@@ -20,7 +20,7 @@
 ##############################################################################
 {
     'name': 'Support branding JEOSOFT',
-    'version': '8.0.2.0.0',
+    'version': '9.0.1.0.0',
     'category': 'Support',
     'sequence': 14,
     'summary': '',
@@ -36,7 +36,10 @@ Set parameter for jeosoft support branding
     ],
     'depends': [
         'support_branding',
-        'mail'
+        'mail',
+
+        # modulos adicionales para instalar
+        'disable_odoo_online'
     ],
     'data': [
         'views/ir_config_parameter.xml',
