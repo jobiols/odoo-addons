@@ -45,6 +45,7 @@ Set parameter for jeosoft support branding
 
         # modulos adicionales utilitarios
         'disable_odoo_online',
+        'res_config_settings_enterprise_remove',
         'server_mode',              # habilitar uso de parametro server_mode = "some value" en config.
 
     ],
