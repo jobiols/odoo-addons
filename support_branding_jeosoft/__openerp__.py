@@ -35,11 +35,18 @@ Set parameter for jeosoft support branding
     'images': [
     ],
     'depends': [
+        # requeridos por este modulo
         'support_branding',
         'mail',
 
-        # modulos adicionales para instalar
-        'disable_odoo_online'
+        # para la localizacion argentina
+        'l10n_ar_afipws_fe',        # Factura Electrónica Argentina
+        'l10n_ar_aeroo_einvoice',   # impresion de factura electronica aeroo
+
+        # modulos adicionales utilitarios
+        'disable_odoo_online',
+        'server_mode',              # habilitar uso de parametro server_mode = "some value" en config.
+
     ],
     'data': [
         'views/ir_config_parameter.xml',
