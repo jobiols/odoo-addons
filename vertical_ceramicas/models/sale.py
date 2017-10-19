@@ -15,13 +15,14 @@ class sale_order_line(models.Model):
             states={'draft': [('readonly', True)]}
     )
 
+    """ Parece que necesitan vender cosas que no tienen.
     @api.onchange('name')
     @api.model
     def onchange_product(self):
-        """
+        " " "
         Ponemos un dominio al campo route_id para que traiga solo las rutas a los almacenes
         donde hay producto
-        """
+        " " "
         for line in self:
             data = line.calc_virtual_stock(line.product_id)
             locs = []
@@ -34,7 +35,7 @@ class sale_order_line(models.Model):
                 res['domain'] = {'route_id': [('name', '=', locs)]}
 
         return res
-
+    """
     @api.model
     def product_id_change(self, ppp, pricelist, product, qty=0,
                           uom=False, qty_uos=0, uos=False, name='', partner_id=False, lang=False,
