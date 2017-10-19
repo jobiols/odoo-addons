@@ -1,0 +1,141 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<openerp>
+
+        <data noupdate="0">
+            <record model="ir.module.category" id="module_reves">
+                <field name="name">Vertical Ceramicas</field>
+                <field name="sequence">0</field>
+                <field name="visible" eval="0" />
+            </record>
+
+            <!-- GRUPO ALMACEN -->
+            <record id="group_reves_stock_users" model="res.groups">
+                <field name="name">Almacén</field>
+                <field name="category_id" ref="module_reves"/>
+                <field name="comment">Grupo para todos los usuarios que manejan stock</field>
+                <field name="implied_ids"
+                       eval="[
+                                (4, ref('base.group_user')),
+                                (4, ref('stock.group_stock_user')),
+                                 ]"/>
+            </record>
+
+            <!-- GRUPO VENTAS -->
+
+            <!-- el siguiente grupo no puede heredar del grupo almacen porque mas abajo necesito
+                 poner unas reglas globales solo para el grupo almacen y no veo como hacer que no
+                 las hereden todos los demas -->
+
+            <!-- le saque esto     (4, ref('group_reves_stock_users')), -->
+            <record id="group_reves_sales_users" model="res.groups">
+                <field name="name">Comercial</field>
+                <field name="category_id" ref="module_reves"/>
+                <field name="comment">Grupo para todos los usuarios comerciales</field>
+                <field name="implied_ids"
+                       eval="[
+                                (4, ref('base.group_user')),
+                                (4, ref('stock.group_stock_user')),
+                                (4, ref('account.group_account_invoice')),
+                                (4, ref('base.group_sale_salesman_all_leads')),
+                                ]"/>
+            </record>
+
+            <!-- GRUPO ENCARGADO -->
+            <record id="group_reves_manager_users" model="res.groups">
+                <field name="name">Encargado</field>
+                <field name="category_id" ref="module_reves"/>
+                <field name="comment">
+Los encargados tienen los mismos permisos que los comerciales
+pero pueden acceder a las listas de precio restringidas</field>
+                <field name="implied_ids"
+                       eval="[
+                                (4, ref('group_reves_sales_users')),
+                              ]"/>
+            </record>
+
+            <!-- GRUPO ADMINISTRADOR -->
+
+            <record id="group_reves_admin_users" model="res.groups">
+                <field name="name">Administración</field>
+                <field name="category_id" ref="module_reves"/>
+                <field name="comment">Los administradores tienen todas las funciones</field>
+                <field name="implied_ids"
+                       eval="[
+                                (4, ref('base_multi_store.group_multi_store')),
+                                (4, ref('group_reves_manager_users')),
+                                (4, ref('account.group_account_user')),
+                                (4, ref('account.group_account_invoice')),
+                                (4, ref('stock.group_locations')),
+                                (4, ref('purchase.group_purchase_manager')),
+                                (4, ref('stock.group_stock_manager')),
+                                (4, ref('base.group_sale_manager')),
+                                   ]"/>
+            </record>
+
+            <!-- Reglas de registro para manejar las listas de precios -->
+
+            <!-- agregamos permiso para ver las listas restringidas a usuarios admin y encargado -->
+            <record id="pricelist_permit_admin_rule" model="ir.rule">
+                <field name="name">Permite ver las listas de precio restringidas</field>
+                <field name="model_id" ref="product.model_product_pricelist"/>
+                <field name="groups" eval="[(4, ref('group_reves_admin_users')),
+                                            (4, ref('group_reves_manager_users'))]"/>
+                <field name="domain_force">[('restricted','=',True)]</field>
+            </record>
+
+            <!-- permiso para ver las listas restringidas a usuarios comercial y stock-->
+            <record id="pricelist_permit_sales_rule" model="ir.rule">
+                <field name="name">Restriccion de lista de precios</field>
+                <field name="model_id" ref="product.model_product_pricelist"/>
+                <field name="groups" eval="[(4, ref('group_reves_sales_users')),
+                                            (4, ref('group_reves_stock_users'))]"/>
+                <field name="domain_force">[('restricted','=',False)]</field>
+            </record>
+
+            <!-- hace aparecer el menu de categorias -->
+            <menuitem id="prod_config_main1"
+                      parent="base.menu_product"
+                      action="product.product_category_action_form"
+                      name="Categorias de productos"
+                      sequence="770"/>
+
+
+            <!-- le ponemos estas regalas al usuario de stock con lo que se las
+                 estamos sacando ademas a los otros usuarios
+                 -->
+
+            <record id="stock_multi_store.stock_warehouse_store_rule" model="ir.rule">
+                <field name="groups" eval="[(4, ref('vertical_ceramicas.group_reves_stock_users'))]"/>
+            </record>
+
+            <record id="stock_multi_store.stock_picking_type_store_rule" model="ir.rule">
+                <field name="groups" eval="[(4, ref('vertical_ceramicas.group_reves_stock_users'))]"/>
+            </record>
+
+            <record id="stock_multi_store.stock_picking_store_rule" model="ir.rule">
+                <field name="groups" eval="[(4, ref('vertical_ceramicas.group_reves_stock_users'))]"/>
+            </record>
+
+            <record id="base_multi_store.res_store_rule" model="ir.rule">
+                <field name="groups" eval="[(4, ref('vertical_ceramicas.group_reves_stock_users'))]"/>
+            </record>
+<!--
+            <record id="sale_multi_store.sale_order_store_rule" model="ir.rule">
+                <field name="groups" eval="[(4, ref('vertical_ceramicas.group_reves_stock_users'))]"/>
+            </record>
+-->
+            <!-- permitir que todos puedan ver el journal_id para elegir el punto de venta -->
+
+            <record id="account_invoice_form_reves" model="ir.ui.view">
+                <field name="name">account.invoice.form.reves</field>
+                <field name="model">account.invoice</field>
+                <field name="inherit_id" ref="account.invoice_form"/>
+                <field name="arch" type="xml">
+                    <xpath expr="//field[@name='journal_id']" position="attributes">
+                        <attribute name="groups"></attribute>
+                    </xpath>
+                </field>
+            </record>
+
+        </data>
+</openerp>

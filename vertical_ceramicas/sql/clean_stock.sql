@@ -1,0 +1,10 @@
+delete from stock_inventory
+delete from stock_move
+delete from stock_picking_voucher
+delete from stock_print_stock_voucher
+delete from stock_quant
+delete from stock_transfer_details
+delete from stock_transfer_details_items
+delete from stock_pack_operation
+delete from stock_picking
+delete from procurement_order

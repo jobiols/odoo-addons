@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+    <data>
+        <report
+            string="REMITO"
+            id="action_report_picking" 
+            model="stock.picking" 
+            report_type="qweb-pdf"
+            name="vertical_ceramicas.report_picking"
+            file="vertical_ceramicas.report_picking"
+        />
+
+    </data>
+</openerp>

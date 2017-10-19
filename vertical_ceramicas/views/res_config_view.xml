@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+    <data>
+        <record id="view_sales_config_pricelist" model="ir.ui.view">
+            <field name="name">sales config pricelist</field>
+            <field name="model">prices.config.settings</field>
+
+            <field name="arch" type="xml">
+                <form string="Configuracion de listas de precio" class="oe_form_configuration">
+                    <header>
+                        <button string="Apply" type="object" name="execute" class="oe_highlight"/>
+                        or
+                        <button string="Cancel" type="object" name="cancel" class="oe_link"/>
+                    </header>
+
+                    <group  string="Configuracion de listas de precio">
+                        <field name="pricelist_1" string="Precio 1" />
+                        <field name="pricelist_2" string="Precio 2" />
+                        <field name="pricelist_3" string="Precio 3" />
+                    </group>
+<!--
+                    <group string="Testing vars">
+                        <field name="default_test" />
+                    </group>
+-->
+                </form>
+            </field>
+        </record>
+
+        <record id="action_view_sales_config_pricelist"
+                model="ir.actions.act_window">
+            <field name="name">Listas de precio</field>
+            <field name="res_model">prices.config.settings</field>
+            <field name="view_mode">form</field>
+            <field name="target">inline</field>
+        </record>
+
+        <menuitem id="menu_view_sales_config_pricelist"
+                  name="Listas de precio"
+                  parent="base.menu_config"
+                  action="action_view_sales_config_pricelist" />
+    </data>
+</openerp>

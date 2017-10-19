@@ -1,0 +1,259 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+    <data>
+
+        <template id="external_layout_header">
+            <div class="header">
+                <!-- poner la letra X flotante en medio del reporte -->
+                <div style="border-style: solid; position: absolute; top: 1px;
+                            left: 47.55%;background-color: #eeeeee;">
+                    <h1 style="outline-style: solid;">&#160;X&#160;</h1>
+                </div>
+                <table style="width:100%;">
+                    <colgroup>
+                        <col width="50%" />
+                        <col width="50%" />
+                    </colgroup>
+                <tr>
+                    <td style="border-style: solid; padding-left: 3px; padding-top: 3px;" >
+                        <center>
+                            <img t-if="company.logo" t-att-src="'data:image/png;base64,%s' % company.logo" style="max-height: 45px;"/>
+                        </center>
+                        <div>
+                             <span t-raw="o.company_id.store_addresses"/>
+                        </div>
+                    </td>
+                    <td style="border-style: solid;">
+                        <p><center><small>Documento no válido como factura</small></center></p>
+                        <center>
+                        <h3>
+                            <span t-field="o.picking_type_id"/>
+                            <span t-field="o.name"/><br/>
+                        </h3>
+                        <h4>
+                            <span t-esc="time.strftime('%d/%m/%Y',time.strptime(o.date,'%Y-%m-%d %H:%M:%S'))"/>
+                        </h4>
+                        </center>
+                    </td>
+                </tr>
+                </table>
+            </div>
+        </template>
+
+        <template id="external_layout_footer">
+            <div class="footer">
+                <div class="text-center" style="border-top: 1px solid black;">
+                    <ul t-if="not company.custom_footer" class="list-inline">
+                        <li t-if="company.phone">Tel: <span t-field="company.phone"/></li>
+
+                        <li t-if="company.fax and company.phone">&amp;bull;</li>
+                        <li t-if="company.fax">Fax: <span t-field="company.fax"/></li>
+
+                        <li t-if="company.email">&amp;bull;</li>
+                        <li t-if="company.email">Email: <span t-field="company.email"/></li>
+
+                        <li t-if="company.website">&amp;bull;</li>
+                        <li t-if="company.website">Website: <span t-field="company.website"/></li>
+                    </ul>
+
+                    <t t-if="company.custom_footer">
+                        <span t-raw="company.rml_footer"/>
+                    </t>
+
+                    <ul class="list-inline">
+                        <li>Pagina:</li>
+                        <li><span class="page"/></li>
+                        <li>/</li>
+                        <li><span class="topage"/></li>
+                    </ul>
+                </div>
+            </div>
+        </template>
+
+        <template id="external_layout">
+            <!-- Multicompany -->
+            <t t-if="o and 'company_id' in o">
+                <t t-set="company" t-value="o.company_id"></t>
+            </t>
+            <t t-if="not o or not 'company_id' in o">
+                <t t-set="company" t-value="res_company"></t>
+            </t>
+
+            <t t-call="vertical_ceramicas.external_layout_header" />
+            <t t-raw="0" />
+            <t t-call="vertical_ceramicas.external_layout_footer" />
+        </template>
+
+        <template id="report_picking">
+            <t t-call="report.html_container">
+                <t t-foreach="docs" t-as="o">
+                    <t t-call="vertical_ceramicas.external_layout">
+                        <div class="page">
+                            <div class="row">
+                                <div class="col-xs-3">
+                                    <div t-if="o.picking_type_id.code=='incoming' and o.partner_id">
+                                        <span><strong>Proveedor:</strong></span>
+                                    </div>
+                                    <div t-if="o.picking_type_id.code=='internal' and o.partner_id">
+                                        <span><strong>Almacen:</strong></span>
+                                    </div>
+                                    <div t-if="o.picking_type_id.code=='outgoing' and o.partner_id">
+                                        <span><strong>Cliente:</strong></span>
+                                    </div>
+
+                                    <!-- Direccion del cliente FACTURACION -->
+                                    <div t-if="o.partner_id" name="partner_header">
+                                        <div t-field="o.partner_id"
+                                           t-field-options='{"widget": "contact", "fields": ["address", "name", "phone", "fax"], "no_marker": true}'/>
+                                        <p t-if="o.partner_id.vat">IVA: <span t-field="o.partner_id.document_number"/></p>
+                                    </div>
+                                </div>
+                                <!--
+                                <div class="col-xs-3">
+
+                                    <!- - Direccion del cliente ENTREGA - ->
+                                    <div t-if="o.move_lines and o.move_lines[0].partner_shipping_id and o.move_lines[0].partner_shipping_id.id">
+                                        <span><strong>Dirección de entrega:</strong></span>
+                                            <div t-field="o.move_lines[0].partner_shipping_id"
+                                            t-field-options='{"widget": "contact", "fields": ["address", "name", "phone", "fax"], "no_marker": true}'/>
+                                    </div>
+
+                                    <div t-if="o.picking_type_id.code != 'internal' and (not o.move_lines or not o.move_lines[0].partner_id) and o.picking_type_id.warehouse_id.partner_id">
+                                        <span><strong>Warehouse Address:</strong></span>
+                                        <div t-field="o.picking_type_id.warehouse_id.partner_id"
+                                            t-field-options='{"widget": "contact", "fields": ["address", "name", "phone", "fax"], "no_marker": true}'/>
+                                    </div>
+                                </div>
+                                -->
+                                <div class="col-xs-6">
+                                    <p>Vendedor: <span t-field="o.create_uid.name"/></p>
+                                    <div t-if="o.observations">
+                                        <p>Notas: <span t-field="o.observations"/></p>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <br/>
+
+                            <!-- Datos de la orden de venta -->
+                            <table class="table-condensed" width="100%" style="border-style: solid; padding: 10px 10px 10px 10px;">
+                                <colgroup>
+                                    <col width="33%" />
+                                    <col width="33%" />
+                                    <col width="34%" />
+                                </colgroup>
+                                <tr align="center" style="padding-left: 3px; padding-top: 3px;">
+                                    <td>
+                                        <strong>Orden de venta</strong>
+                                        <span t-field="o.origin"/>
+                                    </td>
+                                    <td>
+                                        <strong>Estado</strong>
+                                        <span t-field="o.state"/>
+                                    </td>
+                                    <td>
+                                        <strong>Fecha prometida</strong>
+                                        <span t-esc="time.strftime('%d/%m/%Y',time.strptime(o.min_date,'%Y-%m-%d %H:%M:%S'))"/>
+                                    </td>
+                                </tr>
+                            </table>
+                            <br/>
+                            <br/>
+
+                            <!-- obtener si es envio de la primera linea -->
+                            <t t-set="mode" t-value="o.picking_type_id.default_location_src_id.name" />
+
+                            <!-- Datos de los productos -->
+                            <table class="table table-condensed" t-if="not o.pack_operation_ids">
+                              <thead>
+                                <tr>
+                                    <th t-if="mode=='Envío'"><strong>Productos a enviar</strong></th>
+
+                                    <th t-if="mode!='Envío'"><strong>Productos a retirar</strong></th>
+
+                                    <th class="text-right"><strong>Cantidad</strong></th>
+                                    <t t-if="o.picking_type_id.code != 'incoming'"><th><strong>Origen</strong></th></t>
+                                    <t t-if="o.picking_type_id.code != 'outgoing'"><th><strong>Destino</strong></th></t>
+                                </tr>
+                              </thead>
+                              <tbody>
+                                <tr t-foreach="o.move_lines" t-as="move">
+                                    <t t-if="(o.state != 'partially_available') or (move.reserved_availability > 0)">
+                                        <td><span t-field="move.product_id"/></td>
+                                        <td class="text-right">
+                                            <t t-if="o.state == 'partially_available'">
+                                                <span t-field="move.reserved_availability"/> <span t-field="move.product_id.uom_id" groups="product.group_uom"/>
+                                            </t>
+                                            <t t-if="o.state != 'partially_available'">
+                                                <span t-field="move.product_uom_qty"/> <span t-field="move.product_uom" groups="product.group_uom"/>
+                                            </t>
+                                        </td>
+                                        <t t-if="o.picking_type_id.code != 'incoming'"><td><span t-field="move.location_id"/></td></t>
+                                        <t t-if="o.picking_type_id.code != 'outgoing'"><td><span t-field="move.location_dest_id"/></td></t>
+                                    </t>
+                                </tr>
+                              </tbody>
+                            </table>
+
+                            <!-- Datos de los productos -->
+                            <table class="table table-condensed" t-if="o.pack_operation_ids">
+                              <thead>
+                                <tr>
+                                    <th><strong>Productos a enviar</strong></th>
+                                    <th class="text-right"><strong>Cantidad</strong></th>
+                                    <t t-if="o.picking_type_id.code != 'incoming'"><th><strong>Origen</strong></th></t>
+                                    <t t-if="o.picking_type_id.code != 'outgoing'"><th><strong>Destino</strong></th></t>
+                                </tr>
+                              </thead>
+                              <tbody>
+                                <tr t-foreach="o.pack_operation_ids" t-as="pack_operation">
+                                    <td><span t-field="pack_operation.product_id"/>
+                                        <t t-if="not pack_operation.product_id and pack_operation.package_id"><span  t-field="pack_operation.package_id"/></t></td>
+                                    <td class="text-right"><span t-field="pack_operation.product_qty"/> <span t-field="pack_operation.product_uom_id" groups="product.group_uom"/></td>
+                                    <t t-if="o.picking_type_id.code != 'incoming'"><td><span t-field="pack_operation.location_id"/>
+                                        <span t-if="pack_operation.package_id">:</span>
+                                        <span t-field="pack_operation.package_id"/>
+                                        <span t-if="pack_operation.lot_id">:</span>
+                                        <span t-field="pack_operation.lot_id"/>
+                                        </td>
+                                    </t>
+                                    <t t-if="o.picking_type_id.code != 'outgoing'"><td><span t-field="pack_operation.location_dest_id"/>
+                                        <span t-if="pack_operation.result_package_id">:</span>
+                                        <span t-field="pack_operation.result_package_id"/>
+                                    </td></t>
+                                </tr>
+                              </tbody>
+                            </table>
+                            <br/><br/>
+
+
+                            <!--  para ver que tipo de ubicacion es
+                            <h1>esto es un <span t-field="o.picking_type_id.default_location_src_id.name"/></h1>
+                            -->
+
+                            <!-- esto escribe el texto que se pone en el comentario de la ubicacion -->
+                            <div t-if="mode!='Envío'">
+                                <center>
+                                    <h2><span t-field="o.pick_from"/></h2>
+                                </center>
+                            </div>
+
+                            <!-- esto escribe el texto que se pone en el comentario de la empresa -->
+                            <div t-if="mode=='Envío'">
+                                <p>Controlado por:</p>
+                                <br/>
+                                <br/>
+                                <center>
+                                    <span t-raw="o.company_id.report_send_comment"/>
+                                </center>
+
+                            </div>
+
+                        </div>
+                    </t>
+                </t>
+            </t>
+        </template>
+
+    </data>
+</openerp>

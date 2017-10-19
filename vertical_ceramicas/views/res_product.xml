@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<openerp>
+    <data>
+
+        <!-- agrega en la ficha de producto la cantidad de producto que hay en cada caja
+             pudiendo seleccionar además la unidad de medida -->
+
+        <record model='ir.ui.view' id='product_form_view_reves'>
+            <field name='name'>product.form.reves</field>
+            <field name='model'>product.product</field>
+            <field name='inherit_id' ref='product.product_normal_form_view'/>
+            <field name='type'>form</field>
+            <field name='arch' type='xml'>
+
+                <xpath expr="//field[@name='lst_price']" position="after">
+                    <group col="3" colspan="3">
+                        <field name="prod_in_box"/>
+                        <field name="prod_in_box_uom" nolabel="1"/>
+                    </group>
+                </xpath>
+
+                <!-- cambia el label del campo a precio mercadolibre  -->
+                <xpath expr="//field[@name='lst_price']" position="attributes">
+                    <attribute name="string">Precio Mercadolibre</attribute>
+                </xpath>
+
+            </field>
+        </record>
+
+        <!-- agrega una condición para que solo el admin y los integrantes del grupo
+            group_reves_admin_users puedan ver los campos precio mercadolibre y costo-->
+        <record id="product_form_hide_meli_price_reves" model="ir.ui.view">
+            <field name="name">product.form.hide.meli.reves</field>
+            <field name="model">product.product</field>
+            <field name="inherit_id" ref="product.product_normal_form_view"/>
+            <field name="arch" type="xml">
+                <xpath expr="//field[@name='lst_price']" position="attributes">
+                    <attribute name="groups">base.group_erp_manager,vertical_ceramicas.group_reves_admin_users</attribute>
+                </xpath>
+                <xpath expr="//field[@name='standard_price']" position="attributes">
+                    <attribute name="groups">base.group_erp_manager,vertical_ceramicas.group_reves_admin_users</attribute>
+                </xpath>
+
+            </field>
+        </record>
+
+        <!--  product inherited tree view  agrega los tres precios en la lista de productos -->
+
+        <record id="view_product_tree_reves" model="ir.ui.view">
+            <field name="name">res.product.tree.reves</field>
+            <field name="model">product.product</field>
+            <field name="inherit_id" ref="product.product_product_tree_view"/>
+            <field name="arch" type="xml">
+                <field name="ean13" position="attributes">
+                    <attribute name="invisible">1</attribute>
+                </field>
+                <field name="lst_price" position="attributes">
+                    <attribute name="invisible">1</attribute>
+                </field>
+                <field name="attribute_value_ids" position="attributes">
+                    <attribute name="invisible">1</attribute>
+                </field>
+                <field name="lst_price" position="after">
+                    <field name="price_1"/>
+                    <field name="price_2"/>
+                    <field name="price_3"/>
+                </field>
+            </field>
+        </record>
+
+    </data>
+</openerp>

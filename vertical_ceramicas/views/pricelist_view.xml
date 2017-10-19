@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<openerp>
+    <data>
+
+        <!-- en el tree view de pricelist agregamos la columna restringida para
+        mostrar si la pueden ver o no los comerciales -->
+
+        <record model='ir.ui.view' id='product_pricelist_view_tree_reves_restricted'>
+            <field name='name'>product.pricelist.view.tree.reves.restricted</field>
+            <field name='model'>product.pricelist</field>
+            <field name='inherit_id' ref='product.product_pricelist_view_tree'/>
+            <field name='type'>tree</field>
+            <field name='arch' type='xml'>
+                <xpath expr="//field[@name='name']" position="after">
+                    <field name="restricted"/>
+                </xpath>
+            </field>
+        </record>
+
+        <!-- agregamos en el form de la pricelist el campo restringido para editarlo -->
+
+        <record model='ir.ui.view' id='product_pricelist_reves'>
+            <field name='name'>product.form.pricelist.reves</field>
+            <field name='model'>product.pricelist</field>
+            <field name='inherit_id' ref='product.product_pricelist_view'/>
+            <field name='type'>form</field>
+            <field name='arch' type='xml'>
+                <xpath expr="//group" position="attributes">
+                    <attribute name="col">6</attribute>
+                </xpath>
+                <xpath expr="//field[@name='active']" position="after">
+                    <field name="restricted" />
+                </xpath>
+            </field>
+        </record>
+
+    </data>
+</openerp>
