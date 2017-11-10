@@ -13,41 +13,53 @@ class ResPartner(models.Model):
     _inherit = 'res.partner'
 
     @api.multi
-    @api.constrains('responsability_id')
+    @api.constrains('responsability_id', 'document_type_id', 'street')
     def _check_responsability(self):
         for partner in self:
-            # chequear Si es responsable inscripto o monotributo requiere CUIT
+            # chequear Si es responsable inscripto o monotributo requiere CUIT y direccion
             if partner.responsability_id.code == '1' or \
                partner.responsability_id.code == '6':       # responsable inscripto o monotributo
                 if partner.document_type_id.name != 'CUIT':
                     raise ValidationError(u'Para ingresar un cliente "{}" Se requiere CUIT'.
                                           format(partner.responsability_id.name))
+                if not partner.street:
+                    raise ValidationError(u'Para ingresar un cliente "{}" se requiere direccion'.
+                                          format(partner.responsability_id.name))
+
+            if partner.responsability_id.code == '5':       # consumidor final
+                if partner.document_type_id.code == 'Sigd':
+                    # Este es el consumidor final anonimo para menos de $1000
+                    return True
+
+                if partner.document_type_id.name != 'DNI':
+                    raise ValidationError(u'Para ingresar un cliente "{}" al que le vamos \n'
+                                          u'a facturar mas de $1000 Se requiere DNI'.
+                                          format(partner.responsability_id.name))
+                if not partner.street:
+                    raise ValidationError(u'Para ingresar un cliente "{}" al que le vamos \n'
+                                          u'a facturar mas de $1000 se requiere direccion'.
+                                          format(partner.responsability_id.name))
+
 
     @api.multi
-    @api.constrains('document_number')
+    @api.constrains('document_type_id','document_number')
     def _check_unique_dni(self):
         for partner in self:
             if partner.document_type_id.name == 'DNI':
                 recordset = self.search([('document_number', '=', partner.document_number)])
                 if len(recordset) > 1:
-                    raise ValidationError('El DNI {} ya está ingresado'.format(partner.document_number))
+                    raise ValidationError(u'El DNI {} ya está ingresado'.format(partner.document_number))
 
     @api.multi
-    @api.constrains('vat')
+    @api.constrains('vat','document_type_id')
     def _check_unique_vat(self):
         for partner in self:
             if partner.document_type_id.name == 'CUIT':
                 recordset = self.search([('vat', '=', partner.vat)])
                 if len(recordset) > 1:
-                    raise ValidationError('El CUIT {}-{}-{} ya está ingresado'.format(
+                    raise ValidationError(u'El CUIT {}-{}-{} ya está ingresado'.format(
                             partner.vat[2:4], partner.vat[4:12], partner.vat[12:13]))
 
-    @api.multi
-    @api.constrains('responsability_id')
-    def _check_address_exist(self):
-        for partner in self:
-            if not partner.street and partner.responsability_id.code == '1':
-                raise ValidationError('Un responsable inscripto debe tener direccion')
 
     @api.multi
     @api.constrains('document_number')
@@ -56,4 +68,5 @@ class ResPartner(models.Model):
             # verifica que el DNI sea numerico
             if partner.document_type_id.name == 'DNI':
                 if partner.document_number != re.sub("[^0-9]", "", partner.document_number):
-                    raise ValidationError('El DNI "{}" debe contener solo numeros'.format(partner.document_number))
+                    raise ValidationError(u'El DNI "{}" debe contener solo numeros'.
+                                          format(partner.document_number))
