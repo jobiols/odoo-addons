@@ -43,6 +43,6 @@ depende de la localizacion adhoc
     "data": [],
     'website': 'http://jeosoft.com.ar',
     'auto_install': False,
-    'installable': True,
+    'installable': False,
 }
 

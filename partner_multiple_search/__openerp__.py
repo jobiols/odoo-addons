@@ -34,6 +34,9 @@ Agregar mas criterios de busqueda para los partners
 - nro de documento (CUIT/DNI)
 """,
     "demo_xml": [],
+    'depends': [
+        'l10n_ar_invoice',
+    ],
     "data": [
         'views/partner_view.xml'
     ],
