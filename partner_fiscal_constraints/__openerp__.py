@@ -46,9 +46,11 @@ que van a los controladores fiscales.
     'images': [
     ],
     'depends': [
-        'base_vat'
+        'base_vat',
+        'l10n_ar_invoice'
     ],
     'data': [
+        'views/partner_view.xml'
     ],
     'demo': [
     ],

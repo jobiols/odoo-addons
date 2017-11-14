@@ -40,7 +40,6 @@ class ResPartner(models.Model):
                                           u'a facturar mas de $1000 se requiere direccion'.
                                           format(partner.responsability_id.name))
 
-
     @api.multi
     @api.constrains('document_type_id','document_number')
     def _check_unique_dni(self):
@@ -51,7 +50,7 @@ class ResPartner(models.Model):
                     raise ValidationError(u'El DNI {} ya está ingresado'.format(partner.document_number))
 
     @api.multi
-    @api.constrains('vat','document_type_id')
+    @api.constrains('vat', 'document_type_id')
     def _check_unique_vat(self):
         for partner in self:
             if partner.document_type_id.name == 'CUIT':
@@ -59,7 +58,6 @@ class ResPartner(models.Model):
                 if len(recordset) > 1:
                     raise ValidationError(u'El CUIT {}-{}-{} ya está ingresado'.format(
                             partner.vat[2:4], partner.vat[4:12], partner.vat[12:13]))
-
 
     @api.multi
     @api.constrains('document_number')
@@ -70,3 +68,4 @@ class ResPartner(models.Model):
                 if partner.document_number != re.sub("[^0-9]", "", partner.document_number):
                     raise ValidationError(u'El DNI "{}" debe contener solo numeros'.
                                           format(partner.document_number))
+
