@@ -61,9 +61,9 @@ class ProductProduct(models.Model):
 
         # TODO arreglar esto, estamos forzando las listas de precio
         price = self.env['product.pricelist']
-        pl_ids[0] = price.search([('id', '=', 1)])   # 1=reves 6=suelos
-        pl_ids[1] = price.search([('id', '=', 3)])
-        pl_ids[2] = price.search([('id', '=', 0)])
+        pl_ids[0] = price.search([('id', '=', 3)])  # 3=reves 6=suelos
+        pl_ids[1] = price.search([('id', '=', 6)])  # 6=reves
+        pl_ids[2] = price.search([('id', '=', 1)])  # 1=reves
 
         return pl_ids
 
