@@ -32,9 +32,7 @@ class StockPicking(models.Model):
     def _get_min_only_date(self):
         """ creamos una nueva min_date porque necesito truncar la parte de hora y asi filtrar por dias.
         """
-        print self.min_date
         self.min_only_date = self.min_date
-        print self.min_only_date
 
     @api.one
     def _get_picking_location(self):
