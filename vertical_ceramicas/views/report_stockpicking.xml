@@ -87,6 +87,7 @@
         <template id="report_picking">
             <t t-call="report.html_container">
                 <t t-foreach="docs" t-as="o">
+                    <span t-esc="o.mark_as_printed()" />
                     <t t-call="vertical_ceramicas.external_layout">
                         <div class="page">
                             <div class="row">

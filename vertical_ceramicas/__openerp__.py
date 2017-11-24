@@ -74,6 +74,7 @@ WHE:Envios -> Ubicaciones Clientes (Método de abastecimiento = crear abastecimi
         'account_multi_store',    # capacidad de limitar los diarios para los usuarios comerciales
         'stock_multi_store',      # capacidad de limitar los diarios para los usuarios de almacen
         'procurement_jit_stock',  # Planificación 'Just in time' (bajo demanda) con inventario
+        'stock_account', 'stock_voucher'
     ],
     'data': [
         'security/security_groups.xml',
@@ -87,6 +88,7 @@ WHE:Envios -> Ubicaciones Clientes (Método de abastecimiento = crear abastecimi
         'views/account_invoice.xml',
         'views/res_config_view.xml',
         'views/res_product.xml',
+        'views/stock_view.xml'
     ],
     'test': [
 

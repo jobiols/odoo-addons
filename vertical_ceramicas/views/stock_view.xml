@@ -1,0 +1,149 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<openerp>
+    <data>
+
+        <!--  ocultar codigo de barras de la vista kanban del deposito -->
+        <record id='stock_picking_type_kanban_ceramicas' model='ir.ui.view'>
+            <field name='name'>Ceramicas stock view</field>
+            <field name='model'>stock.picking.type</field>
+            <field name='inherit_id' ref='stock.stock_picking_type_kanban'/>
+            <field name='type'>form</field>
+            <field name='arch' type='xml'>
+                <xpath expr="//div[@class='oe_kanban_content']/div[@class='oe_right']" position="attributes">
+                    <attribute name="invisible">1</attribute>
+                </xpath>
+                <!-- TODO intento de ocultar el kanban de Transferencias internas -->
+                <xpath expr="//kanban[@class='oe_background_grey']" position="attributes">
+                    <attribute name="groups">vertical_ceramicas.group_reves_manager_users</attribute>
+                </xpath>
+            </field>
+        </record>
+
+        <!-- ocultar el campo control de factura de la vista tree del deposito -->
+        <record id='stock_picking_type_kanban_invoice' model='ir.ui.view'>
+            <field name='name'>Ceramicas stock view hide invoice</field>
+            <field name='model'>stock.picking</field>
+            <field name='inherit_id' ref='stock_account.view_picking_inherit_tree2'/>
+            <field name='type'>form</field>
+            <field name='arch' type='xml'>
+                <xpath expr="//field[@name='invoice_state']" position="attributes">
+                    <attribute name="invisible">1</attribute>
+                </xpath>
+            </field>
+        </record>
+
+        <!-- ocultar el campo Remitos de la vista tree del deposito -->
+        <record id='stock_picking_type_kanban_voucher' model='ir.ui.view'>
+            <field name='name'>Ceramicas stock view hide voucher</field>
+            <field name='model'>stock.picking</field>
+            <field name='inherit_id' ref='stock_voucher.vpicktree'/>
+            <field name='type'>form</field>
+            <field name='arch' type='xml'>
+                <xpath expr="//field[@name='voucher_ids']" position="attributes">
+                    <attribute name="invisible">1</attribute>
+                </xpath>
+            </field>
+        </record>
+
+        <!-- reemplazar el campo date por fecha prevista y nota -->
+        <record id='stock_picking_type_kanban_date' model='ir.ui.view'>
+            <field name='name'>Ceramicas stock view hide date</field>
+            <field name='model'>stock.picking</field>
+            <field name='inherit_id' ref='stock.vpicktree'/>
+            <field name='type'>form</field>
+            <field name='arch' type='xml'>
+                <xpath expr="//field[@name='date']" position="replace">
+                    <field name="min_date" widget="date"/>
+                    <field name="note"/>
+                </xpath>
+                <xpath expr="//field[@name='state']" position="before">
+                    <field name="carrier"/>
+                    <field name="printed"/>
+                </xpath>
+            </field>
+        </record>
+
+        <!-- ocultar codigo de barras en formulario de transferencia -->
+        <record id='view_picking_form_ceramicas' model='ir.ui.view'>
+            <field name='name'>Ceramicas transfer view</field>
+            <field name='model'>stock.picking</field>
+            <field name='inherit_id' ref='stock.view_picking_form'/>
+            <field name='type'>form</field>
+            <field name='arch' type='xml'>
+                <xpath expr="//div[@class='oe_right oe_button_box']" position="attributes">
+                    <attribute name="invisible">1</attribute>
+                </xpath>
+<!--            hay problemas si no muestro la hora
+                <xpath expr="//field[@name='min_date']" position="attributes">
+                    <attribute name="widget">date</attribute>
+                </xpath>
+-->
+
+            </field>
+        </record>
+
+        <!-- corregimos la accion que busca transferencias desde el kanban -->
+        <record id="stock.action_picking_tree_ready" model="ir.actions.act_window">
+            <field name="name">Ready Transfers</field>
+            <field name="res_model">stock.picking</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">tree,form,calendar</field>
+            <field name="domain"></field>
+            <field name="context">{
+                    'search_default_picking_type_id': [active_id],
+                    'default_picking_type_id': active_id,
+                    'contact_display': 'partner_address',
+                    'search_default_available': 1,
+                    'search_default_not_printed': 1,
+                    'search_default_not_future': 1,
+            }
+            </field>
+            <field name="search_view_id" ref="stock.view_picking_internal_search"/>
+        </record>
+
+        <!-- agregarle filtros a la vista de busqueda -->
+        <record id="view_picking_internal_search" model="ir.ui.view">
+            <field name="name">Ceramicas search pickings</field>
+            <field name="model">stock.picking</field>
+            <field name="inherit_id" ref="stock.view_picking_internal_search"/>
+            <field name="arch" type="xml">
+                <xpath expr="//search/filter[@name='done']" position="after">
+                    <separator/>
+                    <filter icon="terp-dialog-close" name="not_printed" string="No impreso"
+                            domain="[('printed','=',False)]"
+                            help="Ordenes todavia no impresas"/>
+                    <separator/>
+
+                    <filter icon="terp-dialog-close" name="not_future" string="Hasta Manana"
+                            domain="[('min_only_date', '&lt;=', (context_today() + datetime.timedelta(days=1)).strftime('%%Y-%%m-%%d'))]"/>
+                            help="Ordenes hasta el dia de hoy inclusive"/>
+                </xpath>
+            </field>
+        </record>
+
+        <!-- agregar campo ya fue impreso -->
+        <record id='view_picking_form_ceramicas' model='ir.ui.view'>
+            <field name='name'>Ceramicas picking form</field>
+            <field name='model'>stock.picking</field>
+            <field name='inherit_id' ref='stock_voucher.view_picking_withcarrier_out_form'/>
+            <field name='type'>form</field>
+            <field name='arch' type='xml'>
+                <xpath expr="//field[@name='book_id']" position="attributes">
+                    <attribute name="invisible">1</attribute>
+                </xpath>
+                <xpath expr="//field[@name='voucher_ids']" position="attributes">
+                    <attribute name="invisible">1</attribute>
+                </xpath>
+                <xpath expr="//field[@name='book_id']" position="after">
+                    <field name="printed" string="Ya fue impreso en deposito"/>
+                    <field name="carrier" />
+                </xpath>
+
+            </field>
+        </record>
+
+    </data>
+</openerp>
+
+
