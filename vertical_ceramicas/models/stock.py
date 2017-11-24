@@ -14,12 +14,43 @@ class StockPicking(models.Model):
             string="retira",
             compute="_get_picking_location"
     )
+    printed = fields.Boolean(
+        string="Imp",
+        help="Indica si el remito fue impreso por un encargado de deposito"
+    )
+    carrier = fields.Char(
+        'Transportista'
+    )
+
+    min_only_date = fields.Date(
+        compute='_get_min_only_date',
+        store=True
+    )
+
+    @api.one
+    @api.depends('min_date')
+    def _get_min_only_date(self):
+        """ creamos una nueva min_date porque necesito truncar la parte de hora y asi filtrar por dias.
+        """
+        print self.min_date
+        self.min_only_date = self.min_date
+        print self.min_only_date
 
     @api.one
     def _get_picking_location(self):
         for line in self.move_lines:
             loc = line.location_id
             self.pick_from = loc.comment
+
+    @api.multi
+    def mark_as_printed(self):
+        for reg in self:
+            user = self.env['res.users'].search([('id', '=', self._uid)])
+            group = self.env['res.groups'].search([('name', '=', u'Almacén')])
+
+            # marco como impreso solo si lo imprime un usuario de deposito.
+            if user in group.users:
+                reg.printed = True
 
 
 class StockMove(models.Model):
@@ -41,4 +72,13 @@ class StockMove(models.Model):
             self.partner_shipping_id = address.id
 
 
+# intento de poner los stores en el nombre de las rutas
+#class StockLocationRoute(models.Model):
+#    _inherit = 'stock.location.route'
+#    _rec_name = 'id'
+
+#    @api.multi
+#    def name_get(self):
+#        for rec in self:
+#            return [str(rec.id)+'pp']
 

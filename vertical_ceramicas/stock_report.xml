@@ -10,5 +10,7 @@
             file="vertical_ceramicas.report_picking"
         />
 
+        <!-- eliminar el menu original -->
+        <delete model="ir.actions.report.xml" id="stock.action_report_picking" />"
     </data>
 </openerp>
