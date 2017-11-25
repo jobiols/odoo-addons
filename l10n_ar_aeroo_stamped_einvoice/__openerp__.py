@@ -19,15 +19,16 @@
 #
 ##############################################################################
 {
-    'name': 'Support branding JEOSOFT',
-    'version': '9.0.1.0.0',
+    'name': 'Sale Paid Stamp',
+    'version': '9.0.0.0.0',
     'category': 'Support',
     'sequence': 14,
     'summary': '',
     'description': """
-Support branding JEOSOFT
-========================
-Set parameter for jeosoft support branding
+Sale Paid Stamp
+===============
+Pone un sello de pagado al imprimir la factura cuando el balance es cero. (fue pagada)
+
     """,
     'author':  'jeo Soft',
     'website': 'jeosoft.com.ar',
@@ -35,30 +36,20 @@ Set parameter for jeosoft support branding
     'images': [
     ],
     'depends': [
-        # requeridos por este modulo
-        'support_branding',
-        'mail',
-
-        # para la localizacion argentina
-        'l10n_ar_afipws_fe',        # Factura Electrónica Argentina
-        'l10n_ar_aeroo_einvoice',   # impresion de factura electronica aeroo
-        'l10n_ar_account_vat_ledger_citi',
-
-        # modulos adicionales utilitarios
-        'disable_odoo_online',
-        'res_config_settings_enterprise_remove',
-        'server_mode',              # habilitar uso de parametro server_mode = "some value" en config.
+        'l10n_ar_afipws_fe'
 
     ],
     'data': [
-        'views/ir_config_parameter.xml',
+        'report_configuration_defaults_data.xml',
+        'invoice_report.xml',
+        'invoice_template.xml',
     ],
     'demo': [
     ],
     'test': [
     ],
     'installable': True,
-    'auto_install': True,
+    'auto_install': False,
     'application': False,
 }
 
