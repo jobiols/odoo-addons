@@ -1,0 +1,8 @@
+odoo-argentina https://github.com/jobiols/odoo-argentina.git  8.0
+aeroo_reports https://github.com/aeroo/aeroo_reports.git  8.0
+bank-statement-import https://github.com/OCA/bank-statement-import.git 8.0
+server-tools https://github.com/jobiols/server-tools.git  8.0
+adhoc-account-invoicing https://github.com/jobiols/adhoc-account-invoicing.git
+odoomrp-wip https://github.com/jobiols/odoomrp-wip.git
+adhoc-product https://github.com/jobiols/adhoc-product.git
+journal-constraint https://github.com/jobiols/journal-constraint.git
