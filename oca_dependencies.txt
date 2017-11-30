@@ -1,4 +1,3 @@
 odoo-support https://github.com/ingadhoc/odoo-support.git 8.0
 odoo-argentina https://github.com/jobiols/odoo-argentina.git 8.0
-adhoc-argentina-reporting https://github.com/jobiols/adhoc-argentina-reporting.git 8.0
 
