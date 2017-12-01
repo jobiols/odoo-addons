@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+    <data>
+<!--
+        <record id="account_cash_report_view" model="ir.ui.view">
+            <field name="name">Cash Report View</field>
+            <field name="model">cash.report</field>
+            <field name="inherit_id" ref="account.account_common_report_view" />
+            <field name="arch" type="xml">
+            <data>
+
+            <xpath expr="//field[@name='target_move']" position="after">
+                <field name="display_account"/>
+                <field name="sortby"/>
+                <field name="landscape"/>
+                <field name="amount_currency"/>
+                <newline/>
+            </xpath>
+            <xpath expr="//field[@name='filter']" position="after">
+                <field name="initial_balance" attrs="{'readonly':[('filter', 'in', ('filter_no'))]}" />
+            </xpath>
+
+            </data>
+            </field>
+        </record>
+-->
+        <record id="action_account_cash_menu" model="ir.actions.act_window">
+            <field name="name">Reporte de Cajas</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">account.report.general.ledger</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">form</field>
+            <field name="view_id" ref="account.account_report_general_ledger_view"/>
+            <field name="target">new</field>
+        </record>
+
+       <menuitem id="menu_account_custom_reporting"
+            name="Custom"
+            parent="account.menu_finance_generic_reporting"/>
+
+       <menuitem id="menu_account_cash_report"
+            name="Reporte de cajas"
+            action="action_account_cash_menu"
+            parent="menu_account_custom_reporting"/>
+
+    </data>
+</openerp>

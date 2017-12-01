@@ -20,21 +20,23 @@
 # -----------------------------------------------------------------------------------
 
 {
-    'name': 'Estado de cuentas de efectivo',
+    'name': 'Reporte de cajas',
     'version': '8.0.0.0',
     'category': 'Finance',
-    'summary': 'Muestra los movimientos de todas las cajas',
+    'summary': 'Reporta los movimientos de todas las cajas',
     'description': """
 
-Muestra los movimientos de todas las cajas
+Reporta los movimientos de todas las cajas
 ==========================================
 """,
     'author': 'jeo Software',
     'depends': [
+        'account'
     ],
     'data': [
         'views/template.xml',
         'views/report.xml',
+        'wizard/account_report_cash_view.xml'
     ],
     'test': [
 
