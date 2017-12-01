@@ -20,7 +20,7 @@
 # -----------------------------------------------------------------------------------
 
 {
-    'name': 'Reporte de cajas',
+    'name': 'Reporte diario de cajas',
     'version': '8.0.0.0',
     'category': 'Finance',
     'summary': 'Reporta los movimientos de todas las cajas',
