@@ -13,17 +13,3 @@
     </data>
 </openerp>
 
-
-<!--
-        <report
-            id="action_report_general_ledger"
-            model="account.report.general.ledger"
-            string="General Ledger"
-            report_type="qweb-pdf"
-            name="account.report_generalledger"
-            file="account.report_generalledger"
-            menu="False"
-            auto="False"
-        />
-
--->

@@ -7,7 +7,7 @@
 import time
 from openerp.osv import osv
 from openerp.report import report_sxw
-from common_report_header import common_report_header
+from openerp.addons.account.report.common_report_header import common_report_header
 
 
 class CashStatusReport(report_sxw.rml_parse, common_report_header):
@@ -41,12 +41,12 @@ class CashStatusReport(report_sxw.rml_parse, common_report_header):
         if (data['model'] == 'ir.ui.menu'):
             new_ids = [data['form']['chart_account_id']]
             objects = self.pool.get('account.account').browse(self.cr, self.uid, new_ids)
-        return super(general_ledger, self).set_context(objects, data, new_ids, report_type=report_type)
+        return super(CashStatusReport, self).set_context(objects, data, new_ids, report_type=report_type)
 
     def __init__(self, cr, uid, name, context=None):
         if context is None:
             context = {}
-        super(general_ledger, self).__init__(cr, uid, name, context=context)
+        super(CashStatusReport, self).__init__(cr, uid, name, context=context)
         self.query = ""
         self.tot_currency = 0.0
         self.period_sql = ""
@@ -284,9 +284,9 @@ class CashStatusReport(report_sxw.rml_parse, common_report_header):
 
 
 class report_cash_status_template(osv.AbstractModel):
-    _name = 'report.account.cash_report'
+    _name = 'report.account_financial_cash_status.report_cash_status_template'
     _inherit = 'report.abstract_report'
-    _template = 'report_cash_status_template'
+    _template = 'account_financial_cash_status.report_cash_status_template'
     _wrapped_report_class = CashStatusReport
 
 # vim:expandtab:smartindent:tabstop=4:softtabstop=4:shiftwidth=4:
