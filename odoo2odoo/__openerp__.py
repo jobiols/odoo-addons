@@ -21,7 +21,7 @@
 {
     'name': 'Odoo to Odoo',
     'version': '9.0.1.0.0',
-    'category': 'Tools',
+    'category': 'Connector',
     'sequence': 14,
     'summary': '',
     'description': """
@@ -43,8 +43,8 @@ Replicate data between Odoo Databases
     ],
     'test': [
     ],
-    'installable': True,
-    'auto_install': True,
+    'installable': False,
+    'auto_install': False,
     'application': False,
 }
 
