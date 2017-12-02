@@ -47,9 +47,9 @@ class AccountCashReport(models.TransientModel):
             "With Currency",
             help="It adds the currency column on report if the currency differs from the company currency."
     )
-    landscape = fields.Boolean(
-            "Landscape Mode"
-    )
+#    landscape = fields.Boolean(
+#            "Landscape Mode"
+#    )
     initial_balance = fields.Boolean(
             string='Include Initial Balances',
             help='If you selected date, this field allow you to add a row to display the amount of debit/credit/balance that precedes the filter you\'ve set.'
