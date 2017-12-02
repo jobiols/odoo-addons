@@ -21,16 +21,26 @@ class TestReves(SingleTransactionCase):
 
     def test_01_1(self):
         ctx = {'landscape': True}
-        data_dict = {'chart_account_id': 'account.chart0'}
 
-#        import wdb;wdb.set_trace()
-        test_reports.try_report_action(
+        #import wdb;wdb.set_trace()
+        acc_chart = self.registry("ir.model.data").get_object_reference(
                 self.env.cr,
-                self.env.uid,
-                'action_report_cash_status',
-                wiz_data=data_dict,
-                context=ctx,
-                our_module='account_financial_cash_status')
+                self.env.uid, "account", "chart0")
 
+        data_dict = {'chart_account_id': acc_chart}
+
+#        test_reports.try_report_action(
+#                self.env.cr,
+#                self.env.uid,
+#                'action_account_cash_menu',
+#                wiz_data=data_dict,
+#                context=ctx,
+#                our_module='account_financial_cash_status')
+
+    #test_reports.try_report_action(cr, uid,
+        # 'action_account_general_ledger_menu',
+        # wiz_data=data_dict,
+        # context=ctx,
+        # our_module='account')
 
 # vim:expandtab:smartindent:tabstop=4:softtabstop=4:shiftwidth=4:
