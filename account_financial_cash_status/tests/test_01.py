@@ -14,9 +14,9 @@ from openerp.tools import test_reports
 from openerp import api, fields, models, _
 
 
-class TestReves(SingleTransactionCase):
+class TestCashReport(SingleTransactionCase):
     def setUp(self):
-        super(TestReves, self).setUp()
+        super(TestCashReport, self).setUp()
 
     def test_01_1(self):
         ctx = {'landscape': True}
