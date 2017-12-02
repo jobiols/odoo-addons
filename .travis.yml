@@ -27,7 +27,7 @@ addons:
 
 env:
   global:
-  - VERSION="8.0" TESTS="0" LINT_CHECK="0" TRANSIFEX="0"
+  - VERSION="8.0" LINT_CHECK="0"  # en algun momento poner lint = 1
 
 virtualenv:
   system_site_packages: true
@@ -44,4 +44,4 @@ script:
   - travis_run_tests
 
 after_success:
-  - travis_after_tests_success
+  coveralls

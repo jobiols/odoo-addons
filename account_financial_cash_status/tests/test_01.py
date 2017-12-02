@@ -18,7 +18,6 @@ class TestReves(SingleTransactionCase):
     def setUp(self):
         super(TestReves, self).setUp()
 
-
     def test_01_1(self):
         ctx = {'landscape': True}
 
