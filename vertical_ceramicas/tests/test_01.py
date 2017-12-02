@@ -10,17 +10,13 @@
 # ./odooenv.py -Q reves test_01.py -c reves -d reves_travis -m reves_default
 from openerp.tests.common import SingleTransactionCase
 
-class TestReves(SingleTransactionCase):
-    def setUp(self):
-        super(TestReves, self).setUp()
 
-        # crear el wizard
-        self.wizard = self.env['import.price.file'].create({
-            'data': '1',
-            'name': 'juan'
-        })
+class TestCeramicas(SingleTransactionCase):
+    def setUp(self):
+        super(TestCeramicas, self).setUp()
+
 
     def test_01_1(self):
-        pass
+        print '-----------------------------------------------------------------------------------'
 
 # vim:expandtab:smartindent:tabstop=4:softtabstop=4:shiftwidth=4:

@@ -8,10 +8,10 @@
             <field name="arch" type="xml">
             <form string="Report Options">
                 <group col="4">
-                   <field name="chart_account_id" widget='selection' string="Plan de cuentas" />
-                   <field name="company_id" invisible="1"/>
-                   <field name="fiscalyear_id" domain="[('company_id','=',company_id)]" string="Año Fiscal"/>
-                   <field name="target_move" string="Movimientos destino"/>
+                    <field name="chart_account_id" widget='selection' string="Plan de cuentas" />
+                    <field name="company_id" invisible="1"/>
+                    <field name="fiscalyear_id" domain="[('company_id','=',company_id)]" string="Año Fiscal"/>
+                    <field name="target_move" string="Movimientos destino"/>
                     <field name="display_account" string="Mostrar cuentas"/>
                     <field name="sortby" string="Ordenar por"/>
                     <field name="amount_currency" string="Con moneda"/>
@@ -20,19 +20,19 @@
                 <notebook tabpos="up" colspan="4">
                     <page string="Filtros" name="filters">
                         <group>
-                            <field name="filter"/>
-                            <field name="initial_balance" attrs="{'readonly':[('filter', 'in', ('filter_no'))]}" />
+                            <field name="filter" string="Filtrado por"/>
+                            <field name="initial_balance" attrs="{'readonly':[('filter', 'in', ('filter_no'))]}" string="Incluir balance inicial"/>
                         </group>
-                        <group string="Dates"  attrs="{'invisible':[('filter', '!=', 'filter_date')], 'required':[('filter', '=', 'filter_date')]}">
-                            <field name="date_from" />
-                            <field name="date_to" />
+                        <group string="Fechas" attrs="{'invisible':[('filter', '!=', 'filter_date')], 'required':[('filter', '=', 'filter_date')]}">
+                            <field name="date_from" string="Fecha Inical"/>
+                            <field name="date_to" string="Fecha Final"/>
                         </group>
-                        <group string="Periods" attrs="{'invisible':[('filter','!=','filter_period')], 'required':[('filter', '=', 'filter_period')]}">
-                            <field name="period_from" domain="[('fiscalyear_id', '=', fiscalyear_id)]"/>
-                            <field name="period_to" domain="[('fiscalyear_id', '=', fiscalyear_id)]"/>
+                        <group string="Periodos" attrs="{'invisible':[('filter','!=','filter_period')], 'required':[('filter', '=', 'filter_period')]}">
+                            <field name="period_from" string="Periodo inicial" domain="[('fiscalyear_id', '=', fiscalyear_id)]"/>
+                            <field name="period_to" string="Periodo final" domain="[('fiscalyear_id', '=', fiscalyear_id)]"/>
                         </group>
                     </page>
-                    <page string="Journals" name="journal_ids">
+                    <page string="Diarios" name="journal_ids">
                         <field name="journal_ids"/>
                     </page>
                 </notebook>
