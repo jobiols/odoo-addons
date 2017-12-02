@@ -127,7 +127,7 @@ pero pueden acceder a las listas de precio restringidas</field>
             <!-- permitir que todos puedan ver el journal_id para elegir el punto de venta -->
 
             <record id="account_invoice_form_reves" model="ir.ui.view">
-                <field name="name">account.invoice.form.reves</field>
+                <field name="name">Ceramicas: permitir que todos vean journal_id</field>
                 <field name="model">account.invoice</field>
                 <field name="inherit_id" ref="account.invoice_form"/>
                 <field name="arch" type="xml">

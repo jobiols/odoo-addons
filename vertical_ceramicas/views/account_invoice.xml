@@ -2,9 +2,9 @@
 <openerp>
     <data>
 
-        <!-- le damos permiso para que modifiquen el precio en ventas -->
+        <!-- le damos permiso para que modifiquen el precio en factura de ventas -->
         <record id="account_invoice_form_readonly_price_reves" model="ir.ui.view">
-            <field name="name">invoice.order.form.readonly.reves</field>
+            <field name="name">Ceramicas: sales product price</field>
             <field name="model">account.invoice</field>
             <field name="inherit_id" ref="account.invoice_form"/>
 
@@ -20,8 +20,8 @@
         </record>
 
         <!-- le damos permiso para que modifiquen el precio en compras -->
-        <record id="account_invoice_form_readonly_price_reves" model="ir.ui.view">
-            <field name="name">invoice.order.form.readonly.reves</field>
+        <record id="account_invoice_supplier_form_readonly_price_reves" model="ir.ui.view">
+            <field name="name">Ceramicas: purchases product price</field>
             <field name="model">account.invoice</field>
             <field name="inherit_id" ref="account.invoice_supplier_form"/>
 
