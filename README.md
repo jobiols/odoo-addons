@@ -5,4 +5,4 @@
 
 # jeo Software
 
-modulos odoo v9.0
+modulos odoo v8.0
