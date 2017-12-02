@@ -11,6 +11,10 @@ class AccountCashReport(models.TransientModel):
     _name = "cash_report"
     _description = "Accounting Cash Report"
 
+    @api.model
+    def _get_journals(self):
+        return self.env['account.journal'].search([('type', '=', 'cash')])
+
     chart_account_id = fields.Many2one(
             'account.account',
             'Chart of Account',
@@ -61,7 +65,7 @@ class AccountCashReport(models.TransientModel):
             'account.journal',
             string='Journals',
             required=True,
-            default=lambda self: self.env['account.journal'].search([])
+            default=_get_journals
     )
     display_account = fields.Selection(
             [('all', 'All'),
@@ -78,13 +82,13 @@ class AccountCashReport(models.TransientModel):
     )
     date_from = fields.Date(
             string='Start Date',
-#            default=fields.Date.today()
+            #            default=fields.Date.today()
             default='2017-11-01'
     )
     date_to = fields.Date(
             string='End Date',
             default='2017-11-01'
-#            default=fields.Date.today()
+            #            default=fields.Date.today()
     )
     target_move = fields.Selection(
             [('posted', 'All Posted Entries'),
@@ -97,8 +101,6 @@ class AccountCashReport(models.TransientModel):
     def pre_print_report(self, data):
         data['form'].update(self.read(['display_account'])[0])
         return data
-
-    # -----------------------------------------------------
 
     @api.multi
     def check_report(self):
@@ -122,7 +124,6 @@ class AccountCashReport(models.TransientModel):
         data['form'].update(self.read(['landscape', 'initial_balance', 'amount_currency', 'sortby'])[0])
         records = self.env[data['model']].browse(data.get('ids', []))
         report_name = 'account_financial_cash_status.report_cash_status_template'
-#        report_name = 'account.report_generalledger'
         return self.env['report'].with_context(landscape=True).get_action(records, report_name, data=data)
 
     def _build_contexts(self, data):
