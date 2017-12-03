@@ -17,47 +17,47 @@ class AccountCashReport(models.TransientModel):
 
     chart_account_id = fields.Many2one(
             'account.account',
-            'Chart of Account',
-            help='Select Charts of Accounts',
+            'Plan de cuentas',
+            help='Seleccione plan de cuentas',
             required=True,
             domain=[('parent_id', '=', False)]
     )
     period_from = fields.Many2one(
             'account.period',
-            'Start Period'
+            'Periodo inicial'
     )
     period_to = fields.Many2one(
             'account.period',
-            'End Period'
+            'Periodo final'
     )
     filter = fields.Selection(
-            [('filter_no', 'No Filters'),
-             ('filter_date', 'Date'),
-             ('filter_period', 'Periods')],
-            "Filter by",
+            [('filter_no', 'Sin filtro'),
+             ('filter_date', 'Fecha'),
+             ('filter_period', 'Periodos')],
+            'Filtrado por',
             required=True,
-            default="filter_date"
+            default='filter_date'
     )
     fiscalyear_id = fields.Many2one(
             'account.fiscalyear',
-            'Fiscal Year',
-            help='Keep empty for all open fiscal year',
+            'Año Fiscal',
+            help='Dejarlo vacio para obtener todos los años fiscales abiertos',
     )
     amount_currency = fields.Boolean(
-            "With Currency",
-            help="It adds the currency column on report if the currency differs from the company currency."
+            'Con moneda',
+            help='Agrega la columna moneda en el reporte si la moneda difiere de la moneda de la compañia.',
+            default=False
     )
-#    landscape = fields.Boolean(
-#            "Landscape Mode"
-#    )
     initial_balance = fields.Boolean(
-            string='Include Initial Balances',
-            help='If you selected date, this field allow you to add a row to display the amount of debit/credit/balance that precedes the filter you\'ve set.'
+            string='Incluir balance inicial',
+            help='Si selecciona el filtro por fecha o periodo, este campo le permite agregar una fila para mostrar '
+                 'el importe debe/haber/balance que precede al filtro que ha incluido.',
+            default=False
     )
     sortby = fields.Selection(
-            [('sort_date', 'Date'),
-             ('sort_journal_partner', 'Journal & Partner')],
-            string='Sort by',
+            [('sort_date', 'Fecha'),
+             ('sort_journal_partner', 'Diario & Partner')],
+            string='Ordenado por',
             required=True,
             default='sort_date'
     )
@@ -68,12 +68,16 @@ class AccountCashReport(models.TransientModel):
             default=_get_journals
     )
     display_account = fields.Selection(
-            [('all', 'All'),
-             ('movement', 'With movements'),
-             ('not_zero', 'With balance is not equal to 0'), ],
-            string='Display Accounts',
+            [('all', 'Todas'),
+             ('movement', 'Con movimientos'),
+             ('not_zero', 'Con balance distinto de cero'), ],
+            string='Mostrar cuentas',
             required=True,
             default='movement')
+    only_cash_account = fields.Boolean(
+            string='Solo cuentas de Efectivo',
+            default=True
+    )
     company_id = fields.Many2one(
             'res.company',
             string='Company',
@@ -81,25 +85,29 @@ class AccountCashReport(models.TransientModel):
             default=lambda self: self.env.user.company_id
     )
     date_from = fields.Date(
-            string='Start Date',
-            #            default=fields.Date.today()
-            default='2017-11-01'
+            string='Fecha Inical',
+            default=fields.Date.today()
     )
     date_to = fields.Date(
-            string='End Date',
-            default='2017-11-01'
-            #            default=fields.Date.today()
+            string='Fecha Final',
+            default=fields.Date.today()
     )
     target_move = fields.Selection(
-            [('posted', 'All Posted Entries'),
-             ('all', 'All Entries')],
-            string='Target Moves',
+            [('posted', 'Todos los asientos publicados'),
+             ('all', 'Todos los asientos')],
+            string='Movimientos destino',
             required=True,
             default='posted')
+    expand_moves = fields.Boolean(
+        'Expandir movimientos',
+        default=False
+    )
 
     @api.multi
     def pre_print_report(self, data):
         data['form'].update(self.read(['display_account'])[0])
+        data['form'].update(self.read(['only_cash_account'])[0])
+        data['form'].update(self.read(['expand_moves'])[0])
         return data
 
     @api.multi
@@ -120,11 +128,13 @@ class AccountCashReport(models.TransientModel):
         return self._print_report(data)
 
     def _print_report(self, data):
+        #import wdb;wdb.set_trace()
         data = self.pre_print_report(data)
-        data['form'].update(self.read(['landscape', 'initial_balance', 'amount_currency', 'sortby'])[0])
+        data['form'].update(self.read(['expand_moves', 'only_cash_account', 'initial_balance', 'amount_currency', 'sortby'])[0])
         records = self.env[data['model']].browse(data.get('ids', []))
         report_name = 'account_financial_cash_status.report_cash_status_template'
-        return self.env['report'].with_context(landscape=True).get_action(records, report_name, data=data)
+        landscape = data['form']['expand_moves']
+        return self.env['report'].with_context(landscape=landscape).get_action(records, report_name, data=data)
 
     def _build_contexts(self, data):
         result = {}

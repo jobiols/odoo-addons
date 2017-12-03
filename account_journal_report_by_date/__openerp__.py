@@ -47,7 +47,7 @@ Contabilidad / Reportes legales / Diarios / Diarios
     ],
     'test': [
     ],
-    'installable': True,
+    'installable': False,
     'auto_install': False,
     'application': False,
 }

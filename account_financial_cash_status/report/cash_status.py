@@ -23,6 +23,8 @@ class CashStatusReport(report_sxw.rml_parse, common_report_header):
         if self.init_balance:
             ctx2.update({'initial_bal': True})
         self.display_account = data['form']['display_account']
+        self.only_cash_account = data['form']['only_cash_account']
+        self.expand_moves = data['form']['expand_moves']
         self.target_move = data['form'].get('target_move', 'all')
         ctx = self.context.copy()
         ctx['fiscalyear'] = data['form']['fiscalyear_id']
@@ -89,6 +91,7 @@ class CashStatusReport(report_sxw.rml_parse, common_report_header):
     def get_children_accounts(self, account):
         res = []
         currency_obj = self.pool.get('res.currency')
+        # search for all the children and all consolidated children (recursively) of the given account ids
         ids_acc = self.pool.get('account.account')._get_children_and_consol(self.cr, self.uid, account.id)
         currency = account.currency_id and account.currency_id or account.company_id.currency_id
         for child_account in self.pool.get('account.account').browse(self.cr, self.uid, ids_acc, context=self.context):
@@ -101,15 +104,30 @@ class CashStatusReport(report_sxw.rml_parse, common_report_header):
             num_entry = self.cr.fetchone()[0] or 0
             sold_account = self._sum_balance_account(child_account)
             self.sold_accounts[child_account.id] = sold_account
+
             if self.display_account == 'movement':
-                if child_account.type != 'view' and num_entry <> 0:
-                    res.append(child_account)
+                if child_account.type != 'view' and num_entry != 0:
+                    if self.only_cash_account:
+                        if child_account.type == 'liquidity':
+                            res.append(child_account)
+                    else:
+                        res.append(child_account)
+
             elif self.display_account == 'not_zero':
                 if child_account.type != 'view' and num_entry <> 0:
                     if not currency_obj.is_zero(self.cr, self.uid, currency, sold_account):
-                        res.append(child_account)
+                        if self.only_cash_account:
+                            if child_account.type == 'liquidity':
+                                res.append(child_account)
+                        else:
+                            res.append(child_account)
             else:
-                res.append(child_account)
+                if self.only_cash_account:
+                    if child_account.type == 'liquidity':
+                        res.append(child_account)
+                else:
+                    res.append(child_account)
+
         if not res:
             return [account]
         return res

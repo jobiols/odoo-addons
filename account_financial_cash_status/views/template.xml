@@ -28,7 +28,7 @@
                               <p t-esc="', '.join([ lt or '' for lt in get_journal(data) ])"/>
                         </div>
                         <div class="col-xs-3">
-                            <strong>Display Account</strong>
+                            <strong>Mostrar cuentas</strong>
                             <p>
                                 <span t-if="data['form']['display_account'] == 'all'">Todas las cuentas'</span>
                                 <span t-if="data['form']['display_account'] == 'movement'">Con movimientos</span>
@@ -66,17 +66,17 @@
                     <table class="table table-condensed">
                         <thead>
                             <tr class="text-center">
-                                <th>Date</th>
-                                <th>JRNL</th>
+                                <th>Fecha</th>
+                                <th>Diario</th>
                                 <th>Partner</th>
-                                <th>Ref</th>
-                                <th>Move</th>
-                                <th>Entry Label</th>
-                                <th>Counterpart</th>
-                                <th>Debit</th>
-                                <th>Credit</th>
+                                <th>Ref.</th>
+                                <th>Movimiento</th>
+                                <th>Etiqueta del asiento</th>
+                                <th>Contrapartida</th>
+                                <th>Debe</th>
+                                <th>Haber</th>
                                 <th>Balance</th>
-                                <th t-if="data['form']['amount_currency']">Currency</th>
+                                <th t-if="data['form']['amount_currency']">Moneda</th>
                             </tr>
                         </thead>
                         <tbody>
