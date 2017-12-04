@@ -104,6 +104,13 @@ class AccountCashReport(models.TransientModel):
     )
 
     @api.multi
+    @api.constrains('expand_moves')
+    def expand_moves_constraint(self):
+        for rec in self:
+            if not rec.expand_moves and not rec.only_cash_account:
+                rec.only_cash_account = True
+
+    @api.multi
     def pre_print_report(self, data):
         data['form'].update(self.read(['display_account'])[0])
         data['form'].update(self.read(['only_cash_account'])[0])

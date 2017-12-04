@@ -66,17 +66,27 @@
                     <table class="table table-condensed">
                         <thead>
                             <tr class="text-center">
-                                <th>Fecha</th>
-                                <th>Diario</th>
-                                <th>Partner</th>
-                                <th>Ref.</th>
-                                <th>Movimiento</th>
-                                <th>Etiqueta del asiento</th>
-                                <th>Contrapartida</th>
-                                <th>Debe</th>
-                                <th>Haber</th>
-                                <th>Balance</th>
-                                <th t-if="data['form']['amount_currency']">Moneda</th>
+                                <div t-if="data['form']['expand_moves']">
+                                    <th>Fecha</th>
+                                    <th>Diario</th>
+                                    <th>Partner</th>
+                                    <th>Ref.</th>
+                                    <th>Movimiento</th>
+                                    <th>Etiqueta del asiento</th>
+                                    <th>Contrapartida</th>
+                                    <th>Debe</th>
+                                    <th>Haber</th>
+                                    <th>Balance</th>
+                                    <th t-if="data['form']['amount_currency']">Moneda</th>
+                                </div>
+                                <div t-if="not data['form']['expand_moves']">
+                                    <th colspan="7"></th>
+                                    <th class="text-center">Debe</th>
+                                    <th class="text-center">Haber</th>
+                                    <th class="text-center">Balance</th>
+                                    <th t-if="data['form']['amount_currency']" ></th>
+                                </div>
+
                             </tr>
                         </thead>
                         <tbody>
@@ -87,6 +97,7 @@
                                         <span t-esc="childrenaccount['code']"/>
                                         <span t-esc="childrenaccount['name']"/>
                                     </td>
+
                                     <td class="text-right">
                                         <span t-esc="formatLang(sum_debit_account(childrenaccount), digits=get_digits(dp='Account'), currency_obj=res_company.currency_id)"/>
                                     </td>
@@ -100,28 +111,30 @@
                                         <span t-esc="formatLang(sum_currency_amount_account(childrenaccount), digits=get_digits(dp='Account')) if sum_currency_amount_account(childrenaccount) > 0.00 else ''"/>
                                     </td>
                                 </tr>
-                                <tr t-foreach="lines(childrenaccount)" t-as="line">
-                                    <td><span t-esc="formatLang(line['ldate'], date=True)"/></td>
-                                    <td><span t-esc="line['lcode']"/></td>
-                                    <td><span t-esc="line['partner_name']"/></td>
-                                    <td><span t-if="line['lref']" t-esc="line['lref']"/></td>
-                                    <td><span t-esc="line['move']"/></td>
-                                    <td><span t-esc="line['lname']"/></td>
-                                    <td><span t-esc="line['line_corresp'].replace(',',', ')"/></td>
-                                    <td class="text-right">
-                                        <span t-esc="formatLang(line['debit'], digits=get_digits(dp='Account'), currency_obj=res_company.currency_id)"/>
-                                    </td>
-                                    <td class="text-right">
-                                        <span t-esc="formatLang(line['credit'], digits=get_digits(dp='Account'), currency_obj=res_company.currency_id)"/>
-                                    </td>
-                                    <td class="text-right">
-                                        <span t-esc="formatLang(line['progress'], digits=get_digits(dp='Account'), currency_obj=res_company.currency_id)"/>
-                                    </td>
-                                    <td class="text-right" t-if="data['form']['amount_currency']">
-                                        <span t-esc="formatLang(line['amount_currency'], digits=get_digits(dp='Account')) if line['amount_currency'] > 0.00 else ''"/>
-                                        <span t-esc="line['currency_code'] if line['amount_currency'] > 0.00 else ''"/>
-                                    </td>
-                                </tr>
+                                <div t-if="data['form']['expand_moves']">
+                                    <tr t-foreach="lines(childrenaccount)" t-as="line">
+                                        <td><span t-esc="formatLang(line['ldate'], date=True)"/></td>
+                                        <td><span t-esc="line['lcode']"/></td>
+                                        <td><span t-esc="line['partner_name']"/></td>
+                                        <td><span t-if="line['lref']" t-esc="line['lref']"/></td>
+                                        <td><span t-esc="line['move']"/></td>
+                                        <td><span t-esc="line['lname']"/></td>
+                                        <td><span t-esc="line['line_corresp'].replace(',',', ')"/></td>
+                                        <td class="text-right">
+                                            <span t-esc="formatLang(line['debit'], digits=get_digits(dp='Account'), currency_obj=res_company.currency_id)"/>
+                                        </td>
+                                        <td class="text-right">
+                                            <span t-esc="formatLang(line['credit'], digits=get_digits(dp='Account'), currency_obj=res_company.currency_id)"/>
+                                        </td>
+                                        <td class="text-right">
+                                            <span t-esc="formatLang(line['progress'], digits=get_digits(dp='Account'), currency_obj=res_company.currency_id)"/>
+                                        </td>
+                                        <td class="text-right" t-if="data['form']['amount_currency']">
+                                            <span t-esc="formatLang(line['amount_currency'], digits=get_digits(dp='Account')) if line['amount_currency'] > 0.00 else ''"/>
+                                            <span t-esc="line['currency_code'] if line['amount_currency'] > 0.00 else ''"/>
+                                        </td>
+                                    </tr>
+                                </div>
                             </t>
                         </tbody>
                     </table>
