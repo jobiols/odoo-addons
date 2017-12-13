@@ -13,7 +13,7 @@ class AccountCashReport(models.TransientModel):
 
     @api.model
     def _get_journals(self):
-        return self.env['account.journal'].search([('type', '=', 'cash')])
+        return self.env['account.journal'].search([])
 
     chart_account_id = fields.Many2one(
             'account.account',
@@ -52,7 +52,7 @@ class AccountCashReport(models.TransientModel):
             string='Incluir balance inicial',
             help='Si selecciona el filtro por fecha o periodo, este campo le permite agregar una fila para mostrar '
                  'el importe debe/haber/balance que precede al filtro que ha incluido.',
-            default=False
+            default=True
     )
     sortby = fields.Selection(
             [('sort_date', 'Fecha'),
@@ -75,7 +75,7 @@ class AccountCashReport(models.TransientModel):
             required=True,
             default='movement')
     only_cash_account = fields.Boolean(
-            string='Solo cuentas de Efectivo',
+            string='NO Incluir contrapartidas',
             default=True
     )
     company_id = fields.Many2one(
