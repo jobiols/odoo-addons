@@ -15,8 +15,7 @@ class TestCeramicas(SingleTransactionCase):
     def setUp(self):
         super(TestCeramicas, self).setUp()
 
-
     def test_01_1(self):
-        print '-----------------------------------------------------------------------------------'
+        self.assertEqual(1, 1)
 
 # vim:expandtab:smartindent:tabstop=4:softtabstop=4:shiftwidth=4:

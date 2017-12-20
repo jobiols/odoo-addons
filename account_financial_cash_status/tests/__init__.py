@@ -3,6 +3,6 @@
 # For copyright and license notices, see __openerp__.py file in module root
 # directory
 ##############################################################################
-import test_01
+from . import test_01
 
 # vim:expandtab:smartindent:tabstop=4:softtabstop=4:shiftwidth=4:
