@@ -21,7 +21,6 @@ class TestCashReport(SingleTransactionCase):
     def test_01_1(self):
         ctx = {'landscape': True}
 
-        print 'testing report ================================================================================='
 
         #import wdb;wdb.set_trace()
         acc_chart = self.registry("ir.model.data").get_object_reference(
