@@ -27,7 +27,7 @@ addons:
 
 env:
   global:
-  - VERSION="8.0" LINT_CHECK="0"  # en algun momento poner lint = 1
+  - VERSION="8.0" LINT_CHECK="1"
 
 virtualenv:
   system_site_packages: true
