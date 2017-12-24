@@ -2,4 +2,3 @@ connector https://github.com/OCA/connector.git 9.0
 odoo-support https://github.com/ingadhoc/odoo-support.git 9.0
 odoo-argentina https://github.com/jobiols/odoo-argentina.git 9.0
 adhoc-argentina-reporting https://github.com/jobiols/adhoc-argentina-reporting.git 9.0
-

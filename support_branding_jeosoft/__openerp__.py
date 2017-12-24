@@ -24,11 +24,6 @@
     'category': 'Support',
     'sequence': 14,
     'summary': '',
-    'description': """
-Support branding JEOSOFT
-========================
-Set parameter for jeosoft support branding
-    """,
     'author':  'jeo Soft',
     'website': 'jeosoft.com.ar',
     'license': 'AGPL-3',
@@ -49,7 +44,7 @@ Set parameter for jeosoft support branding
         # modulos adicionales utilitarios
         'disable_odoo_online',
         'res_config_settings_enterprise_remove',
-        'server_mode',              # habilitar uso de parametro server_mode = "some value" en config.
+        'server_mode',              # server_mode = "test" en desarrollo
 
     ],
     'data': [
