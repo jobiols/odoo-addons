@@ -27,7 +27,7 @@ addons:
 
 env:
   global:
-  - VERSION="9.0" TESTS="1" LINT_CHECK="1"
+  - VERSION="9.0" TESTS="1" LINT_CHECK="0"
 
 virtualenv:
   system_site_packages: true
