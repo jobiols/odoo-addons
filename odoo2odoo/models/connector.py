@@ -25,7 +25,7 @@ class OdooBaseBindings(models.AbstractModel):
 
 def get_environment(session, model_name, backend_id):
     """ Create an environment to work with. """
-    
+
     backend_record = session.env['odoo_base.backend'].browse(backend_id)
     env = Environment(backend_record, session, model_name)
     lang = backend_record.default_lang_id
@@ -35,4 +35,3 @@ def get_environment(session, model_name, backend_id):
     else:
         with env.session.change_context(lang=lang_code):
             return env
-

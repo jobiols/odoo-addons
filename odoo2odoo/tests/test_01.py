@@ -33,5 +33,4 @@ class TestBackend(unittest.TestCase):
         super(TestBackend, self).setUp()
 
     def test_new_backend(self):
-        print 'hola test odoo 2 odoo'
         self.assertEqual(1, 1)

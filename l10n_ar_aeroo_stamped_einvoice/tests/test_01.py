@@ -10,4 +10,4 @@ class test_backend(unittest.TestCase):
         super(test_backend, self).setUp()
 
     def test_new_backend(self):
-        print 'hola test aeroo stamped'
+        self.assertEqual(1,1)

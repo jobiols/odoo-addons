@@ -13,22 +13,22 @@ class OdooBaseBackend(models.Model):
 
     version = fields.Selection(
             selection='_select_versions',
-            string='Version',
-            required=True
+        string='Version',
+    required=True
 
     )
     location = fields.Char(
-            string='Location'
+        string='Location'
     )
     username = fields.Char(
-            string='Username'
+          string='Username'
     )
     password = fields.Char(
-            string='Password'
+    string='Password'
     )
     default_lang_id = fields.Many2one(
-            comodel_name='res.lang',
-            string='Default Language',
+          comodel_name='res.lang',
+        string='Default Language',
     )
 
     @api.model
