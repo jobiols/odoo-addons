@@ -1,7 +1,10 @@
 language: python
 sudo: false
+
 cache:
-  apt: true
+  - pip
+  - apt
+
   directories:
     - $HOME/.cache/pip
 
@@ -24,8 +27,6 @@ addons:
       - libssl-dev
       - python-m2crypto
       - python-httplib2
-
-
 
 env:
   matrix:
