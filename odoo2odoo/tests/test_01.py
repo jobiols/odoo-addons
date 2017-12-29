@@ -20,7 +20,8 @@ import unittest
 #   -d base de datos
 #   -m modulo que estamos testeando
 #
-#   ./odooenv.py -Q odoo-addons test_01.py -c bulonfer -d bulonfer_test -m odoo2odoo
+#   ./odooenv.py
+#   -Q odoo-addons test_01.py -c bulonfer -d bulonfer_test -m odoo2odoo
 #
 #    si le pongo -i modulo ejecuta el yml si le pongo -u modulo no lo ejecuta.
 #

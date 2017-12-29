@@ -27,7 +27,8 @@
     'description': """
 Sale Paid Stamp
 ===============
-Pone un sello de pagado al imprimir la factura cuando el balance es cero. (fue pagada)
+Pone un sello de pagado al imprimir la factura cuando el balance es cero.
+(fue pagada)
 
     """,
     'author':  'jeo Soft',
