@@ -13,7 +13,7 @@ class MailNotification(osv.Model):
             cr, uid, "support_branding.company_url",
             default=None, context=context)
 
-        ret = super(mail_notification, self).get_signature_footer(
+        ret = super(MailNotification, self).get_signature_footer(
             cr, uid, user_id, res_model, res_id, context, user_signature)
 
         if web:
