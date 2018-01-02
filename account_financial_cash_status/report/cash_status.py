@@ -308,4 +308,4 @@ class report_cash_status_template(osv.AbstractModel):
     _template = 'account_financial_cash_status.report_cash_status_template'
     _wrapped_report_class = CashStatusReport
 
-# vim:expandtab:smartindent:tabstop=4:softtabstop=4:shiftwidth=4:
+# flake8: noqa

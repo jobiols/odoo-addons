@@ -78,4 +78,3 @@ class sale_order_line(models.Model):
 
         if self.discount > 10 and not manager:
             raise ValidationError("No puede poner un descuento mayor que 10%")
-

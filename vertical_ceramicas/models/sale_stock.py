@@ -87,8 +87,9 @@ class sale_order_line(osv.osv):
 
                 # verificar si en algun lado hay, si no hay damos el warning
                 # aunque lo dejamos vender igual
-                compare_qty = float_compare(product_obj.virtual_available, qty,
-                                            precision_rounding=uom_record.rounding)
+                compare_qty = float_compare(
+                    product_obj.virtual_available, qty,
+                    precision_rounding=uom_record.rounding)
                 if compare_qty == -1:
                     warn_msg = _(
                         'Intenta vender {} Un pero solo tiene {} Un disponibles !\n'
@@ -117,27 +118,17 @@ class sale_order_line(osv.osv):
 
     @api.multi
     def calc_virtual_stock(self, product_id):
+        print ' calc virtual stock ------------------------------'
+        product_obj = self.env['product.product']
 
-        # generar una lista de ids con las ubicaciones internas
-        locations = self.env['stock.location'].search(
-            [('usage', '=', 'internal')])
-        ids = []
-        for loc in locations:
-            ids.append(loc.id)
-
-        # buscar quants con ubicaciones internas y el producto que quiero
-        quants = self.env['stock.quant'].search([
-            ('location_id', 'in', ids),
-            ('product_id', '=', product_id.id),
-            ('reservation_id', '=', False),
-        ])
         data = {}
-        for quant in quants:
-            loc_id = quant.location_id.location_id.name
-            if loc_id not in data:
-                data[loc_id] = int(quant.qty)
-            else:
-                data[loc_id] += int(quant.qty)
+        for loc in [u'AM', u'CH', u'GA', u'PA', u'SM']:
+            stk = product_obj.search(
+                [('id', '=', product_id.id)]).with_context(
+                location=loc)._product_available()
+            qty = stk[product_id.id]['virtual_available']
+            if qty > 0:
+                data[loc] = qty
 
         return data
 
