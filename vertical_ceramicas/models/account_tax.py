@@ -5,6 +5,7 @@
 ##############################################################################
 from openerp import models, fields, api
 
+
 #   Agrega un campo en el tax para poner en la factura, esto permite que no
 #   aparezcan ciertos impuestos en cada linea tipo percepciones de ingresos
 #   brutos.

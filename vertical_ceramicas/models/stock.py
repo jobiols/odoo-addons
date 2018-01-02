@@ -9,10 +9,11 @@ from openerp import models, fields, api
 class StockPicking(models.Model):
     _inherit = "stock.picking"
 
-    # es el comentario del deposito se usa en el remito para decir donde se retira y a que hora etc.
+    # es el comentario del deposito se usa en el remito para decir donde se
+    # retira y a que hora etc.
     pick_from = fields.Char(
-            string="retira",
-            compute="_get_picking_location"
+        string="retira",
+        compute="_get_picking_location"
     )
     printed = fields.Boolean(
         string="Imp",
@@ -30,7 +31,8 @@ class StockPicking(models.Model):
     @api.one
     @api.depends('min_date')
     def _get_min_only_date(self):
-        """ creamos una nueva min_date porque necesito truncar la parte de hora y asi filtrar por dias.
+        """ creamos una nueva min_date porque necesito truncar la parte de
+            hora y asi filtrar por dias.
         """
         self.min_only_date = self.min_date
 
@@ -56,22 +58,22 @@ class StockMove(models.Model):
 
     # es la direccion de entrega
     partner_shipping_id = fields.Many2one(
-            'res.partner',
-            'Direccion de entrega',
-            compute='_get_partner_shipping_id'
+        'res.partner',
+        'Direccion de entrega',
+        compute='_get_partner_shipping_id'
     )
 
     @api.one
     @api.depends('partner_id.child_ids')
     def _get_partner_shipping_id(self):
-        addresses = self.partner_id.child_ids.search([('type', '=', 'delivery')])
+        addresses = self.partner_id.child_ids.search(
+            [('type', '=', 'delivery')])
         # me traigo solo la primera si es que existe
         for address in addresses:
             self.partner_shipping_id = address.id
 
-
 # intento de poner los stores en el nombre de las rutas
-#class StockLocationRoute(models.Model):
+# class StockLocationRoute(models.Model):
 #    _inherit = 'stock.location.route'
 #    _rec_name = 'id'
 
@@ -79,4 +81,3 @@ class StockMove(models.Model):
 #    def name_get(self):
 #        for rec in self:
 #            return [str(rec.id)+'pp']
-
