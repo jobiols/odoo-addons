@@ -15,6 +15,18 @@ class sale_order_line(models.Model):
             states={'draft': [('readonly', True)]}
     )
 
+    route_select = fields.Selection(
+        string='Ruta',
+        selection='_select_route'
+
+    )
+
+    @api.model
+    def _select_route(self):
+
+        return [('a','A'),('b','B')]
+
+
     """ Parece que necesitan vender cosas que no tienen.
     @api.onchange('name')
     @api.model
