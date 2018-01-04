@@ -15,18 +15,6 @@ class sale_order_line(models.Model):
             states={'draft': [('readonly', True)]}
     )
 
-    route_select = fields.Selection(
-        string='Ruta',
-        selection='_select_route'
-
-    )
-
-    @api.model
-    def _select_route(self):
-
-        return [('a','A'),('b','B')]
-
-
     """ Parece que necesitan vender cosas que no tienen.
     @api.onchange('name')
     @api.model
@@ -88,4 +76,3 @@ class sale_order_line(models.Model):
         if self.discount > 10 and not manager:
             raise ValidationError("No puede poner un descuento mayor que 10%")
 
-# vim:expandtab:smartindent:tabstop=4:softtabstop=4:shiftwidth=4:

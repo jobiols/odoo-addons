@@ -8,9 +8,9 @@ from . import account_tax
 from . import account_invoice_line
 from . import sale
 from . import pricelist
-from . import sale_stock
+#from . import sale_stock
 from . import stock
 from . import res_company
 from . import res_config
+from . import sale_old_style
 
-# vim:expandtab:smartindent:tabstop=4:softtabstop=4:shiftwidth=4:
