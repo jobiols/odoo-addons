@@ -19,10 +19,18 @@ class sale_order_line(osv.osv):
             stk = prod._product_available()
             qty = stk[prod.id]
             if qty['virtual_available'] != 0.0:
-                data.append((loc, '{} {}'.format(loc, int(qty['virtual_available']))))
+                data.append(
+                    (
+                        loc,
+                        '{} {}'.format(loc, int(qty['virtual_available']))
+                    )
+                )
 
         return data
 
     _columns = {
-        'route_select': fields.selection(_get_route_selection),
+        'route_select': fields.selection(
+            _get_route_selection,
+            required=True),
+
     }

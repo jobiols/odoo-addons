@@ -76,3 +76,12 @@ class sale_order_line(models.Model):
         if self.discount > 10 and not manager:
             raise ValidationError("No puede poner un descuento mayor que 10%")
 
+    @api.multi
+    @api.onchange('route_select')
+    def _onchange_route(self):
+        """ setear el verdadero route id basado en la seleccion
+        """
+        route_obj = self.env['stock.location.route']
+        for line in self:
+            route = route_obj.search([('name', '=', line.route_select)])
+            line.route_id = route.id
