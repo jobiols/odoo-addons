@@ -122,12 +122,18 @@ class sale_order_line(osv.osv):
 
         data = {}
         for loc in [u'AM', u'CH', u'GA', u'PA', u'SM']:
-            stk = product_obj.search(
+            prod = product_obj.search(
                 [('id', '=', product_id.id)]).with_context(
-                location=loc)._product_available()
-            qty = stk[product_id.id]
-            if qty['virtual_available'] != 0.0:
-                data[loc] = qty
+                location=loc)
+            tmp = {
+                'virtual_available' : int(prod.qty_available),
+                'qty_available': int(prod.qty_available),
+                'incoming_qty': int(prod.incoming_qty),
+                'outgoing_qty': int(prod.outgoing_qty),
+                'virtual_available': int(prod.virtual_available),
+            }
+            if prod.virtual_available != 0:
+                data[loc] = tmp
         return data
 
     @api.multi
@@ -136,9 +142,9 @@ class sale_order_line(osv.osv):
             formatear la informacion de sucursales y cantidades
         """
         data = self.calc_virtual_stock(product_id)
-        ret = 'Sucursal --- Cantidad (existencia - reservado + comprado)\n' if data else ''
+        ret = 'EXISTENCIAS\n' if data else ''
         for loc in data:
-            ret += u'{} ---> {} ({} - {} + {}) Un\n'.format(loc,
+            ret += u'{} --->  [{}]  ({} - {} + {}) Un\n'.format(loc,
                                                 data[loc]['virtual_available'],
                                                 data[loc]['qty_available'],
                                                 data[loc]['outgoing_qty'],
