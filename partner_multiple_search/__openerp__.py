@@ -23,7 +23,6 @@
     "version": "8.0.3.0",
     "author": "jeo Software",
     'website': 'http://www.jeosoft.com.ar',
-    "depends": ['base'],
     "category": "Generic Modules",
     "description": """
 Agregar mas criterios de busqueda para los partners
@@ -38,7 +37,8 @@ Agregar mas criterios de busqueda para los partners
         'l10n_ar_invoice',
     ],
     "data": [
-        'views/partner_view.xml'
+        'views/partner_view.xml',
+        'base'
     ],
     'installable': True,
     'application': False,
