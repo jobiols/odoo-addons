@@ -12,5 +12,4 @@ from . import pricelist
 from . import stock
 from . import res_company
 from . import res_config
-from . import sale_old_style
 

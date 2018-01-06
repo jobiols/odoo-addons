@@ -15,6 +15,29 @@ class sale_order_line(models.Model):
             states={'draft': [('readonly', True)]}
     )
 
+    @api.multi
+    def _get_route_selection(self):
+        product = 14882
+        product_obj = self.env['product.product']
+        data = []
+        for loc in [u'AM', u'CH', u'GA', u'PA', u'SM']:
+            print '------------------------------------------------------- calculate dropdown'
+            prod = product_obj.with_context(location=loc).browse([product])
+            qty = prod.qty_available
+            if qty != 0.0:
+                data.append(
+                    (
+                        loc, '{} {}'.format(loc, int(qty))
+                    )
+                )
+
+        return data
+
+    route_select = fields.Selection(
+        _get_route_selection,
+        required=True)
+
+
     """ Parece que necesitan vender cosas que no tienen.
     @api.onchange('name')
     @api.model
