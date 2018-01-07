@@ -3,7 +3,7 @@
 # For copyright and license notices, see __openerp__.py file in module root
 # directory
 ##############################################################################
-from openerp import models, fields, api
+from openerp import models, fields
 
 
 #   Agrega un campo en el tax para poner en la factura, esto permite que no

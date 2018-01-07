@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-# -----------------------------------------------------------------------------------
+# -----------------------------------------------------------------------------
 #
 #    Copyright (C) 2017  jeo Software  (http://www.jeosoft.com.ar)
 #    All Rights Reserved.
@@ -17,53 +17,13 @@
 #    You should have received a copy of the GNU Affero General Public License
 #    along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #
-# -----------------------------------------------------------------------------------
+# -----------------------------------------------------------------------------
 
 {
     'name': 'Vertical Ceramicas',
-    'version': '8.0.1.1',
+    'version': '8.0.1.2',
     'category': 'Tools',
     'summary': 'Customización mayorista de ceramicas',
-    'description': """
-
-Customización mayorista de ceramicas
-====================================
-
-- Parametro adicional m2 o m por caja en producto
-- Si se usan descuentos, el Comercial solo pueden poner descuentos hasta 10%
-- Listas de precios restringidas, solo las ven Administrador y Encargado
-- Definicion de remitos para envios o para retiro en sucursal
-- Definicion de tres columnas configurables en listado de productos para mostrar listas de precio.
-- Rutas para definir envios o retiros desde el presupuesto.
-
-Definicion de cuatro grupos de usuarios
----------------------------------------
-- Administrador
-- Encargado
-- Comercial
-- Almacen
-
-Se usan las restricciones de los stores
----------------------------------------
-- Los usuarios de almacen tienen restrignidos los almacenes y diarios.
-- Los usuarios comerciales tienen restringidos diarios.
-
-Definicion de rutas
--------------------
-Se requiere definir para cada almacen una ubicacion Envio y dos rutas, suponiendo un almacen WH las
-rutas tendrian la siguiente forma:
-
-**Ruta WH** genera un remito para que lo vengan a retirar al almacen
-
-WH:Stock -> Ubicaciones Clientes
-
-**Ruta WHE** genera un remito para que lo envien a la direccion de envio del cliente
-
-WHE:Stock -> Envios (Método de abastecimiento = Obtener de las existencias)
-
-WHE:Envios -> Ubicaciones Clientes (Método de abastecimiento = crear abastecimiento)
-
-""",
     'author': 'jeo Software',
     'depends': [
         'product',
@@ -71,9 +31,12 @@ WHE:Envios -> Ubicaciones Clientes (Método de abastecimiento = crear abastecimi
         'account',
         'stock',
         'purchase',
-        'account_multi_store',    # capacidad de limitar los diarios para los usuarios comerciales
-        'stock_multi_store',      # capacidad de limitar los diarios para los usuarios de almacen
-        'procurement_jit_stock',  # Planificación 'Just in time' (bajo demanda) con inventario
+        # capacidad de limitar los diarios para los usuarios comerciales
+        'account_multi_store',
+        # capacidad de limitar los diarios para los usuarios de almacen
+        'stock_multi_store',
+        # Planificación 'Just in time' (bajo demanda) con inventario
+        'procurement_jit_stock',
         'stock_account', 'stock_voucher'
     ],
     'data': [

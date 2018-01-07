@@ -80,7 +80,7 @@ class sale_order_line(osv.osv):
                 if uom:
                     uom_record = product_uom_obj.browse(cr, uid, uom,
                                                         context=context)
-                    if product_obj.uom_id.category_id.id != uom_record.category_id.id:
+                    if product_obj.uom_id.category_id.id != uom_record.category_id.id:  # noqa
                         uom_record = False
                 if not uom_record:
                     uom_record = product_obj.uom_id
@@ -92,7 +92,8 @@ class sale_order_line(osv.osv):
                     precision_rounding=uom_record.rounding)
                 if compare_qty == -1:
                     warn_msg = _(
-                        'Intenta vender {} Un pero solo tiene {} Un disponibles !\n'
+                        'Intenta vender {} Un pero solo tiene {} Un '
+                        'disponibles !\n'
                         'El stock real es {} Un. (sin reservas)').format(
                         int(qty),
                         int(max(0, product_obj.virtual_available)),
