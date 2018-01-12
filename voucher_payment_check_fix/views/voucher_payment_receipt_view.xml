@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<openerp>
+    <data>
+        <record id="view_vendor_receipt_form_jeo_fix" model="ir.ui.view">
+            <field name="name">voucher_payment_check_fix modulo</field>
+            <field name="model">account.voucher</field>
+            <field name="inherit_id" ref="account_voucher.view_vendor_receipt_form"/>
+            <field name="arch" type="xml">
+                <xpath expr="//field[@name='journal_id']" position="attributes">
+                    <attribute name="domain">"[
+                        ('type','in',['bank','cash']),
+                        ('payment_subtype','not in',['issue_check'])]"
+                    </attribute>
+                </xpath>
+            </field>
+        </record>
+    </data>
+</openerp>

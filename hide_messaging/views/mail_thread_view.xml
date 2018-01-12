@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<openerp>
+    <data>
+
+        <record model="res.groups" id="group_messaging_menu">
+            <field name="name">Group to show messaging</field>
+        </record>
+
+        <!-- Replace all users in the group. The eval statement here
+        means, replace all ids in the groups_id field with the id for
+        group group_messaging_menu.-->
+        <record model="ir.ui.menu" id="mail.mail_feeds_main">
+            <field name="groups_id" eval="[(6,0,[ref('group_messaging_menu')])]"/>
+        </record>
+
+    </data>
+</openerp>
