@@ -8,7 +8,8 @@
     'author': "jeo Software",
     'website': 'http://www.jeosoft.com.ar',
     'depends': [
-
+        'sale',
+        'stock'
     ],
     'data': [
 

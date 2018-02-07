@@ -8,5 +8,3 @@ Stock picking automatic
 
 Provide an automatic picking when a Invoice is validated.
 
-
-
