@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+    <data noupdate="0">
+
+        <!-- Cron data -->
+        <record id="bulonfer_cron_data" model="ir.cron">
+            <field name="name">Importar datos Bulonfer</field>
+            <field name="interval_type">work_days</field>
+            <field name="model">product.product</field>
+            <field name="function">auto_load</field>
+            <field name="args">(['/opt/odoo/data/product_data/'])</field>
+        </record>
+
+        <record id="bulonfer_partner_data" model="res.partner">
+            <field name="name">Bulonfer SA.</field>
+            <field name="company_type">company</field>
+            <field name="supplier">true</field>
+            <field name="customer">false</field>
+        </record>
+
+    </data>
+</openerp>
