@@ -8,7 +8,6 @@
             <xpath expr="//script[@src='/mail/static/src/js/announcement.js']" position="replace"/>
         </template>
 
-
         <!-- Agregamos el grupo cajero para que haga la transferencia automatica -->
 
         <record id="module_stock_picking_auto" model="ir.module.category">
