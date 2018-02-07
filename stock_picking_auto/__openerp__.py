@@ -8,11 +8,13 @@
     'author': "jeo Software",
     'website': 'http://www.jeosoft.com.ar',
     'depends': [
+        'base',
         'sale',
         'stock'
     ],
     'data': [
-
+        'security/security_groups.xml',
+        'views/sale_view.xml'
     ],
     'installable': True,
     'auto_install': False,

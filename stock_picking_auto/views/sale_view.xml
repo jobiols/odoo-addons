@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <record id="view_order_form_stock_picking_auto" model="ir.ui.view">
+            <field name="name">stock_picking_auto: replace buttons</field>
+            <field name="model">sale.order</field>
+            <field name="inherit_id" ref="sale.view_order_form"/>
+            <field name="arch" type="xml">
+
+                <xpath expr="header" position="replace">
+                </xpath>
+
+            </field>
+        </record>
+
+<!--
+
+        <record id="inherited_view_res_partner_filter" model="ir.ui.view">
+            <field name="name">cliente busquedas</field>
+            <field name="model">res.partner</field>
+            <field name="inherit_id" ref="base.view_res_partner_filter"/>
+            <field name="arch" type="xml">
+                <xpath expr="field[@name='street']" position="replace">
+                </xpath>
+            </field>
+        </record>
+-->
+
+
+    </data>
+</odoo>
+
+
+
+
+<!--
+
+
+<button name="action_confirm" states="draft" string="Confirm Sale" type="object" context="{'show_sale': True}"/>
+
+            <field name="groups_id" eval="[(4, ref('base.group_sale_salesman'))]"/>
+
+
+
+                <xpath expr="//button[@name='action_confirm']" position="attributes">
+                    <attribute string="cambiado"/>
+                </xpath>
+
+-->
