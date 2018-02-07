@@ -1,14 +1,15 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <openerp>
-
     <data>
 
-        <!-- esto corrige un bug de odoo -->
+        <!-- esto corrige un bug de odoo que aparece solo con chrome -->
 
         <template id="mail_assets_backend" name="mail assets" inherit_id="mail.assets_backend">
             <xpath expr="//script[@src='/mail/static/src/js/announcement.js']" position="replace"/>
         </template>
 
+
+        <!-- Agregamos el grupo cajero para que haga la transferencia automatica -->
 
         <record id="module_stock_picking_auto" model="ir.module.category">
             <field name="name">Stock Picking Auto</field>
@@ -23,18 +24,4 @@
 
     </data>
 
-<!--
-            <record id="group_stock_picking_auto_cashier" model="res.groups">
-                <field name="name">Cashier</field>
-                <field name="category_id" ref="module_stock_picking_auto"/>
-                <field name="comment">Grupo para los usuarios Cajero</field>
-                <field name="implied_ids"
-                       eval="[
-                                (4, ref('base.group_user')),
-                                 ]"/>
-            </record>
-
-
-                                (4, ref('stock.group_stock_user')),
-            -->
 </openerp>
