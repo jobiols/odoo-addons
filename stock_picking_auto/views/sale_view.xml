@@ -5,10 +5,11 @@
             <field name="name">stock_picking_auto: replace buttons</field>
             <field name="model">sale.order</field>
             <field name="inherit_id" ref="sale.view_order_form"/>
+            <field name="groups_id" eval="[(4, ref('group_stock_picking_auto_cashier'))]"/>
             <field name="arch" type="xml">
 
                 <xpath expr="(//button[@name='action_confirm'])[2]" position="attributes">
-                    <attribute name="string">cambiado</attribute>
+                    <attribute name="string">Confirm and Transfer</attribute>
                 </xpath>
 
             </field>
