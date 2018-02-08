@@ -10,7 +10,7 @@ class SaleOrder(models.Model):
     _inherit = "sale.order"
 
     @api.multi
-    def action_confirm(self):
+    def action_confirm_send(self):
         super(SaleOrder, self).action_confirm()
 
         picking_obj = self.env['stock.picking']
@@ -36,7 +36,6 @@ class SaleOrder(models.Model):
                             if pack.product_id and pack.product_id.tracking != 'none':
                                 raise UserError(_('Some products require lots, so you need to specify those first!'))
 
-                #self.ensure_one()
                 # If still in draft => confirm and assign
                 if pick.state == 'draft':
                     pick.action_confirm()
