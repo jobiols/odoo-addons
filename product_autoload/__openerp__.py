@@ -33,7 +33,8 @@
 
     'data': [
         'security/ir.model.access.csv',
-        'data/cron_data.xml'
+        'data/cron_data.xml',
+        'views/product_view.xml'
     ],
     'test': [
     ],

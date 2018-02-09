@@ -71,7 +71,6 @@ class TestBusiness(TransactionCase):
         self.assertEqual(prod.default_code, '123456')
         self.assertEqual(prod.name, 'nombre-producto')
         self.assertEqual(prod.description_sale, 'Descripción del producto')
-        self.assertEqual(prod.barcode, '7750082001169', )
         self.assertEqual(prod.list_price, 1000.52)
         self.assertEqual(prod.standard_price, 500.22)
         self.assertEqual(prod.weight, 200.50)
@@ -83,7 +82,6 @@ class TestBusiness(TransactionCase):
 
         val = {
             'warranty': 60.0,
-            'barcode': '7750082001169',
             'list_price': 1000.52,
             'name': 'nombre-producto',
             'weight': 200.5,
@@ -101,26 +99,27 @@ class TestBusiness(TransactionCase):
     def test_04_update_product(self):
         """ Chequear update de producto -------------------------------------04
         """
+
         # verificar createm
         product_obj = self.env['product.product']
         product_obj.auto_load(self._data_path)
 
-        #        prod_obj = self.env['product.product']
-        #        prod = prod_obj.search([('default_code', '=', '601.AA.315/7')])
-        #        self.assertEqual(len(prod), 1)
-        #        self.assertEqual(prod.item_code, '001')
+        prod_obj = self.env['product.product']
+        prod = prod_obj.search([('default_code', '=', '601.AA.315/7')])
+        self.assertEqual(len(prod), 1)
+        self.assertEqual(prod.item_code, '001')
 
-        #        prod = prod_obj.search([('default_code', '=', '601.HV.8800B')])
-        #        self.assertEqual(len(prod), 1)
-        #        self.assertEqual(prod.item_code, '001')
+        prod = prod_obj.search([('default_code', '=', '601.HV.8800B')])
+        self.assertEqual(len(prod), 1)
+        self.assertEqual(prod.item_code, '001')
 
-        #        prod = prod_obj.search([('default_code', '=', '601.I.10250')])
-        #        self.assertEqual(len(prod), 1)
-        #        self.assertEqual(prod.item_code, '003')
+        prod = prod_obj.search([('default_code', '=', '601.I.10250')])
+        self.assertEqual(len(prod), 1)
+        self.assertEqual(prod.item_code, '003')
 
         # verificar update
 
-    #        product_obj.auto_load(self._data_path)
+        product_obj.auto_load(self._data_path)
 
     def test_05_section_mapper(self):
         """ Testear seccion mapper ------------------------------------------05

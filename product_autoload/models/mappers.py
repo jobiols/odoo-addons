@@ -267,9 +267,6 @@ class ProductMapper(CommonMapper):
         if self._description_sale:
             ret['description_sale'] = self.description_sale
 
-        if self.barcode:
-            ret['barcode'] = self.barcode
-
         if self.list_price:
             ret['list_price'] = self.list_price
 
@@ -346,6 +343,29 @@ class ProductMapper(CommonMapper):
             except Exception as ex:
                 _logger.error(ex.message)
 
+        # actualiza los modelos relacionados, IVA y barcode
+
+        barcode_obj = env['product_autoload.barcode']
+        for barcode in self.barcode:
+            bc = barcode_obj.search([('product_id', '=', prod.id),
+                                     ('barcode', '=', barcode)])
+            if not bc:
+                barcode_obj.create({
+                    'product_id': prod.id,
+                    'barcode': barcode
+                })
+
+        tax_obj = env['account.tax']
+        tax_sale = tax_obj.search([('amount', '=', self.iva),
+                                   ('type_tax_use', '=', 'sale')])
+        tax_purchase = tax_obj.search([('amount', '=', self.iva),
+                                       ('type_tax_use', '=', 'purchase')])
+
+        if tax_sale:
+            prod.taxes_id = [(6, 0, tax_sale.ids)]
+        if tax_purchase:
+            prod.supplier_taxes_id = [(6, 0, tax_purchase.ids)]
+
     @staticmethod
     def check_numeric(field, value):
         try:
@@ -405,15 +425,6 @@ class ProductMapper(CommonMapper):
                                                        value)
 
     @property
-    def barcode(self):
-        return self._barcode
-
-    @barcode.setter
-    def barcode(self, value):
-        if value:
-            self._barcode = self.check_numeric('barcode', value)
-
-    @property
     def list_price(self):
         return self._list_price
 
@@ -464,6 +475,15 @@ class ProductMapper(CommonMapper):
                     self._image = img_file.read().encode('base64')
             except IOError as ex:
                 logging.error('%s %s', ex.filename, ex.strerror)
+
+    @property
+    def barcode(self):
+        return self._barcode
+
+    @barcode.setter
+    def barcode(self, value):
+        if value:
+            self._barcode = [value]
 
     @property
     def iva(self):

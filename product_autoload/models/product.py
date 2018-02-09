@@ -20,6 +20,12 @@ class ProductProduct(models.Model):
         help="Code from bulonfer, not shown"
     )
 
+    barcode_ids = fields.One2many(
+        'product_autoload.barcode',
+        'product_id',
+        help='supports multiple barcodes per product'
+    )
+
     @api.multi
     def process_file(self, file_path, file, class_mapper, vendor=False,
                      supplierinfo=False):
