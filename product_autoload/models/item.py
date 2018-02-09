@@ -52,7 +52,8 @@ class Item(models.Model):
         # eliminar los datos de las tres tablas
         for table in ['product_autoload.family',
                       'product_autoload.section',
-                      'product_autoload.item']:
+                      'product_autoload.item',
+                      'product_autoload.barcode']:
             for item in self.env[table].search([]):
                 item.unlink()
 
@@ -120,12 +121,16 @@ class Item(models.Model):
                              prod.default_code, item.item_code)
 
     @api.multi
-    def get_category(self, item_code):
+    def get_category(self, prod):
 
         categ_obj = self.env['product.category']
         item_obj = self.env['product_autoload.item']
 
-        item = item_obj.search([('item_code', '=', item_code)])
+        item = item_obj.search([('item_code', '=', prod.item_code)])
+        if not item:
+            raise Exception('product %s has idRubro = %s but there is no such '
+                            'item in item.csv', prod.default_code,
+                            prod.item_code)
         categ_id = categ_obj.search([('name', '=', item.name)])
         if not categ_id:
             categ_id = categ_obj.create({'name': item.name})
@@ -138,7 +143,7 @@ class Item(models.Model):
 
     @api.multi
     def assign_category(self, prod):
-        prod.categ_id = self.get_category(prod.item_code)
+        prod.categ_id = self.get_category(prod)
         _logger.info('setting category %s to product %s',
                      prod.categ_id.complete_name, prod.default_code)
 

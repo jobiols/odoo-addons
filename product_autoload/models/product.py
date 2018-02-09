@@ -31,9 +31,13 @@ class ProductProduct(models.Model):
                      supplierinfo=False):
         """ Procesa un archivo csv con un mapper
         """
+        bulonfer_dialect = {
+            'delimiter': '\r\n'
+        }
+
         try:
             with open(file_path + file, 'r') as file_csv:
-                reader = csv.reader(file_csv)
+                reader = csv.reader(file_csv, dialect=bulonfer_dialect)
                 for line in reader:
                     prod = class_mapper(line, file_path, vendor, supplierinfo)
                     prod.execute(self.env)
