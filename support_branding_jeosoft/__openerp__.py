@@ -45,6 +45,7 @@
         'disable_odoo_online',
         'res_config_settings_enterprise_remove',
         'server_mode',              # server_mode = "test" en desarrollo
+        'database_tools'
 
     ],
     'data': [
