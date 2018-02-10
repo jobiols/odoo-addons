@@ -11,7 +11,7 @@
     'author': "Camptocamp, "
               "Trey, "
               "Tecnativa, "
-              "Odoo Community Association (OCA)"
+              "Odoo Community Association (OCA), "
               "jeo Software",
     'category': 'Product Management',
     'depends': ['product'],

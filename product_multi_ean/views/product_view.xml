@@ -6,10 +6,10 @@
             <field name="model">product.product</field>
             <field name="inherit_id" ref="product.product_normal_form_view" />
             <field name="arch" type="xml">
-                <xpath expr="//field[@name='ean13']" position="attributes">
+                <xpath expr="//field[@name='barcode']" position="attributes">
                     <attribute name="readonly">True</attribute>
                 </xpath>
-                <xpath expr="//field[@name='ean13']" position="after">
+                <xpath expr="//field[@name='barcode']" position="after">
                     <field name="ean13_ids">
                         <tree string="EAN13" editable="bottom">
                             <field name="sequence" widget="handle"/>
