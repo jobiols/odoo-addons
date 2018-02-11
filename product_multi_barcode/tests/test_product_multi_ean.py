@@ -19,7 +19,7 @@ class TestProductMultiEan(common.TransactionCase):
         """
         self.product4.add_barcodes(
             ['4044471900007', '4211821800007', '2112345678900'])
-        self.assertEqual(len(self.product4.ean13_ids), 3)
+        self.assertEqual(len(self.product4.barcode_ids), 3)
 
     def test_02(self):
         """ test_02 agregar barcodes que ya existen en el producto----------
@@ -29,7 +29,7 @@ class TestProductMultiEan(common.TransactionCase):
 
         # si ya existe no lo agrega y no falla
         self.product4.add_barcodes(['4044471900007'])
-        self.assertEqual(len(self.product4.ean13_ids), 3)
+        self.assertEqual(len(self.product4.barcode_ids), 3)
 
     def test_03(self):
         """ test_03 agregar barcodes que ya existen en otro producto-------

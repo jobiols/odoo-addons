@@ -7,8 +7,8 @@
 from openerp import models, fields, api, _
 
 
-class ProductEan13(models.Model):
-    _name = 'product.ean13'
+class ProductBarcode(models.Model):
+    _name = 'product.barcode'
     _description = "List of Barcodes for a product."
 
     name = fields.Char(
@@ -29,9 +29,20 @@ class ProductEan13(models.Model):
 class ProductProduct(models.Model):
     _inherit = 'product.product'
 
-    ean13_ids = fields.One2many(
-        comodel_name='product.ean13', inverse_name='product_id',
-        string='EAN13')
+    barcode_ids = fields.One2many(
+        comodel_name='product.barcode',
+        inverse_name='product_id',
+        string='Barcodes')
+
+    @api.multi
+    def add_barcodes(self, barcodes):
+        for prod in self:
+            for barcode in barcodes:
+                bc = self.barcode_ids.search([('product_id', '=', prod.id),
+                                              ('name', '=', barcode)])
+                if not bc:
+                    self.barcode_ids.create({'product_id': prod.id,
+                                             'name': barcode})
 
     def name_search(self, cr, user, name='', args=None, operator='ilike',
                     context=None, limit=100):
@@ -49,7 +60,7 @@ class ProductProduct(models.Model):
                                   limit=limit, context=context)
                 if not ids:
                     ids = self.search(cr, user,
-                                      [('ean13_ids.name', '=', name)] + args,
+                                      [('barcode_ids.name', '=', name)] + args,
                                       limit=limit, context=context)
             if not ids and operator not in expression.NEGATIVE_TERM_OPERATORS:
                 # Do not merge the 2 next lines into one single search, SQL
@@ -100,12 +111,10 @@ class ProductProduct(models.Model):
         result = self.name_get(cr, user, ids, context=context)
         return result
 
-    @api.multi
-    def add_barcodes(self, barcodes):
-        for prod in self:
-            for barcode in barcodes:
-                bc = self.ean13_ids.search([('product_id', '=', prod.id),
-                                            ('name', '=', barcode)])
-                if not bc:
-                    self.ean13_ids.create({'product_id': prod.id,
-                                           'name': barcode})
+
+class ProductTemplate(models.Model):
+    _inherit = 'product.template'
+
+    barcode_ids = fields.One2many(
+        related='product_variant_ids.barcode_ids')
+
