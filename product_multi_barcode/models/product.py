@@ -1,0 +1,111 @@
+# -*- coding: utf-8 -*-
+# © 2012-2014 Guewen Baconnier (Camptocamp SA)
+# © 2015 Roberto Lizana (Trey)
+# © 2016 Pedro M. Baeza
+# License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl.html).
+
+from openerp import models, fields, api, _
+
+
+class ProductEan13(models.Model):
+    _name = 'product.ean13'
+    _description = "List of Barcodes for a product."
+
+    name = fields.Char(
+        string='Barcode',
+        required=True
+    )
+    product_id = fields.Many2one(
+        string='Product',
+        comodel_name='product.product',
+        required=True
+    )
+
+    _sql_constraints = [
+        ('uniq_barcode', 'unique(name)', "The barcode must be unique !"),
+    ]
+
+
+class ProductProduct(models.Model):
+    _inherit = 'product.product'
+
+    ean13_ids = fields.One2many(
+        comodel_name='product.ean13', inverse_name='product_id',
+        string='EAN13')
+
+    def name_search(self, cr, user, name='', args=None, operator='ilike',
+                    context=None, limit=100):
+
+        if context is None:
+            context = {}
+        if not args:
+            args = []
+        if name:
+            positive_operators = ['=', 'ilike', '=ilike', 'like', '=like']
+            ids = []
+            if operator in positive_operators:
+                ids = self.search(cr, user,
+                                  [('default_code', '=', name)] + args,
+                                  limit=limit, context=context)
+                if not ids:
+                    ids = self.search(cr, user,
+                                      [('ean13_ids.name', '=', name)] + args,
+                                      limit=limit, context=context)
+            if not ids and operator not in expression.NEGATIVE_TERM_OPERATORS:
+                # Do not merge the 2 next lines into one single search, SQL
+                # search performance would be abysmal on a database with
+                # thousands of matching products, due to the huge merge+unique
+                # needed for the OR operator (and given the fact that the
+                # 'name' lookup results come from the ir.translation table
+                # Performing a quick memory merge of ids in Python will give
+                # much better performance
+                ids = self.search(cr, user,
+                                  args + [('default_code', operator, name)],
+                                  limit=limit, context=context)
+                if not limit or len(ids) < limit:
+                    # we may underrun the limit because of dupes in the
+                    # results, that's fine
+                    limit2 = (limit - len(ids)) if limit else False
+                    ids += self.search(cr, user,
+                                       args + [('name', operator, name),
+                                               ('id', 'not in', ids)],
+                                       limit=limit2, context=context)
+            elif not ids and operator in expression.NEGATIVE_TERM_OPERATORS:
+                ids = self.search(cr, user, args + ['&', (
+                    'default_code', operator, name), ('name', operator, name)],
+                                  limit=limit, context=context)
+            if not ids and operator in positive_operators:
+                ptrn = re.compile('(\[(.*?)\])')
+                res = ptrn.search(name)
+                if res:
+                    ids = self.search(cr, user, [
+                        ('default_code', '=', res.group(2))] + args,
+                                      limit=limit, context=context)
+            # still no results, partner in context: search on supplier info as
+            # last hope to find something
+            if not ids and context.get('partner_id'):
+                supplier_ids = self.pool['product.supplierinfo'].search(
+                    cr, user, [
+                        ('name', '=', context.get('partner_id')),
+                        '|',
+                        ('product_code', operator, name),
+                        ('product_name', operator, name)
+                    ], context=context)
+                if supplier_ids:
+                    ids = self.search(cr, user, [
+                        ('product_tmpl_id.seller_ids', 'in', supplier_ids)],
+                                      limit=limit, context=context)
+        else:
+            ids = self.search(cr, user, args, limit=limit, context=context)
+        result = self.name_get(cr, user, ids, context=context)
+        return result
+
+    @api.multi
+    def add_barcodes(self, barcodes):
+        for prod in self:
+            for barcode in barcodes:
+                bc = self.ean13_ids.search([('product_id', '=', prod.id),
+                                            ('name', '=', barcode)])
+                if not bc:
+                    self.ean13_ids.create({'product_id': prod.id,
+                                           'name': barcode})

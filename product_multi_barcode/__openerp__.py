@@ -5,14 +5,10 @@
 # License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl.html).
 
 {
-    'name': 'Multiple EAN13 on products',
+    'name': 'Multiple Barcode on products',
     'version': '9.0.0.0.0',
     'license': 'AGPL-3',
-    'author': "Camptocamp, "
-              "Trey, "
-              "Tecnativa, "
-              "Odoo Community Association (OCA), "
-              "jeo Software",
+    'author': "jeo Software",
     'category': 'Product Management',
     'depends': ['product'],
     'website': 'http://jeosoft.com.ar',
@@ -21,5 +17,4 @@
         'security/ir.model.access.csv',
     ],
     'installable': True,
-    'post_init_hook': 'post_init_hook',
 }
