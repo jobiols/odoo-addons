@@ -28,13 +28,13 @@
     'depends': [
         'stock',
         'sale',
-        'purchase'
+        'purchase',
+        'product_multi_barcode'
     ],
 
     'data': [
         'security/ir.model.access.csv',
         'data/cron_data.xml',
-        'views/product_view.xml'
     ],
     'test': [
     ],

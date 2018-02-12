@@ -7,6 +7,7 @@ _logger = logging.getLogger(__name__)
 from openerp import api, models, fields
 from mappers import ProductMapper, SectionMapper, ItemMapper, FamilyMapper
 import csv
+from openerp.exceptions import ValidationError
 
 
 class ProductProduct(models.Model):
@@ -20,11 +21,22 @@ class ProductProduct(models.Model):
         help="Code from bulonfer, not shown"
     )
 
-    barcode_ids = fields.One2many(
-        'product_autoload.barcode',
-        'product_id',
-        help='supports multiple barcodes per product'
+    default_item_code = fields.Char(
+        help="Code from bulonfer, extracted from default_code",
+        calculated='_get_default_item_code'
     )
+
+    @api.constrains('item_code', 'default_code')
+    def _check_item_code(self):
+        if self.item_code != self.default_code.split('.')[0]:
+            raise ValidationError(
+                'Fied idRubro {} is not related with product code {}'.format(
+                self.item_code, self.default_code))
+
+    @api.one
+    @api.depends('default_code')
+    def _get_default_item_code(self):
+        return self.default_code.split('.')[0]
 
     @api.multi
     def process_file(self, file_path, file, class_mapper, vendor=False,
@@ -48,7 +60,6 @@ class ProductProduct(models.Model):
     def category_load(self, file_path):
         """ Carga las tablas auxiliares por unica vez, o cuando haga falta
         """
-
         item_obj = self.env['product_autoload.item']
         item_obj.unlink_data()
         self.process_file(file_path, 'section.csv', SectionMapper)

@@ -10,8 +10,10 @@ class CommonMapper(object):
     def check_string(field, value):
         try:
             value.decode('utf-8')
-        except UnicodeError as ex:
-            _logger.error('%s Value: "%s": %s', field, value, ex.message)
+        except:
+            raise Exception(
+                'Unicode Encode Error in field %s, '
+                'The codification must be utf-8', field)
         return value
 
 
@@ -27,8 +29,7 @@ class ItemMapper(CommonMapper):
     def __init__(self, line, image_path=False, vendor=False,
                  supplierinfo=False):
         if len(line) != IM_LEN:
-            raise Exception('item.csv len is %d must be %d', len(line),
-                            IM_LEN)
+            raise Exception('item.csv len is %d must be %d', len(line), IM_LEN)
 
         self._code = False
         self._name = False
@@ -47,12 +48,9 @@ class ItemMapper(CommonMapper):
          se supone que esto no actualiza los datos, porque se borran antes de
          que se procesen asi que siempre hacemos create
         """
-        try:
-            section_obj = env['product_autoload.item']
-            section_obj.create(self.values())
-            _logger.info('Creating item %s', self.name)
-        except Exception as ex:
-            _logger.error(ex.message)
+        section_obj = env['product_autoload.item']
+        section_obj.create(self.values())
+        _logger.info('Creating item %s', self.name)
 
     def values(self):
         return {'name': self.name,
@@ -124,12 +122,9 @@ class FamilyMapper(CommonMapper):
          se supone que esto no actualiza los datos, porque se borran antes de
          que se procesen asi que siempre hacemos create
         """
-        try:
-            section_obj = env['product_autoload.family']
-            section_obj.create(self.values())
-            _logger.info('Creating family %s', self.name)
-        except Exception as ex:
-            _logger.error(ex.message)
+        section_obj = env['product_autoload.family']
+        section_obj.create(self.values())
+        _logger.info('Creating family %s', self.name)
 
     def values(self):
         return {'family_code': self.code,
@@ -175,12 +170,9 @@ class SectionMapper(CommonMapper):
          se supone que esto no actualiza los datos, porque se borran antes de
          que se procesen asi que siempre hacemos create
         """
-        try:
-            section_obj = env['product_autoload.section']
-            section_obj.create(self.values())
-            _logger.info('Creating section %s', self.name)
-        except Exception as ex:
-            _logger.error(ex.message)
+        section_obj = env['product_autoload.section']
+        section_obj.create(self.values())
+        _logger.info('Creating section %s', self.name)
 
     def values(self):
         return {
@@ -331,29 +323,14 @@ class ProductMapper(CommonMapper):
         product_obj = env['product.product']
         prod = product_obj.search([('default_code', '=', self.default_code)])
         if prod:
-            try:
-                prod.write(self.values())
-                _logger.info('Updating product %s', self.default_code)
-            except Exception as ex:
-                _logger.error(ex.message)
+            prod.write(self.values())
+            _logger.info('Updating product %s', self.default_code)
         else:
-            try:
-                product_obj.create(self.values(create=True))
-                _logger.info('Creating product %s', self.default_code)
-            except Exception as ex:
-                _logger.error(ex.message)
+            product_obj.create(self.values(create=True))
+            _logger.info('Creating product %s', self.default_code)
 
         # actualiza los modelos relacionados, IVA y barcode
-
-        barcode_obj = env['product_autoload.barcode']
-        for barcode in self.barcode:
-            bc = barcode_obj.search([('product_id', '=', prod.id),
-                                     ('barcode', '=', barcode)])
-            if not bc:
-                barcode_obj.create({
-                    'product_id': prod.id,
-                    'barcode': barcode
-                })
+        prod.add_barcodes(self.barcode)
 
         tax_obj = env['account.tax']
         tax_sale = tax_obj.search([('amount', '=', self.iva),
@@ -380,8 +357,7 @@ class ProductMapper(CommonMapper):
             ret = float(value)
             return ret
         except ValueError as ex:
-            _logger.error('%s Value: "%s": %s', field, value, ex.message)
-        return False
+            raise Exception('%s Value: "%s": %s', field, value, ex.message)
 
     @staticmethod
     def check_float(field, value):
@@ -389,8 +365,7 @@ class ProductMapper(CommonMapper):
             ret = float(value)
             return ret
         except ValueError as ex:
-            _logger.error('%s Value "%s": %s', field, value, ex.message)
-        return False
+            raise Exception('%s Value "%s": %s', field, value, ex.message)
 
     def slugify(self, field, value):
         ret = self.check_string(field, value)
@@ -483,7 +458,7 @@ class ProductMapper(CommonMapper):
     @barcode.setter
     def barcode(self, value):
         if value:
-            self._barcode = [value]
+            self._barcode = value.split(',')
 
     @property
     def iva(self):

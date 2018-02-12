@@ -55,7 +55,7 @@ class TestBusiness(TransactionCase):
             '123456',
             'nombre-producto',
             'Descripción del producto',
-            '7750082001169',
+            '7750082001169,7750082001169',
             '1000.52',
             '500.22',
             '200.50',
@@ -75,6 +75,7 @@ class TestBusiness(TransactionCase):
         self.assertEqual(prod.standard_price, 500.22)
         self.assertEqual(prod.weight, 200.50)
         self.assertEqual(prod.volume, 125.85)
+        self.assertEqual(prod.barcode, ['7750082001169', '7750082001169'])
         self.assertEqual(prod.warranty, 60)
         self.assertEqual(prod.iva, 21)
         self.assertEqual(prod.item_code, '001')
@@ -96,6 +97,73 @@ class TestBusiness(TransactionCase):
         for item in val:
             self.assertEqual(prod.values(create=True)[item], val[item])
 
+    def test_03_(self):
+        """ Chequear tipos de campo
+        """
+        line = [
+            u'1aa\xe11',
+            'nombre-producto',
+            'Descripción del producto',
+            '7750082001169,7750082001169',
+            '1000.52',
+            '500.22',
+            '200.50',
+            '125.85',
+            '601.AA.3157.jpg',
+            '60',
+            '21',
+            '001',
+            '2018-25-01 13:10:55']
+
+        with self.assertRaises(Exception):
+            prod = ProductMapper(line, self._data_path, self._vendor,
+                                 self._supinfo)
+
+    def test_031_(self):
+        """ Chequear tipos de campo currency
+        """
+        line = [
+            '123456789',
+            'nombre-producto',
+            'Descripción del producto',
+            '7750082001169,7750082001169',
+            '100a0.52',
+            '500.22',
+            '200.50',
+            '125.85',
+            '601.AA.3157.jpg',
+            '60',
+            '21',
+            '001',
+            '2018-25-01 13:10:55']
+
+        with self.assertRaises(Exception):
+            prod = ProductMapper(line, self._data_path, self._vendor,
+                                 self._supinfo)
+
+    def test_032_(self):
+        """ Chequear tipos de campo currency
+        """
+        line = [
+            '123456789',
+            'nombre-producto',
+            'Descripción del producto',
+            '7750082001169,7750082001169',
+            '1000.52',
+            '500.22',
+            '200q',
+            '125.85',
+            '601.AA.3157.jpg',
+            '60',
+            '21',
+            '001',
+            '2018-25-01 13:10:55']
+
+        with self.assertRaises(Exception):
+            prod = ProductMapper(line, self._data_path, self._vendor,
+                                 self._supinfo)
+
+
     def test_04_update_product(self):
         """ Chequear update de producto -------------------------------------04
         """
@@ -105,17 +173,17 @@ class TestBusiness(TransactionCase):
         product_obj.auto_load(self._data_path)
 
         prod_obj = self.env['product.product']
-        prod = prod_obj.search([('default_code', '=', '601.AA.315/7')])
+        prod = prod_obj.search([('default_code', '=', '009.F.6.20')])
+        self.assertEqual(len(prod), 1)
+        self.assertEqual(prod.item_code, '009')
+
+        prod = prod_obj.search([('default_code', '=', '968.F.6.35')])
+        self.assertEqual(len(prod), 1)
+        self.assertEqual(prod.item_code, '968')
+
+        prod = prod_obj.search([('default_code', '=', '001.F.6.25')])
         self.assertEqual(len(prod), 1)
         self.assertEqual(prod.item_code, '001')
-
-        prod = prod_obj.search([('default_code', '=', '601.HV.8800B')])
-        self.assertEqual(len(prod), 1)
-        self.assertEqual(prod.item_code, '001')
-
-        prod = prod_obj.search([('default_code', '=', '601.I.10250')])
-        self.assertEqual(len(prod), 1)
-        self.assertEqual(prod.item_code, '003')
 
         # verificar update
 

@@ -45,15 +45,20 @@ class Item(models.Model):
     @api.model
     def unlink_data(self):
 
-        # recorrer todos los productos y deslinkear las categorias
-        for prod in self.env['product.template'].search([]):
-            prod.categ_id = 1
+        # TODO Esto esta mal
+        # recorrer todos los productos de bulonfer deslinkear las categorias
+        for prod in self.env['product.product'].search([]):
+            flag = False
+            for vendor in prod.seller_ids:
+                if vendor.name.name[0:8] == 'Bulonfer':
+                    flag = True
+            if flag:
+                prod.categ_id = 1
 
         # eliminar los datos de las tres tablas
         for table in ['product_autoload.family',
                       'product_autoload.section',
-                      'product_autoload.item',
-                      'product_autoload.barcode']:
+                      'product_autoload.item']:
             for item in self.env[table].search([]):
                 item.unlink()
 
@@ -119,6 +124,23 @@ class Item(models.Model):
                 prod.item_id = item.id
                 _logger.info('Linked product %s with item %s',
                              prod.default_code, item.item_code)
+
+        # generar warnings de registros huerfanos
+
+        for family in family_obj.search([('item_ids', '=', False)]):
+            _logger.warning('Orphan family found %s',
+                            u'[{}] {}'.format(family.family_code,
+                                              family.name))
+
+        for section in section_obj.search([('item_ids', '=', False)]):
+            _logger.warning('Orphan section found %s',
+                            u'[{}] {}'.format(section.section_code,
+                                              section.name))
+
+            for item in item_obj.search([('product_ids', '=', False)]):
+                _logger.warning('Orphat item found %s',
+                                u'[{}] {}'.format(item.item_code,
+                                                  item.name))
 
     @api.multi
     def get_category(self, prod):

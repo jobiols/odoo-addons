@@ -37,12 +37,13 @@ class ProductProduct(models.Model):
     @api.multi
     def add_barcodes(self, barcodes):
         for prod in self:
+            barcode_obj = self.env['product.barcode']
             for barcode in barcodes:
-                bc = self.barcode_ids.search([('product_id', '=', prod.id),
-                                              ('name', '=', barcode)])
+                bc = barcode_obj.search([('product_id', '=', prod.id),
+                                         ('name', '=', barcode)])
                 if not bc:
-                    self.barcode_ids.create({'product_id': prod.id,
-                                             'name': barcode})
+                    res = barcode_obj.create({'product_id': prod.id,
+                                              'name': barcode})
 
     def name_search(self, cr, user, name='', args=None, operator='ilike',
                     context=None, limit=100):
@@ -117,4 +118,3 @@ class ProductTemplate(models.Model):
 
     barcode_ids = fields.One2many(
         related='product_variant_ids.barcode_ids')
-

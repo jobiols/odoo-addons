@@ -22,8 +22,8 @@ data.csv
 - Código del producto
 - Nombre del producto
 - Descripción del producto
-- Código de barras
-- Precio de lista	- Precio sugerido de venta al público sin iva
+- Códigos de barras (multiples codigos por producto)
+- Precio de lista	- no se usa
 - Precio de costo - Precio al que la ferretería minorista compra el producto sin iva
 - Peso bruto en kg
 - Volumen cm3
