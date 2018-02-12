@@ -1,0 +1,5 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_product_autoload_item,access_product_autoload_item,model_product_autoload_item,,1,0,0,0
+access_product_autoload_family,access_product_autoload_family,model_product_autoload_family,,1,0,0,0
+access_product_autoload_section,access_product_autoload_section,model_product_autoload_section,,1,0,0,0
+access_product_autoload_barcode,access_product_autoload_barcode,model_product_autoload_barcode,,1,0,0,0
