@@ -338,10 +338,20 @@ class ProductMapper(CommonMapper):
         tax_purchase = tax_obj.search([('amount', '=', self.iva),
                                        ('type_tax_use', '=', 'purchase')])
 
-        if tax_sale:
-            prod.taxes_id = [(6, 0, tax_sale.ids)]
-        if tax_purchase:
-            prod.supplier_taxes_id = [(6, 0, tax_purchase.ids)]
+        if len(tax_sale) != 1:
+            raise Exception('Product %s needs Customer Tax %s% (IVA Sales)'
+                            ' not (or multiple) found in Accounting',
+                            self.default_code,
+                            self.iva)
+
+        if len(tax_purchase) != 1:
+            raise Exception('Product %s needs Customer Tax %s% (IVA Purchases)'
+                            ' not (or multiple) found in Accounting',
+                            self.default_code,
+                            self.iva)
+
+        prod.taxes_id = [(6, 0, tax_sale.ids)]
+        prod.supplier_taxes_id = [(6, 0, tax_purchase.ids)]
 
     @staticmethod
     def check_numeric(field, value):
