@@ -31,7 +31,7 @@ class ProductProduct(models.Model):
         if self.item_code != self.default_code.split('.')[0]:
             raise ValidationError(
                 'Fied idRubro {} is not related with product code {}'.format(
-                self.item_code, self.default_code))
+                    self.item_code, self.default_code))
 
     @api.one
     @api.depends('default_code')
@@ -43,16 +43,15 @@ class ProductProduct(models.Model):
                      supplierinfo=False):
         """ Procesa un archivo csv con un mapper
         """
-        bulonfer_dialect = {
-            'delimiter': '\r\n'
-        }
 
         try:
             with open(file_path + file, 'r') as file_csv:
-                reader = csv.reader(file_csv, dialect=bulonfer_dialect)
+                reader = csv.reader(file_csv)
                 for line in reader:
-                    prod = class_mapper(line, file_path, vendor, supplierinfo)
-                    prod.execute(self.env)
+                    if line:
+                        prod = class_mapper(line, file_path, vendor,
+                                            supplierinfo)
+                        prod.execute(self.env)
         except IOError as ex:
             _logger.error('%s %s', ex.filename, ex.strerror)
 
