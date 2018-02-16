@@ -7,7 +7,8 @@
 import time
 from openerp.osv import osv
 from openerp.report import report_sxw
-from openerp.addons.account.report.common_report_header import common_report_header
+from openerp.addons.account.report.common_report_header import \
+    common_report_header
 
 
 class CashStatusReport(report_sxw.rml_parse, common_report_header):
@@ -17,7 +18,9 @@ class CashStatusReport(report_sxw.rml_parse, common_report_header):
         new_ids = ids
         obj_move = self.pool.get('account.move.line')
         self.sortby = data['form'].get('sortby', 'sort_date')
-        self.query = obj_move._query_get(self.cr, self.uid, obj='l', context=data['form'].get('used_context', {}))
+        self.query = obj_move._query_get(self.cr, self.uid, obj='l',
+                                         context=data['form'].get(
+                                             'used_context', {}))
         ctx2 = data['form'].get('used_context', {}).copy()
         self.init_balance = data['form'].get('initial_balance', True)
         if self.init_balance:
@@ -31,8 +34,9 @@ class CashStatusReport(report_sxw.rml_parse, common_report_header):
         if data['form']['filter'] == 'filter_period':
             period_from_id = data['form']['period_from']
             period_to_id = data['form']['period_to']
-            ctx['periods'] = self.pool["account.period"].build_ctx_periods(self.cr, self.uid, period_from_id,
-                                                                           period_to_id)
+            ctx['periods'] = self.pool["account.period"].build_ctx_periods(
+                self.cr, self.uid, period_from_id,
+                period_to_id)
             # Do not let "_query_get" calculate the periods itself
             ctx2.update({'periods': ctx['periods']})
         elif data['form']['filter'] == 'filter_date':
@@ -40,11 +44,16 @@ class CashStatusReport(report_sxw.rml_parse, common_report_header):
             ctx['date_to'] = data['form']['date_to']
         ctx['state'] = data['form']['target_move']
         self.context.update(ctx)
-        self.init_query = obj_move._query_get(self.cr, self.uid, obj='l', context=ctx2)
+        self.init_query = obj_move._query_get(self.cr, self.uid, obj='l',
+                                              context=ctx2)
         if (data['model'] == 'ir.ui.menu'):
             new_ids = [data['form']['chart_account_id']]
-            objects = self.pool.get('account.account').browse(self.cr, self.uid, new_ids)
-        return super(CashStatusReport, self).set_context(objects, data, new_ids, report_type=report_type)
+            objects = self.pool.get('account.account').browse(self.cr,
+                                                              self.uid,
+                                                              new_ids)
+        return super(CashStatusReport, self).set_context(objects, data,
+                                                         new_ids,
+                                                         report_type=report_type)
 
     def __init__(self, cr, uid, name, context=None):
         if context is None:
@@ -84,7 +93,8 @@ class CashStatusReport(report_sxw.rml_parse, common_report_header):
         if self.init_balance:
             self.cr.execute('SELECT sum(l.amount_currency) AS tot_currency \
                             FROM account_move_line l \
-                            WHERE l.account_id = %s AND %s ' % (account.id, self.init_query))
+                            WHERE l.account_id = %s AND %s ' % (
+            account.id, self.init_query))
             sum_currency += self.cr.fetchone()[0] or 0.0
         return sum_currency
 
@@ -92,9 +102,13 @@ class CashStatusReport(report_sxw.rml_parse, common_report_header):
         res = []
         currency_obj = self.pool.get('res.currency')
         # search for all the children and all consolidated children (recursively) of the given account ids
-        ids_acc = self.pool.get('account.account')._get_children_and_consol(self.cr, self.uid, account.id)
+        ids_acc = self.pool.get('account.account')._get_children_and_consol(
+            self.cr, self.uid, account.id)
         currency = account.currency_id and account.currency_id or account.company_id.currency_id
-        for child_account in self.pool.get('account.account').browse(self.cr, self.uid, ids_acc, context=self.context):
+        for child_account in self.pool.get('account.account').browse(self.cr,
+                                                                     self.uid,
+                                                                     ids_acc,
+                                                                     context=self.context):
             sql = """
                 SELECT count(id)
                 FROM account_move_line AS l
@@ -115,7 +129,8 @@ class CashStatusReport(report_sxw.rml_parse, common_report_header):
 
             elif self.display_account == 'not_zero':
                 if child_account.type != 'view' and num_entry <> 0:
-                    if not currency_obj.is_zero(self.cr, self.uid, currency, sold_account):
+                    if not currency_obj.is_zero(self.cr, self.uid, currency,
+                                                sold_account):
                         if self.only_cash_account:
                             if child_account.type == 'liquidity':
                                 res.append(child_account)
@@ -203,11 +218,14 @@ class CashStatusReport(report_sxw.rml_parse, common_report_header):
         res = res_init + res_lines
         account_sum = 0.0
         for l in res:
-            l['move'] = l['move_name'] != '/' and l['move_name'] or ('*' + str(l['mmove_id']))
+            l['move'] = l['move_name'] != '/' and l['move_name'] or (
+            '*' + str(l['mmove_id']))
             l['partner'] = l['partner_name'] or ''
             account_sum += l['debit'] - l['credit']
             l['progress'] = account_sum
-            l['line_corresp'] = l['mmove_id'] == '' and ' ' or counterpart_accounts[l['mmove_id']].replace(', ', ',')
+            l['line_corresp'] = l['mmove_id'] == '' and ' ' or \
+                                counterpart_accounts[l['mmove_id']].replace(
+                                    ', ', ',')
             # Modification of amount Currency
             if l['credit'] > 0:
                 if l['amount_currency'] != None:

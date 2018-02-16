@@ -21,7 +21,7 @@
 
 {
     'name': 'Reporte diario de cajas',
-    'version': '8.0.0.0',
+    'version': '8.0.0.0.0',
     'category': 'Finance',
     'summary': 'Reporta los movimientos de todas las cajas',
     'description': """
@@ -31,7 +31,8 @@ Reporta los movimientos de todas las cajas
 """,
     'author': 'jeo Software',
     'depends': [
-        'account'
+        'account',
+        'vertical_ceramicas'
     ],
     'data': [
         'views/template.xml',
@@ -47,4 +48,3 @@ Reporta los movimientos de todas las cajas
     'images': [],
 }
 
-# vim:expandtab:smartindent:tabstop=4:softtabstop=4:shiftwidth=4:
