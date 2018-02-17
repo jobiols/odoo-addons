@@ -42,6 +42,11 @@ class Item(models.Model):
         help="All products belonging to this item"
     )
 
+    _sql_constraints = [
+        ('uniq_item_code', 'unique(item_code)', "The item_code must be unique !"),
+    ]
+
+
     @api.model
     def unlink_data(self):
 
@@ -111,6 +116,7 @@ class Item(models.Model):
 
             # Linkear con productos
             # Chequeo: El codigo item_code de item debe existir en product
+            """
             product = product_obj.search(
                 [('item_code', '=', item.item_code)]
             )
@@ -125,6 +131,7 @@ class Item(models.Model):
                 _logger.info('Linked product %s with item %s',
                              prod.default_code, item.item_code)
 
+            """
         # generar warnings de registros huerfanos
 
         for family in family_obj.search([('item_ids', '=', False)]):
@@ -138,7 +145,7 @@ class Item(models.Model):
                                               section.name))
 
             for item in item_obj.search([('product_ids', '=', False)]):
-                _logger.warning('Orphat item found %s',
+                _logger.warning('Orphan item found %s',
                                 u'[{}] {}'.format(item.item_code,
                                                   item.name))
 

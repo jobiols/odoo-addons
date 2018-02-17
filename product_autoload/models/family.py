@@ -23,3 +23,7 @@ class Family(models.Model):
     item_ids = fields.One2many(
         'product_autoload.item',
         'family_id')
+
+    _sql_constraints = [
+        ('uniq_family_code', 'unique(family_code)', "The family_code must be unique !"),
+    ]

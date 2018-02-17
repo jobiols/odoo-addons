@@ -56,8 +56,8 @@ class TestBusiness(TransactionCase):
             'nombre-producto',
             'Descripción del producto',
             '7750082001169,7750082001169',
-            '1000.52',
             '500.22',
+            '100',
             '200.50',
             '125.85',
             '601.AA.3157.jpg',
@@ -71,7 +71,7 @@ class TestBusiness(TransactionCase):
         self.assertEqual(prod.default_code, '123456')
         self.assertEqual(prod.name, 'nombre-producto')
         self.assertEqual(prod.description_sale, 'Descripción del producto')
-        self.assertEqual(prod.list_price, 1000.52)
+        self.assertEqual(prod.upv, 100)
         self.assertEqual(prod.standard_price, 500.22)
         self.assertEqual(prod.weight, 200.50)
         self.assertEqual(prod.volume, 125.85)
@@ -83,7 +83,7 @@ class TestBusiness(TransactionCase):
 
         val = {
             'warranty': 60.0,
-            'list_price': 1000.52,
+            'upv': 100,
             'name': 'nombre-producto',
             'weight': 200.5,
             'standard_price': 500.22,
@@ -225,18 +225,24 @@ class TestBusiness(TransactionCase):
     def test_08_load_section(self):
         """ Testear load section---------------------------------------------08
         """
+        for item in self.env['product_autoload.section'].search([]):
+            item.unlink()
         product_obj = self.env['product.product']
         product_obj.process_file(self._data_path, 'section.csv', SectionMapper)
 
     def test_09_load_family(self):
-        """ Testear load section---------------------------------------------09
+        """ Testear load family---------------------------------------------09
         """
+        for item in self.env['product_autoload.family'].search([]):
+            item.unlink()
         product_obj = self.env['product.product']
         product_obj.process_file(self._data_path, 'family.csv', FamilyMapper)
 
     def test_10_load_item(self):
         """ Testear load section---------------------------------------------10
         """
+        for item in self.env['product_autoload.item'].search([]):
+            item.unlink()
         product_obj = self.env['product.product']
         product_obj.process_file(self._data_path, 'item.csv', ItemMapper)
 

@@ -21,3 +21,7 @@ class Section(models.Model):
     item_ids = fields.One2many(
         'product_autoload.item',
         'section_id')
+
+    _sql_constraints = [
+        ('uniq_section_code', 'unique(section_code)', "The section_code must be unique !"),
+    ]

@@ -13,6 +13,10 @@ from openerp.exceptions import ValidationError
 class ProductProduct(models.Model):
     _inherit = "product.product"
 
+    upv = fields.Integer(
+        help='something about packets of products'
+    )
+
     item_id = fields.Many2one(
         'product_autoload.item'
     )

@@ -200,8 +200,8 @@ MAP_DEFAULT_CODE = 0
 MAP_NAME = 1
 MAP_DESCRIPTION_SALE = 2
 MAP_BARCODE = 3
-MAP_LIST_PRICE = 4
-MAP_STANDARD_PRICE = 5
+MAP_STANDARD_PRICE = 4
+MAP_UPV = 5
 MAP_WEIGHT = 6
 MAP_VOLUME = 7
 MAP_IMAGE_NAME = 8
@@ -225,7 +225,7 @@ class ProductMapper(CommonMapper):
         self._name = False
         self._description_sale = False
         self._barcode = False
-        self._list_price = False
+        self._upv = False
         self._standard_price = False
         self._weight = False
         self._volume = False
@@ -240,7 +240,7 @@ class ProductMapper(CommonMapper):
         self.name = line[MAP_NAME]
         self.description_sale = line[MAP_DESCRIPTION_SALE]
         self.barcode = line[MAP_BARCODE]
-        self.list_price = line[MAP_LIST_PRICE]
+        self.upv = line[MAP_UPV]
         self.standard_price = line[MAP_STANDARD_PRICE]
         self.weight = line[MAP_WEIGHT]
         self.volume = line[MAP_VOLUME]
@@ -259,8 +259,8 @@ class ProductMapper(CommonMapper):
         if self._description_sale:
             ret['description_sale'] = self.description_sale
 
-        if self.list_price:
-            ret['list_price'] = self.list_price
+        if self.upv:
+            ret['upv'] = self.upv
 
         if self.standard_price:
             ret['standard_price'] = self.standard_price
@@ -353,13 +353,20 @@ class ProductMapper(CommonMapper):
         prod.taxes_id = [(6, 0, tax_sale.ids)]
         prod.supplier_taxes_id = [(6, 0, tax_purchase.ids)]
 
+        # relaciona el producto con el item
+        item_obj = env['product_autoload.item']
+        item = item_obj.search([('item_code', '=', prod.item_code)])
+        prod.item_id = item.id
+        _logger.info('Linked product %s with item %s',
+                     prod.default_code, item.item_code)
+
     @staticmethod
     def check_numeric(field, value):
         try:
             ret = int(value)
         except ValueError as ex:
             _logger.error('%s Value: "%s": %s', field, value, ex.message)
-        return value
+        return ret
 
     @staticmethod
     def check_currency(field, value):
@@ -410,13 +417,13 @@ class ProductMapper(CommonMapper):
                                                        value)
 
     @property
-    def list_price(self):
-        return self._list_price
+    def upv(self):
+        return self._upv
 
-    @list_price.setter
-    def list_price(self, value):
+    @upv.setter
+    def upv(self, value):
         if value:
-            self._list_price = self.check_currency('list_price', value)
+            self._upv = self.check_numeric('upv', value)
 
     @property
     def standard_price(self):
