@@ -326,7 +326,7 @@ class ProductMapper(CommonMapper):
             prod.write(self.values())
             _logger.info('Updating product %s', self.default_code)
         else:
-            product_obj.create(self.values(create=True))
+            prod = product_obj.create(self.values(create=True))
             _logger.info('Creating product %s', self.default_code)
 
         # actualiza los modelos relacionados, IVA y barcode

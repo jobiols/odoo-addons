@@ -163,7 +163,6 @@ class TestBusiness(TransactionCase):
             prod = ProductMapper(line, self._data_path, self._vendor,
                                  self._supinfo)
 
-
     def test_04_update_product(self):
         """ Chequear update de producto -------------------------------------04
         """
