@@ -26,8 +26,8 @@ class ProductBarcode(models.Model):
     ]
 
 
-class ProductProduct(models.Model):
-    _inherit = 'product.product'
+class ProductTemplate(models.Model):
+    _inherit = 'product.template'
 
     barcode_ids = fields.One2many(
         comodel_name='product.barcode',
@@ -111,10 +111,3 @@ class ProductProduct(models.Model):
             ids = self.search(cr, user, args, limit=limit, context=context)
         result = self.name_get(cr, user, ids, context=context)
         return result
-
-
-class ProductTemplate(models.Model):
-    _inherit = 'product.template'
-
-    barcode_ids = fields.One2many(
-        related='product_variant_ids.barcode_ids')

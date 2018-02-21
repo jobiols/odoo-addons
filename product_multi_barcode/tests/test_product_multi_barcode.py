@@ -5,14 +5,16 @@
 from openerp.tests import common
 
 
-# oe -Q product_multi_ean -c iomaq -d iomaq_test
+# oe -Q product_multi_barcode -c bulonfer -d bulonfer_test
 
 
 class TestProductMultiEan(common.TransactionCase):
     def setUp(self):
         super(TestProductMultiEan, self).setUp()
-        self.product4 = self.env.ref('product.product_product_4')
-        self.product5 = self.env.ref('product.product_product_5')
+        self.product4 = self.env.ref(
+            'product.product_product_34_product_template')
+        self.product5 = self.env.ref(
+            'product.product_product_35_product_template')
 
     def test_01(self):
         """ test_01 agregar barcodes que no existen------------------------

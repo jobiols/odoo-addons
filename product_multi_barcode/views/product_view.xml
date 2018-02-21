@@ -2,7 +2,7 @@
 <openerp>
     <data>
 
-        <record id="product_normal_form_view_multi_ean13" model="ir.ui.view">
+        <record id="product_normal_form_view_multi_barcode" model="ir.ui.view">
             <field name="name">product_multi_barcode: barcode list</field>
             <field name="model">product.template</field>
             <field name="inherit_id"
@@ -28,7 +28,8 @@
             </field>
             <field name="model">product.template</field>
             <field name="inherit_id"
-                   ref="product.product_template_search_view"></field>
+                   ref="product.product_template_search_view">
+            </field>
             <field name="arch" type="xml">
                 <field name="name" position="attributes">
                     <attribute name="filter_domain">
@@ -40,7 +41,6 @@
                 </field>
             </field>
         </record>
-
 
     </data>
 </openerp>
