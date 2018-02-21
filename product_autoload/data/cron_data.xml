@@ -6,7 +6,7 @@
         <record id="bulonfer_cron_data" model="ir.cron">
             <field name="name">Importar datos Bulonfer</field>
             <field name="interval_type">work_days</field>
-            <field name="model">product.product</field>
+            <field name="model">product.template</field>
             <field name="function">auto_load</field>
             <field name="args">(['/opt/odoo/data/product_data/'])</field>
         </record>
