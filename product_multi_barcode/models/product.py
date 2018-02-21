@@ -17,7 +17,7 @@ class ProductBarcode(models.Model):
     )
     product_id = fields.Many2one(
         string='Product',
-        comodel_name='product.product',
+        comodel_name='product.template',
         required=True
     )
 

@@ -98,7 +98,7 @@ class TestBusiness(TransactionCase):
             self.assertEqual(prod.values(create=True)[item], val[item])
 
     def test_03_(self):
-        """ Chequear tipos de campo
+        """ Chequear tipos de campo -----------------------------------------03
         """
         line = [
             u'1aa\xe11',
@@ -106,7 +106,7 @@ class TestBusiness(TransactionCase):
             'Descripción del producto',
             '7750082001169,7750082001169',
             '1000.52',
-            '500.22',
+            '501',
             '200.50',
             '125.85',
             '601.AA.3157.jpg',
@@ -120,7 +120,7 @@ class TestBusiness(TransactionCase):
                                  self._supinfo)
 
     def test_031_(self):
-        """ Chequear tipos de campo currency
+        """ Chequear tipos de campo currency -------------------------------031
         """
         line = [
             '123456789',
@@ -128,7 +128,7 @@ class TestBusiness(TransactionCase):
             'Descripción del producto',
             '7750082001169,7750082001169',
             '100a0.52',
-            '500.22',
+            '501',
             '200.50',
             '125.85',
             '601.AA.3157.jpg',
@@ -150,7 +150,7 @@ class TestBusiness(TransactionCase):
             'Descripción del producto',
             '7750082001169,7750082001169',
             '1000.52',
-            '500.22',
+            '500',
             '200q',
             '125.85',
             '601.AA.3157.jpg',
@@ -168,21 +168,17 @@ class TestBusiness(TransactionCase):
         """
 
         # verificar createm
-        product_obj = self.env['product.product']
+        product_obj = self.env['product.template']
         product_obj.auto_load(self._data_path)
 
-        prod_obj = self.env['product.product']
-        prod = prod_obj.search([('default_code', '=', '009.F.6.20')])
-        self.assertEqual(len(prod), 1)
-        self.assertEqual(prod.item_code, '009')
-
-        prod = prod_obj.search([('default_code', '=', '968.F.6.35')])
-        self.assertEqual(len(prod), 1)
+        prod_obj = self.env['product.template']
+        prod = prod_obj.search([('default_code', '=', '968.F.4.40')])
+        self.assertEqual(len(prod), 1, '968.F.4.40')
         self.assertEqual(prod.item_code, '968')
 
-        prod = prod_obj.search([('default_code', '=', '001.F.6.25')])
-        self.assertEqual(len(prod), 1)
-        self.assertEqual(prod.item_code, '001')
+        prod = prod_obj.search([('default_code', '=', '969.6.32')])
+        self.assertEqual(len(prod), 1, '969.6.32')
+        self.assertEqual(prod.item_code, '969')
 
         # verificar update
 
@@ -226,7 +222,7 @@ class TestBusiness(TransactionCase):
         """
         for item in self.env['product_autoload.section'].search([]):
             item.unlink()
-        product_obj = self.env['product.product']
+        product_obj = self.env['product.template']
         product_obj.process_file(self._data_path, 'section.csv', SectionMapper)
 
     def test_09_load_family(self):
@@ -234,7 +230,7 @@ class TestBusiness(TransactionCase):
         """
         for item in self.env['product_autoload.family'].search([]):
             item.unlink()
-        product_obj = self.env['product.product']
+        product_obj = self.env['product.template']
         product_obj.process_file(self._data_path, 'family.csv', FamilyMapper)
 
     def test_10_load_item(self):
@@ -242,13 +238,13 @@ class TestBusiness(TransactionCase):
         """
         for item in self.env['product_autoload.item'].search([]):
             item.unlink()
-        product_obj = self.env['product.product']
+        product_obj = self.env['product.template']
         product_obj.process_file(self._data_path, 'item.csv', ItemMapper)
 
     def test_11_item_unlink(self):
         """ Testear que el unlink borra todo --------------------------------11
         """
-        product_obj = self.env['product.product']
+        product_obj = self.env['product.template']
         # cargar productos
         product_obj.auto_load(self._data_path)
         # cargar categorias
@@ -267,7 +263,8 @@ class TestBusiness(TransactionCase):
     def test_12_item_unlink(self):
         """ Testear que el unlink borra todo --------------------------------12
         """
-        product_obj = self.env['product.product']
+
+        product_obj = self.env['product.template']
         # cargar productos
         product_obj.auto_load(self._data_path)
         # cargar categorias
@@ -276,7 +273,7 @@ class TestBusiness(TransactionCase):
     def test_13_check_all(self):
         """ cargar todo dos veces para asegurar multiples cargas-------------13
         """
-        product_obj = self.env['product.product']
+        product_obj = self.env['product.template']
         # cargar productos
         product_obj.auto_load(self._data_path)
         product_obj.auto_load(self._data_path)

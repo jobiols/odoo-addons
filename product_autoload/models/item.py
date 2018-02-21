@@ -37,7 +37,7 @@ class Item(models.Model):
     )
 
     product_ids = fields.One2many(
-        'product.product',
+        'product.template',
         'item_id',
         help="All products belonging to this item"
     )
@@ -52,7 +52,7 @@ class Item(models.Model):
 
         # TODO Esto esta mal
         # recorrer todos los productos de bulonfer deslinkear las categorias
-        for prod in self.env['product.product'].search([]):
+        for prod in self.env['product.template'].search([]):
             flag = False
             for vendor in prod.seller_ids:
                 if vendor.name.name[0:8] == 'Bulonfer':
@@ -72,7 +72,7 @@ class Item(models.Model):
         item_obj = self.env['product_autoload.item']
         family_obj = self.env['product_autoload.family']
         section_obj = self.env['product_autoload.section']
-        product_obj = self.env['product.product']
+        product_obj = self.env['product.template']
 
         # linkear todos los datos
         for item in item_obj.search([]):
@@ -178,7 +178,7 @@ class Item(models.Model):
 
     @api.multi
     def create_categories(self):
-        product_obj = self.env['product.product']
+        product_obj = self.env['product.template']
 
         # recorrer todos los productos que tienen proveedor bulonfer y
         # asignarles una familia

@@ -11,7 +11,7 @@ from openerp.exceptions import ValidationError
 
 
 class ProductProduct(models.Model):
-    _inherit = "product.product"
+    _inherit = "product.template"
 
     upv = fields.Integer(
         help='something about packets of products'

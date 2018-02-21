@@ -320,7 +320,7 @@ class ProductMapper(CommonMapper):
         :param product_model: objeto product.product
         :return:
         """
-        product_obj = env['product.product']
+        product_obj = env['product.template']
         prod = product_obj.search([('default_code', '=', self.default_code)])
         if prod:
             prod.write(self.values())
