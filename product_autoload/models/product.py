@@ -30,12 +30,12 @@ class ProductProduct(models.Model):
         calculated='_get_default_item_code'
     )
 
-    @api.constrains('item_code', 'default_code')
-    def _check_item_code(self):
-        if self.item_code != self.default_code.split('.')[0]:
-            raise ValidationError(
-                'Fied idRubro {} is not related with product code {}'.format(
-                    self.item_code, self.default_code))
+#    @api.constrains('item_code', 'default_code')
+#    def _check_item_code(self):
+#        if self.item_code != self.default_code.split('.')[0]:
+#            raise ValidationError(
+#                'Fied idRubro {} is not related with product code {}'.format(
+#                    self.item_code, self.default_code))
 
     @api.one
     @api.depends('default_code')
