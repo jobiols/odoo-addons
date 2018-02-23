@@ -5,6 +5,8 @@
 # License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl.html).
 
 from openerp import models, fields, api, _
+from openerp.osv import expression
+import re
 
 
 class ProductBarcode(models.Model):
@@ -42,8 +44,16 @@ class ProductTemplate(models.Model):
                 bc = barcode_obj.search([('product_id', '=', prod.id),
                                          ('name', '=', barcode)])
                 if not bc:
-                    res = barcode_obj.create({'product_id': prod.id,
-                                              'name': barcode})
+                    barcode_obj.create(
+                        {'product_id': prod.id, 'name': barcode})
+
+
+class ProductProduct(models.Model):
+    _inherit = 'product.product'
+
+    barcode_ids = fields.One2many(
+        related='product_tmpl_id.barcode_ids'
+    )
 
     def name_search(self, cr, user, name='', args=None, operator='ilike',
                     context=None, limit=100):

@@ -77,6 +77,9 @@ class ProductProduct(models.Model):
         """
         bulonfer = self.env['res.partner'].search(
             [('name', 'like', 'Bulonfer')])
+        if not bulonfer:
+            raise Exception('Vendor Bulonfer not found')
+
         supplierinfo = self.env['product.supplierinfo']
         self.process_file(file_path, 'data.csv', ProductMapper,
                           vendor=bulonfer, supplierinfo=supplierinfo)
