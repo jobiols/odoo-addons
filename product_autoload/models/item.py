@@ -43,9 +43,9 @@ class Item(models.Model):
     )
 
     _sql_constraints = [
-        ('uniq_item_code', 'unique(item_code)', "The item_code must be unique !"),
+        ('uniq_item_code', 'unique(item_code)',
+         "The item_code must be unique !"),
     ]
-
 
     @api.model
     def unlink_data(self):
@@ -155,18 +155,37 @@ class Item(models.Model):
         categ_obj = self.env['product.category']
         item_obj = self.env['product_autoload.item']
 
+        # buscar el item que corresponde al producto
         item = item_obj.search([('item_code', '=', prod.item_code)])
         if not item:
             raise Exception('product %s has idRubro = %s but there is no such '
                             'item in item.csv', prod.default_code,
                             prod.item_code)
-        categ_id = categ_obj.search([('name', '=', item.name)])
-        if not categ_id:
-            categ_id = categ_obj.create({'name': item.name})
 
-        if not categ_id.parent_id:
-            parent = categ_obj.create({'name': item.family_id.name})
-            categ_id.parent_id = parent
+        item_name = item.name
+        family_name = item.family_id.name
+        section_name = item.section_id.name
+
+        # buscar seccion o crearla
+        sec_id = categ_obj.search([('name', '=', section_name)])
+        if not sec_id:
+            sec_id = categ_obj.create({'name': section_name})
+
+        # buscar seccion / familia o crearla
+        sec_fam_id = categ_obj.search([('name', '=', family_name),
+                                       ('parent_id.name', '=', section_name)])
+        if not sec_fam_id:
+            sec_fam_id = categ_obj.create({'name': family_name,
+                                           'parent_id': sec_id.id})
+
+        # buscar seccion / familia / item o crearla
+        categ_id = categ_obj.search(
+            [('name', '=', item_name),
+             ('parent_id.name', '=', family_name),
+             ('parent_id.parent_id.name', '=', section_name)])
+        if not categ_id:
+            categ_id = categ_obj.create({'name': item_name,
+                                         'parent_id': sec_fam_id.id})
 
         return categ_id
 
