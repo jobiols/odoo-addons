@@ -21,7 +21,7 @@
 {
     'name': 'Product autoload',
     'version': '9.0.0.1',
-    'license': 'Other OSI approved licence',
+    'license': 'AGPL-3',
     'category': 'Tools',
     'summary': 'Carga automatica de productos',
     'author': 'jeo Software',
