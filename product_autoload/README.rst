@@ -23,8 +23,8 @@ data.csv
 - Nombre del producto
 - Descripción del producto
 - Códigos de barras (multiples codigos por producto)
-- Precio de lista	- no se usa
 - Precio de costo - Precio al que la ferretería minorista compra el producto sin iva
+- UPV Agrupacion mayorista
 - Peso bruto en kg
 - Volumen cm3
 - Nombre de la imagen
