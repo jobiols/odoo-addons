@@ -3,11 +3,9 @@
     <data>
         <record id="account_financial_report_cierredecaja0"
                 model="account.financial.report">
-            <field name="create_uid" ref="base.user_root"/>
             <field name="name">Cierre diario de caja</field>
             <field name="sign" eval="1"/>
             <field name="display_detail">detail_flat</field>
-            <field name="display_name">Cierre diario de caja</field>
             <field name="level" eval="2"/>
             <field name="type">sum</field>
         </record>
@@ -29,8 +27,8 @@
         <record id="account_financial_report_tarjetas0"
                 model="account.financial.report">
             <field name="create_uid" ref="base.user_root"/>
-            <field name="name">Tarjetas</field>
-            <field name="display_name">Tarjetas</field>
+            <field name="name">Total Tarjetas</field>
+            <field name="display_name">Total Tarjetas</field>
             <field eval="1" name="sign"/>
             <field model="account.financial.report" name="parent_id"
                    search="[('name', '=', u'Total Recaudado')]"/>
@@ -96,17 +94,26 @@
                    name="account_type_ids"/>
             <field eval="[(6,0,[])]" name="account_ids"/>
             <field name="display_detail">detail_flat</field>
-            <field name="level" eval="2" />
+            <field name="level" eval="2"/>
             <field name="type">accounts</field>
         </record>
 
-        <record id="action_report_daily_cash"
-                model="ir.actions.act_window">
+
+        <record id="action_account_report_dcash" model="ir.actions.act_window">
             <field name="name">Reporte de cierre</field>
-            <field name="res_model">account.financial.report</field>
+            <field name="res_model">accounting.report</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="view_type">form</field>
             <field name="view_mode">form</field>
-            <field name="target">inline</field>
+            <field name="view_id" ref="account.accounting_report_view"/>
+            <field name="target">new</field>
+            <field name="context"
+                   eval="{'default_account_report_id':ref('account_financial_report_cierredecaja0')}"/>
         </record>
+
+        <menuitem id="menu_account_report_dcash" name="Reporte de cierre"
+                  action="action_account_report_dcash"
+                  parent="account.menu_finance_legal_statement"/>
 
         <menuitem id="menu_cash_item"
                   name="Caja"
@@ -117,6 +124,18 @@
                   parent="menu_cash_item"
                   action="account.action_account_report" />
 
+
+        <!--
+
+        <record id="action_report_daily_cash"
+                model="ir.actions.act_window">
+            <field name="name">Reporte de cierre</field>
+            <field name="res_model">account.financial.report</field>
+            <field name="view_mode">form</field>
+            <field name="target">inline</field>
+        </record>
+
+        -->
     </data>
 </openerp>
 
