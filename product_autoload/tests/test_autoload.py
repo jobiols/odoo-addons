@@ -48,32 +48,10 @@ class TestBusiness(TransactionCase):
             [('name', 'like', 'Bulonfer')])
         self._supinfo = self.env['product.supplierinfo']
 
-    def test_01_productcode(self):
-        """ Chequear creacion de ProductCode --------------------------------01
+    def test_01_product_mapper(self):
+        """ Chequear creacion de ProductMapper ------------------------------01
         """
-        line = [
-            '003.0151-5/at',
-            '171.003.0151.5',
-            '1']
 
-        prod = ProductCodeMapper(line, self._data_path, self._vendor,
-                                 self._supinfo)
-
-        self.assertEqual(prod.barcode, '003.0151-5/at')
-        self.assertEqual(prod.product_code, '171.003.0151.5')
-        self.assertEqual(prod.uxb, 1)
-
-        val = {
-            'barcode': '003.0151-5/at',
-            'product_code': '171.003.0151.5',
-            'uxb': 1}
-
-        for item in val:
-            self.assertEqual(prod.values()[item], val[item])
-
-    def test_02_product_mapper(self):
-        """ Chequear creacion de ProductMapper ------------------------------02
-        """
         line = [
             '123456',
             'nombre-producto',
@@ -84,7 +62,7 @@ class TestBusiness(TransactionCase):
             '125.85',
             '100',
             '5',
-            '601.AA.3157.jpg',
+            '102.7811.jpg',
             '60',
             '15.5',
             '001',
@@ -123,6 +101,29 @@ class TestBusiness(TransactionCase):
 
         for item in val:
             self.assertEqual(prod.values(create=True)[item], val[item])
+
+    def test_02_productcode(self):
+        """ Chequear creacion de ProductCode --------------------------------02
+        """
+        line = [
+            '003.0151-5/at',
+            '171.003.0151.5',
+            '1']
+
+        prod = ProductCodeMapper(line, self._data_path, self._vendor,
+                                 self._supinfo)
+
+        self.assertEqual(prod.barcode, '003.0151-5/at')
+        self.assertEqual(prod.product_code, '171.003.0151.5')
+        self.assertEqual(prod.uxb, 1)
+
+        val = {
+            'barcode': '003.0151-5/at',
+            'product_code': '171.003.0151.5',
+            'uxb': 1}
+
+        for item in val:
+            self.assertEqual(prod.values()[item], val[item])
 
     def test_03_(self):
         """ Chequear tipos de campo -----------------------------------------03
@@ -199,12 +200,12 @@ class TestBusiness(TransactionCase):
         product_obj.auto_load(self._data_path)
 
         prod_obj = self.env['product.template']
-        prod = prod_obj.search([('default_code', '=', '102.C.12')])
-        self.assertEqual(len(prod), 1, '102.C.12')
+        prod = prod_obj.search([('default_code', '=', '102.AF')])
+        self.assertEqual(len(prod), 1, '102.AF')
         self.assertEqual(prod.item_code, '102')
 
-        prod = prod_obj.search([('default_code', '=', '106.18')])
-        self.assertEqual(len(prod), 1, '106.18')
+        prod = prod_obj.search([('default_code', '=', '106.32')])
+        self.assertEqual(len(prod), 1, '106.32')
         self.assertEqual(prod.item_code, '106')
 
         # verificar update
@@ -295,6 +296,10 @@ class TestBusiness(TransactionCase):
         product_obj.auto_load(self._data_path)
         # cargar categorias
         product_obj.category_load(self._data_path)
+
+        barcode_obj = self.env['product.barcode']
+        for bc in barcode_obj.search([('product_id.name', '=', '102.7811')]):
+            self.assertTrue(bc.barcode in ['5449000000996', '299999134500'])
 
     def test_15_check_all(self):
         """ cargar todo dos veces para asegurar multiples cargas-------------15

@@ -287,6 +287,7 @@ MAP_LEN = 14
 class ProductMapper(CommonMapper):
     def __init__(self, line, image_path=False, vendor=False,
                  supplierinfo=False):
+
         if len(line) != MAP_LEN:
             raise Exception('data.csv len is %d must be %d', len(line),
                             MAP_LEN)
@@ -361,9 +362,12 @@ class ProductMapper(CommonMapper):
         if self.item_code:
             ret['item_code'] = self.item_code
 
+        if self._image:
+            ret['image'] = self._image
+
         supplierinfo = {
             'name': self._vendor.id,
-            'min_qty': 1.0,
+            'min_qty': self.wholesaler_bulk,
             'price': self.standard_price,
             'product_code': self.default_code
         }
@@ -407,9 +411,7 @@ class ProductMapper(CommonMapper):
             prod = product_obj.create(self.values(create=True))
             _logger.info('Creating product %s', self.default_code)
 
-        # actualiza los modelos relacionados, IVA y barcode
-        prod.add_barcodes()
-
+        # actualiza IVA
         tax_obj = env['account.tax']
         tax_sale = tax_obj.search([('amount', '=', self.iva),
                                    ('type_tax_use', '=', 'sale')])

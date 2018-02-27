@@ -66,7 +66,8 @@ class Item(models.Model):
         for table in ['product_autoload.family',
                       'product_autoload.section',
                       'product_autoload.item',
-                      'product_autoload.productcode']:
+                      'product_autoload.productcode',
+                      'product.barcode']:
             for item in self.env[table].search([]):
                 item.unlink()
 
@@ -76,6 +77,7 @@ class Item(models.Model):
         family_obj = self.env['product_autoload.family']
         section_obj = self.env['product_autoload.section']
         prodcode_obj = self.env['product_autoload.productcode']
+        product_obj = self.env['product.template']
 
         # linkear todos los datos
         for item in item_obj.search([]):
@@ -117,7 +119,18 @@ class Item(models.Model):
                                 'records found in section.csv', item.item_code,
                                 item.section_code)
 
-        # generar warnings de registros huerfanos
+        # linkear los barcodes
+        barcode_obj = self.env['product.barcode']
+        for prod in product_obj.search([
+                ('seller_ids.name', 'like', 'Bulonfer')]):
+
+            recs = prodcode_obj.search([
+                ('product_code', '=', prod.default_code)])
+            for rec in recs:
+                bc = barcode_obj.search([('name', '=', rec.barcode)])
+                if not bc:
+                    barcode_obj.create(
+                        {'product_id': prod.id, 'name': rec.barcode})
 
         for family in family_obj.search([('item_ids', '=', False)]):
             _logger.warning('Orphan family found %s',

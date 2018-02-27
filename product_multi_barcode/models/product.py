@@ -36,16 +36,6 @@ class ProductTemplate(models.Model):
         inverse_name='product_id',
         string='Barcodes')
 
-    @api.multi
-    def add_barcodes(self):
-        for prod in self:
-            barcode_obj = self.env['product.barcode']
-            for rec in self.productcode_ids:
-                bc = barcode_obj.search([('name', '=', rec.barcode)])
-                if not bc:
-                    barcode_obj.create(
-                        {'product_id': prod.id, 'name': rec.barcode})
-
 
 class ProductProduct(models.Model):
     _inherit = 'product.product'
