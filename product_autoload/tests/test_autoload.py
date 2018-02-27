@@ -6,7 +6,7 @@ from __future__ import division
 
 from openerp.tests.common import TransactionCase
 from ..models.mappers import ProductMapper, SectionMapper, FamilyMapper, \
-    ItemMapper
+    ItemMapper, ProductCodeMapper
 
 #    Forma de correr el test
 #    -----------------------
@@ -48,6 +48,29 @@ class TestBusiness(TransactionCase):
             [('name', 'like', 'Bulonfer')])
         self._supinfo = self.env['product.supplierinfo']
 
+    def test_01_productcode(self):
+        """ Chequear creacion de ProductCode --------------------------------01
+        """
+        line = [
+            '003.0151-5/at',
+            '171.003.0151.5',
+            '1']
+
+        prod = ProductCodeMapper(line, self._data_path, self._vendor,
+                                 self._supinfo)
+
+        self.assertEqual(prod.barcode, '003.0151-5/at')
+        self.assertEqual(prod.product_code, '171.003.0151.5')
+        self.assertEqual(prod.uxb, 1)
+
+        val = {
+            'barcode': '003.0151-5/at',
+            'product_code': '171.003.0151.5',
+            'uxb': 1}
+
+        for item in val:
+            self.assertEqual(prod.values()[item], val[item])
+
     def test_02_product_mapper(self):
         """ Chequear creacion de ProductMapper ------------------------------02
         """
@@ -55,14 +78,15 @@ class TestBusiness(TransactionCase):
             '123456',
             'nombre-producto',
             'Descripción del producto',
-            '7750082001169,7750082001169',
             '500.22',
             '100',
             '200.50',
             '125.85',
+            '100',
+            '5',
             '601.AA.3157.jpg',
             '60',
-            '21',
+            '15.5',
             '001',
             '2018-25-01 13:10:55']
 
@@ -71,17 +95,20 @@ class TestBusiness(TransactionCase):
         self.assertEqual(prod.default_code, '123456')
         self.assertEqual(prod.name, 'nombre-producto')
         self.assertEqual(prod.description_sale, 'Descripción del producto')
-        self.assertEqual(prod.upv, 100)
         self.assertEqual(prod.standard_price, 500.22)
+        self.assertEqual(prod.upv, 100)
         self.assertEqual(prod.weight, 200.50)
         self.assertEqual(prod.volume, 125.85)
-        self.assertEqual(prod.barcode, ['7750082001169', '7750082001169'])
+        self.assertEqual(prod.wholesaler_bulk, 100)
+        self.assertEqual(prod.retail_bulk, 5)
         self.assertEqual(prod.warranty, 60)
-        self.assertEqual(prod.iva, 21)
+        self.assertEqual(prod.iva, 15.5)
         self.assertEqual(prod.item_code, '001')
         self.assertEqual(prod.write_date, '2018-25-01 13:10:55')
 
         val = {
+            'wholesaler_bulk': 100,
+            'retail_bulk': 5,
             'warranty': 60.0,
             'upv': 100,
             'name': 'nombre-producto',
@@ -119,8 +146,8 @@ class TestBusiness(TransactionCase):
             prod = ProductMapper(line, self._data_path, self._vendor,
                                  self._supinfo)
 
-    def test_031_(self):
-        """ Chequear tipos de campo currency -------------------------------031
+    def test_04_(self):
+        """ Chequear tipos de campo currency -------------------------------004
         """
         line = [
             '123456789',
@@ -141,8 +168,8 @@ class TestBusiness(TransactionCase):
             prod = ProductMapper(line, self._data_path, self._vendor,
                                  self._supinfo)
 
-    def test_032_(self):
-        """ Chequear tipos de campo currency
+    def test_05_(self):
+        """ Chequear tipos de campo currency --------------------------------05
         """
         line = [
             '123456789',
@@ -163,8 +190,8 @@ class TestBusiness(TransactionCase):
             prod = ProductMapper(line, self._data_path, self._vendor,
                                  self._supinfo)
 
-    def test_04_update_product(self):
-        """ Chequear update de producto -------------------------------------04
+    def test_06_update_product(self):
+        """ Chequear update de producto -------------------------------------06
         """
 
         # verificar createm
@@ -172,20 +199,20 @@ class TestBusiness(TransactionCase):
         product_obj.auto_load(self._data_path)
 
         prod_obj = self.env['product.template']
-        prod = prod_obj.search([('default_code', '=', '968.F.4.40')])
-        self.assertEqual(len(prod), 1, '968.F.4.40')
-        self.assertEqual(prod.item_code, '968')
+        prod = prod_obj.search([('default_code', '=', '102.C.12')])
+        self.assertEqual(len(prod), 1, '102.C.12')
+        self.assertEqual(prod.item_code, '102')
 
-        prod = prod_obj.search([('default_code', '=', '969.6.32')])
-        self.assertEqual(len(prod), 1, '969.6.32')
-        self.assertEqual(prod.item_code, '969')
+        prod = prod_obj.search([('default_code', '=', '106.18')])
+        self.assertEqual(len(prod), 1, '106.18')
+        self.assertEqual(prod.item_code, '106')
 
         # verificar update
 
         product_obj.auto_load(self._data_path)
 
-    def test_05_section_mapper(self):
-        """ Testear seccion mapper ------------------------------------------05
+    def test_07_section_mapper(self):
+        """ Testear seccion mapper ------------------------------------------07
         """
         line = ['1',
                 'Buloneria']
@@ -193,8 +220,8 @@ class TestBusiness(TransactionCase):
         self.assertEqual(section.code, '1')
         self.assertEqual(section.name, 'Buloneria')
 
-    def test_06_family_mapper(self):
-        """ Testear Family mapper -------------------------------------------06
+    def test_08_family_mapper(self):
+        """ Testear Family mapper -------------------------------------------08
         """
         line = ['3C',
                 'MANGERAS TRICOLOR']
@@ -202,8 +229,8 @@ class TestBusiness(TransactionCase):
         self.assertEqual(family.code, '3C')
         self.assertEqual(family.name, 'MANGERAS TRICOLOR')
 
-    def test_07_item_mapper(self):
-        """ Testear Item mapper ---------------------------------------------07
+    def test_09_item_mapper(self):
+        """ Testear Item mapper ---------------------------------------------09
         """
         line = ['001',
                 'BULON PULIDO FIXO',
@@ -217,15 +244,15 @@ class TestBusiness(TransactionCase):
         self.assertEqual(item.section_code, '1')
         self.assertEqual(item.family_code, 'BG2')
 
-    def test_08_load_section(self):
-        """ Testear load section---------------------------------------------08
+    def test_10_load_section(self):
+        """ Testear load section---------------------------------------------10
         """
         for item in self.env['product_autoload.section'].search([]):
             item.unlink()
         product_obj = self.env['product.template']
         product_obj.process_file(self._data_path, 'section.csv', SectionMapper)
 
-    def test_09_load_family(self):
+    def test_11_load_family(self):
         """ Testear load family---------------------------------------------09
         """
         for item in self.env['product_autoload.family'].search([]):
@@ -233,16 +260,16 @@ class TestBusiness(TransactionCase):
         product_obj = self.env['product.template']
         product_obj.process_file(self._data_path, 'family.csv', FamilyMapper)
 
-    def test_10_load_item(self):
-        """ Testear load section---------------------------------------------10
+    def test_12_load_item(self):
+        """ Testear load section---------------------------------------------12
         """
         for item in self.env['product_autoload.item'].search([]):
             item.unlink()
         product_obj = self.env['product.template']
         product_obj.process_file(self._data_path, 'item.csv', ItemMapper)
 
-    def test_11_item_unlink(self):
-        """ Testear que el unlink borra todo --------------------------------11
+    def test_13_item_unlink(self):
+        """ Testear que el unlink borra todo --------------------------------13
         """
         product_obj = self.env['product.template']
         # cargar productos
@@ -260,18 +287,17 @@ class TestBusiness(TransactionCase):
         families = self.env['product_autoload.family'].search([])
         self.assertEqual(len(families), 0)
 
-    def test_12_item_unlink(self):
-        """ Testear que el unlink borra todo --------------------------------12
+    def test_14_item_unlink(self):
+        """ Testear que el unlink borra todo --------------------------------14
         """
-
         product_obj = self.env['product.template']
         # cargar productos
         product_obj.auto_load(self._data_path)
         # cargar categorias
         product_obj.category_load(self._data_path)
 
-    def test_13_check_all(self):
-        """ cargar todo dos veces para asegurar multiples cargas-------------13
+    def test_15_check_all(self):
+        """ cargar todo dos veces para asegurar multiples cargas-------------15
         """
         product_obj = self.env['product.template']
         # cargar productos

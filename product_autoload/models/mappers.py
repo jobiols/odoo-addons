@@ -16,6 +16,14 @@ class CommonMapper(object):
                 'The codification must be utf-8', field)
         return value
 
+    @staticmethod
+    def check_numeric(field, value):
+        try:
+            ret = int(value)
+        except ValueError as ex:
+            _logger.error('%s Value: "%s": %s', field, value, ex.message)
+        return ret
+
 
 IM_CODE = 0
 IM_NAME = 1
@@ -147,6 +155,69 @@ class FamilyMapper(CommonMapper):
         self._name = self.check_string('Family Name', value)
 
 
+PC_BARCODE = 0
+PC_PRODUCT_CODE = 1
+PC_UXB = 2
+PC_LEN = 3
+
+
+class ProductCodeMapper(CommonMapper):
+    def __init__(self, line, image_path=False, vendor=False,
+                 supplierinfo=False):
+        if len(line) != PC_LEN:
+            raise Exception('productcode.csv len is %d must be %d', len(line),
+                            PC_LEN)
+
+        self._barcode = False
+        self._product_code = False
+        self._uxb = False
+
+        self.barcode = line[PC_BARCODE]
+        self.product_code = line[PC_PRODUCT_CODE]
+        self.uxb = line[PC_UXB]
+
+    def execute(self, env):
+        """
+         se supone que esto no actualiza los datos, porque se borran antes de
+         que se procesen asi que siempre hacemos create
+        """
+        productcode_obj = env['product_autoload.productcode']
+        productcode_obj.create(self.values())
+        _logger.info('Creating barcode %s, %s', self._barcode,
+                     self._product_code)
+
+    def values(self):
+        return {
+            'barcode': self.barcode,
+            'product_code': self.product_code,
+            'uxb': self.uxb,
+        }
+
+    @property
+    def barcode(self):
+        return self._barcode
+
+    @barcode.setter
+    def barcode(self, value):
+        self._barcode = value
+
+    @property
+    def product_code(self):
+        return self._product_code
+
+    @product_code.setter
+    def product_code(self, value):
+        self._product_code = value
+
+    @property
+    def uxb(self):
+        return self._uxb
+
+    @uxb.setter
+    def uxb(self, value):
+        self._uxb = self.check_numeric('UXB', value)
+
+
 SM_CODE = 0
 SM_NAME = 1
 SM_LEN = 2
@@ -199,17 +270,18 @@ class SectionMapper(CommonMapper):
 MAP_DEFAULT_CODE = 0
 MAP_NAME = 1
 MAP_DESCRIPTION_SALE = 2
-MAP_BARCODE = 3
-MAP_STANDARD_PRICE = 4
-MAP_UPV = 5
-MAP_WEIGHT = 6
-MAP_VOLUME = 7
-MAP_IMAGE_NAME = 8
-MAP_WARRANTY = 9
-MAP_IVA = 10
-MAP_ITEM_CODE = 11
-MAP_WRITE_DATE = 12
-MAP_LEN = 13
+MAP_STANDARD_PRICE = 3
+MAP_UPV = 4
+MAP_WEIGHT = 5
+MAP_VOLUME = 6
+MAP_WHOLESALER_BULK = 7
+MAP_RETAIL_BULK = 8
+MAP_IMAGE_NAME = 9
+MAP_WARRANTY = 10
+MAP_IVA = 11
+MAP_ITEM_CODE = 12
+MAP_WRITE_DATE = 13
+MAP_LEN = 14
 
 
 class ProductMapper(CommonMapper):
@@ -221,16 +293,18 @@ class ProductMapper(CommonMapper):
         self._supplierinfo_obj = supplierinfo
         self._vendor = vendor
         self._image_path = image_path
+        self._image = False
+
         self._default_code = False
         self._name = False
         self._description_sale = False
-        self._barcode = False
-        self._upv = False
         self._standard_price = False
+        self._upv = False
         self._weight = False
         self._volume = False
+        self._wholesaler_bulk = False
+        self._retail_bulk = False
         self._image_name = False
-        self._image = False
         self._warranty = False
         self._iva = False
         self._item_code = False
@@ -239,15 +313,16 @@ class ProductMapper(CommonMapper):
         self.default_code = line[MAP_DEFAULT_CODE]
         self.name = line[MAP_NAME]
         self.description_sale = line[MAP_DESCRIPTION_SALE]
-        self.barcode = line[MAP_BARCODE]
-        self.upv = line[MAP_UPV]
         self.standard_price = line[MAP_STANDARD_PRICE]
+        self.upv = line[MAP_UPV]
         self.weight = line[MAP_WEIGHT]
         self.volume = line[MAP_VOLUME]
+        self.wholesaler_bulk = line[MAP_WHOLESALER_BULK]
+        self.retail_bulk = line[MAP_RETAIL_BULK]
         self.image_name = line[MAP_IMAGE_NAME]
         self.warranty = line[MAP_WARRANTY]
-        self.item_code = line[MAP_ITEM_CODE]
         self.iva = line[MAP_IVA]
+        self.item_code = line[MAP_ITEM_CODE]
         self.write_date = line[MAP_WRITE_DATE]
 
     def values(self, create=False):
@@ -259,11 +334,11 @@ class ProductMapper(CommonMapper):
         if self._description_sale:
             ret['description_sale'] = self.description_sale
 
-        if self.upv:
-            ret['upv'] = self.upv
-
         if self.standard_price:
             ret['standard_price'] = self.standard_price
+
+        if self.upv:
+            ret['upv'] = self.upv
 
         if self.weight:
             ret['weight'] = self.weight
@@ -271,14 +346,17 @@ class ProductMapper(CommonMapper):
         if self.volume:
             ret['volume'] = self.volume
 
+        if self.wholesaler_bulk:
+            ret['wholesaler_bulk'] = self.wholesaler_bulk
+
+        if self.retail_bulk:
+            ret['retail_bulk'] = self.retail_bulk
+
         if self.warranty:
             ret['warranty'] = self.warranty
 
         if self.write_date:
             ret['write_date'] = self.write_date
-
-        if self._image:
-            ret['image'] = self._image
 
         if self.item_code:
             ret['item_code'] = self.item_code
@@ -330,7 +408,7 @@ class ProductMapper(CommonMapper):
             _logger.info('Creating product %s', self.default_code)
 
         # actualiza los modelos relacionados, IVA y barcode
-        prod.add_barcodes(self.barcode)
+        prod.add_barcodes()
 
         tax_obj = env['account.tax']
         tax_sale = tax_obj.search([('amount', '=', self.iva),
@@ -359,14 +437,6 @@ class ProductMapper(CommonMapper):
         prod.item_id = item.id
         _logger.info('Linked product %s with item %s',
                      prod.default_code, item.item_code)
-
-    @staticmethod
-    def check_numeric(field, value):
-        try:
-            ret = int(value)
-        except ValueError as ex:
-            _logger.error('%s Value: "%s": %s', field, value, ex.message)
-        return ret
 
     @staticmethod
     def check_currency(field, value):
@@ -426,15 +496,6 @@ class ProductMapper(CommonMapper):
             self._upv = self.check_numeric('upv', value)
 
     @property
-    def standard_price(self):
-        return self._standard_price
-
-    @standard_price.setter
-    def standard_price(self, value):
-        if value:
-            self._standard_price = self.check_currency('standard_price', value)
-
-    @property
     def weight(self):
         return self._weight
 
@@ -453,6 +514,31 @@ class ProductMapper(CommonMapper):
             self._volume = self.check_float('volume', value)
 
     @property
+    def wholesaler_bulk(self):
+        return self._wholesaler_bulk
+
+    @wholesaler_bulk.setter
+    def wholesaler_bulk(self, value):
+        self._wholesaler_bulk = self.check_numeric('wholesaler_bulk', value)
+
+    @property
+    def retail_bulk(self):
+        return self._retail_bulk
+
+    @retail_bulk.setter
+    def retail_bulk(self, value):
+        self._retail_bulk = self.check_numeric('retail_bulk', value)
+
+    @property
+    def standard_price(self):
+        return self._standard_price
+
+    @standard_price.setter
+    def standard_price(self, value):
+        if value:
+            self._standard_price = self.check_currency('standard_price', value)
+
+    @property
     def image_name(self):
         return self._image_name
 
@@ -469,15 +555,6 @@ class ProductMapper(CommonMapper):
                 logging.error('%s %s', ex.filename, ex.strerror)
 
     @property
-    def barcode(self):
-        return self._barcode
-
-    @barcode.setter
-    def barcode(self, value):
-        if value:
-            self._barcode = value.split(',')
-
-    @property
     def iva(self):
         return self._iva
 
@@ -485,10 +562,6 @@ class ProductMapper(CommonMapper):
     def iva(self, value):
         if value:
             self._iva = self.check_float('iva', value)
-
-            # agregar el iva
-            #        taxes_id
-            #        supplier_taxes_id
 
     @property
     def warranty(self):

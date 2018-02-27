@@ -49,6 +49,8 @@ class Item(models.Model):
 
     @api.model
     def unlink_data(self):
+        """ Esto borra los datos de las tablas auxiliares y para recargar todo
+        """
 
         # TODO Esto esta mal
         # recorrer todos los productos de bulonfer deslinkear las categorias
@@ -63,7 +65,8 @@ class Item(models.Model):
         # eliminar los datos de las tres tablas
         for table in ['product_autoload.family',
                       'product_autoload.section',
-                      'product_autoload.item']:
+                      'product_autoload.item',
+                      'product_autoload.productcode']:
             for item in self.env[table].search([]):
                 item.unlink()
 
@@ -72,7 +75,7 @@ class Item(models.Model):
         item_obj = self.env['product_autoload.item']
         family_obj = self.env['product_autoload.family']
         section_obj = self.env['product_autoload.section']
-        product_obj = self.env['product.template']
+        prodcode_obj = self.env['product_autoload.productcode']
 
         # linkear todos los datos
         for item in item_obj.search([]):
@@ -114,24 +117,6 @@ class Item(models.Model):
                                 'records found in section.csv', item.item_code,
                                 item.section_code)
 
-            # Linkear con productos
-            # Chequeo: El codigo item_code de item debe existir en product
-            """
-            product = product_obj.search(
-                [('item_code', '=', item.item_code)]
-            )
-            if not product:
-                raise Exception('Item points to product tagged with '
-                                'idrubro=%s but no product found',
-                                item.item_code)
-            _logger.info('Linking %s products with item %s', len(product),
-                         item.item_code)
-            for prod in product:
-                prod.item_id = item.id
-                _logger.info('Linked product %s with item %s',
-                             prod.default_code, item.item_code)
-
-            """
         # generar warnings de registros huerfanos
 
         for family in family_obj.search([('item_ids', '=', False)]):

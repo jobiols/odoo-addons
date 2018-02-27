@@ -37,15 +37,14 @@ class ProductTemplate(models.Model):
         string='Barcodes')
 
     @api.multi
-    def add_barcodes(self, barcodes):
+    def add_barcodes(self):
         for prod in self:
             barcode_obj = self.env['product.barcode']
-            for barcode in barcodes:
-                bc = barcode_obj.search([('product_id', '=', prod.id),
-                                         ('name', '=', barcode)])
+            for rec in self.productcode_ids:
+                bc = barcode_obj.search([('name', '=', rec.barcode)])
                 if not bc:
                     barcode_obj.create(
-                        {'product_id': prod.id, 'name': barcode})
+                        {'product_id': prod.id, 'name': rec.barcode})
 
 
 class ProductProduct(models.Model):

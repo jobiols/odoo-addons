@@ -6,3 +6,4 @@ from . import mappers
 from . import item
 from . import family
 from . import section
+from . import productcode

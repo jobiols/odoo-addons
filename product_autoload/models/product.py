@@ -5,7 +5,8 @@ import logging
 _logger = logging.getLogger(__name__)
 
 from openerp import api, models, fields
-from mappers import ProductMapper, SectionMapper, ItemMapper, FamilyMapper
+from mappers import ProductMapper, SectionMapper, ItemMapper, FamilyMapper, \
+    ProductCodeMapper
 import csv
 from openerp.exceptions import ValidationError
 
@@ -14,11 +15,17 @@ class ProductProduct(models.Model):
     _inherit = "product.template"
 
     upv = fields.Integer(
-        help='something about packets of products'
+        help='Agrupacion mayorista'
     )
 
     item_id = fields.Many2one(
         'product_autoload.item'
+    )
+
+    productcode_ids = fields.One2many(
+        'product_autoload.productcode',
+        'product_id',
+        help="All barcodes belonging to this product"
     )
 
     item_code = fields.Char(
@@ -30,12 +37,13 @@ class ProductProduct(models.Model):
         calculated='_get_default_item_code'
     )
 
-#    @api.constrains('item_code', 'default_code')
-#    def _check_item_code(self):
-#        if self.item_code != self.default_code.split('.')[0]:
-#            raise ValidationError(
-#                'Fied idRubro {} is not related with product code {}'.format(
-#                    self.item_code, self.default_code))
+    wholesaler_bulk = fields.Integer(
+
+    )
+
+    retail_bulk = fields.Integer(
+
+    )
 
     @api.one
     @api.depends('default_code')
@@ -68,6 +76,7 @@ class ProductProduct(models.Model):
         self.process_file(file_path, 'section.csv', SectionMapper)
         self.process_file(file_path, 'family.csv', FamilyMapper)
         self.process_file(file_path, 'item.csv', ItemMapper)
+        self.process_file(file_path, 'productcode.csv', ProductCodeMapper)
         item_obj.link_data()
         item_obj.create_categories()
 
