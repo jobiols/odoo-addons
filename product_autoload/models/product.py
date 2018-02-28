@@ -84,13 +84,40 @@ class ProductProduct(models.Model):
     def auto_load(self, file_path):
         """ Carga todos los productos que tienen timestamp > ultima carga
         """
+        self.send_email('Inicio de proceso','Hola, te aviso que inicio el proceso')
         bulonfer = self.env['res.partner'].search(
             [('name', 'like', 'Bulonfer')])
         if not bulonfer:
             raise Exception('Vendor Bulonfer not found')
 
         supplierinfo = self.env['product.supplierinfo']
-        self.process_file(file_path, 'data.csv', ProductMapper,
-                          vendor=bulonfer, supplierinfo=supplierinfo)
 
-        self.category_load(file_path)
+        try:
+            self.process_file(file_path, 'data.csv', ProductMapper,
+                              vendor=bulonfer, supplierinfo=supplierinfo)
+            self.category_load(file_path)
+            self.send_email('Fin del proceso','Hola, te aviso que finalizo el proceso')
+
+        except Exception as ex:
+            self.send_email('Falla del proceso',ex.message)
+            raise Exception('\nFalla del proceso %s\n', ex.message)
+
+    @api.model
+    def send_email(self, subject, body):
+        mail_mail = self.env['mail.mail']
+        user = self.env['res.users'].search([('id', '=', 1)])
+        if not user.email:
+            _logger.error(_('Email Required to notify load failure'))
+            return False
+        email_to = 'jorge.obiols@gmail.com'
+        mail_ids = []
+
+        mail_ids.append(mail_mail.create({
+            'email_from': user.email,
+            'email_to': email_to,
+            'subject': subject,
+            'body_html': '<pre>%s</pre>' % body}))
+
+        # force direct delivery
+        mail_mail.send(mail_ids)
+        _logger.info('mail sent.')
