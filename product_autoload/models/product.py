@@ -100,7 +100,7 @@ class ProductProduct(models.Model):
 
         except Exception as ex:
             self.send_email('Falla del proceso',ex.message)
-            raise Exception('\nFalla del proceso %s\n', ex.message)
+            raise Exception('=== Falla del proceso === %s', ex.message)
 
     @api.model
     def send_email(self, subject, body):
@@ -120,4 +120,4 @@ class ProductProduct(models.Model):
 
         # force direct delivery
         mail_mail.send(mail_ids)
-        _logger.info('mail sent.')
+        _logger.info('-------------->>>> mail sent.')
