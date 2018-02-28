@@ -84,7 +84,8 @@ class ProductProduct(models.Model):
     def auto_load(self, file_path):
         """ Carga todos los productos que tienen timestamp > ultima carga
         """
-        self.send_email('Inicio de proceso','Hola, te aviso que inicio el proceso')
+        self.send_email('Inicio de proceso',
+                        'Hola, te aviso que inicio el proceso')
         bulonfer = self.env['res.partner'].search(
             [('name', 'like', 'Bulonfer')])
         if not bulonfer:
@@ -96,14 +97,17 @@ class ProductProduct(models.Model):
             self.process_file(file_path, 'data.csv', ProductMapper,
                               vendor=bulonfer, supplierinfo=supplierinfo)
             self.category_load(file_path)
-            self.send_email('Fin del proceso','Hola, te aviso que finalizo el proceso')
+            self.send_email('Fin del proceso',
+                            'Hola, te aviso que finalizo el proceso')
 
         except Exception as ex:
-            self.send_email('Falla del proceso',ex.message)
+            _logger.error('Falla del proceso---------------------')
+            self.send_email('Falla del proceso', ex.message)
             raise Exception('=== Falla del proceso === %s', ex.message)
 
     @api.model
     def send_email(self, subject, body):
+        _logger.info('entra en send mail --------------------------------')
         mail_mail = self.env['mail.mail']
         user = self.env['res.users'].search([('id', '=', 1)])
         if not user.email:
