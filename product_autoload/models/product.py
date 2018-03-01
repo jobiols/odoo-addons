@@ -8,7 +8,9 @@ from openerp import api, models, fields
 from mappers import ProductMapper, SectionMapper, ItemMapper, FamilyMapper, \
     ProductCodeMapper
 import csv
-from openerp.exceptions import ValidationError
+from openerp.addons.base.ir.ir_mail_server import MailDeliveryException
+from time import time
+from datetime import timedelta
 
 
 class ProductProduct(models.Model):
@@ -84,8 +86,9 @@ class ProductProduct(models.Model):
     def auto_load(self, file_path):
         """ Carga todos los productos que tienen timestamp > ultima carga
         """
-        self.send_email('Inicio de proceso',
-                        'Hola, te aviso que inicio el proceso')
+        self.send_email('Replicacion Bulonfer, Inicio', 'Se inicio el proceso')
+        start_time = time()
+
         bulonfer = self.env['res.partner'].search(
             [('name', 'like', 'Bulonfer')])
         if not bulonfer:
@@ -97,31 +100,28 @@ class ProductProduct(models.Model):
             self.process_file(file_path, 'data.csv', ProductMapper,
                               vendor=bulonfer, supplierinfo=supplierinfo)
             self.category_load(file_path)
-            self.send_email('Fin del proceso',
-                            'Hola, te aviso que finalizo el proceso')
+            elapsed_time = time() - start_time
+            self.send_email('Replicacion Bulonfer, Fin', 'Termino el proceso',
+                            elapsed_time)
 
         except Exception as ex:
             _logger.error('Falla del proceso---------------------')
-            self.send_email('Falla del proceso', ex.message)
+            self.send_email('Replicacion Bulonfer ERROR', ex.message)
             raise Exception('=== Falla del proceso === %s', ex.message)
 
     @api.model
-    def send_email(self, subject, body):
-        _logger.info('entra en send mail --------------------------------')
-        mail_mail = self.env['mail.mail']
-        user = self.env['res.users'].search([('id', '=', 1)])
-        if not user.email:
-            _logger.error(_('Email Required to notify load failure'))
-            return False
-        email_to = 'jorge.obiols@gmail.com'
-        mail_ids = []
+    def send_email(self, subject, body, elapsed_time=False):
 
-        mail_ids.append(mail_mail.create({
-            'email_from': user.email,
-            'email_to': email_to,
-            'subject': subject,
-            'body_html': '<pre>%s</pre>' % body}))
+        email_from = 'noresponder@bulonfer.com.ar'
+        email_to = ['jorge.obiols@gmail.com']
 
-        # force direct delivery
-        mail_mail.send(mail_ids)
-        _logger.info('-------------->>>> mail sent.')
+        if elapsed_time:
+            elapsed = str(timedelta(seconds=elapsed_time))
+            body += ', duracion: ' + elapsed
+
+        try:
+            smtp = self.env['ir.mail_server']
+            message = smtp.build_email(email_from, email_to, subject, body)
+            smtp.send_email(message)
+        except MailDeliveryException as ex:
+            raise Exception(ex.message)
