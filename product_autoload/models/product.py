@@ -113,7 +113,7 @@ class ProductProduct(models.Model):
     def send_email(self, subject, body, elapsed_time=False):
 
         email_from = 'noresponder@bulonfer.com.ar'
-        email_to = ['jorge.obiols@gmail.com']
+        email_to = ['jorge.obiols@gmail.com', 'sagomez@gmail.com']
 
         if elapsed_time:
             elapsed = str(timedelta(seconds=elapsed_time))
