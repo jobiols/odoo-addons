@@ -12,8 +12,8 @@ class CommonMapper(object):
             value.decode('utf-8')
         except:
             raise Exception(
-                'Unicode Encode Error in field %s, '
-                'The codification must be utf-8', field)
+                    'Unicode Encode Error in field %s, '
+                    'The codification must be utf-8', field)
         return value
 
     @staticmethod
@@ -375,8 +375,8 @@ class ProductMapper(CommonMapper):
             ret['seller_ids'] = [(0, 0, supplierinfo)]
         else:
             rec = self._supplierinfo_obj.search(
-                [('name', '=', self._vendor.id),
-                 ('product_code', '=', self.default_code)])
+                    [('name', '=', self._vendor.id),
+                     ('product_code', '=', self.default_code)])
             if rec:
                 rec.price = self.standard_price
             else:
@@ -411,34 +411,41 @@ class ProductMapper(CommonMapper):
             prod = product_obj.create(self.values(create=True))
             _logger.info('Creating product %s', self.default_code)
 
-        # actualiza IVA
         tax_obj = env['account.tax']
+
+        # actualiza IVA ventas
         tax_sale = tax_obj.search([('amount', '=', self.iva),
+                                   ('tax_group_id.tax', '=', 'vat'),
                                    ('type_tax_use', '=', 'sale')])
-        tax_purchase = tax_obj.search([('amount', '=', self.iva),
-                                       ('type_tax_use', '=', 'purchase')])
-
-        if len(tax_sale) != 1:
+        if not tax_sale:
             raise Exception('Product %s needs Customer Tax %s% (IVA Sales)'
-                            ' not (or multiple) found in Accounting',
-                            self.default_code,
-                            self.iva)
+                            ' not found in Accounting',
+                            self.default_code, self.iva)
 
-        if len(tax_purchase) != 1:
+        # si hay mas de uno me quedo con el primero
+        tax = tax_sale[0].id
+        prod.taxes_id = [(6, 0, [tax])]
+
+        # actualiza iva compras
+        tax_purchase = tax_obj.search([('amount', '=', self.iva),
+                                       ('tax_group_id.tax', '=', 'vat'),
+                                       ('type_tax_use', '=', 'purchase')])
+        if not tax_purchase:
             raise Exception('Product %s needs Customer Tax %s% (IVA Purchases)'
-                            ' not (or multiple) found in Accounting',
-                            self.default_code,
-                            self.iva)
+                            ' not found in Accounting',
+                            self.default_code, self.iva)
 
-        prod.taxes_id = [(6, 0, tax_sale.ids)]
-        prod.supplier_taxes_id = [(6, 0, tax_purchase.ids)]
+        # si hay mas de uno me quedo con el primero
+        tax = tax_purchase[0].id
+        prod.supplier_taxes_id = [(6, 0, [tax])]
 
         # relaciona el producto con el item
         item_obj = env['product_autoload.item']
         item = item_obj.search([('item_code', '=', prod.item_code)])
-        prod.item_id = item.id
-        _logger.info('Linked product %s with item %s',
-                     prod.default_code, item.item_code)
+        if item:
+            prod.item_id = item.id
+            _logger.info('Linked product %s with item %s',
+                         prod.default_code, item.item_code)
 
     @staticmethod
     def check_currency(field, value):
