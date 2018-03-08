@@ -213,7 +213,8 @@ class ProductCodeMapper(CommonMapper):
     def barcode(self, value):
         # correccion del barcode
         # si hay un espacio elimino lo que hay despues
-        self._barcode = value.split(' ')[0]
+        # parece que esto es inviable porque no vale la regla
+        self._barcode = value   #.split(' ')[0]
 
     @property
     def product_code(self):
