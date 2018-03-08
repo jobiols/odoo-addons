@@ -211,7 +211,9 @@ class ProductCodeMapper(CommonMapper):
 
     @barcode.setter
     def barcode(self, value):
-        self._barcode = value
+        # correccion del barcode
+        # si hay un espacio elimino lo que hay despues
+        self._barcode = value.split(' ')[0]
 
     @property
     def product_code(self):
