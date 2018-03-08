@@ -7,3 +7,4 @@ from . import item
 from . import family
 from . import section
 from . import productcode
+from . import settings

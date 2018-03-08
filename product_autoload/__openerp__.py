@@ -35,6 +35,7 @@
     'data': [
         'security/ir.model.access.csv',
         'data/cron_data.xml',
+        'views/settings_view.xml'
     ],
     'test': [
     ],

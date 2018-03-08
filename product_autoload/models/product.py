@@ -112,8 +112,11 @@ class ProductProduct(models.Model):
     @api.model
     def send_email(self, subject, body, elapsed_time=False):
 
-        email_from = 'noresponder@bulonfer.com.ar'
-        email_to = ['jorge.obiols@gmail.com', 'sagomez@gmail.com']
+        email_from = 'Bulonfer SA <noresponder@bulonfer.com.ar>'
+        emails = self.env['ir.config_parameter'].get_param('email_notification', '')
+
+        email_to = emails.split(',')
+        #email_to = ['jorge.obiols@gmail.com', 'sagomez@gmail.com']
 
         if elapsed_time:
             elapsed = str(timedelta(seconds=elapsed_time))
