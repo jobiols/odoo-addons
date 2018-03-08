@@ -10,7 +10,7 @@ from mappers import ProductMapper, SectionMapper, ItemMapper, FamilyMapper, \
 import csv
 from openerp.addons.base.ir.ir_mail_server import MailDeliveryException
 from time import time
-from datetime import timedelta
+from datetime import datetime, timedelta
 
 
 class ProductProduct(models.Model):
@@ -40,11 +40,11 @@ class ProductProduct(models.Model):
     )
 
     wholesaler_bulk = fields.Integer(
-
+        help="Bulk Wholesaler quantity of units",
     )
 
     retail_bulk = fields.Integer(
-
+        help="Bulk retail quantity of units",
     )
 
     @api.one
@@ -55,19 +55,31 @@ class ProductProduct(models.Model):
     @api.multi
     def process_file(self, file_path, file, class_mapper, vendor=False,
                      supplierinfo=False):
-        """ Procesa un archivo csv con un mapper
+        """ Procesa un archivo csv con un mapper teniendo en cuenta la fecha
+            de los registros
         """
+        last_replication = self.env['ir.config_parameter'].get_param(
+            'last_replication', '')
+        check_date = self.env['ir.config_parameter'].get_param(
+            'import_only_new', '')
 
         try:
             with open(file_path + file, 'r') as file_csv:
                 reader = csv.reader(file_csv)
                 for line in reader:
                     if line:
-                        prod = class_mapper(line, file_path, vendor,
-                                            supplierinfo)
-                        prod.execute(self.env)
+                        obj = class_mapper(line, file_path, vendor,
+                                           supplierinfo)
+                        if not check_date:
+                            if obj.write_date > last_replication:
+                                obj.execute(self.env)
+                            else:
+                                obj.execute(self.env)
+
+            self.env['ir.config_parameter'].set_param('last_replication',
+                                                      str(datetime.now()))
         except IOError as ex:
-            _logger.error('%s %s', ex.filename, ex.strerror)
+            _logger.error('{} {}'.format(ex.filename, ex.strerror))
 
     @api.model
     def category_load(self, file_path):
@@ -84,7 +96,7 @@ class ProductProduct(models.Model):
 
     @api.model
     def auto_load(self, file_path):
-        """ Carga todos los productos que tienen timestamp > ultima carga
+        """ Actualiza los productos
         """
         self.send_email('Replicacion Bulonfer, Inicio', 'Se inicio el proceso')
         start_time = time()
@@ -93,7 +105,6 @@ class ProductProduct(models.Model):
             [('name', 'like', 'Bulonfer')])
         if not bulonfer:
             raise Exception('Vendor Bulonfer not found')
-
         supplierinfo = self.env['product.supplierinfo']
 
         try:
@@ -105,18 +116,18 @@ class ProductProduct(models.Model):
                             elapsed_time)
 
         except Exception as ex:
-            _logger.error('Falla del proceso---------------------')
             self.send_email('Replicacion Bulonfer ERROR', ex.message)
-            raise Exception('=== Falla del proceso === %s', ex.message)
+            raise Exception('=== Falla del proceso === {}'.format(ex.message))
 
     @api.model
     def send_email(self, subject, body, elapsed_time=False):
 
         email_from = 'Bulonfer SA <noresponder@bulonfer.com.ar>'
-        emails = self.env['ir.config_parameter'].get_param('email_notification', '')
+        emails = self.env['ir.config_parameter'].get_param(
+            'email_notification', '')
 
         email_to = emails.split(',')
-        #email_to = ['jorge.obiols@gmail.com', 'sagomez@gmail.com']
+        # email_to = ['jorge.obiols@gmail.com', 'sagomez@gmail.com']
 
         if elapsed_time:
             elapsed = str(timedelta(seconds=elapsed_time))

@@ -12,8 +12,8 @@ class CommonMapper(object):
             value.decode('utf-8')
         except:
             raise Exception(
-                    'Unicode Encode Error in field %s, '
-                    'The codification must be utf-8', field)
+                'Unicode Encode Error in field {}, '
+                'The codification must be utf-8'.format(field))
         return value
 
     @staticmethod
@@ -21,7 +21,8 @@ class CommonMapper(object):
         try:
             ret = int(value)
         except ValueError as ex:
-            _logger.error('%s Value: "%s": %s', field, value, ex.message)
+            _logger.error(
+                '{} Value: "{}": {}'.format(field, value, ex.message))
         return ret
 
 
@@ -37,13 +38,15 @@ class ItemMapper(CommonMapper):
     def __init__(self, line, image_path=False, vendor=False,
                  supplierinfo=False):
         if len(line) != IM_LEN:
-            raise Exception('item.csv len is %d must be %d', len(line), IM_LEN)
+            raise Exception(
+                'item.csv len is {} must be {}'.format(len(line), IM_LEN))
 
         self._code = False
         self._name = False
         self._origin = False
         self._section_code = False
         self._family_code = False
+        self._write_date = ''
 
         self.code = line[IM_CODE]
         self.name = line[IM_NAME]
@@ -58,7 +61,7 @@ class ItemMapper(CommonMapper):
         """
         section_obj = env['product_autoload.item']
         section_obj.create(self.values())
-        _logger.info('Creating item %s', self.name)
+        _logger.info('Creating item {}'.format(self.name))
 
     def values(self):
         return {'name': self.name,
@@ -106,6 +109,10 @@ class ItemMapper(CommonMapper):
     def family_code(self, value):
         self._family_code = self.check_string('Item Family Code', value)
 
+    @property
+    def write_date(self):
+        return self._write_date
+
 
 FM_CODE = 0
 FM_NAME = 1
@@ -116,14 +123,14 @@ class FamilyMapper(CommonMapper):
     def __init__(self, line, image_path=False, vendor=False,
                  supplierinfo=False):
         if len(line) != FM_LEN:
-            raise Exception('family.csv len is %d must be %d', len(line),
-                            FM_LEN)
-
+            raise Exception('family.csv len is {} must be {}'.format(len(line),
+                                                                     FM_LEN))
         self._code = False
         self._name = False
 
         self.code = line[FM_CODE]
         self.name = line[FM_NAME]
+        self._write_date = ''
 
     def execute(self, env):
         """
@@ -132,7 +139,7 @@ class FamilyMapper(CommonMapper):
         """
         section_obj = env['product_autoload.family']
         section_obj.create(self.values())
-        _logger.info('Creating family %s', self.name)
+        _logger.info('Creating family {}'.format(self.name))
 
     def values(self):
         return {'family_code': self.code,
@@ -154,6 +161,10 @@ class FamilyMapper(CommonMapper):
     def name(self, value):
         self._name = self.check_string('Family Name', value)
 
+    @property
+    def write_date(self):
+        return self._write_date
+
 
 PC_BARCODE = 0
 PC_PRODUCT_CODE = 1
@@ -165,12 +176,13 @@ class ProductCodeMapper(CommonMapper):
     def __init__(self, line, image_path=False, vendor=False,
                  supplierinfo=False):
         if len(line) != PC_LEN:
-            raise Exception('productcode.csv len is %d must be %d', len(line),
-                            PC_LEN)
+            raise Exception('productcode.csv len is {} '
+                            'must be {}'.format(len(line), PC_LEN))
 
         self._barcode = False
         self._product_code = False
         self._uxb = False
+        self._write_date = ''
 
         self.barcode = line[PC_BARCODE]
         self.product_code = line[PC_PRODUCT_CODE]
@@ -183,8 +195,8 @@ class ProductCodeMapper(CommonMapper):
         """
         productcode_obj = env['product_autoload.productcode']
         productcode_obj.create(self.values())
-        _logger.info('Creating barcode %s, %s', self._barcode,
-                     self._product_code)
+        _logger.info('Creating barcode {}, {}'.format(self._barcode,
+                                                      self._product_code))
 
     def values(self):
         return {
@@ -217,6 +229,10 @@ class ProductCodeMapper(CommonMapper):
     def uxb(self, value):
         self._uxb = self.check_numeric('UXB', value)
 
+    @property
+    def write_date(self):
+        return self._write_date
+
 
 SM_CODE = 0
 SM_NAME = 1
@@ -227,11 +243,12 @@ class SectionMapper(CommonMapper):
     def __init__(self, line, image_path=False, vendor=False,
                  supplierinfo=False):
         if len(line) != SM_LEN:
-            raise Exception('section.csv len is %d must be %d', len(line),
-                            SM_LEN)
+            raise Exception('section.csv len is {} '
+                            'must be {}'.format(len(line), SM_LEN))
 
         self._code = False
         self._name = False
+        self._write_date = ''
 
         self.code = line[SM_CODE]
         self.name = line[SM_NAME]
@@ -243,7 +260,7 @@ class SectionMapper(CommonMapper):
         """
         section_obj = env['product_autoload.section']
         section_obj.create(self.values())
-        _logger.info('Creating section %s', self.name)
+        _logger.info('Creating section {}'.format(self.name))
 
     def values(self):
         return {
@@ -265,6 +282,10 @@ class SectionMapper(CommonMapper):
     @name.setter
     def name(self, value):
         self._name = self.check_string('Section Name', value)
+
+    @property
+    def write_date(self):
+        return self._write_date
 
 
 MAP_DEFAULT_CODE = 0
@@ -289,8 +310,8 @@ class ProductMapper(CommonMapper):
                  supplierinfo=False):
 
         if len(line) != MAP_LEN:
-            raise Exception('data.csv len is %d must be %d', len(line),
-                            MAP_LEN)
+            raise Exception('data.csv len is {} '
+                            'must be {}'.format(len(line), MAP_LEN))
         self._supplierinfo_obj = supplierinfo
         self._vendor = vendor
         self._image_path = image_path
@@ -375,8 +396,8 @@ class ProductMapper(CommonMapper):
             ret['seller_ids'] = [(0, 0, supplierinfo)]
         else:
             rec = self._supplierinfo_obj.search(
-                    [('name', '=', self._vendor.id),
-                     ('product_code', '=', self.default_code)])
+                [('name', '=', self._vendor.id),
+                 ('product_code', '=', self.default_code)])
             if rec:
                 rec.price = self.standard_price
             else:
@@ -406,10 +427,10 @@ class ProductMapper(CommonMapper):
         prod = product_obj.search([('default_code', '=', self.default_code)])
         if prod:
             prod.write(self.values())
-            _logger.info('Updating product %s', self.default_code)
+            _logger.info('Updating product {}'.format(self.default_code))
         else:
             prod = product_obj.create(self.values(create=True))
-            _logger.info('Creating product %s', self.default_code)
+            _logger.info('Creating product {}'.format(self.default_code))
 
         tax_obj = env['account.tax']
 
@@ -418,9 +439,9 @@ class ProductMapper(CommonMapper):
                                    ('tax_group_id.tax', '=', 'vat'),
                                    ('type_tax_use', '=', 'sale')])
         if not tax_sale:
-            raise Exception('Product %s needs Customer Tax %s% (IVA Sales)'
-                            ' not found in Accounting',
-                            self.default_code, self.iva)
+            raise Exception('Product {} needs Customer Tax {}% (IVA Sales)'
+                            ' not found in Accounting'.format(
+                self.default_code, self.iva))
 
         # si hay mas de uno me quedo con el primero
         tax = tax_sale[0].id
@@ -431,9 +452,9 @@ class ProductMapper(CommonMapper):
                                        ('tax_group_id.tax', '=', 'vat'),
                                        ('type_tax_use', '=', 'purchase')])
         if not tax_purchase:
-            raise Exception('Product %s needs Customer Tax %s% (IVA Purchases)'
-                            ' not found in Accounting',
-                            self.default_code, self.iva)
+            raise Exception('Product {} needs Customer Tax {}% (IVA Purchases)'
+                            ' not found in Accounting'.format(
+                self.default_code, self.iva))
 
         # si hay mas de uno me quedo con el primero
         tax = tax_purchase[0].id
@@ -444,8 +465,8 @@ class ProductMapper(CommonMapper):
         item = item_obj.search([('item_code', '=', prod.item_code)])
         if item:
             prod.item_id = item.id
-            _logger.info('Linked product %s with item %s',
-                         prod.default_code, item.item_code)
+            _logger.info('Linked product {} with item {}'.format(
+                prod.default_code, item.item_code))
 
     @staticmethod
     def check_currency(field, value):
@@ -453,7 +474,8 @@ class ProductMapper(CommonMapper):
             ret = float(value)
             return ret
         except ValueError as ex:
-            raise Exception('%s Value: "%s": %s', field, value, ex.message)
+            raise Exception(
+                '{} Value: "{}": {}'.format(field, value, ex.message))
 
     @staticmethod
     def check_float(field, value):
@@ -461,7 +483,8 @@ class ProductMapper(CommonMapper):
             ret = float(value)
             return ret
         except ValueError as ex:
-            raise Exception('%s Value "%s": %s', field, value, ex.message)
+            raise Exception(
+                '{} Value "{}": {}'.format(field, value, ex.message))
 
     def slugify(self, field, value):
         ret = self.check_string(field, value)
@@ -561,7 +584,7 @@ class ProductMapper(CommonMapper):
                           'rb') as img_file:
                     self._image = img_file.read().encode('base64')
             except IOError as ex:
-                logging.error('%s %s', ex.filename, ex.strerror)
+                logging.error('{} {}'.format(ex.filename, ex.strerror))
 
     @property
     def iva(self):

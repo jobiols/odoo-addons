@@ -48,6 +48,19 @@ class TestBusiness(TransactionCase):
             [('name', 'like', 'Bulonfer')])
         self._supinfo = self.env['product.supplierinfo']
 
+    def test_00_all_mappers(self):
+        Section = SectionMapper([u'1', u'Bulones'])
+        self.assertEqual(Section.write_date, '')
+
+        Family = FamilyMapper([u'SNP', u'SIN PAR'])
+        self.assertEqual(Family.write_date, '')
+
+        Item = ItemMapper([u'102', u'ARANDELA', u'Nacional', u'1', u'ARA'])
+        self.assertEqual(Item.write_date, '')
+
+        Product = ProductCodeMapper([u'106.32', u'106.32', u'50'])
+        self.assertEqual(Product.write_date, '')
+
     def test_01_product_mapper(self):
         """ Chequear creacion de ProductMapper ------------------------------01
         """

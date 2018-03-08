@@ -87,18 +87,18 @@ class Item(models.Model):
             family = family_obj.search(
                 [('family_code', '=', item.family_code)])
             if not family:
-                raise Exception('Item %s points to family %s but no family '
-                                'record found in family.csv', item.item_code,
-                                item.family_code)
+                raise Exception('Item {} points to family {} but no family '
+                                'record found in family.csv'.format(
+                    item.item_code, item.family_code))
             try:
                 family.ensure_one()
                 item.family_id = family.id
-                _logger.info('linked item %s with family %s', item.name,
-                             family.name)
+                _logger.info('linked item {} with family {}'.format(
+                    item.name, family.name))
             except ValueError:
-                raise Exception('Item %s points to family %s but multiple '
-                                'records found in family.csv', item.item_code,
-                                item.family_code)
+                raise Exception('Item {} points to family {} but multiple '
+                                'records found in family.csv'.format(
+                    item.item_code, item.family_code))
 
             # Linkear con seccion
             # Chequeo: El codigo section_code de item debe existir en
@@ -106,23 +106,23 @@ class Item(models.Model):
             section = section_obj.search(
                 [('section_code', '=', item.section_code)])
             if not section:
-                raise Exception('Item %s points to section %s but no section '
-                                'record found in section.csv', item.item_code,
-                                item.section_code)
+                raise Exception('Item {} points to section {} but no section '
+                                'record found in section.csv'.format(
+                    item.item_code, item.section_code))
             try:
                 section.ensure_one()
                 item.section_id = section.id
-                _logger.info('linked item %s with section %s', item.name,
-                             item.section_code)
+                _logger.info('linked item {} with section {}'.format(
+                    item.name, item.section_code))
             except ValueError:
-                raise Exception('Item %s points to section %s but multiple '
-                                'records found in section.csv', item.item_code,
-                                item.section_code)
+                raise Exception('Item {} points to section {} but multiple '
+                                'records found in section.csv'.format(
+                    item.item_code, item.section_code))
 
         # linkear los barcodes
         barcode_obj = self.env['product.barcode']
         for prod in product_obj.search([
-                ('seller_ids.name', 'like', 'Bulonfer')]):
+            ('seller_ids.name', 'like', 'Bulonfer')]):
 
             recs = prodcode_obj.search([
                 ('product_code', '=', prod.default_code)])
@@ -133,19 +133,18 @@ class Item(models.Model):
                         {'product_id': prod.id, 'name': rec.barcode})
 
         for family in family_obj.search([('item_ids', '=', False)]):
-            _logger.warning('Orphan family found %s',
-                            u'[{}] {}'.format(family.family_code,
-                                              family.name))
+            _logger.warning('Orphan family found [{}] {}'.format(
+                family.family_code, family.name))
 
         for section in section_obj.search([('item_ids', '=', False)]):
-            _logger.warning('Orphan section found %s',
-                            u'[{}] {}'.format(section.section_code,
-                                              section.name))
+            _logger.warning('Orphan section found [{}] {}'.format(
+                section.section_code,
+                section.name))
 
             for item in item_obj.search([('product_ids', '=', False)]):
-                _logger.warning('Orphan item found %s',
-                                u'[{}] {}'.format(item.item_code,
-                                                  item.name))
+                _logger.warning('Orphan item found [{}] {}'.format(
+                    item.item_code,
+                    item.name))
 
     @api.multi
     def get_category(self, prod):
@@ -156,9 +155,9 @@ class Item(models.Model):
         # buscar el item que corresponde al producto
         item = item_obj.search([('item_code', '=', prod.item_code)])
         if not item:
-            raise Exception('product %s has idRubro = %s but there is no such '
-                            'item in item.csv', prod.default_code,
-                            prod.item_code)
+            raise Exception('product {} has item = {} but there is no such '
+                            'item in item.csv'.format(prod.default_code,
+                                                      prod.item_code))
 
         item_name = item.name
         family_name = item.family_id.name
@@ -190,8 +189,8 @@ class Item(models.Model):
     @api.multi
     def assign_category(self, prod):
         prod.categ_id = self.get_category(prod)
-        _logger.info('setting category %s to product %s',
-                     prod.categ_id.complete_name, prod.default_code)
+        _logger.info('setting category {} to product {}'.format(
+            prod.categ_id.complete_name, prod.default_code))
 
     @api.multi
     def create_categories(self):
