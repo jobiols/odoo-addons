@@ -145,9 +145,4 @@ class Item(models.Model):
 
         return categ_id
 
-    @api.multi
-    def assign_category(self, prod):
-        prod.categ_id = self.get_category(prod)
-        _logger.info('setting category {} to product {}'.format(
-            prod.categ_id.complete_name, prod.default_code))
 

@@ -44,9 +44,14 @@ class TestBusiness(TransactionCase):
         self._data_path = os.path.realpath(__file__)
         self._data_path = self._data_path.replace('tests/test_autoload.py',
                                                   'data/')
+        self.env['ir.config_parameter'].set_param('data_path', self._data_path)
+
         self._vendor = self.env['res.partner'].search(
             [('name', 'like', 'Bulonfer')])
+
         self._supinfo = self.env['product.supplierinfo']
+
+        self.env['res.partner'].create({'name': 'Bulonfer'})
 
     def test_00_all_mappers(self):
         Section = SectionMapper([u'1', u'Bulones'])
@@ -208,11 +213,11 @@ class TestBusiness(TransactionCase):
         """ Chequear update de producto -------------------------------------06
         """
 
-        # verificar createm
-        product_obj = self.env['product.template']
-        product_obj.auto_load(self._data_path)
-
+        # verificar create
+        manager_obj = self.env['product_autoload.manager']
         prod_obj = self.env['product.template']
+        manager_obj.run()
+
         prod = prod_obj.search([('default_code', '=', '102.AF')])
         self.assertEqual(len(prod), 1, '102.AF')
         self.assertEqual(prod.item_code, '102')
@@ -223,101 +228,25 @@ class TestBusiness(TransactionCase):
 
         # verificar update
 
-        product_obj.auto_load(self._data_path)
+        manager_obj.run()
 
-    def test_07_section_mapper(self):
-        """ Testear seccion mapper ------------------------------------------07
-        """
-        line = ['1',
-                'Buloneria']
-        section = SectionMapper(line)
-        self.assertEqual(section.code, '1')
-        self.assertEqual(section.name, 'Buloneria')
+        prod = prod_obj.search([('default_code', '=', '102.AF')])
+        self.assertEqual(len(prod), 1, '102.AF')
+        self.assertEqual(prod.item_code, '102')
 
-    def test_08_family_mapper(self):
-        """ Testear Family mapper -------------------------------------------08
-        """
-        line = ['3C',
-                'MANGERAS TRICOLOR']
-        family = FamilyMapper(line)
-        self.assertEqual(family.code, '3C')
-        self.assertEqual(family.name, 'MANGERAS TRICOLOR')
+        prod = prod_obj.search([('default_code', '=', '106.32')])
+        self.assertEqual(len(prod), 1, '106.32')
+        self.assertEqual(prod.item_code, '106')
 
-    def test_09_item_mapper(self):
-        """ Testear Item mapper ---------------------------------------------09
-        """
-        line = ['001',
-                'BULON PULIDO FIXO',
-                'Importado',
-                '1',
-                'BG2']
-        item = ItemMapper(line)
-        self.assertEqual(item.code, '001')
-        self.assertEqual(item.name, 'BULON PULIDO FIXO')
-        self.assertEqual(item.origin, 'Importado')
-        self.assertEqual(item.section_code, '1')
-        self.assertEqual(item.family_code, 'BG2')
 
-    def test_10_load_section(self):
-        """ Testear load section---------------------------------------------10
-        """
-        for item in self.env['product_autoload.section'].search([]):
-            item.unlink()
-        product_obj = self.env['product.template']
-        product_obj.process_file(self._data_path, 'section.csv', SectionMapper)
-
-    def test_11_load_family(self):
-        """ Testear load family---------------------------------------------09
-        """
-        for item in self.env['product_autoload.family'].search([]):
-            item.unlink()
-        product_obj = self.env['product.template']
-        product_obj.process_file(self._data_path, 'family.csv', FamilyMapper)
-
-    def test_12_load_item(self):
-        """ Testear load section---------------------------------------------12
-        """
-        for item in self.env['product_autoload.item'].search([]):
-            item.unlink()
-        product_obj = self.env['product.template']
-        product_obj.process_file(self._data_path, 'item.csv', ItemMapper)
-
-    def test_13_item_unlink(self):
-        """ Testear que el unlink borra todo --------------------------------13
-        """
-        product_obj = self.env['product.template']
-        # cargar productos
-        product_obj.auto_load(self._data_path)
-        # cargar categorias
-        product_obj.category_load(self._data_path)
-
-        item_obj = self.env['product_autoload.item']
-        item_obj.unlink_data()
-
-        items = self.env['product_autoload.item'].search([])
-        self.assertEqual(len(items), 0)
-        sections = self.env['product_autoload.section'].search([])
-        self.assertEqual(len(sections), 0)
-        families = self.env['product_autoload.family'].search([])
-        self.assertEqual(len(families), 0)
-
-    def test_14_item_unlink(self):
+    def test_14_barcodes(self):
         """ Testear que el unlink borra todo --------------------------------14
         """
-        product_obj = self.env['product.template']
-        # cargar productos
-        product_obj.auto_load(self._data_path)
-        # cargar categorias
-        product_obj.category_load(self._data_path)
+        # verificar create
+        manager_obj = self.env['product_autoload.manager']
+        prod_obj = self.env['product.template']
+        manager_obj.run()
 
         barcode_obj = self.env['product.barcode']
         for bc in barcode_obj.search([('product_id.name', '=', '102.7811')]):
             self.assertTrue(bc.barcode in ['5449000000996', '299999134500'])
-
-    def test_15_check_all(self):
-        """ cargar todo dos veces para asegurar multiples cargas-------------15
-        """
-        product_obj = self.env['product.template']
-        # cargar productos
-        product_obj.auto_load(self._data_path)
-        product_obj.auto_load(self._data_path)
