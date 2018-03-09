@@ -472,40 +472,7 @@ class ProductMapper(CommonMapper):
                 barcode_obj.create({
                     'product_id': prod.id, 'name': rec.barcode
                 })
-
-        # linkear las categorias
-        categ_obj = env['product.category']
-        item_obj = env['product_autoload.item']
-
-        # buscar el item que corresponde al producto
-        item = item_obj.search([('code', '=', prod.item_code)])
-        if not item:
-            raise Exception('product {} has item = {} but there is no such '
-                            'item in item.csv'.format(prod.default_code,
-                                                      prod.item_code))
-
-        # buscar seccion o crearla
-        sec_id = categ_obj.search([('name', '=', item.section)])
-        if not sec_id:
-            sec_id = categ_obj.create({'name': item.section})
-
-        # buscar seccion / familia o crearla
-        sec_fam_id = categ_obj.search([('name', '=', item.family),
-                                       ('parent_id.name', '=', item.section)])
-        if not sec_fam_id:
-            sec_fam_id = categ_obj.create({'name': item.family,
-                                           'parent_id': sec_id.id})
-
-        # buscar seccion / familia / item o crearla
-        categ_id = categ_obj.search([('name', '=', item.name),
-                                     ('parent_id.name', '=', item.family),
-                                     ('parent_id.parent_id.name', '=',
-                                      item.section)])
-        if not categ_id:
-            categ_id = categ_obj.create({'name': item.name,
-                                         'parent_id': sec_fam_id.id})
-        _logger.info('Setting category {}'.format(categ_id.complete_name))
-        prod.categ_id = categ_id
+        prod.categ_id = 1
 
     @staticmethod
     def check_currency(field, value):

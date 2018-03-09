@@ -142,16 +142,54 @@ class AutoloadMgr(models.Model):
 
             if send_mail:
                 self.send_email('Replicacion Bulonfer, Fin',
-                                'Termino el proceso.',
-                                elapsed_time)
+                                'Termino el proceso.', elapsed_time)
         except Exception as ex:
-            self.send_email('Replicacion Bulonfer, ERROR',
-                            ex.message)
+            self.send_email('Replicacion Bulonfer, ERROR', ex.message)
             raise
 
     @api.model
-    def send_email(self, subject, body, elapsed_time=False):
+    def update_categories(self):
 
+        # linkear las categorias
+        categ_obj = env['product.category']
+        item_obj = env['product_autoload.item']
+        prods = self.env['product.template'].search(
+            [('categ_id', '=', False)], limit=10)
+        for prod in prods:
+            # buscar el item que corresponde al producto
+            item = item_obj.search([('code', '=', prod.item_code)])
+            if not item:
+                text = 'product {} has item = {} but there is no such '
+                'item in item.csv'.format(prod.default_code, prod.item_code)
+                self.send_email('Replicacion Bulonfer, ERROR', text)
+                raise Exception(text)
+
+            # buscar seccion o crearla
+            sec_id = categ_obj.search([('name', '=', item.section)])
+            if not sec_id:
+                sec_id = categ_obj.create({'name': item.section})
+
+            # buscar seccion / familia o crearla
+            sec_fam_id = categ_obj.search([('name', '=', item.family),
+                                           ('parent_id.name', '=',
+                                            item.section)])
+            if not sec_fam_id:
+                sec_fam_id = categ_obj.create({'name': item.family,
+                                               'parent_id': sec_id.id})
+
+            # buscar seccion / familia / item o crearla
+            categ_id = categ_obj.search([('name', '=', item.name),
+                                         ('parent_id.name', '=', item.family),
+                                         ('parent_id.parent_id.name', '=',
+                                          item.section)])
+            if not categ_id:
+                categ_id = categ_obj.create({'name': item.name,
+                                             'parent_id': sec_fam_id.id})
+            _logger.info('Setting category {}'.format(categ_id.complete_name))
+            prod.categ_id = categ_id
+
+    @api.model
+    def send_email(self, subject, body, elapsed_time=False):
         email_from = 'Bulonfer SA <noresponder@bulonfer.com.ar>'
         emails = self.env['ir.config_parameter'].get_param(
             'email_notification', '')
