@@ -212,11 +212,10 @@ class TestBusiness(TransactionCase):
     def test_06_update_product(self):
         """ Chequear update de producto -------------------------------------06
         """
-
         # verificar create
         manager_obj = self.env['product_autoload.manager']
         prod_obj = self.env['product.template']
-        manager_obj.run()
+        manager_obj.run(send_mail=False)
 
         prod = prod_obj.search([('default_code', '=', '102.AF')])
         self.assertEqual(len(prod), 1, '102.AF')
@@ -228,7 +227,7 @@ class TestBusiness(TransactionCase):
 
         # verificar update
 
-        manager_obj.run()
+        manager_obj.run(send_mail=False)
 
         prod = prod_obj.search([('default_code', '=', '102.AF')])
         self.assertEqual(len(prod), 1, '102.AF')
@@ -238,14 +237,13 @@ class TestBusiness(TransactionCase):
         self.assertEqual(len(prod), 1, '106.32')
         self.assertEqual(prod.item_code, '106')
 
-
     def test_14_barcodes(self):
         """ Testear que el unlink borra todo --------------------------------14
         """
         # verificar create
         manager_obj = self.env['product_autoload.manager']
         prod_obj = self.env['product.template']
-        manager_obj.run()
+        manager_obj.run(send_mail=False)
 
         barcode_obj = self.env['product.barcode']
         for bc in barcode_obj.search([('product_id.name', '=', '102.7811')]):

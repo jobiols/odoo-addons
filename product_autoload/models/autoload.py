@@ -32,9 +32,7 @@ PC_LEN = 3
 
 class AutoloadMgr(models.Model):
     _name = 'product_autoload.manager'
-
-    """ Administra la carga de datos en el sistema
-    """
+    _description = "Manage product data import"
 
     name = fields.Char()
 
@@ -118,36 +116,41 @@ class AutoloadMgr(models.Model):
                     obj.execute(self.env)
 
     @api.model
-    def run(self):
+    def run(self, send_mail=True):
         """ Actualiza todos los productos
         """
         start_time = time()
         data_path = self.env['ir.config_parameter'].get_param('data_path', '')
 
-        self.send_email('Replicacion Bulonfer, Inicio',
-                        'Se inicio el proceso {}'.format(
-                            str(start_time)))
+        try:
+            if send_mail:
+                self.send_email('Replicacion Bulonfer, Inicio',
+                                'Se inicio el proceso')
 
-        self.create({'name': 'Inicia Proceso'})
+            self.create({'name': 'Inicia Proceso'})
 
-        self._section = self.load_section(data_path)
-        self._family = self.load_family(data_path)
+            self._section = self.load_section(data_path)
+            self._family = self.load_family(data_path)
 
-        self.load_item(data_path)
-        self.load_productcode(data_path)
-        self.load_product(data_path)
+            self.load_item(data_path)
+            self.load_productcode(data_path)
+            self.load_product(data_path)
 
-        elapsed_time = time() - start_time
+            elapsed_time = time() - start_time
 
-        self.create({'name': 'Termina Proceso'})
-        self.send_email('Replicacion Bulonfer, Fin',
-                        'Termino el proceso.',
-                        elapsed_time)
+            self.create({'name': 'Termina Proceso'})
+
+            if send_mail:
+                self.send_email('Replicacion Bulonfer, Fin',
+                                'Termino el proceso.',
+                                elapsed_time)
+        except Exception as ex:
+            self.send_email('Replicacion Bulonfer, ERROR',
+                            ex.message)
+            raise
 
     @api.model
     def send_email(self, subject, body, elapsed_time=False):
-
-        return
 
         email_from = 'Bulonfer SA <noresponder@bulonfer.com.ar>'
         emails = self.env['ir.config_parameter'].get_param(
@@ -160,9 +163,6 @@ class AutoloadMgr(models.Model):
             elapsed = str(timedelta(seconds=elapsed_time))
             body += ', duracion: ' + elapsed
 
-        try:
-            smtp = self.env['ir.mail_server']
-            message = smtp.build_email(email_from, email_to, subject, body)
-            smtp.send_email(message)
-        except MailDeliveryException as ex:
-            raise Exception(ex.message)
+        smtp = self.env['ir.mail_server']
+        message = smtp.build_email(email_from, email_to, subject, body)
+        smtp.send_email(message)
