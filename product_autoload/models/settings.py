@@ -21,7 +21,6 @@ class AutoloadConfigurationWizard(models.TransientModel):
 
     import_only_new = fields.Boolean(
         help="Import only new registers",
-        default=True
     )
 
     data_path = fields.Char(

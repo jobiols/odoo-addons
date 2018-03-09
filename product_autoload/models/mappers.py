@@ -466,7 +466,7 @@ class ProductMapper(CommonMapper):
 
         recs = prodcode_obj.search([('product_code', '=', prod.default_code)])
         for rec in recs:
-            _logger.info('loading barcode {}'.format(rec.barcode))
+            _logger.info('Linking barcode {}'.format(rec.barcode))
             bc = barcode_obj.search([('name', '=', rec.barcode)])
             if not bc:
                 barcode_obj.create({

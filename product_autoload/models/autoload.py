@@ -2,14 +2,14 @@
 # Part of Odoo. See LICENSE file for full copyright and licensing details.
 import logging
 from time import time
+from datetime import datetime, timedelta
 import csv
 from openerp.addons.base.ir.ir_mail_server import MailDeliveryException
 from mappers import MAP_WRITE_DATE
-
-_logger = logging.getLogger(__name__)
-
 from openerp import api, models, fields
 from mappers import ProductMapper
+
+_logger = logging.getLogger(__name__)
 
 SECTION = 'section.csv'
 FAMILY = 'family.csv'
@@ -77,10 +77,14 @@ class AutoloadMgr(models.Model):
     def load_productcode(self, data_path):
         item_obj = self.env['product_autoload.productcode']
         item_obj.search([]).unlink()
+        count = 0
         with open(data_path + PRODUCTCODE, 'r') as file_csv:
             reader = csv.reader(file_csv)
             for line in reader:
-                _logger.info('loading barcode {}'.format(line[PC_BARCODE]))
+                count += 1
+                if count == 2000:
+                    count = 0
+                    _logger.info('loading +2000 barcodes ')
                 values = {
                     'barcode': line[PC_BARCODE].strip(),
                     'product_code': line[PC_PRODUCT_CODE].strip(),
@@ -143,6 +147,10 @@ class AutoloadMgr(models.Model):
             if send_mail:
                 self.send_email('Replicacion Bulonfer, Fin',
                                 'Termino el proceso.', elapsed_time)
+
+            self.env['ir.config_parameter'].set_param('last_replication',
+                                                      str(datetime.now()))
+
         except Exception as ex:
             self.send_email('Replicacion Bulonfer, ERROR', ex.message)
             raise
