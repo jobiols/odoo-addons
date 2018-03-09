@@ -4,7 +4,6 @@ import logging
 from time import time
 from datetime import datetime, timedelta
 import csv
-from openerp.addons.base.ir.ir_mail_server import MailDeliveryException
 from mappers import MAP_WRITE_DATE
 from openerp import api, models, fields
 from mappers import ProductMapper
