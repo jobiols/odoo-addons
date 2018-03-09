@@ -27,11 +27,6 @@ class ProductCode(models.Model):
         help="unidades por bulto"
     )
 
-    product_id = fields.Many2one(
-        'product.template',
-        help="The product pointed with this barcode"
-    )
-
     _sql_constraints = [
         ('uniq_barcode', 'unique(barcode)', "The barcode must be unique !"),
     ]

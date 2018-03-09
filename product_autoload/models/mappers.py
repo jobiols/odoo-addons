@@ -214,7 +214,7 @@ class ProductCodeMapper(CommonMapper):
         # correccion del barcode
         # si hay un espacio elimino lo que hay despues
         # parece que esto es inviable porque no vale la regla
-        self._barcode = value   #.split(' ')[0]
+        self._barcode = value  # .split(' ')[0]
 
     @property
     def product_code(self):
@@ -422,9 +422,6 @@ class ProductMapper(CommonMapper):
         """
          si encuentra el producto en el modelo lo actualiza si no lo
          encuentra lo crea
-
-        :param product_model: objeto product.product
-        :return:
         """
         product_obj = env['product.template']
         prod = product_obj.search([('default_code', '=', self.default_code)])
@@ -463,13 +460,52 @@ class ProductMapper(CommonMapper):
         tax = tax_purchase[0].id
         prod.supplier_taxes_id = [(6, 0, [tax])]
 
-        # relaciona el producto con el item
+        # linkear los barcodes
+        prodcode_obj = env['product_autoload.productcode']
+        barcode_obj = env['product.barcode']
+
+        recs = prodcode_obj.search([('product_code', '=', prod.default_code)])
+        for rec in recs:
+            _logger.info('loading barcode {}'.format(rec.barcode))
+            bc = barcode_obj.search([('name', '=', rec.barcode)])
+            if not bc:
+                barcode_obj.create({
+                    'product_id': prod.id, 'name': rec.barcode
+                })
+
+        # linkear las categorias
+        categ_obj = env['product.category']
         item_obj = env['product_autoload.item']
-        item = item_obj.search([('item_code', '=', prod.item_code)])
-        if item:
-            prod.item_id = item.id
-            _logger.info('Linked product {} with item {}'.format(
-                prod.default_code, item.item_code))
+
+        # buscar el item que corresponde al producto
+        item = item_obj.search([('code', '=', prod.item_code)])
+        if not item:
+            raise Exception('product {} has item = {} but there is no such '
+                            'item in item.csv'.format(prod.default_code,
+                                                      prod.item_code))
+
+        # buscar seccion o crearla
+        sec_id = categ_obj.search([('name', '=', item.section)])
+        if not sec_id:
+            sec_id = categ_obj.create({'name': item.section})
+
+        # buscar seccion / familia o crearla
+        sec_fam_id = categ_obj.search([('name', '=', item.family),
+                                       ('parent_id.name', '=', item.section)])
+        if not sec_fam_id:
+            sec_fam_id = categ_obj.create({'name': item.family,
+                                           'parent_id': sec_id.id})
+
+        # buscar seccion / familia / item o crearla
+        categ_id = categ_obj.search([('name', '=', item.name),
+                                     ('parent_id.name', '=', item.family),
+                                     ('parent_id.parent_id.name', '=',
+                                      item.section)])
+        if not categ_id:
+            categ_id = categ_obj.create({'name': item.name,
+                                         'parent_id': sec_fam_id.id})
+        _logger.info('Setting category {}'.format(categ_id.complete_name))
+        prod.categ_id = categ_id
 
     @staticmethod
     def check_currency(field, value):

@@ -8,7 +8,6 @@ from openerp import api, models, fields
 from mappers import ProductMapper, SectionMapper, ItemMapper, FamilyMapper, \
     ProductCodeMapper
 import csv
-from openerp.addons.base.ir.ir_mail_server import MailDeliveryException
 from time import time
 from datetime import datetime, timedelta
 
@@ -22,12 +21,6 @@ class ProductProduct(models.Model):
 
     item_id = fields.Many2one(
         'product_autoload.item'
-    )
-
-    productcode_ids = fields.One2many(
-        'product_autoload.productcode',
-        'product_id',
-        help="All barcodes belonging to this product"
     )
 
     item_code = fields.Char(
@@ -119,23 +112,3 @@ class ProductProduct(models.Model):
             self.send_email('Replicacion Bulonfer ERROR', ex.message)
             raise Exception('=== Falla del proceso === {}'.format(ex.message))
 
-    @api.model
-    def send_email(self, subject, body, elapsed_time=False):
-
-        email_from = 'Bulonfer SA <noresponder@bulonfer.com.ar>'
-        emails = self.env['ir.config_parameter'].get_param(
-            'email_notification', '')
-
-        email_to = emails.split(',')
-        # email_to = ['jorge.obiols@gmail.com', 'sagomez@gmail.com']
-
-        if elapsed_time:
-            elapsed = str(timedelta(seconds=elapsed_time))
-            body += ', duracion: ' + elapsed
-
-        try:
-            smtp = self.env['ir.mail_server']
-            message = smtp.build_email(email_from, email_to, subject, body)
-            smtp.send_email(message)
-        except MailDeliveryException as ex:
-            raise Exception(ex.message)

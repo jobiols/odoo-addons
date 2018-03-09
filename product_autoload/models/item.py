@@ -12,39 +12,25 @@ class Item(models.Model):
     """
     _name = 'product_autoload.item'
 
-    item_code = fields.Char(
-        help="Code from bulonfer, not shown"
-    )
     name = fields.Char(
         help="Item name to show in category full name"
+    )
+    code = fields.Char(
+        help="Code from bulonfer, not shown"
     )
     origin = fields.Char(
         help="where the product was made"
     )
-    section_code = fields.Char(
+    section = fields.Char(
         help="Code from bulonfer, not shown"
     )
-    family_code = fields.Char(
+    family = fields.Char(
         help="Code from bulonfer, not shown"
-    )
-    family_id = fields.Many2one(
-        'product_autoload.family',
-        help="family to which the item belongs"
-    )
-    section_id = fields.Many2one(
-        'product_autoload.section',
-        help='section to which the item belongs'
-    )
-
-    product_ids = fields.One2many(
-        'product.template',
-        'item_id',
-        help="All products belonging to this item"
     )
 
     _sql_constraints = [
-        ('uniq_item_code', 'unique(item_code)',
-         "The item_code must be unique !"),
+        ('uniq_code', 'unique(code)',
+         "The item code must be unique !"),
     ]
 
     @api.model
@@ -119,33 +105,6 @@ class Item(models.Model):
                                 'records found in section.csv'.format(
                     item.item_code, item.section_code))
 
-        # linkear los barcodes
-        barcode_obj = self.env['product.barcode']
-        for prod in product_obj.search([
-            ('seller_ids.name', 'like', 'Bulonfer')]):
-
-            recs = prodcode_obj.search([
-                ('product_code', '=', prod.default_code)])
-            for rec in recs:
-                bc = barcode_obj.search([('name', '=', rec.barcode)])
-                if not bc:
-                    barcode_obj.create(
-                        {'product_id': prod.id, 'name': rec.barcode})
-
-        for family in family_obj.search([('item_ids', '=', False)]):
-            _logger.warning('Orphan family found [{}] {}'.format(
-                family.family_code, family.name))
-
-        for section in section_obj.search([('item_ids', '=', False)]):
-            _logger.warning('Orphan section found [{}] {}'.format(
-                section.section_code,
-                section.name))
-
-            for item in item_obj.search([('product_ids', '=', False)]):
-                _logger.warning('Orphan item found [{}] {}'.format(
-                    item.item_code,
-                    item.name))
-
     @api.multi
     def get_category(self, prod):
 
@@ -192,18 +151,3 @@ class Item(models.Model):
         _logger.info('setting category {} to product {}'.format(
             prod.categ_id.complete_name, prod.default_code))
 
-    @api.multi
-    def create_categories(self):
-        product_obj = self.env['product.template']
-
-        # recorrer todos los productos que tienen proveedor bulonfer y
-        # asignarles una familia
-
-        # TODO Arreglar esta porqueria
-        for prod in product_obj.search([]):
-            flag = False
-            for vendor in prod.seller_ids:
-                if vendor.name.name[0:8] == 'Bulonfer':
-                    flag = True
-            if flag:
-                self.assign_category(prod)

@@ -1,15 +1,168 @@
 # -*- coding: utf-8 -*-
 # Part of Odoo. See LICENSE file for full copyright and licensing details.
 import logging
+from time import time
+import csv
+from openerp.addons.base.ir.ir_mail_server import MailDeliveryException
+from mappers import MAP_WRITE_DATE
 
 _logger = logging.getLogger(__name__)
 
 from openerp import api, models, fields
+from mappers import ProductMapper
+
+SECTION = 'section.csv'
+FAMILY = 'family.csv'
+ITEM = 'item.csv'
+DATA = 'data.csv'
+PRODUCTCODE = 'productcode.csv'
+
+IM_CODE = 0
+IM_NAME = 1
+IM_ORIGIN = 2
+IM_SECTION_CODE = 3
+IM_FAMILY_CODE = 4
+IM_LEN = 5
+
+PC_BARCODE = 0
+PC_PRODUCT_CODE = 1
+PC_UXB = 2
+PC_LEN = 3
 
 
 class AutoloadMgr(models.Model):
+    _name = 'product_autoload.manager'
+
     """ Administra la carga de datos en el sistema
     """
 
     name = fields.Char()
 
+    @staticmethod
+    def load_section(data_path):
+        res = dict()
+        with open(data_path + SECTION, 'r') as file_csv:
+            reader = csv.reader(file_csv)
+            for line in reader:
+                _logger.info('loading section {}'.format(line[1]))
+                res[line[0]] = line[1]
+        return res
+
+    @staticmethod
+    def load_family(data_path):
+        res = dict()
+        with open(data_path + FAMILY, 'r') as file_csv:
+            reader = csv.reader(file_csv)
+            for line in reader:
+                _logger.info('loading family {}'.format(line[1]))
+                res[line[0]] = line[1]
+        return res
+
+    @api.model
+    def load_item(self, data_path):
+        item_obj = self.env['product_autoload.item']
+        item_obj.search([]).unlink()
+        with open(data_path + ITEM, 'r') as file_csv:
+            reader = csv.reader(file_csv)
+            for line in reader:
+                _logger.info('loading item {}'.format(line[IM_NAME]))
+                values = {
+                    'code': line[IM_CODE].strip(),
+                    'name': line[IM_NAME].strip(),
+                    'origin': line[IM_CODE].strip(),
+                    'section': self._section[line[IM_SECTION_CODE]].strip(),
+                    'family': self._family[line[IM_FAMILY_CODE]].strip()
+                }
+                item_obj.create(values)
+
+    @api.model
+    def load_productcode(self, data_path):
+        item_obj = self.env['product_autoload.productcode']
+        item_obj.search([]).unlink()
+        with open(data_path + PRODUCTCODE, 'r') as file_csv:
+            reader = csv.reader(file_csv)
+            for line in reader:
+                _logger.info('loading barcode {}'.format(line[PC_BARCODE]))
+                values = {
+                    'barcode': line[PC_BARCODE].strip(),
+                    'product_code': line[PC_PRODUCT_CODE].strip(),
+                    'uxb': line[PC_UXB].strip(),
+                }
+                item_obj.create(values)
+
+    @api.model
+    def load_product(self, data_path):
+        """ Carga todos los productos teniendo en cuenta la fecha
+        """
+        last_replication = self.env['ir.config_parameter'].get_param(
+            'last_replication', '')
+        import_only_new = self.env['ir.config_parameter'].get_param(
+            'import_only_new', True)
+
+        bulonfer = self.env['res.partner'].search(
+            [('name', 'like', 'Bulonfer')])
+        if not bulonfer:
+            raise Exception('Vendor Bulonfer not found')
+
+        supplierinfo = self.env['product.supplierinfo']
+
+        with open(data_path + DATA, 'r') as file_csv:
+            reader = csv.reader(file_csv)
+            for line in reader:
+                if line and \
+                    (import_only_new or
+                             line[MAP_WRITE_DATE] > last_replication
+                     ):
+                    obj = ProductMapper(line, data_path, bulonfer,
+                                        supplierinfo)
+                    obj.execute(self.env)
+
+    @api.model
+    def run(self):
+        """ Actualiza todos los productos
+        """
+        start_time = time()
+        data_path = self.env['ir.config_parameter'].get_param('data_path', '')
+
+        self.send_email('Replicacion Bulonfer, Inicio',
+                        'Se inicio el proceso {}'.format(
+                            str(start_time)))
+
+        self.create({'name': 'Inicia Proceso'})
+
+        self._section = self.load_section(data_path)
+        self._family = self.load_family(data_path)
+
+        self.load_item(data_path)
+        self.load_productcode(data_path)
+        self.load_product(data_path)
+
+        elapsed_time = time() - start_time
+
+        self.create({'name': 'Termina Proceso'})
+        self.send_email('Replicacion Bulonfer, Fin',
+                        'Termino el proceso.',
+                        elapsed_time)
+
+    @api.model
+    def send_email(self, subject, body, elapsed_time=False):
+
+        return
+
+        email_from = 'Bulonfer SA <noresponder@bulonfer.com.ar>'
+        emails = self.env['ir.config_parameter'].get_param(
+            'email_notification', '')
+
+        email_to = emails.split(',')
+        # email_to = ['jorge.obiols@gmail.com', 'sagomez@gmail.com']
+
+        if elapsed_time:
+            elapsed = str(timedelta(seconds=elapsed_time))
+            body += ', duracion: ' + elapsed
+
+        try:
+            smtp = self.env['ir.mail_server']
+            message = smtp.build_email(email_from, email_to, subject, body)
+            smtp.send_email(message)
+        except MailDeliveryException as ex:
+            raise Exception(ex.message)
