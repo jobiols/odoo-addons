@@ -20,16 +20,12 @@ class ProductCode(models.Model):
     )
 
     product_code = fields.Char(
-        help="product default code"
+        help="product default code",
+        select=1
     )
 
     uxb = fields.Integer(
         help="unidades por bulto"
-    )
-
-    product_id = fields.Many2one(
-        'product.template',
-        help="The product pointed with this barcode"
     )
 
     _sql_constraints = [

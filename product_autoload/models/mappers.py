@@ -214,7 +214,7 @@ class ProductCodeMapper(CommonMapper):
         # correccion del barcode
         # si hay un espacio elimino lo que hay despues
         # parece que esto es inviable porque no vale la regla
-        self._barcode = value   #.split(' ')[0]
+        self._barcode = value  # .split(' ')[0]
 
     @property
     def product_code(self):
@@ -418,13 +418,10 @@ class ProductMapper(CommonMapper):
             'purchase_method': 'purchase'
         }
 
-    def execute(self, env):
+    def execute(self, env, none_categ_id):
         """
          si encuentra el producto en el modelo lo actualiza si no lo
          encuentra lo crea
-
-        :param product_model: objeto product.product
-        :return:
         """
         product_obj = env['product.template']
         prod = product_obj.search([('default_code', '=', self.default_code)])
@@ -463,13 +460,19 @@ class ProductMapper(CommonMapper):
         tax = tax_purchase[0].id
         prod.supplier_taxes_id = [(6, 0, [tax])]
 
-        # relaciona el producto con el item
-        item_obj = env['product_autoload.item']
-        item = item_obj.search([('item_code', '=', prod.item_code)])
-        if item:
-            prod.item_id = item.id
-            _logger.info('Linked product {} with item {}'.format(
-                prod.default_code, item.item_code))
+        # linkear los barcodes
+        prodcode_obj = env['product_autoload.productcode']
+        barcode_obj = env['product.barcode']
+
+        recs = prodcode_obj.search([('product_code', '=', prod.default_code)])
+        for rec in recs:
+            _logger.info('Linking barcode {}'.format(rec.barcode))
+            bc = barcode_obj.search([('name', '=', rec.barcode)])
+            if not bc:
+                barcode_obj.create({
+                    'product_id': prod.id, 'name': rec.barcode
+                })
+        prod.categ_id = none_categ_id
 
     @staticmethod
     def check_currency(field, value):

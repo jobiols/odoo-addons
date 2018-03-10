@@ -16,6 +16,7 @@
                     <field name="email_notification"/>
                     <field name="last_replication"/>
                     <field name="import_only_new"/>
+                    <field name="data_path"/>
                 </group>
             </form>
         </field>

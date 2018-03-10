@@ -21,7 +21,10 @@ class AutoloadConfigurationWizard(models.TransientModel):
 
     import_only_new = fields.Boolean(
         help="Import only new registers",
-        default=True
+    )
+
+    data_path = fields.Char(
+        help="path to data files on server",
     )
 
     @api.model
@@ -56,3 +59,15 @@ class AutoloadConfigurationWizard(models.TransientModel):
     def set_import_only_new(self):
         value = getattr(self, 'import_only_new', '')
         self.env['ir.config_parameter'].set_param('import_only_new', value)
+
+    @api.model
+    def get_default_data_path(self, fields):
+        value = self.env['ir.config_parameter'].get_param(
+            'data_path', '/opt/odoo/data/product_data/')
+        return {'data_path': value}
+
+    @api.multi
+    def set_data_path(self):
+        value = getattr(self, 'data_path', '')
+        self.env['ir.config_parameter'].set_param('data_path', value)
+

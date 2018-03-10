@@ -20,7 +20,7 @@
 # -----------------------------------------------------------------------------
 {
     'name': 'Product autoload',
-    'version': '9.0.0.1',
+    'version': '9.0.1.0',
     'license': 'AGPL-3',
     'category': 'Tools',
     'summary': 'Carga automatica de productos',

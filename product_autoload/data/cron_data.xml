@@ -6,16 +6,23 @@
         <record id="bulonfer_cron_data" model="ir.cron">
             <field name="name">Importar datos Bulonfer</field>
             <field name="interval_type">work_days</field>
-            <field name="model">product.template</field>
-            <field name="function">auto_load</field>
-            <field name="args">(['/opt/odoo/data/product_data/'])</field>
+            <field name="model">product_autoload.manager</field>
+            <field name="function">run</field>
+            <field name="args"></field>
         </record>
 
-        <record id="bulonfer_partner_data" model="res.partner">
-            <field name="name">Bulonfer SA.</field>
-            <field name="company_type">company</field>
-            <field name="supplier">true</field>
-            <field name="customer">false</field>
+        <!-- Cron data -->
+        <record id="bulonfer_cron_categ" model="ir.cron">
+            <field name="name">Generar categorias Bulonfer</field>
+            <field name="interval_type">minutes</field>
+            <field name="model">product_autoload.manager</field>
+            <field name="function">update_categories</field>
+            <field name="args"></field>
+        </record>
+
+        <!-- Nothing category -->
+        <record id="bulonfer_none_categ" model="product.category">
+            <field name="name">No Categorizado</field>
         </record>
 
     </data>
