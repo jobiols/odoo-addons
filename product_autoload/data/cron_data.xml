@@ -11,5 +11,14 @@
             <field name="args"></field>
         </record>
 
+        <!-- Cron data -->
+        <record id="bulonfer_cron_data" model="ir.cron">
+            <field name="name">Importar datos Bulonfer</field>
+            <field name="interval_type">work_days</field>
+            <field name="model">product_autoload.manager</field>
+            <field name="function">update_categories</field>
+            <field name="args"></field>
+        </record>
+
     </data>
 </openerp>

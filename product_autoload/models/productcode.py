@@ -20,7 +20,8 @@ class ProductCode(models.Model):
     )
 
     product_code = fields.Char(
-        help="product default code"
+        help="product default code",
+        select=1
     )
 
     uxb = fields.Integer(
