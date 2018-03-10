@@ -28,6 +28,7 @@ class ProductCode(models.Model):
         help="unidades por bulto"
     )
 
-#    _sql_constraints = [(
-#        'uniq_barcode', 'unique(barcode)', "The barcode must be unique !"
-#    )]
+    _sql_constraints = [(
+        'uniq_barcode', 'unique(barcode,product_code,uxb)',
+        "The barcode must be unique !"
+    )]
