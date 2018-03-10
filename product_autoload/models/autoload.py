@@ -158,8 +158,8 @@ class AutoloadMgr(models.Model):
     def update_categories(self):
 
         # linkear las categorias
-        categ_obj = env['product.category']
-        item_obj = env['product_autoload.item']
+        categ_obj = self.env['product.category']
+        item_obj = self.env['product_autoload.item']
         prods = self.env['product.template'].search(
             [('categ_id', '=', False)], limit=10)
         for prod in prods:
