@@ -12,9 +12,9 @@
         </record>
 
         <!-- Cron data -->
-        <record id="bulonfer_cron_data" model="ir.cron">
-            <field name="name">Importar datos Bulonfer</field>
-            <field name="interval_type">work_days</field>
+        <record id="bulonfer_cron_categ" model="ir.cron">
+            <field name="name">Generar categorias Bulonfer</field>
+            <field name="interval_type">minutes</field>
             <field name="model">product_autoload.manager</field>
             <field name="function">update_categories</field>
             <field name="args"></field>
