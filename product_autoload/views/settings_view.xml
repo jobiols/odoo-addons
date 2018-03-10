@@ -13,6 +13,7 @@
                 </header>
                 <br/>
                 <group string="Autoload Settings">
+                    <field name="email_from"/>
                     <field name="email_notification"/>
                     <field name="last_replication"/>
                     <field name="import_only_new"/>

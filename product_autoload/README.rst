@@ -61,8 +61,7 @@ armadas de la siguiente forma:
 
 Para cada producto la categoria se arma de la siguiente forma:
 
-- Obtengo el codigo de item correspondiente al producto, que se define por los
-digitos del codigo del producto hasta el primer punto.
+- Obtengo el codigo de item correspondiente al producto, que se define por los digitos del codigo del producto hasta el primer punto.
 - Con el codigo de item obtengo el item, familia y seccion
 - del item obtengo la familia
 - Armo la categoria con Nombre de seccion / Nombre de familia / Nombre de item

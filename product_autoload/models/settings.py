@@ -26,6 +26,10 @@ class AutoloadConfigurationWizard(models.TransientModel):
     data_path = fields.Char(
         help="path to data files on server",
     )
+    email_from = fields.Char(
+        help="Email Sender i.e. 'Bulonfer SA <noresponder@bulonfer.com.ar>'"
+    )
+
 
     @api.model
     def get_default_email_notification(self, fields):
@@ -71,3 +75,13 @@ class AutoloadConfigurationWizard(models.TransientModel):
         value = getattr(self, 'data_path', '')
         self.env['ir.config_parameter'].set_param('data_path', value)
 
+    @api.model
+    def get_default_email_from(self, fields):
+        value = self.env['ir.config_parameter'].get_param(
+            'email_from', 'Bulonfer SA <noresponder@bulonfer.com.ar>')
+        return {'email_from': value}
+
+    @api.multi
+    def set_email_from(self):
+        value = getattr(self, 'email_from', '')
+        self.env['ir.config_parameter'].set_param('email_from', value)

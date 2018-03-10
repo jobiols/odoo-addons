@@ -83,7 +83,7 @@ class AutoloadMgr(models.Model):
                 count += 1
                 if count == 2000:
                     count = 0
-                    _logger.info('loading +2000 barcodes ')
+                _logger.info('loading +2000 barcodes {}'.format(line))
                 values = {
                     'barcode': line[PC_BARCODE].strip(),
                     'product_code': line[PC_PRODUCT_CODE].strip(),
@@ -129,13 +129,18 @@ class AutoloadMgr(models.Model):
         """
         start_time = time()
         data_path = self.env['ir.config_parameter'].get_param('data_path', '')
+        email_from = self.env['ir.config_parameter'].get_param('email_from',
+                                                               '')
+        email_to = self.env['ir.config_parameter'].get_param(
+            'email_notification', '')
 
         try:
             rec = self.create({'name': 'Inicia Proceso'})
             if send_mail:
                 self.send_email('Replicacion Bulonfer #{}, '
                                 'Inicio'.format(rec.id),
-                                'Se inicio el proceso')
+                                'Se inicio el proceso',
+                                email_from, email_to)
 
             self._section = self.load_section(data_path)
             self._family = self.load_family(data_path)
@@ -151,14 +156,17 @@ class AutoloadMgr(models.Model):
             if send_mail:
                 self.send_email('Replicacion Bulonfer #{}, '
                                 'Fin'.format(rec.id),
-                                self.get_stats(elapsed_time))
+                                self.get_stats(elapsed_time),
+                                email_from, email_to)
 
             self.env['ir.config_parameter'].set_param('last_replication',
                                                       str(datetime.now()))
-
         except Exception as ex:
+            import wdb;wdb.set_trace()
             self.send_email('Replicacion Bulonfer #{}, '
-                            'ERROR'.format(rec.id), ex.message)
+                            'ERROR'.format(rec.id), ex.message,
+                            email_from, email_to)
+
             raise
 
     @api.model
@@ -166,10 +174,13 @@ class AutoloadMgr(models.Model):
         # linkear las categorias
         categ_obj = self.env['product.category']
         item_obj = self.env['product_autoload.item']
-
         model_data_obj = self.env['ir.model.data']
         res_model, none_categ_id = model_data_obj.get_object_reference(
             'product_autoload', 'bulonfer_none_categ')
+        email_from = self.env['ir.config_parameter'].get_param('email_from',
+                                                               '')
+        email_to = self.env['ir.config_parameter'].get_param(
+            'email_notification', '')
 
         prods = self.env['product.template'].search(
             [('categ_id', '=', none_categ_id)], limit=1000)
@@ -179,7 +190,8 @@ class AutoloadMgr(models.Model):
             if not item:
                 text = 'product {} has item = {} but there is no such item ' \
                        'in item.csv'.format(prod.default_code, prod.item_code)
-                self.send_email('Replicacion Bulonfer, ERROR', text)
+                self.send_email('Replicacion Bulonfer, ERROR', text,
+                                email_from, email_to)
                 raise Exception(text)
 
             # buscar seccion o crearla
@@ -207,12 +219,9 @@ class AutoloadMgr(models.Model):
             prod.categ_id = categ_id
 
     @api.model
-    def send_email(self, subject, body):
-        email_from = 'Bulonfer SA <noresponder@bulonfer.com.ar>'
-        emails = self.env['ir.config_parameter'].get_param(
-            'email_notification', '')
+    def send_email(self, subject, body, email_from, email_to):
 
-        email_to = emails.split(',')
+        email_to = email_to.split(',')
         # email_to = ['jorge.obiols@gmail.com', 'sagomez@gmail.com']
 
         smtp = self.env['ir.mail_server']
