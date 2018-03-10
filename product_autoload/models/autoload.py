@@ -83,7 +83,7 @@ class AutoloadMgr(models.Model):
                 count += 1
                 if count == 2000:
                     count = 0
-                _logger.info('loading +2000 barcodes {}'.format(line))
+                    _logger.info('loading +2000 barcodes')
                 values = {
                     'barcode': line[PC_BARCODE].strip(),
                     'product_code': line[PC_PRODUCT_CODE].strip(),
@@ -162,11 +162,10 @@ class AutoloadMgr(models.Model):
             self.env['ir.config_parameter'].set_param('last_replication',
                                                       str(datetime.now()))
         except Exception as ex:
-            import wdb;wdb.set_trace()
             self.send_email('Replicacion Bulonfer #{}, '
                             'ERROR'.format(rec.id), ex.message,
                             email_from, email_to)
-
+            _logger.error('Replicacion Bulonfer {}'.format(ex.message))
             raise
 
     @api.model
