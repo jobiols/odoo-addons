@@ -52,12 +52,12 @@ class AutoloadConfigurationWizard(models.TransientModel):
     @api.model
     def get_default_import_only_new(self, fields):
         value = self.env['ir.config_parameter'].get_param(
-            'import_only_new', True)
+            'import_only_new', '')
         return {'import_only_new': value}
 
     @api.multi
     def set_import_only_new(self):
-        value = getattr(self, 'import_only_new', True)
+        value = getattr(self, 'import_only_new', '')
         self.env['ir.config_parameter'].set_param('import_only_new', value)
 
     @api.model
