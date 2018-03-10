@@ -418,7 +418,7 @@ class ProductMapper(CommonMapper):
             'purchase_method': 'purchase'
         }
 
-    def execute(self, env):
+    def execute(self, env, none_categ_id):
         """
          si encuentra el producto en el modelo lo actualiza si no lo
          encuentra lo crea
@@ -472,7 +472,7 @@ class ProductMapper(CommonMapper):
                 barcode_obj.create({
                     'product_id': prod.id, 'name': rec.barcode
                 })
-        prod.categ_id = 1
+        prod.categ_id = none_categ_id
 
     @staticmethod
     def check_currency(field, value):

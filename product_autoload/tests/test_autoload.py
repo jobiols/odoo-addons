@@ -237,8 +237,8 @@ class TestBusiness(TransactionCase):
         self.assertEqual(len(prod), 1, '106.32')
         self.assertEqual(prod.item_code, '106')
 
-    def test_14_barcodes(self):
-        """ Testear que el unlink borra todo --------------------------------14
+    def test_7_barcodes(self):
+        """ Testear que el unlink borra todo ---------------------------------7
         """
         # verificar create
         manager_obj = self.env['product_autoload.manager']
@@ -248,3 +248,12 @@ class TestBusiness(TransactionCase):
         barcode_obj = self.env['product.barcode']
         for bc in barcode_obj.search([('product_id.name', '=', '102.7811')]):
             self.assertTrue(bc.barcode in ['5449000000996', '299999134500'])
+
+    def test_8_categories(self):
+        """ Testear actualizacion de categorias-------------------------------8
+        """
+        # verificar create
+        manager_obj = self.env['product_autoload.manager']
+        manager_obj.run(send_mail=False)
+
+        manager_obj.update_categories()

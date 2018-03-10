@@ -20,5 +20,10 @@
             <field name="args"></field>
         </record>
 
+        <!-- Nothing category -->
+        <record id="bulonfer_none_categ" model="product.category">
+            <field name="name">No Categorizado</field>
+        </record>
+
     </data>
 </openerp>

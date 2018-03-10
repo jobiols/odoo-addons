@@ -100,13 +100,17 @@ class AutoloadMgr(models.Model):
         import_only_new = self.env['ir.config_parameter'].get_param(
             'import_only_new', True)
 
+        model_data_obj = self.env['ir.model.data']
+        res_model, none_categ_id = model_data_obj.get_object_reference(
+            'product_autoload', 'bulonfer_none_categ')
+
         bulonfer = self.env['res.partner'].search(
             [('name', 'like', 'Bulonfer')])
         if not bulonfer:
             raise Exception('Vendor Bulonfer not found')
 
         supplierinfo = self.env['product.supplierinfo']
-
+        self.prod_processed = 0
         with open(data_path + DATA, 'r') as file_csv:
             reader = csv.reader(file_csv)
             for line in reader:
@@ -116,7 +120,8 @@ class AutoloadMgr(models.Model):
                      ):
                     obj = ProductMapper(line, data_path, bulonfer,
                                         supplierinfo)
-                    obj.execute(self.env)
+                    obj.execute(self.env, none_categ_id)
+                    self.prod_processed += 1
 
     @api.model
     def run(self, send_mail=True):
@@ -126,11 +131,11 @@ class AutoloadMgr(models.Model):
         data_path = self.env['ir.config_parameter'].get_param('data_path', '')
 
         try:
+            rec = self.create({'name': 'Inicia Proceso'})
             if send_mail:
-                self.send_email('Replicacion Bulonfer, Inicio',
+                self.send_email('Replicacion Bulonfer #{}, '
+                                'Inicio'.format(rec.id),
                                 'Se inicio el proceso')
-
-            self.create({'name': 'Inicia Proceso'})
 
             self._section = self.load_section(data_path)
             self._family = self.load_family(data_path)
@@ -144,30 +149,36 @@ class AutoloadMgr(models.Model):
             self.create({'name': 'Termina Proceso'})
 
             if send_mail:
-                self.send_email('Replicacion Bulonfer, Fin',
-                                'Termino el proceso.', elapsed_time)
+                self.send_email('Replicacion Bulonfer #{}, '
+                                'Fin'.format(rec.id),
+                                self.get_stats(elapsed_time))
 
             self.env['ir.config_parameter'].set_param('last_replication',
                                                       str(datetime.now()))
 
         except Exception as ex:
-            self.send_email('Replicacion Bulonfer, ERROR', ex.message)
+            self.send_email('Replicacion Bulonfer #{}, '
+                            'ERROR'.format(rec.id), ex.message)
             raise
 
     @api.model
     def update_categories(self):
-
         # linkear las categorias
         categ_obj = self.env['product.category']
         item_obj = self.env['product_autoload.item']
+
+        model_data_obj = self.env['ir.model.data']
+        res_model, none_categ_id = model_data_obj.get_object_reference(
+            'product_autoload', 'bulonfer_none_categ')
+
         prods = self.env['product.template'].search(
-            [('categ_id', '=', False)], limit=10)
+            [('categ_id', '=', none_categ_id)], limit=1000)
         for prod in prods:
             # buscar el item que corresponde al producto
             item = item_obj.search([('code', '=', prod.item_code)])
             if not item:
-                text = 'product {} has item = {} but there is no such '
-                'item in item.csv'.format(prod.default_code, prod.item_code)
+                text = 'product {} has item = {} but there is no such item ' \
+                       'in item.csv'.format(prod.default_code, prod.item_code)
                 self.send_email('Replicacion Bulonfer, ERROR', text)
                 raise Exception(text)
 
@@ -196,7 +207,7 @@ class AutoloadMgr(models.Model):
             prod.categ_id = categ_id
 
     @api.model
-    def send_email(self, subject, body, elapsed_time=False):
+    def send_email(self, subject, body):
         email_from = 'Bulonfer SA <noresponder@bulonfer.com.ar>'
         emails = self.env['ir.config_parameter'].get_param(
             'email_notification', '')
@@ -204,10 +215,15 @@ class AutoloadMgr(models.Model):
         email_to = emails.split(',')
         # email_to = ['jorge.obiols@gmail.com', 'sagomez@gmail.com']
 
-        if elapsed_time:
-            elapsed = str(timedelta(seconds=elapsed_time))
-            body += ', duracion: ' + elapsed
-
         smtp = self.env['ir.mail_server']
         message = smtp.build_email(email_from, email_to, subject, body)
         smtp.send_email(message)
+
+    @api.model
+    def get_stats(self, elapsed_time):
+        elapsed = str(timedelta(seconds=elapsed_time))
+
+        ret = u'Terminó el proceso\n'
+        ret += u'Duración: {}\n'.format(elapsed)
+        ret += u'Productos procesados: {}'.format(self.prod_processed)
+        return ret
