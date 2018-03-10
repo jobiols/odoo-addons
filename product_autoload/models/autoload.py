@@ -134,6 +134,8 @@ class AutoloadMgr(models.Model):
         email_to = self.env['ir.config_parameter'].get_param(
             'email_notification', '')
 
+        _logger('-----------------------------------------'+email_to)
+
         try:
             rec = self.create({'name': 'Inicia Proceso'})
             if send_mail:
