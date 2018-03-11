@@ -30,11 +30,10 @@ class AutoloadConfigurationWizard(models.TransientModel):
         help="Email Sender i.e. 'Bulonfer SA <noresponder@bulonfer.com.ar>'"
     )
 
-
     @api.model
     def get_default_email_notification(self, fields):
         value = self.env['ir.config_parameter'].get_param(
-            'email_notification', '')
+            'email_notification', 'jorge.obiols@gmail.com')
         return {'email_notification': value}
 
     @api.multi

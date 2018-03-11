@@ -96,9 +96,11 @@ class AutoloadMgr(models.Model):
         """ Carga todos los productos teniendo en cuenta la fecha
         """
         last_replication = self.env['ir.config_parameter'].get_param(
-            'last_replication', '')
+            'last_replication')
         import_only_new = self.env['ir.config_parameter'].get_param(
-            'import_only_new', True)
+            'import_only_new')
+        if not import_only_new:
+            last_replication = '2000-01-01'
 
         model_data_obj = self.env['ir.model.data']
         res_model, none_categ_id = model_data_obj.get_object_reference(
@@ -114,10 +116,7 @@ class AutoloadMgr(models.Model):
         with open(data_path + DATA, 'r') as file_csv:
             reader = csv.reader(file_csv)
             for line in reader:
-                if line and \
-                    (import_only_new or
-                             line[MAP_WRITE_DATE] > last_replication
-                     ):
+                if line and line[MAP_WRITE_DATE] > last_replication:
                     obj = ProductMapper(line, data_path, bulonfer,
                                         supplierinfo)
                     obj.execute(self.env, none_categ_id)

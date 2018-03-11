@@ -5,8 +5,7 @@
 from __future__ import division
 
 from openerp.tests.common import TransactionCase
-from ..models.mappers import ProductMapper, SectionMapper, FamilyMapper, \
-    ItemMapper, ProductCodeMapper
+from ..models.mappers import ProductMapper
 
 #    Forma de correr el test
 #    -----------------------
@@ -37,7 +36,7 @@ class TestBusiness(TransactionCase):
     """
 
     def setUp(self):
-        """ Este setup corre antes de cada método ---------------------------01
+        """ Este setup corre antes de cada método ---------------------------00
         """
         super(TestBusiness, self).setUp()
         # obtener el path al archivo de datos
@@ -52,19 +51,6 @@ class TestBusiness(TransactionCase):
         self._supinfo = self.env['product.supplierinfo']
 
         self.env['res.partner'].create({'name': 'Bulonfer'})
-
-    def test_00_all_mappers(self):
-        Section = SectionMapper([u'1', u'Bulones'])
-        self.assertEqual(Section.write_date, '')
-
-        Family = FamilyMapper([u'SNP', u'SIN PAR'])
-        self.assertEqual(Family.write_date, '')
-
-        Item = ItemMapper([u'102', u'ARANDELA', u'Nacional', u'1', u'ARA'])
-        self.assertEqual(Item.write_date, '')
-
-        Product = ProductCodeMapper([u'106.32', u'106.32', u'50'])
-        self.assertEqual(Product.write_date, '')
 
     def test_01_product_mapper(self):
         """ Chequear creacion de ProductMapper ------------------------------01
@@ -120,29 +106,6 @@ class TestBusiness(TransactionCase):
         for item in val:
             self.assertEqual(prod.values(create=True)[item], val[item])
 
-    def test_02_productcode(self):
-        """ Chequear creacion de ProductCode --------------------------------02
-        """
-        line = [
-            '003.0151-5/at',
-            '171.003.0151.5',
-            '1']
-
-        prod = ProductCodeMapper(line, self._data_path, self._vendor,
-                                 self._supinfo)
-
-        self.assertEqual(prod.barcode, '003.0151-5/at')
-        self.assertEqual(prod.product_code, '171.003.0151.5')
-        self.assertEqual(prod.uxb, 1)
-
-        val = {
-            'barcode': '003.0151-5/at',
-            'product_code': '171.003.0151.5',
-            'uxb': 1}
-
-        for item in val:
-            self.assertEqual(prod.values()[item], val[item])
-
     def test_03_(self):
         """ Chequear tipos de campo -----------------------------------------03
         """
@@ -188,7 +151,7 @@ class TestBusiness(TransactionCase):
                                  self._supinfo)
 
     def test_05_(self):
-        """ Chequear tipos de campo currency --------------------------------05
+        """ Chequear tipos de campo -----------------------------------------05
         """
         line = [
             '123456789',
@@ -209,36 +172,69 @@ class TestBusiness(TransactionCase):
             prod = ProductMapper(line, self._data_path, self._vendor,
                                  self._supinfo)
 
-    def test_06_update_product(self):
-        """ Chequear update de producto -------------------------------------06
+    def test_06_update(self):
+        """ Chequear que NO replique registros viejos------------------------06
         """
         # verificar create
         manager_obj = self.env['product_autoload.manager']
         prod_obj = self.env['product.template']
-        manager_obj.run(send_mail=False)
 
-        prod = prod_obj.search([('default_code', '=', '102.AF')])
-        self.assertEqual(len(prod), 1, '102.AF')
-        self.assertEqual(prod.item_code, '102')
-
-        prod = prod_obj.search([('default_code', '=', '106.32')])
-        self.assertEqual(len(prod), 1, '106.32')
-        self.assertEqual(prod.item_code, '106')
-
-        # verificar update
+        # fecha de los registros 2018-01-26 16:13:21
+        # con esta fecha no deberia replicar nada
+        self.env['ir.config_parameter'].set_param(
+            'last_replication', '2018-02-26 16:13:21')
+        self.env['ir.config_parameter'].set_param(
+            'import_only_new', True)
 
         manager_obj.run(send_mail=False)
-
         prod = prod_obj.search([('default_code', '=', '102.AF')])
-        self.assertEqual(len(prod), 1, '102.AF')
-        self.assertEqual(prod.item_code, '102')
-
+        self.assertFalse(prod)
         prod = prod_obj.search([('default_code', '=', '106.32')])
-        self.assertEqual(len(prod), 1, '106.32')
-        self.assertEqual(prod.item_code, '106')
+        self.assertFalse(prod)
 
-    def test_7_barcodes(self):
-        """ Testear que el unlink borra todo ---------------------------------7
+    def test_07_update_product(self):
+        """ Chequear que SI replique registros nuevos------------------------07
+        """
+        # verificar create
+        manager_obj = self.env['product_autoload.manager']
+        prod_obj = self.env['product.template']
+
+        # fecha de los registros 2018-01-26 16:13:21
+        # con esta fecha si deberia replicar
+        self.env['ir.config_parameter'].set_param(
+            'last_replication', '2018-01-01 16:13:21')
+        self.env['ir.config_parameter'].set_param(
+            'import_only_new', True)
+
+        manager_obj.run(send_mail=False)
+        prod = prod_obj.search([('default_code', '=', '102.AF')])
+        self.assertTrue(prod)
+        prod = prod_obj.search([('default_code', '=', '106.32')])
+        self.assertTrue(prod)
+
+    def test_08_update_product(self):
+        """ Chequear que SI replique si fuerzo la replicacion----------------08
+        """
+        # verificar create
+        manager_obj = self.env['product_autoload.manager']
+        prod_obj = self.env['product.template']
+
+        # fecha de los registros 2018-01-26 16:13:21
+        # con esta fecha no deberia replicar nada
+        self.env['ir.config_parameter'].set_param(
+            'last_replication', '2018-02-26 16:13:21')
+        # pero aca lo estoy forzando a que replique
+        self.env['ir.config_parameter'].set_param(
+            'import_only_new', False)
+
+        manager_obj.run(send_mail=False)
+        prod = prod_obj.search([('default_code', '=', '102.AF')])
+        self.assertTrue(prod)
+        prod = prod_obj.search([('default_code', '=', '106.32')])
+        self.assertTrue(prod)
+
+    def test_09_barcodes(self):
+        """ Testear que el unlink borra todo --------------------------------09
         """
         # verificar create
         manager_obj = self.env['product_autoload.manager']
@@ -249,8 +245,8 @@ class TestBusiness(TransactionCase):
         for bc in barcode_obj.search([('product_id.name', '=', '102.7811')]):
             self.assertTrue(bc.barcode in ['5449000000996', '299999134500'])
 
-    def test_8_categories(self):
-        """ Testear actualizacion de categorias-------------------------------8
+    def test_010_categories(self):
+        """ Testear actualizacion de categorias------------------------------10
         """
         # verificar create
         manager_obj = self.env['product_autoload.manager']
