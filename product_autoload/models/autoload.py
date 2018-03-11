@@ -135,9 +135,6 @@ class AutoloadMgr(models.Model):
         email_to = self.env['ir.config_parameter'].get_param(
             'email_notification', '')
 
-        _logger.info('-----------------------------------------' + email_to)
-        _logger.info('-----------------------------------------' + email_from)
-
         try:
             rec = self.create({'name': 'Inicia Proceso'})
             if send_mail:
@@ -223,8 +220,7 @@ class AutoloadMgr(models.Model):
 
     @api.model
     def send_email(self, subject, body, email_from, email_to):
-        _logger.info(
-            '{}=={}=={}=={}=='.format(subject, body, email_from, email_to))
+        email_to = email_to.split(',')
         # email_to = ['jorge.obiols@gmail.com', 'sagomez@gmail.com']
         smtp = self.env['ir.mail_server']
         message = smtp.build_email(email_from, email_to, subject, body)
