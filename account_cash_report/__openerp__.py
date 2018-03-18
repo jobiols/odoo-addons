@@ -10,14 +10,12 @@
     'depends': [
         'account'
     ],
-
     'data': [
         'views/report_data.xml'
     ],
     'test': [
     ],
     'demo': [
-
     ],
     'installable': True,
     'application': False,
