@@ -3,8 +3,13 @@
 from openerp import api, models, fields
 
 
-# documentation from
-# http://odoo-development.readthedocs.io/en/latest/dev/py/res.config.settings.html
+PARAMS = [
+    ("email_notification", 'email_notification'),
+    ("last_replication", 'last_replication'),
+    ("import_only_new", 'import_only_new'),
+    ("data_path", 'data_path'),
+    ("email_from", 'email_from')
+]
 
 
 class AutoloadConfigurationWizard(models.TransientModel):
@@ -30,57 +35,17 @@ class AutoloadConfigurationWizard(models.TransientModel):
         help="Email Sender i.e. 'Bulonfer SA <noresponder@bulonfer.com.ar>'"
     )
 
-    @api.model
-    def get_default_email_notification(self, fields):
-        value = self.env['ir.config_parameter'].get_param(
-            'email_notification', 'jorge.obiols@gmail.com')
-        return {'email_notification': value}
+    @api.multi
+    def set_params(self):
+        self.ensure_one()
+        for field_name, key_name in PARAMS:
+            value = getattr(self, field_name, '')
+            self.env['ir.config_parameter'].set_param(key_name, value)
 
     @api.multi
-    def set_email_notification(self):
-        value = getattr(self, 'email_notification', '')
-        self.env['ir.config_parameter'].set_param('email_notification', value)
-
-    @api.model
-    def get_default_last_replication(self, fields):
-        value = self.env['ir.config_parameter'].get_param(
-            'last_replication', '')
-        return {'last_replication': value}
-
-    @api.multi
-    def set_last_replication(self):
-        value = getattr(self, 'last_replication', '')
-        self.env['ir.config_parameter'].set_param('last_replication', value)
-
-    @api.model
-    def get_default_import_only_new(self, fields):
-        value = self.env['ir.config_parameter'].get_param(
-            'import_only_new', '')
-        return {'import_only_new': value}
-
-    @api.multi
-    def set_import_only_new(self):
-        value = getattr(self, 'import_only_new', '')
-        self.env['ir.config_parameter'].set_param('import_only_new', value)
-
-    @api.model
-    def get_default_data_path(self, fields):
-        value = self.env['ir.config_parameter'].get_param(
-            'data_path', '/opt/odoo/data/product_data/')
-        return {'data_path': value}
-
-    @api.multi
-    def set_data_path(self):
-        value = getattr(self, 'data_path', '')
-        self.env['ir.config_parameter'].set_param('data_path', value)
-
-    @api.model
-    def get_default_email_from(self, fields):
-        value = self.env['ir.config_parameter'].get_param(
-            'email_from', 'Bulonfer SA <noresponder@bulonfer.com.ar>')
-        return {'email_from': value}
-
-    @api.multi
-    def set_email_from(self):
-        value = getattr(self, 'email_from', '')
-        self.env['ir.config_parameter'].set_param('email_from', value)
+    def get_default_params(self, fields):
+        res = dict()
+        for field_name, key_name in PARAMS:
+            value = self.env['ir.config_parameter'].get_param(key_name, False)
+            res[field_name] = value
+        return res
