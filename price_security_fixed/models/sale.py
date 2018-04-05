@@ -42,7 +42,7 @@ class SaleOrderLine(models.Model):
         # 'product_can_modify_prices'
     )
     def check_discount_sale(self):
-        if (self.user_has_groups('price_security.group_restrict_prices'
+        if (self.user_has_groups('price_security_fixed.group_restrict_prices'
                                  ) and not self.product_can_modify_prices):
             self.env.user.check_discount(
                 self.discount,
@@ -58,7 +58,7 @@ class SaleOrder(models.Model):
         'payment_term_id',
         'partner_id')
     def check_priority(self):
-        if not self.user_has_groups('price_security.group_restrict_prices'):
+        if not self.user_has_groups('price_security_fixed.group_restrict_prices'):
             return True
         if (
                 self.partner_id.property_product_pricelist and

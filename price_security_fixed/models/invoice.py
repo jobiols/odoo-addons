@@ -48,7 +48,7 @@ class AccountInvoiceLine(models.Model):
             # only customer invoices
             if il.invoice_id and il.invoice_id.type in (
                 'out_invoice', 'out_refund') and (il.user_has_groups(
-                    'price_security.group_restrict_prices') and
+                    'price_security_fixed.group_restrict_prices') and
                     not il.product_can_modify_prices):
                 # chequeamos si la orden de venta permitió un descuento mayor
                 if any(

@@ -38,5 +38,5 @@
         'views/partner_view.xml',
         'views/account_view.xml',
     ],
-    'installable': False,
+    'installable': True,
 }
