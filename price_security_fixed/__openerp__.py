@@ -19,7 +19,7 @@
 #
 ##############################################################################
 {
-    'name': 'Price Security',
+    'name': 'Price Security Fixed',
     'version': '9.0.1.3.1',
     'category': 'Sales Management',
     'author': 'jeoSoftware, ADHOC SA, Odoo Community Association (OCA)',
