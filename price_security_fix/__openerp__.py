@@ -19,24 +19,16 @@
 #
 ##############################################################################
 {
-    'name': 'Price Security Fixed',
-    'version': '9.0.1.3.1',
+    'name': 'Price Security fix',
+    'version': '9.0.0.0.0',
     'category': 'Sales Management',
-    'author': 'jeoSoftware, ADHOC SA, Odoo Community Association (OCA)',
+    'author': 'jeo Software, ADHOC SA, Odoo Community Association (OCA)',
     'website': 'http://www.adhoc.com.ar/',
     'license': 'AGPL-3',
     'depends': [
         'sale',
     ],
     'data': [
-        'security/security.xml',
-        'security/ir.model.access.csv',
-        'views/res_users_view.xml',
-        'views/product_view.xml',
-        'views/sale_view.xml',
-        'views/invoice_view.xml',
-        'views/partner_view.xml',
-        'views/account_view.xml',
     ],
     'installable': True,
 }
