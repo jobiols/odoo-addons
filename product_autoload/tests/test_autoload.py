@@ -211,6 +211,7 @@ class TestBusiness(TransactionCase):
         self.assertTrue(prod)
         prod = prod_obj.search([('default_code', '=', '106.32')])
         self.assertTrue(prod)
+        self.assertTrue(prod.invalidate_category)
 
     def test_08_update_product(self):
         """ Chequear que SI replique si fuerzo la replicacion----------------08
