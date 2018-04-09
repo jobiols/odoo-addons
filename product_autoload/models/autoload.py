@@ -21,7 +21,8 @@ IM_NAME = 1
 IM_ORIGIN = 2
 IM_SECTION_CODE = 3
 IM_FAMILY_CODE = 4
-IM_LEN = 5
+IM_MARGIN = 5
+IM_LEN = 6
 
 PC_BARCODE = 0
 PC_PRODUCT_CODE = 1
@@ -68,7 +69,8 @@ class AutoloadMgr(models.Model):
                     'name': line[IM_NAME].strip(),
                     'origin': line[IM_CODE].strip(),
                     'section': self._section[line[IM_SECTION_CODE]].strip(),
-                    'family': self._family[line[IM_FAMILY_CODE]].strip()
+                    'family': self._family[line[IM_FAMILY_CODE]].strip(),
+                    'margin': self._family[line[IM_MARGIN]].strip()
                 }
                 item_obj.create(values)
 

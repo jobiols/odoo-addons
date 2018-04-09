@@ -23,6 +23,9 @@ class Item(models.Model):
     family = fields.Char(
         help="Code from bulonfer, not shown"
     )
+    margin = fields.Float(
+        help="Profit margin suggested by the vendor for this item"
+    )
 
     _sql_constraints = [
         ('uniq_code', 'unique(code)', "The item code must be unique !"),

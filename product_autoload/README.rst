@@ -41,6 +41,7 @@ item.csv
 - origin
 - section_code
 - family_code
+- margen
 
 family.csv
 ----------
@@ -65,4 +66,3 @@ Para cada producto la categoria se arma de la siguiente forma:
 - Con el codigo de item obtengo el item, familia y seccion
 - del item obtengo la familia
 - Armo la categoria con Nombre de seccion / Nombre de familia / Nombre de item
-

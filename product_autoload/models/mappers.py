@@ -26,26 +26,6 @@ class CommonMapper(object):
         return ret
 
 
-IM_CODE = 0
-IM_NAME = 1
-IM_ORIGIN = 2
-IM_SECTION_CODE = 3
-IM_FAMILY_CODE = 4
-IM_LEN = 5
-
-FM_CODE = 0
-FM_NAME = 1
-FM_LEN = 2
-
-PC_BARCODE = 0
-PC_PRODUCT_CODE = 1
-PC_UXB = 2
-PC_LEN = 3
-
-SM_CODE = 0
-SM_NAME = 1
-SM_LEN = 2
-
 MAP_DEFAULT_CODE = 0
 MAP_NAME = 1
 MAP_DESCRIPTION_SALE = 2
