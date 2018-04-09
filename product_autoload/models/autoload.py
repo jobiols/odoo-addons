@@ -60,6 +60,10 @@ class AutoloadMgr(models.Model):
     def load_item(self, data_path):
         """ Borra la tabla item y la vuelve a crear con los datos nuevos
         """
+
+
+        # TODO ver que hacemos si cambia el porcentaje, en principio el conjunto de productos deberia
+        # recalcular su precio de lista.
         item_obj = self.env['product_autoload.item']
         item_obj.search([]).unlink()
         with open(data_path + ITEM, 'r') as file_csv:
@@ -108,11 +112,6 @@ class AutoloadMgr(models.Model):
         if not import_only_new:
             last_replication = '2000-01-01'
 
-        # TODO esto ya no hace falta cuando revisemos el proceso de categorias
-        model_data_obj = self.env['ir.model.data']
-        res_model, none_categ_id = model_data_obj.get_object_reference(
-            'product_autoload', 'bulonfer_none_categ')
-
         bulonfer = self.env['res.partner'].search(
             [('name', 'like', 'Bulonfer')])
         if not bulonfer:
@@ -126,31 +125,30 @@ class AutoloadMgr(models.Model):
                 if line and line[MAP_WRITE_DATE] > last_replication:
                     obj = ProductMapper(line, data_path, bulonfer,
                                         supplierinfo)
-                    obj.execute(self.env, none_categ_id)
+                    obj.execute(self.env)
                     self.prod_processed += 1
 
-    @api.model
-    def migrate(self):
-        """ elimina los codigos de barra que no se pusieron manualmente
-        """
-        _logger.info('MIGRATING DATABASE START')
 
-        prod_obj = self.env['product.template']
-        for prod in prod_obj.search([('default_code', 'like', '0')]):
-            dc = prod.default_code
-            if dc != dc.lstrip('0'):
-                _logger.info('stripping {}'.format(dc))
-                prod.default_code = dc.lstrip('0')
+    # @api.model
+    # def migrate(self):
+    #    """ elimina los codigos de barra que no se pusieron manualmente
+    #    """
+    #    _logger.info('MIGRATING DATABASE START')
 
-        cr = self.env.cr
-        cr.execute("""
-          delete from product_barcode
-          where name in (select barcode from product_autoload_productcode);
-          """)
+    #    prod_obj = self.env['product.template']
+    #    for prod in prod_obj.search([('default_code', 'like', '0')]):
+    #        dc = prod.default_code
+    #        if dc != dc.lstrip('0'):
+    #            _logger.info('stripping {}'.format(dc))
+    #            prod.default_code = dc.lstrip('0')
 
-        _logger.info('MIGRATING DATABASE END')
+    #    cr = self.env.cr
+    #    cr.execute("""
+    #      delete from product_barcode
+    #      where name in (select barcode from product_autoload_productcode);
+    #      """)
 
-
+    #    _logger.info('MIGRATING DATABASE END')
 
     @api.model
     def run(self, send_mail=True):
@@ -209,22 +207,14 @@ class AutoloadMgr(models.Model):
         # linkear las categorias
         categ_obj = self.env['product.category']
         item_obj = self.env['product_autoload.item']
-        model_data_obj = self.env['ir.model.data']
-
-        # TODO esto ya no hace falta cuando revisemos el proceso de categorias
-        res_model, none_categ_id = model_data_obj.get_object_reference(
-            'product_autoload', 'bulonfer_none_categ')
 
         email_from = self.env['ir.config_parameter'].get_param('email_from',
                                                                '')
         email_to = self.env['ir.config_parameter'].get_param(
             'email_notification', '')
 
-        # TODO para seleccionar que categoria hay que procesar tener en cuenta:
-        # que sean productos que acabo de actualizar, estos productos tendran una marca 'revisar categoria'
-        # que se pone en falso cuando la actualizo.
         prods = self.env['product.template'].search(
-            [('categ_id', '=', none_categ_id)], limit=1000)
+            [('invalidate_category', '=', True)], limit=1000)
         for prod in prods:
             # buscar el item que corresponde al producto
             item = item_obj.search([('code', '=', prod.item_code)])
@@ -234,6 +224,9 @@ class AutoloadMgr(models.Model):
                 self.send_email('Replicacion Bulonfer, ERROR', text,
                                 email_from, email_to)
                 raise Exception(text)
+
+            # calcular el precio de lista
+            prod.list_price = prod.standard_price * (1 + item.margin)
 
             # buscar seccion o crearla en categorias
             sec_id = categ_obj.search([('name', '=', item.section)])
@@ -257,15 +250,23 @@ class AutoloadMgr(models.Model):
                 categ_id = categ_obj.create({'name': item.name,
                                              'parent_id': sec_fam_id.id})
             _logger.info('Setting category {}'.format(categ_id.complete_name))
-            prod.categ_id = categ_id
+            prod.write(
+                {
+                    'categ_id': categ_id,
+                    'invalidate_category': False
+                }
+            )
 
     @api.model
     def send_email(self, subject, body, email_from, email_to):
         email_to = email_to.split(',')
         # email_to = ['jorge.obiols@gmail.com', 'sagomez@gmail.com']
         smtp = self.env['ir.mail_server']
-        message = smtp.build_email(email_from, email_to, subject, body)
-        smtp.send_email(message)
+        try:
+            message = smtp.build_email(email_from, email_to, subject, body)
+            smtp.send_email(message)
+        except Exception as ex:
+            _logger.error('Falla envio de mail {}'.format(ex.message))
 
     @api.model
     def get_stats(self, elapsed_time):

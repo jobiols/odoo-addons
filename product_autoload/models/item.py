@@ -12,7 +12,8 @@ class Item(models.Model):
         help="Item name to show in category full name"
     )
     code = fields.Char(
-        help="Code from bulonfer, not shown"
+        help="Code from bulonfer, not shown",
+        select=1
     )
     origin = fields.Char(
         help="where the product was made"

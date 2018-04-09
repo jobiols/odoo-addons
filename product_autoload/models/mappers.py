@@ -157,9 +157,7 @@ class ProductMapper(CommonMapper):
             'purchase_method': 'purchase'
         }
 
-    # TODO aca en lugar de poner none_categ_id hay que poner una marca para revisar la categoria
-    # en el siguiente paso de la replicacion
-    def execute(self, env, none_categ_id):
+    def execute(self, env):
         """ Este es el corazon del proceso de replicacion, si encuentra el
             producto en el modelo lo actualiza si no lo encuentra lo crea.
         """
@@ -212,7 +210,6 @@ class ProductMapper(CommonMapper):
                 barcode_obj.create({
                     'product_id': prod.id, 'name': rec.barcode
                 })
-        prod.categ_id = none_categ_id
 
     @staticmethod
     def check_currency(field, value):
