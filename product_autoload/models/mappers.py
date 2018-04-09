@@ -69,6 +69,7 @@ class ProductMapper(CommonMapper):
         self._iva = False
         self._item_code = False
         self._write_date = False
+        self._invalidate_category = True
 
         self.default_code = line[MAP_DEFAULT_CODE]
         self.name = line[MAP_NAME]
@@ -123,6 +124,9 @@ class ProductMapper(CommonMapper):
 
         if self._image:
             ret['image'] = self._image
+
+        if self._invalidate_category:
+            ret['invalidate_category'] = self._invalidate_category
 
         supplierinfo = {
             'name': self._vendor.id,

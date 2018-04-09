@@ -35,6 +35,10 @@ class ProductProduct(models.Model):
         help="Bulk retail quantity of units",
     )
 
+    invalidate_category = fields.Boolean(
+        help="Category needs rebuild"
+    )
+
     @api.one
     @api.depends('default_code')
     def _get_default_item_code(self):
