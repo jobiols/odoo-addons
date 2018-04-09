@@ -58,6 +58,8 @@ class AutoloadMgr(models.Model):
 
     @api.model
     def load_item(self, data_path):
+        """ Borra la tabla item y la vuelve a crear con los datos nuevos
+        """
         item_obj = self.env['product_autoload.item']
         item_obj.search([]).unlink()
         with open(data_path + ITEM, 'r') as file_csv:
@@ -76,6 +78,8 @@ class AutoloadMgr(models.Model):
 
     @api.model
     def load_productcode(self, data_path):
+        """ Borra la tabla productcode y la vuelve a crear con los datos nuevos
+        """
         item_obj = self.env['product_autoload.productcode']
         item_obj.search([]).unlink()
         count = 0
@@ -104,6 +108,7 @@ class AutoloadMgr(models.Model):
         if not import_only_new:
             last_replication = '2000-01-01'
 
+        # TODO esto ya no hace falta cuando revisemos el proceso de categorias
         model_data_obj = self.env['ir.model.data']
         res_model, none_categ_id = model_data_obj.get_object_reference(
             'product_autoload', 'bulonfer_none_categ')
@@ -124,9 +129,22 @@ class AutoloadMgr(models.Model):
                     obj.execute(self.env, none_categ_id)
                     self.prod_processed += 1
 
+
+    @api.model
+    def migrate(self):
+        """ elimina los codigos de barra que no se pusieron manualmente
+        """
+        import wdb;wdb.set_trace()
+        cr = self.env.cr
+        cr.execute("""
+          delete from product_barcode
+          where name in (select barcode from product_autoload_productcode);
+          """)
+
+
     @api.model
     def run(self, send_mail=True):
-        """ Actualiza todos los productos
+        """ Actualiza todos los productos.
         """
         start_time = time()
         data_path = self.env['ir.config_parameter'].get_param(
@@ -144,11 +162,17 @@ class AutoloadMgr(models.Model):
                                 'Se inicio el proceso',
                                 email_from, email_to)
 
+            # Cargar en memoria las tablas chicas
             self._section = self.load_section(data_path)
             self._family = self.load_family(data_path)
 
+            # Cargar en bd las demas tablas
             self.load_item(data_path)
             self.load_productcode(data_path)
+
+            # Aca carga solo los productos que tienen fecha de modificacion
+            # posterior a la fecha de proceso y los actualiza o los crea segun
+            # sea necesario
             self.load_product(data_path)
 
             elapsed_time = time() - start_time
@@ -176,13 +200,19 @@ class AutoloadMgr(models.Model):
         categ_obj = self.env['product.category']
         item_obj = self.env['product_autoload.item']
         model_data_obj = self.env['ir.model.data']
+
+        # TODO esto ya no hace falta cuando revisemos el proceso de categorias
         res_model, none_categ_id = model_data_obj.get_object_reference(
             'product_autoload', 'bulonfer_none_categ')
+
         email_from = self.env['ir.config_parameter'].get_param('email_from',
                                                                '')
         email_to = self.env['ir.config_parameter'].get_param(
             'email_notification', '')
 
+        # TODO para seleccionar que categoria hay que procesar tener en cuenta:
+        # que sean productos que acabo de actualizar, estos productos tendran una marca 'revisar categoria'
+        # que se pone en falso cuando la actualizo.
         prods = self.env['product.template'].search(
             [('categ_id', '=', none_categ_id)], limit=1000)
         for prod in prods:
@@ -195,7 +225,7 @@ class AutoloadMgr(models.Model):
                                 email_from, email_to)
                 raise Exception(text)
 
-            # buscar seccion o crearla
+            # buscar seccion o crearla en categorias
             sec_id = categ_obj.search([('name', '=', item.section)])
             if not sec_id:
                 sec_id = categ_obj.create({'name': item.section})

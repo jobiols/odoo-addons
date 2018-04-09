@@ -22,11 +22,12 @@ data.csv
 - Código del producto
 - Nombre del producto
 - Descripción del producto
-- Códigos de barras (multiples codigos por producto)
 - Precio de costo - Precio al que la ferretería minorista compra el producto sin iva
 - UPV Agrupacion mayorista
 - Peso bruto en kg
-- Volumen cm3
+- Volumen m3
+- Bulto Mayorista
+- Bulto Minorista
 - Nombre de la imagen
 - Garantia (meses)
 - IVA %
@@ -41,7 +42,7 @@ item.csv
 - origin
 - section_code
 - family_code
-- margen
+- margin
 
 family.csv
 ----------
@@ -57,12 +58,9 @@ section.csv
 Armado de Categorias
 --------------------
 
-Por el momento y a falta de conocimiento de los datos las categorias quedaron
-armadas de la siguiente forma:
-
 Para cada producto la categoria se arma de la siguiente forma:
 
 - Obtengo el codigo de item correspondiente al producto, que se define por los digitos del codigo del producto hasta el primer punto.
-- Con el codigo de item obtengo el item, familia y seccion
+- Con el codigo de item obtengo el item, family_code y seccion
 - del item obtengo la familia
 - Armo la categoria con Nombre de seccion / Nombre de familia / Nombre de item

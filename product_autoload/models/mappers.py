@@ -153,10 +153,11 @@ class ProductMapper(CommonMapper):
             'purchase_method': 'purchase'
         }
 
+    # TODO aca en lugar de poner none_categ_id hay que poner una marca para revisar la categoria
+    # en el siguiente paso de la replicacion
     def execute(self, env, none_categ_id):
-        """
-         si encuentra el producto en el modelo lo actualiza si no lo
-         encuentra lo crea
+        """ Este es el corazon del proceso de replicacion, si encuentra el
+            producto en el modelo lo actualiza si no lo encuentra lo crea.
         """
         product_obj = env['product.template']
         prod = product_obj.search([('default_code', '=', self.default_code)])
