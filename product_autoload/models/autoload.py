@@ -129,17 +129,27 @@ class AutoloadMgr(models.Model):
                     obj.execute(self.env, none_categ_id)
                     self.prod_processed += 1
 
-
     @api.model
     def migrate(self):
         """ elimina los codigos de barra que no se pusieron manualmente
         """
-        import wdb;wdb.set_trace()
+        _logger.info('MIGRATING DATABASE START')
+
+        prod_obj = self.env['product.template']
+        for prod in prod_obj.search([('default_code', 'like', '0')]):
+            dc = prod.default_code
+            if dc != dc.lstrip('0'):
+                _logger.info('stripping {}'.format(dc))
+                prod.default_code = dc.lstrip('0')
+
         cr = self.env.cr
         cr.execute("""
           delete from product_barcode
           where name in (select barcode from product_autoload_productcode);
           """)
+
+        _logger.info('MIGRATING DATABASE END')
+
 
 
     @api.model
