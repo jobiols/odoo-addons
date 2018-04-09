@@ -70,7 +70,7 @@ class AutoloadMgr(models.Model):
                     'origin': line[IM_CODE].strip(),
                     'section': self._section[line[IM_SECTION_CODE]].strip(),
                     'family': self._family[line[IM_FAMILY_CODE]].strip(),
-                    'margin': self._family[line[IM_MARGIN]].strip()
+                    'margin': line[IM_MARGIN].strip()
                 }
                 item_obj.create(values)
 
