@@ -31,3 +31,14 @@ class Item(models.Model):
     _sql_constraints = [
         ('uniq_code', 'unique(code)', "The item code must be unique !"),
     ]
+
+    @api.multi
+    @api.depends('margin')
+    def change_margin(self):
+        for item in self:
+            # forzar recalculo de precios.
+            prod_obj = self.env['product.template']
+            prod = prod_obj.search([('item_code', '=', item.code)])
+            if prod:
+                print 'recalculando ', prod.default_code, item.margin
+                prod.recalculate_list_price(item.margin)

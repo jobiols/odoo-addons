@@ -38,6 +38,8 @@ class AutoloadMgr(models.Model):
 
     @staticmethod
     def load_section(data_path):
+        """ Carga la estructura de datos en memoria
+        """
         res = dict()
         with open(data_path + SECTION, 'r') as file_csv:
             reader = csv.reader(file_csv)
@@ -48,6 +50,8 @@ class AutoloadMgr(models.Model):
 
     @staticmethod
     def load_family(data_path):
+        """ Carga la estructura de datos en memoria
+        """
         res = dict()
         with open(data_path + FAMILY, 'r') as file_csv:
             reader = csv.reader(file_csv)
@@ -58,10 +62,12 @@ class AutoloadMgr(models.Model):
 
     @api.model
     def load_item(self, data_path, item=ITEM):
-        """ Revisa la tabla y chequea si cambio algo
+        """ Carga los datos en una modelo, chequeando por modificaciones
+            Si cambio el precio recalcula todos preecios de los productos
         """
         prod_obj = self.env['product.template']
         item_obj = self.env['product_autoload.item']
+
         with open(data_path + item, 'r') as file_csv:
             reader = csv.reader(file_csv)
             for line in reader:
@@ -85,18 +91,18 @@ class AutoloadMgr(models.Model):
 
                         item.write(values)
 
-                        # forzar recalculo de precios.
-                        prod = prod_obj.search([
-                            ('item_code', '=', values['code'])])
-                        if prod:
-                            prod.recalculate_list_price(item.margin)
+                        ## forzar recalculo de precios.
+                        #prod = prod_obj.search([
+                        #    ('item_code', '=', values['code'])])
+                        #if prod:
+                        #    prod.recalculate_list_price(item.margin)
                 else:
                     item_obj.create(values)
                     # forzar recalculo de precios
-                    prod = prod_obj.search([
-                        ('item_code', '=', values['code'])])
-                    if prod:
-                        prod.recalculate_list_price(item.margin)
+                    #prod = prod_obj.search([
+                    #    ('item_code', '=', values['code'])])
+                    #if prod:
+                    #    prod.recalculate_list_price(item.margin)
 
     @api.model
     def load_productcode(self, data_path):
@@ -123,18 +129,12 @@ class AutoloadMgr(models.Model):
     def load_product(self, data_path):
         """ Carga todos los productos teniendo en cuenta la fecha
         """
-        last_replication = self.env['ir.config_parameter'].get_param(
-            'last_replication')
-        import_only_new = self.env['ir.config_parameter'].get_param(
-            'import_only_new')
-        if not import_only_new:
-            last_replication = '2000-01-01'
-
         bulonfer = self.env['res.partner'].search(
             [('name', 'like', 'Bulonfer')])
         if not bulonfer:
             raise Exception('Vendor Bulonfer not found')
 
+        last_replication = self.last_replication
         supplierinfo = self.env['product.supplierinfo']
         self.prod_processed = 0
         with open(data_path + DATA, 'r') as file_csv:
@@ -146,46 +146,21 @@ class AutoloadMgr(models.Model):
                     obj.execute(self.env)
                     self.prod_processed += 1
 
-    # @api.model
-    # def migrate(self):
-    #    """ elimina los codigos de barra que no se pusieron manualmente
-    #    """
-    #    _logger.info('MIGRATING DATABASE START')
-
-    #    prod_obj = self.env['product.template']
-    #    for prod in prod_obj.search([('default_code', 'like', '0')]):
-    #        dc = prod.default_code
-    #        if dc != dc.lstrip('0'):
-    #            _logger.info('stripping {}'.format(dc))
-    #            prod.default_code = dc.lstrip('0')
-
-    #    cr = self.env.cr
-    #    cr.execute("""
-    #      delete from product_barcode
-    #      where name in (select barcode from product_autoload_productcode);
-    #      """)
-
-    #    _logger.info('MIGRATING DATABASE END')
-
     @api.model
     def run(self, send_mail=True, item=ITEM):
         """ Actualiza todos los productos.
         """
+        # empezamos a contar el tiempo de proceso
         start_time = time()
-        data_path = self.env['ir.config_parameter'].get_param(
-            'data_path', '')
-        email_from = self.env['ir.config_parameter'].get_param(
-            'email_from', '')
-        email_to = self.env['ir.config_parameter'].get_param(
-            'email_notification', '')
+        data_path = self.data_path
 
+        rec = self.create({'name': 'Inicia Proceso'})
         try:
-            rec = self.create({'name': 'Inicia Proceso'})
             if send_mail:
                 self.send_email('Replicacion Bulonfer #{}, '
                                 'Inicio'.format(rec.id),
                                 'Se inicio el proceso',
-                                email_from, email_to)
+                                self.email_from, self.email_to)
 
             # Cargar en memoria las tablas chicas
             self._section = self.load_section(data_path)
@@ -200,6 +175,7 @@ class AutoloadMgr(models.Model):
             # sea necesario
             self.load_product(data_path)
 
+            # terminamos de contar el tiempo de proceso
             elapsed_time = time() - start_time
 
             self.create({'name': 'Termina Proceso'})
@@ -208,14 +184,14 @@ class AutoloadMgr(models.Model):
                 self.send_email('Replicacion Bulonfer #{}, '
                                 'Fin'.format(rec.id),
                                 self.get_stats(elapsed_time),
-                                email_from, email_to)
+                                self.email_from, self.email_to)
 
-            self.env['ir.config_parameter'].set_param('last_replication',
-                                                      str(datetime.now()))
+            self.last_replication = str(datetime.now())
+
         except Exception as ex:
             self.send_email('Replicacion Bulonfer #{}, '
                             'ERROR'.format(rec.id), ex.message,
-                            email_from, email_to)
+                            self.email_from, self.email_to)
             _logger.error('Replicacion Bulonfer {}'.format(ex.message))
             raise
 
@@ -225,13 +201,8 @@ class AutoloadMgr(models.Model):
         categ_obj = self.env['product.category']
         item_obj = self.env['product_autoload.item']
 
-        email_from = self.env['ir.config_parameter'].get_param('email_from',
-                                                               '')
-        email_to = self.env['ir.config_parameter'].get_param(
-            'email_notification', '')
-
         prods = self.env['product.template'].search(
-            [('invalidate_category', '=', True)], limit=1000)
+            [('invalidate_category', '=', True)], limit=2000)
         for prod in prods:
             # buscar el item que corresponde al producto
             item = item_obj.search([('code', '=', prod.item_code)])
@@ -239,7 +210,7 @@ class AutoloadMgr(models.Model):
                 text = 'product {} has item = {} but there is no such item ' \
                        'in item.csv'.format(prod.default_code, prod.item_code)
                 self.send_email('Replicacion Bulonfer, ERROR', text,
-                                email_from, email_to)
+                                self.email_from, self.email_to)
                 raise Exception(text)
 
             # calcular el precio de lista
@@ -266,7 +237,8 @@ class AutoloadMgr(models.Model):
             if not categ_id:
                 categ_id = categ_obj.create({'name': item.name,
                                              'parent_id': sec_fam_id.id})
-            _logger.info('Setting category {}'.format(categ_id.complete_name))
+            _logger.info('Setting {} --> {}'.format(
+                prod.default_code, categ_id.complete_name))
             prod.write(
                 {
                     'categ_id': categ_id.id,
@@ -277,7 +249,6 @@ class AutoloadMgr(models.Model):
     @api.model
     def send_email(self, subject, body, email_from, email_to):
         email_to = email_to.split(',')
-        # email_to = ['jorge.obiols@gmail.com', 'sagomez@gmail.com']
         smtp = self.env['ir.mail_server']
         try:
             message = smtp.build_email(email_from, email_to, subject, body)
@@ -293,3 +264,31 @@ class AutoloadMgr(models.Model):
         ret += u'Duración: {}\n'.format(elapsed)
         ret += u'Productos procesados: {}'.format(self.prod_processed)
         return ret
+
+    @property
+    def email_from(self):
+        return self.env['ir.config_parameter'].get_param('email_from', '')
+
+    @property
+    def email_to(self):
+        return self.env['ir.config_parameter'].get_param('email_to', '')
+
+    @property
+    def data_path(self):
+        return self.env['ir.config_parameter'].get_param('data_path', '')
+
+    @property
+    def last_replication(self):
+        """ Si import_only_new devolver ulima replicacion en el 2000
+            Si no, devolver la fecha de la ultima replicacion
+        """
+        parameter_obj = self.env['ir.config_parameter']
+        last = parameter_obj.get_param('last_replication')
+        if not parameter_obj.get_param('import_only_new'):
+            last = '2000-01-01'
+        return last
+
+    @last_replication.setter
+    def last_replication(self, value):
+        parameter_obj = self.env['ir.config_parameter']
+
