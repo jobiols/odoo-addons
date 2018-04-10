@@ -83,26 +83,26 @@ class AutoloadMgr(models.Model):
                 # buscar el codigo en la tabla
                 item = item_obj.search([('code', '=', values['code'])])
                 if item:
-                    if not (item.name == values['name']
-                            and item.origin == values['origin']
-                            and item.section == values['section']
-                            and item.family == values['family']
-                            and item.margin == values['margin']):
-
+                    if not (item.name == values['name'] and
+                                    item.origin == values['origin'] and
+                                    item.section == values['section'] and
+                                    item.family == values['family'] and
+                                    item.margin == values['margin']):
                         item.write(values)
 
                         ## forzar recalculo de precios.
-                        #prod = prod_obj.search([
-                        #    ('item_code', '=', values['code'])])
-                        #if prod:
-                        #    prod.recalculate_list_price(item.margin)
+                        prod = prod_obj.search([
+                            ('item_code', '=', values['code'])])
+                        if prod:
+                            prod.recalculate_list_price(item.margin)
                 else:
                     item_obj.create(values)
+
                     # forzar recalculo de precios
-                    #prod = prod_obj.search([
-                    #    ('item_code', '=', values['code'])])
-                    #if prod:
-                    #    prod.recalculate_list_price(item.margin)
+                    prod = prod_obj.search([
+                        ('item_code', '=', values['code'])])
+                    if prod:
+                        prod.recalculate_list_price(item.margin)
 
     @api.model
     def load_productcode(self, data_path):
@@ -147,7 +147,7 @@ class AutoloadMgr(models.Model):
                     self.prod_processed += 1
 
     @api.model
-    def run(self, send_mail=True, item=ITEM):
+    def run(self, item=ITEM):
         """ Actualiza todos los productos.
         """
         # empezamos a contar el tiempo de proceso
@@ -156,11 +156,9 @@ class AutoloadMgr(models.Model):
 
         rec = self.create({'name': 'Inicia Proceso'})
         try:
-            if send_mail:
-                self.send_email('Replicacion Bulonfer #{}, '
-                                'Inicio'.format(rec.id),
-                                'Se inicio el proceso',
-                                self.email_from, self.email_to)
+            self.send_email('Replicacion Bulonfer #{}, Inicio'.format(rec.id),
+                            'Se inicio el proceso',
+                            self.email_from, self.email_to)
 
             # Cargar en memoria las tablas chicas
             self._section = self.load_section(data_path)
@@ -180,11 +178,9 @@ class AutoloadMgr(models.Model):
 
             self.create({'name': 'Termina Proceso'})
 
-            if send_mail:
-                self.send_email('Replicacion Bulonfer #{}, '
-                                'Fin'.format(rec.id),
-                                self.get_stats(elapsed_time),
-                                self.email_from, self.email_to)
+            self.send_email('Replicacion Bulonfer #{}, Fin'.format(rec.id),
+                            self.get_stats(elapsed_time),
+                            self.email_from, self.email_to)
 
             self.last_replication = str(datetime.now())
 
@@ -249,6 +245,10 @@ class AutoloadMgr(models.Model):
     @api.model
     def send_email(self, subject, body, email_from, email_to):
         email_to = email_to.split(',')
+        if len(email_to) == 0:
+            _logger.error('No hay destinatario de mail')
+            return
+
         smtp = self.env['ir.mail_server']
         try:
             message = smtp.build_email(email_from, email_to, subject, body)
@@ -283,12 +283,12 @@ class AutoloadMgr(models.Model):
             Si no, devolver la fecha de la ultima replicacion
         """
         parameter_obj = self.env['ir.config_parameter']
-        last = parameter_obj.get_param('last_replication')
         if not parameter_obj.get_param('import_only_new'):
-            last = '2000-01-01'
-        return last
+            return '2000-01-01'
+        else:
+            return parameter_obj.get_param('last_replication')
 
     @last_replication.setter
     def last_replication(self, value):
         parameter_obj = self.env['ir.config_parameter']
-
+        parameter_obj.set_param('last_replication', str(value))

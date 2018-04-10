@@ -186,7 +186,7 @@ class TestBusiness(TransactionCase):
         self.env['ir.config_parameter'].set_param(
             'import_only_new', True)
 
-        manager_obj.run(send_mail=False)
+        manager_obj.run()
         prod = prod_obj.search([('default_code', '=', '102.AF')])
         self.assertFalse(prod)
         prod = prod_obj.search([('default_code', '=', '106.32')])
@@ -206,7 +206,7 @@ class TestBusiness(TransactionCase):
         self.env['ir.config_parameter'].set_param(
             'import_only_new', True)
 
-        manager_obj.run(send_mail=False)
+        manager_obj.run()
         prod = prod_obj.search([('default_code', '=', '102.AF')])
         self.assertTrue(prod)
         prod = prod_obj.search([('default_code', '=', '106.32')])
@@ -228,7 +228,7 @@ class TestBusiness(TransactionCase):
         self.env['ir.config_parameter'].set_param(
             'import_only_new', False)
 
-        manager_obj.run(send_mail=False)
+        manager_obj.run()
         prod = prod_obj.search([('default_code', '=', '102.AF')])
         self.assertTrue(prod)
         prod = prod_obj.search([('default_code', '=', '106.32')])
@@ -240,7 +240,7 @@ class TestBusiness(TransactionCase):
         # verificar create
         manager_obj = self.env['product_autoload.manager']
         prod_obj = self.env['product.template']
-        manager_obj.run(send_mail=False)
+        manager_obj.run()
 
         barcode_obj = self.env['product.barcode']
         for bc in barcode_obj.search([('product_id.name', '=', '102.7811')]):
@@ -251,7 +251,7 @@ class TestBusiness(TransactionCase):
         """
         # verificar create
         manager_obj = self.env['product_autoload.manager']
-        manager_obj.run(send_mail=False)
+        manager_obj.run()
         manager_obj.update_categories()
 
     def test_020_cambia_margen(self):
@@ -260,13 +260,14 @@ class TestBusiness(TransactionCase):
         prod_obj = self.env['product.template']
 
         manager_obj = self.env['product_autoload.manager']
-        manager_obj.run(send_mail=False)
+        manager_obj.run()
         manager_obj.update_categories()
 
         prod = prod_obj.search([('default_code', '=', '106.24')])
         self.assertAlmostEqual(prod.standard_price * 1.5, prod.list_price)
 
-        manager_obj.run(send_mail=False, item='item_changed.csv')
+        #import wdb;wdb.set_trace()
+        manager_obj.run(item='item_changed.csv')
         manager_obj.update_categories()
 
         prod = prod_obj.search([('default_code', '=', '106.24')])
