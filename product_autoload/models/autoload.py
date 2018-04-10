@@ -198,7 +198,7 @@ class AutoloadMgr(models.Model):
         item_obj = self.env['product_autoload.item']
 
         prods = self.env['product.template'].search(
-            [('invalidate_category', '=', True)], limit=500)
+            [('invalidate_category', '=', True)], limit=2000)
         for prod in prods:
             # buscar el item que corresponde al producto
             item = item_obj.search([('code', '=', prod.item_code)])
