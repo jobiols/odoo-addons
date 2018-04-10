@@ -57,16 +57,12 @@ class AutoloadMgr(models.Model):
         return res
 
     @api.model
-    def load_item(self, data_path):
-        """ Borra la tabla item y la vuelve a crear con los datos nuevos
+    def load_item(self, data_path, item=ITEM):
+        """ Revisa la tabla y chequea si cambio algo
         """
-
-
-        # TODO ver que hacemos si cambia el porcentaje, en principio el conjunto de productos deberia
-        # recalcular su precio de lista.
+        prod_obj = self.env['product.template']
         item_obj = self.env['product_autoload.item']
-        item_obj.search([]).unlink()
-        with open(data_path + ITEM, 'r') as file_csv:
+        with open(data_path + item, 'r') as file_csv:
             reader = csv.reader(file_csv)
             for line in reader:
                 _logger.info('loading item {}'.format(line[IM_NAME]))
@@ -78,7 +74,29 @@ class AutoloadMgr(models.Model):
                     'family': self._family[line[IM_FAMILY_CODE]].strip(),
                     'margin': line[IM_MARGIN].strip()
                 }
-                item_obj.create(values)
+                # buscar el codigo en la tabla
+                item = item_obj.search([('code', '=', values['code'])])
+                if item:
+                    if not (item.name == values['name']
+                            and item.origin == values['origin']
+                            and item.section == values['section']
+                            and item.family == values['family']
+                            and item.margin == values['margin']):
+
+                        item.write(values)
+
+                        # forzar recalculo de precios.
+                        prod = prod_obj.search([
+                            ('item_code', '=', values['code'])])
+                        if prod:
+                            prod.recalculate_list_price(item.margin)
+                else:
+                    item_obj.create(values)
+                    # forzar recalculo de precios
+                    prod = prod_obj.search([
+                        ('item_code', '=', values['code'])])
+                    if prod:
+                        prod.recalculate_list_price(item.margin)
 
     @api.model
     def load_productcode(self, data_path):
@@ -128,7 +146,6 @@ class AutoloadMgr(models.Model):
                     obj.execute(self.env)
                     self.prod_processed += 1
 
-
     # @api.model
     # def migrate(self):
     #    """ elimina los codigos de barra que no se pusieron manualmente
@@ -151,7 +168,7 @@ class AutoloadMgr(models.Model):
     #    _logger.info('MIGRATING DATABASE END')
 
     @api.model
-    def run(self, send_mail=True):
+    def run(self, send_mail=True, item=ITEM):
         """ Actualiza todos los productos.
         """
         start_time = time()
@@ -175,7 +192,7 @@ class AutoloadMgr(models.Model):
             self._family = self.load_family(data_path)
 
             # Cargar en bd las demas tablas
-            self.load_item(data_path)
+            self.load_item(data_path, item)
             self.load_productcode(data_path)
 
             # Aca carga solo los productos que tienen fecha de modificacion
@@ -226,7 +243,7 @@ class AutoloadMgr(models.Model):
                 raise Exception(text)
 
             # calcular el precio de lista
-            prod.list_price = prod.standard_price * (1 + item.margin)
+            prod.recalculate_list_price(item.margin)
 
             # buscar seccion o crearla en categorias
             sec_id = categ_obj.search([('name', '=', item.section)])
@@ -252,7 +269,7 @@ class AutoloadMgr(models.Model):
             _logger.info('Setting category {}'.format(categ_id.complete_name))
             prod.write(
                 {
-                    'categ_id': categ_id,
+                    'categ_id': categ_id.id,
                     'invalidate_category': False
                 }
             )

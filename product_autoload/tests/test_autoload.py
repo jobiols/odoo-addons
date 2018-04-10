@@ -252,5 +252,22 @@ class TestBusiness(TransactionCase):
         # verificar create
         manager_obj = self.env['product_autoload.manager']
         manager_obj.run(send_mail=False)
-
         manager_obj.update_categories()
+
+    def test_020_cambia_margen(self):
+        """ Testear cambio de margen de ganancia-----------------------------20
+        """
+        prod_obj = self.env['product.template']
+
+        manager_obj = self.env['product_autoload.manager']
+        manager_obj.run(send_mail=False)
+        manager_obj.update_categories()
+
+        prod = prod_obj.search([('default_code', '=', '106.24')])
+        self.assertAlmostEqual(prod.standard_price * 1.5, prod.list_price)
+
+        manager_obj.run(send_mail=False, item='item_changed.csv')
+        manager_obj.update_categories()
+
+        prod = prod_obj.search([('default_code', '=', '106.24')])
+        self.assertAlmostEqual(prod.standard_price * 1.6, prod.list_price)

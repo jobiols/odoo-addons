@@ -10,21 +10,13 @@ from openerp import api, models, fields
 class ProductProduct(models.Model):
     _inherit = "product.template"
 
+    item_code = fields.Char(
+        help="Code from bulonfer, not shown",
+        select=1
+    )
+
     upv = fields.Integer(
         help='Agrupacion mayorista'
-    )
-
-    item_id = fields.Many2one(
-        'product_autoload.item'
-    )
-
-    item_code = fields.Char(
-        help="Code from bulonfer, not shown"
-    )
-
-    default_item_code = fields.Char(
-        help="Code from bulonfer, extracted from default_code",
-        calculated='_get_default_item_code'
     )
 
     wholesaler_bulk = fields.Integer(
@@ -39,7 +31,7 @@ class ProductProduct(models.Model):
         help="Category needs rebuild"
     )
 
-    @api.one
-    @api.depends('default_code')
-    def _get_default_item_code(self):
-        return self.default_code.split('.')[0]
+    @api.multi
+    def recalculate_list_price(self, margin):
+        for prod in self:
+            prod.list_price = prod.standard_price * (1 + margin)
