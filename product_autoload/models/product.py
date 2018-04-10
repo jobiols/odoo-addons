@@ -35,7 +35,3 @@ class ProductProduct(models.Model):
     def recalculate_list_price(self, margin):
         for prod in self:
             prod.list_price = prod.standard_price * (1 + margin)
-            _logger.info('{} {} <<< {}'.format(
-                prod.default_code,
-                prod.list_price,
-                prod.standard_price))
