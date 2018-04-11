@@ -69,7 +69,7 @@ class TestBusiness(TransactionCase):
             '102.7811.jpg',
             '60',
             '15.5',
-            '001',
+            '133',
             '2018-25-01 13:10:55']
 
         prod = ProductMapper(line, self._data_path, self._vendor,
@@ -85,7 +85,7 @@ class TestBusiness(TransactionCase):
         self.assertEqual(prod.retail_bulk, 5)
         self.assertEqual(prod.warranty, 60)
         self.assertEqual(prod.iva, 15.5)
-        self.assertEqual(prod.item_code, '001')
+        self.assertEqual(prod.item_code, '133')
         self.assertEqual(prod.write_date, '2018-25-01 13:10:55')
 
         val = {
@@ -95,7 +95,7 @@ class TestBusiness(TransactionCase):
             'upv': 100,
             'name': 'nombre-producto',
             'weight': 200.5,
-            'standard_price': 500.22,
+            'standard_price': 5.0022,
             'volume': 125.85,
             'default_code': '123456',
             'write_date': '2018-25-01 13:10:55',
@@ -264,11 +264,14 @@ class TestBusiness(TransactionCase):
         manager_obj.update_categories()
 
         prod = prod_obj.search([('default_code', '=', '106.24')])
-        self.assertAlmostEqual(prod.standard_price * 1.5, prod.list_price)
+        self.assertAlmostEqual(prod.standard_price, 150.62)
+        self.assertAlmostEqual(prod.standard_price * 1.5, prod.list_price,
+                               places=2)
 
-        #import wdb;wdb.set_trace()
+        # import wdb;wdb.set_trace()
         manager_obj.run(item='item_changed.csv')
         manager_obj.update_categories()
 
         prod = prod_obj.search([('default_code', '=', '106.24')])
-        self.assertAlmostEqual(prod.standard_price * 1.6, prod.list_price)
+        self.assertAlmostEqual(prod.standard_price * 1.6, prod.list_price,
+                               places=2)

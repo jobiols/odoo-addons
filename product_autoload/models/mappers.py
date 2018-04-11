@@ -96,7 +96,7 @@ class ProductMapper(CommonMapper):
             ret['description_sale'] = self.description_sale
 
         if self.standard_price:
-            ret['standard_price'] = self.standard_price
+            ret['standard_price'] = self.standard_price / self.upv
 
         if self.upv:
             ret['upv'] = self.upv
