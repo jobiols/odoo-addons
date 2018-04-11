@@ -95,6 +95,8 @@ class AutoloadMgr(models.Model):
                             ('item_code', '=', values['code'])])
                         if prod:
                             prod.recalculate_list_price(item.margin)
+                            _logger.info('recalculate for modify {}'
+                                         ''.format(item.code))
                 else:
                     item_obj.create(values)
 
@@ -103,6 +105,8 @@ class AutoloadMgr(models.Model):
                         ('item_code', '=', values['code'])])
                     if prod:
                         prod.recalculate_list_price(item.margin)
+                        _logger.info('recalculate for create {}'
+                                     ''.format(item.code))
 
     @api.model
     def load_productcode(self, data_path):
