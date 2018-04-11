@@ -87,7 +87,7 @@ class AutoloadMgr(models.Model):
                                     item.origin == values['origin'] and
                                     item.section == values['section'] and
                                     item.family == values['family'] and
-                                    item.margin == values['margin']):
+                                    item.margin == float(values['margin'])):
                         item.write(values)
 
                         ## forzar recalculo de precios.
