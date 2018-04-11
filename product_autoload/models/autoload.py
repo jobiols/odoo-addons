@@ -83,7 +83,7 @@ class AutoloadMgr(models.Model):
                 # buscar el codigo en la tabla
                 item = item_obj.search([('code', '=', values['code'])])
                 if item:
-                    if not (item.name == values['name'] and
+                    if not (item.margin == values['margin'] and
                                     item.origin == values['origin'] and
                                     item.section == values['section'] and
                                     item.family == values['family'] and
@@ -95,12 +95,12 @@ class AutoloadMgr(models.Model):
                             ('item_code', '=', values['code'])])
                         if prod:
                             prod.recalculate_list_price(item.margin)
-                            _logger.info('recalculate for modify '
-                                         '{} - {}\n'
-                                         '{} - {}\n'
-                                         '{} - {}\n'
-                                         '{} - {}\n'
-                                         '{} - {}\n'.format(
+                            _logger.info('recalculate for modify \n'
+                                         '[{}] - [{}]\n'
+                                         '[{}] - [{}]\n'
+                                         '[{}] - [{}]\n'
+                                         '[{}] - [{}]\n'
+                                         '[{}] - [{}]\n'.format(
                                 item.name,
                                 values['name'],
 
