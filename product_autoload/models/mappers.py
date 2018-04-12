@@ -141,8 +141,8 @@ class ProductMapper(CommonMapper):
         prod = product_obj.search([('default_code', '=', self.default_code)])
         if prod:
             prod.write(self.values())
-            _logger.info('#{} Updating product {}'.format(
-                self.prod_processed, self.self.default_code))
+            _logger.info('Updating product {}'.format(
+                self.self.default_code))
         else:
             prod = product_obj.create(self.values(create=True))
             _logger.info('Creating product {}'.format(self.default_code))
