@@ -199,7 +199,7 @@ class AutoloadMgr(models.Model):
         item_obj = self.env['product_autoload.item']
 
         prods = self.env['product.template'].search(
-            [('invalidate_category', '=', True)], limit=1000)
+            [('invalidate_category', '=', True)], limit=500)
         for prod in prods:
             # buscar el item que corresponde al producto
             item = item_obj.search([('code', '=', prod.item_code)])
@@ -219,6 +219,8 @@ class AutoloadMgr(models.Model):
                 sec_id = categ_obj.create({'name': item.section})
 
             # buscar seccion / familia o crearla
+            _logger.info('search name fam {} / parent sec {}'.format(
+                item.family, item.section))
             sec_fam_id = categ_obj.search([('name', '=', item.family),
                                            ('parent_id.name', '=',
                                             item.section)])
