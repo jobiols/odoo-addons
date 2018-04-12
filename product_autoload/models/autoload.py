@@ -198,49 +198,58 @@ class AutoloadMgr(models.Model):
         item_obj = self.env['product_autoload.item']
 
         prods = self.env['product.template'].search(
-            [('invalidate_category', '=', True)], limit=1000)
+            [('invalidate_category', '=', True)], limit=3)
         for prod in prods:
-            # buscar el item que corresponde al producto
-            item = item_obj.search([('code', '=', prod.item_code)])
-            if not item:
-                text = 'product {} has item = {} but there is no such item ' \
-                       'in item.csv'.format(prod.default_code, prod.item_code)
-                self.send_email('Replicacion Bulonfer, ERROR', text,
+            try:
+                # buscar el item que corresponde al producto
+                item = item_obj.search([('code', '=', prod.item_code)])
+                if not item:
+                    text = 'product {} has item = {} ' \
+                           'but there is no such item ' \
+                           'in item.csv'.format(prod.default_code,
+                                                prod.item_code)
+                    self.send_email('Replicacion Bulonfer, ERROR', text,
+                                    self.email_from, self.email_to)
+                    raise Exception(text)
+
+                # calcular el precio de lista
+                prod.recalculate_list_price(item.margin)
+
+                # buscar seccion o crearla en categorias
+                sec_id = categ_obj.search([('name', '=', item.section)])
+                if not sec_id:
+                    sec_id = categ_obj.create({'name': item.section})
+
+                # buscar seccion / familia o crearla
+                sec_fam_id = categ_obj.search([('name', '=', item.family),
+                                               ('parent_id.name', '=',
+                                                item.section)])
+                if not sec_fam_id:
+                    sec_fam_id = categ_obj.create({'name': item.family,
+                                                   'parent_id': sec_id.id})
+
+                # buscar seccion / familia / item o crearla
+                categ_id = categ_obj.search([('name', '=', item.name),
+                                             ('parent_id.name', '=',
+                                              item.family),
+                                             ('parent_id.parent_id.name', '=',
+                                              item.section)])
+                if not categ_id:
+                    categ_id = categ_obj.create({'name': item.name,
+                                                 'parent_id': sec_fam_id.id})
+                _logger.info('Setting {} --> {}'.format(
+                    prod.default_code, categ_id.complete_name))
+                prod.write(
+                    {
+                        'categ_id': categ_id.id,
+                        'invalidate_category': False
+                    }
+                )
+            except Exception as ex:
+                self.send_email('Replicacion Bulonfer, ERROR', ex.message,
                                 self.email_from, self.email_to)
-                raise Exception(text)
-
-            # calcular el precio de lista
-            prod.recalculate_list_price(item.margin)
-
-            # buscar seccion o crearla en categorias
-            sec_id = categ_obj.search([('name', '=', item.section)])
-            if not sec_id:
-                sec_id = categ_obj.create({'name': item.section})
-
-            # buscar seccion / familia o crearla
-            sec_fam_id = categ_obj.search([('name', '=', item.family),
-                                           ('parent_id.name', '=',
-                                            item.section)])
-            if not sec_fam_id:
-                sec_fam_id = categ_obj.create({'name': item.family,
-                                               'parent_id': sec_id.id})
-
-            # buscar seccion / familia / item o crearla
-            categ_id = categ_obj.search([('name', '=', item.name),
-                                         ('parent_id.name', '=', item.family),
-                                         ('parent_id.parent_id.name', '=',
-                                          item.section)])
-            if not categ_id:
-                categ_id = categ_obj.create({'name': item.name,
-                                             'parent_id': sec_fam_id.id})
-            _logger.info('Setting {} --> {}'.format(
-                prod.default_code, categ_id.complete_name))
-            prod.write(
-                {
-                    'categ_id': categ_id.id,
-                    'invalidate_category': False
-                }
-            )
+                _logger.error('Replicacion Bulonfer {}'.format(ex.message))
+                raise
 
     @api.model
     def send_email(self, subject, body, email_from, email_to):
@@ -267,11 +276,13 @@ class AutoloadMgr(models.Model):
 
     @property
     def email_from(self):
-        return self.env['ir.config_parameter'].get_param('email_from', '')
+        config = self.env['ir.config_parameter']
+        return config.get_param('email_from', '')
 
     @property
     def email_to(self):
-        return self.env['ir.config_parameter'].get_param('email_to', '')
+        config = self.env['ir.config_parameter']
+        return config.get_param('email_notification', '')
 
     @property
     def data_path(self):
@@ -279,7 +290,7 @@ class AutoloadMgr(models.Model):
 
     @property
     def last_replication(self):
-        """ Si import_only_new devolver ulima replicacion en el 2000
+        """ Si import_only_new devolver ulima replicacion en el 2000-01-01
             Si no, devolver la fecha de la ultima replicacion
         """
         parameter_obj = self.env['ir.config_parameter']
