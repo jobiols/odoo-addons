@@ -166,17 +166,21 @@ class AutoloadMgr(models.Model):
 
         rec = self.create({'name': 'Inicia Proceso'})
         try:
+            _logger('VOY A MANDAR MAIL')
             self.send_email('Replicacion Bulonfer #{}, Inicio'.format(rec.id),
                             'Se inicio el proceso',
                             self.email_from, self.email_to)
+            _logger('YA MANDE MAIL')
 
             # por unica vez:
             # poner todas las categorias en 1
+            _logger.info('PARCHE POR UNICA VEZ')
             prods = self.env['product.template'].search([])
             prods.write({'categ_id': 1})
             # eliminar todas las categorias
             categs = self.env['product.category'].search([('id', '<>', 1)])
             categs.unlink()
+            _logger.info('FIN DEL PARCHE')
 
             # Cargar en memoria las tablas chicas
             self._section = self.load_section(data_path)
