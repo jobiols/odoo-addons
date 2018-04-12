@@ -166,11 +166,11 @@ class AutoloadMgr(models.Model):
 
         rec = self.create({'name': 'Inicia Proceso'})
         try:
-            _logger('VOY A MANDAR MAIL')
+            _logger.info('VOY A MANDAR MAIL')
             self.send_email('Replicacion Bulonfer #{}, Inicio'.format(rec.id),
                             'Se inicio el proceso',
                             self.email_from, self.email_to)
-            _logger('YA MANDE MAIL')
+            _logger.info('YA MANDE MAIL')
 
             # por unica vez:
             # poner todas las categorias en 1
