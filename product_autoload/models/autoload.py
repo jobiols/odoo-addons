@@ -35,6 +35,15 @@ class AutoloadMgr(models.Model):
     _description = "Manage product data import"
 
     name = fields.Char()
+    start_time = fields.Datetime(
+
+    )
+    elapsed_time = fields.Datetime(
+
+    )
+    statistics = fields.Html(
+
+    )
 
     @staticmethod
     def load_section(data_path):
@@ -161,9 +170,18 @@ class AutoloadMgr(models.Model):
                             'Se inicio el proceso',
                             self.email_from, self.email_to)
 
+            # por unica vez:
+            # poner todas las categorias en 1
+            prods = self.env['product.template'].search([])
+            prods.write({'categ_id': 1})
+            # eliminar todas las categorias
+            categs = self.env['product.category'].search([('id', '<>', 1)])
+            categs.unlink()
+
             # Cargar en memoria las tablas chicas
             self._section = self.load_section(data_path)
             self._family = self.load_family(data_path)
+            self.prod_processed = 0
 
             # Cargar en bd las demas tablas
             self.load_item(data_path, item)
@@ -177,8 +195,7 @@ class AutoloadMgr(models.Model):
             # terminamos de contar el tiempo de proceso
             elapsed_time = time() - start_time
 
-            self.create({'name': 'Termina Proceso'})
-
+            rec.stats = self.get_stats(elapsed_time)
             self.send_email('Replicacion Bulonfer #{}, Fin'.format(rec.id),
                             self.get_stats(elapsed_time),
                             self.email_from, self.email_to)
@@ -274,7 +291,8 @@ class AutoloadMgr(models.Model):
 
     @property
     def email_to(self):
-        return self.env['ir.config_parameter'].get_param('email_to', '')
+        return self.env['ir.config_parameter'].get_param('email_notification',
+                                                         '')
 
     @property
     def data_path(self):
