@@ -83,8 +83,7 @@ class AutoloadMgr(models.Model):
                 # buscar el codigo en la tabla
                 item = item_obj.search([('code', '=', values['code'])])
                 if item:
-                    if not (item.margin == values['margin'] and
-                                    item.origin == values['origin'] and
+                    if not (item.origin == values['origin'] and
                                     item.section == values['section'] and
                                     item.family == values['family'] and
                                     item.margin == float(values['margin'])):
@@ -99,12 +98,7 @@ class AutoloadMgr(models.Model):
                                          '[{}] - [{}] {}\n'
                                          '[{}] - [{}] {}\n'
                                          '[{}] - [{}] {}\n'
-                                         '[{}] - [{}] {}\n'
                                          '[{}] - [{}] {}\n'.format(
-                                item.name,
-                                values['name'],
-                                item.margin == values['margin'],
-
                                 item.origin,
                                 values['origin'],
                                 item.origin == values['origin'],
