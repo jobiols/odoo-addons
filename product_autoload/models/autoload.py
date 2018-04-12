@@ -94,27 +94,6 @@ class AutoloadMgr(models.Model):
                             ('item_code', '=', values['code'])])
                         if prod:
                             prod.recalculate_list_price(item.margin)
-                            _logger.info('recalculate for modify \n'
-                                         '[{}] - [{}] {}\n'
-                                         '[{}] - [{}] {}\n'
-                                         '[{}] - [{}] {}\n'
-                                         '[{}] - [{}] {}\n'.format(
-                                item.origin,
-                                values['origin'],
-                                item.origin == values['origin'],
-
-                                item.section,
-                                values['section'],
-                                item.section == values['section'],
-
-                                item.family,
-                                values['family'],
-                                item.family == values['family'],
-
-                                item.margin,
-                                values['margin'],
-                                item.margin == float(values['margin'])
-                                ))
                 else:
                     item_obj.create(values)
 
