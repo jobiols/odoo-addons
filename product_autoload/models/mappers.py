@@ -58,15 +58,15 @@ class ProductMapper(CommonMapper):
         self._default_code = False
         self._name = False
         self._description_sale = False
-        self._standard_price = False
-        self._upv = False
-        self._weight = False
-        self._volume = False
-        self._wholesaler_bulk = False
-        self._retail_bulk = False
+        self._standard_price = 0
+        self._upv = 0
+        self._weight = 0
+        self._volume = 0
+        self._wholesaler_bulk = 0
+        self._retail_bulk = 0
         self._image_name = False
-        self._warranty = False
-        self._iva = False
+        self._warranty = 0
+        self._iva = 0
         self._item_code = False
         self._write_date = False
         self._invalidate_category = True
@@ -89,44 +89,20 @@ class ProductMapper(CommonMapper):
     def values(self, create=False):
         ret = {'default_code': self.default_code}
 
-        if self.name:
-            ret['name'] = self.name
-
-        if self._description_sale:
-            ret['description_sale'] = self.description_sale
-
-        if self.standard_price:
-            ret['standard_price'] = self.standard_price / self.upv
-
-        if self.upv:
-            ret['upv'] = self.upv
-
-        if self.weight:
-            ret['weight'] = self.weight
-
-        if self.volume:
-            ret['volume'] = self.volume
-
-        if self.wholesaler_bulk:
-            ret['wholesaler_bulk'] = self.wholesaler_bulk
-
-        if self.retail_bulk:
-            ret['retail_bulk'] = self.retail_bulk
-
-        if self.warranty:
-            ret['warranty'] = self.warranty
-
-        if self.write_date:
-            ret['write_date'] = self.write_date
-
-        if self.item_code:
-            ret['item_code'] = self.item_code
-
+        ret['name'] = self.name
+        ret['description_sale'] = self.description_sale
+        ret['standard_price'] = self.standard_price / self.upv
+        ret['upv'] = self.upv
+        ret['weight'] = self.weight
+        ret['volume'] = self.volume
+        ret['wholesaler_bulk'] = self.wholesaler_bulk
+        ret['retail_bulk'] = self.retail_bulk
+        ret['warranty'] = self.warranty
+        ret['write_date'] = self.write_date
+        ret['item_code'] = self.item_code
+        ret['invalidate_category'] = self._invalidate_category
         if self._image:
             ret['image'] = self._image
-
-        if self._invalidate_category:
-            ret['invalidate_category'] = self._invalidate_category
 
         supplierinfo = {
             'name': self._vendor.id,
