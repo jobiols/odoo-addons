@@ -166,11 +166,9 @@ class AutoloadMgr(models.Model):
 
         rec = self.create({'name': 'Inicia Proceso'})
         try:
-            _logger.info('VOY A MANDAR MAIL')
             self.send_email('Replicacion Bulonfer #{}, Inicio'.format(rec.id),
                             'Se inicio el proceso',
                             self.email_from, self.email_to)
-            _logger.info('YA MANDE MAIL')
 
             # por unica vez:
             # poner todas las categorias en 1
@@ -235,7 +233,8 @@ class AutoloadMgr(models.Model):
             prod.recalculate_list_price(item.margin)
 
             # buscar seccion o crearla en categorias
-            sec_id = categ_obj.search([('name', '=', item.section)])
+            sec_id = categ_obj.search([('name', '=', item.section),
+                                       ('parent_id.name', '=', False)])
             if not sec_id:
                 sec_id = categ_obj.create({'name': item.section})
 
