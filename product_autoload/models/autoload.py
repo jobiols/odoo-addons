@@ -229,8 +229,6 @@ class AutoloadMgr(models.Model):
                 sec_id = categ_obj.create({'name': item.section})
 
             # buscar seccion / familia o crearla
-            _logger.info('search name fam {} / parent sec {}'.format(
-                item.family, item.section))
             sec_fam_id = categ_obj.search([('name', '=', item.family),
                                            ('parent_id.name', '=',
                                             item.section)])
