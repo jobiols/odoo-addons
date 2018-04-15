@@ -204,6 +204,7 @@ class AutoloadMgr(models.Model):
     @api.model
     def update_categories(self):
         # linkear las categorias
+        _logger.info('update categories')
         categ_obj = self.env['product.category']
         item_obj = self.env['product_autoload.item']
 
