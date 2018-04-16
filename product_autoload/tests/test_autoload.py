@@ -253,6 +253,12 @@ class TestBusiness(TransactionCase):
         manager_obj = self.env['product_autoload.manager']
         manager_obj.run()
         manager_obj.update_categories()
+        # verificar que se crean bien las categorias
+
+        categ_obj = self.env['product.category']
+        categs = categ_obj.search([('name', '=', 'Ferretería'),
+                                   ('parent_id', '=', False)])
+        self.assertEqual(len(categs), 1)
 
     def test_020_cambia_margen(self):
         """ Testear cambio de margen de ganancia-----------------------------20

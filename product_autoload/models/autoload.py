@@ -225,7 +225,7 @@ class AutoloadMgr(models.Model):
 
             # buscar seccion o crearla en categorias
             sec_id = categ_obj.search([('name', '=', item.section),
-                                       ('parent_id.name', '=', False)])
+                                       ('parent_id', '=', False)])
             if not sec_id:
                 sec_id = categ_obj.create({'name': item.section})
 
