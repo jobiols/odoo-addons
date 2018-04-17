@@ -47,7 +47,7 @@ class AutoloadMgr(models.Model):
 
     @api.model
     def check_garbage(self):
-        print '/////////////////////////////////////////////////////////'
+        _logger.info('/////////////////////////////////////////////////////////')
 
         from bisect import bisect_left
 
@@ -64,13 +64,11 @@ class AutoloadMgr(models.Model):
             default_code = prod.default_code
             i = bisect_left(data, default_code)
             if i < len1 and i >= 0:
-                print i, '-----------', default_code
+                _logger.info('{} ------- {}'.format(i,default_code))
                 if data[i] != default_code:
                     prod.warranty = 99
-            else:
-                print '============================= len1, i', len1, i
 
-        print '/////////////////////////////////////////////////////////'
+        _logger.info('/////////////////////////////////////////////////////////')
 
     @staticmethod
     def load_section(data_path):
