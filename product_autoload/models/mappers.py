@@ -137,6 +137,17 @@ class ProductMapper(CommonMapper):
         """ Este es el corazon del proceso de replicacion, si encuentra el
             producto en el modelo lo actualiza si no lo encuentra lo crea.
         """
+
+        def choose_tax(tax_sale):
+            for tax in tax_sale:
+                if tax.amount != 0:
+                    # si no es cero es ese
+                    return tax.id
+                else:
+                    # si es iva cero busco que sea exento
+                    if tax.tax_group_id.afip_code == 2:
+                        return tax.id
+
         product_obj = env['product.template']
         prod = product_obj.search([('default_code', '=', self.default_code)])
         if prod:
@@ -157,8 +168,10 @@ class ProductMapper(CommonMapper):
                             ' not found in Accounting'.format(
                 self.default_code, self.iva))
 
-        # si hay mas de uno me quedo con el primero
-        tax = tax_sale[0].id
+        # analizando el iva
+        tax = choose_tax(tax_sale)
+
+        # esto reemplaza todos los registros por el tax que es un id
         prod.taxes_id = [(6, 0, [tax])]
 
         # actualiza iva compras
@@ -170,8 +183,10 @@ class ProductMapper(CommonMapper):
                             ' not found in Accounting'.format(
                 self.default_code, self.iva))
 
-        # si hay mas de uno me quedo con el primero
-        tax = tax_purchase[0].id
+        # analizando el iva
+        tax = choose_tax(tax_purchase)
+
+        # esto reemplaza todos los registros por el tax que es un id
         prod.supplier_taxes_id = [(6, 0, [tax])]
 
         # linkear los barcodes
