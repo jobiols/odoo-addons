@@ -45,6 +45,33 @@ class AutoloadMgr(models.Model):
 
     )
 
+    @api.model
+    def check_garbage(self):
+        print '/////////////////////////////////////////////////////////'
+
+        from bisect import bisect_left
+
+        data = []
+        with open('/opt/odoo/data/product_data/data.csv', 'r') as file_csv:
+            reader = csv.reader(file_csv)
+            for line in reader:
+                data.append(line[0])
+        data.sort()
+        len1 = len(data)
+        # esta en la bd y no esta en el archivo
+        prod_obj = self.env['product.template']
+        for prod in prod_obj.search([]):
+            default_code = prod.default_code
+            i = bisect_left(data, default_code)
+            if i < len1 and i >= 0:
+                print i, '-----------', default_code
+                if data[i] != default_code:
+                    prod.warranty = 99
+            else:
+                print '============================= len1, i', len1, i
+
+        print '/////////////////////////////////////////////////////////'
+
     @staticmethod
     def load_section(data_path):
         """ Carga la estructura de datos en memoria
