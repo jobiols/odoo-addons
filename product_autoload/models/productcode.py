@@ -12,7 +12,6 @@ from openerp import api, models, fields
 
 class ProductCode(models.Model):
     """ Contiene los codigos de barra de los productos
-        el codigo de barras debe ser unico
     """
     _name = 'product_autoload.productcode'
 
@@ -31,5 +30,5 @@ class ProductCode(models.Model):
 
     _sql_constraints = [(
         'uniq_barcode', 'unique(barcode)',
-        "El codigo de barras no puede repetirse !"
+        "The barcode must be unique !"
     )]

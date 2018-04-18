@@ -1,0 +1,85 @@
+# Translation of Odoo Server.
+# This file contains the translation of the following modules:
+#	* product_multi_barcode
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: Odoo Server 9.0c-20180206\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2018-04-18 23:26+0000\n"
+"PO-Revision-Date: 2018-04-18 23:26+0000\n"
+"Last-Translator: <>\n"
+"Language-Team: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: \n"
+"Plural-Forms: \n"
+
+#. module: product_multi_barcode
+#: model:ir.model.fields,field_description:product_multi_barcode.field_product_barcode_name
+msgid "Barcode"
+msgstr "Código de Barras"
+
+#. module: product_multi_barcode
+#: model:ir.model.fields,field_description:product_multi_barcode.field_product_product_barcode_ids
+#: model:ir.model.fields,field_description:product_multi_barcode.field_product_template_barcode_ids
+#: model:ir.ui.view,arch_db:product_multi_barcode.product_normal_form_view_multi_barcode
+msgid "Barcodes"
+msgstr "Código de barras"
+
+#. module: product_multi_barcode
+#: model:ir.model.fields,field_description:product_multi_barcode.field_product_barcode_create_uid
+msgid "Created by"
+msgstr "Creado por"
+
+#. module: product_multi_barcode
+#: model:ir.model.fields,field_description:product_multi_barcode.field_product_barcode_create_date
+msgid "Created on"
+msgstr "Creado el"
+
+#. module: product_multi_barcode
+#: model:ir.model.fields,field_description:product_multi_barcode.field_product_barcode_display_name
+msgid "Display Name"
+msgstr "Mostrar Nombre"
+
+#. module: product_multi_barcode
+#: model:ir.model.fields,field_description:product_multi_barcode.field_product_barcode_id
+msgid "ID"
+msgstr "ID"
+
+#. module: product_multi_barcode
+#: model:ir.model.fields,field_description:product_multi_barcode.field_product_barcode___last_update
+msgid "Last Modified on"
+msgstr "Última modificación el"
+
+#. module: product_multi_barcode
+#: model:ir.model.fields,field_description:product_multi_barcode.field_product_barcode_write_uid
+msgid "Last Updated by"
+msgstr "Última actualización por"
+
+#. module: product_multi_barcode
+#: model:ir.model.fields,field_description:product_multi_barcode.field_product_barcode_write_date
+msgid "Last Updated on"
+msgstr "Última actualizacón el"
+
+#. module: product_multi_barcode
+#: model:ir.model,name:product_multi_barcode.model_product_barcode
+msgid "List of Barcodes for a product."
+msgstr "Lista de codigos de barra por el producto."
+
+#. module: product_multi_barcode
+#: model:ir.model,name:product_multi_barcode.model_product_product
+#: model:ir.model.fields,field_description:product_multi_barcode.field_product_barcode_product_id
+msgid "Product"
+msgstr "Producto"
+
+#. module: product_multi_barcode
+#: model:ir.model,name:product_multi_barcode.model_product_template
+msgid "Product Template"
+msgstr "Plantilla de Producto"
+
+#. module: product_multi_barcode
+#: sql_constraint:product.barcode:0
+msgid "The barcode must be unique !"
+msgstr "El codigo de barras debe ser único !"
+
