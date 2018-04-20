@@ -3,7 +3,7 @@
 
 {
     'name': 'Stock picking automatic',
-    'version': '9.0.0.0',
+    'version': '9.0.0.1',
     'category': 'Warehouse Management',
     'author': "jeo Software",
     'website': 'http://www.jeosoft.com.ar',
@@ -18,5 +18,6 @@
     ],
     'installable': True,
     'auto_install': False,
+    'application': False,
     'license': "AGPL-3",
 }

@@ -2,11 +2,12 @@
 <openerp>
     <data>
 
-        <!-- esto corrige un bug de odoo que aparece solo con chrome -->
+        <!-- esto corrige un bug de odoo que aparece solo con chrome
 
         <template id="mail_assets_backend" name="mail assets" inherit_id="mail.assets_backend">
             <xpath expr="//script[@src='/mail/static/src/js/announcement.js']" position="replace"/>
         </template>
+        -->
 
         <!-- Agregamos el grupo cajero para que haga la transferencia automatica -->
 
