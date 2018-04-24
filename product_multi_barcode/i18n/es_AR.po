@@ -65,7 +65,7 @@ msgstr "Última actualizacón el"
 #. module: product_multi_barcode
 #: model:ir.model,name:product_multi_barcode.model_product_barcode
 msgid "List of Barcodes for a product."
-msgstr "Lista de codigos de barra por el producto."
+msgstr "Lista de codigos de barra del producto."
 
 #. module: product_multi_barcode
 #: model:ir.model,name:product_multi_barcode.model_product_product
