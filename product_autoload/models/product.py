@@ -28,7 +28,8 @@ class ProductProduct(models.Model):
     )
 
     invalidate_category = fields.Boolean(
-        help="Category needs rebuild"
+        help="Category needs rebuild",
+        default=False
     )
 
     @api.multi
