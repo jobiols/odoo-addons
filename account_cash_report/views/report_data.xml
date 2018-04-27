@@ -55,7 +55,7 @@
         <record id="account_financial_report_tarjetamaster0"
                 model="account.financial.report">
             <field name="create_uid" ref="base.user_root"/>
-            <field name="name">Tarjeta MASTER</field>
+            <field name="name">Tarjeta MASTERCARD</field>
             <field name="display_name">Tarjeta MASTER</field>
             <field eval="1" name="sign"/>
             <field name="parent_id" ref="account_financial_report_tarjetas0"/>
@@ -139,8 +139,8 @@
         <record id="account_financial_report_tarjetamasterdebito0"
                 model="account.financial.report">
             <field name="create_uid" ref="base.user_root"/>
-            <field name="name">Tarjeta MASTER DEBITO</field>
-            <field name="display_name">Tarjeta MASTER DEBITO</field>
+            <field name="name">Tarjeta MASTERCARD DEBITO</field>
+            <field name="display_name">Tarjeta MASTERCARD DEBITO</field>
             <field eval="1" name="sign"/>
             <field name="parent_id" ref="account_financial_report_tarjetas0"/>
             <field eval="[(6,0,[])]" name="account_type_ids"/>
