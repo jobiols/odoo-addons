@@ -87,8 +87,8 @@ class ProductMapper(CommonMapper):
         self.write_date = line[MAP_WRITE_DATE]
 
     def values(self, create=False):
-        ret = {'default_code': self.default_code}
-
+        ret = dict
+        ret['default_code'] = self.default_code
         ret['name'] = self.name
         ret['description_sale'] = self.description_sale
         ret['standard_price'] = self.standard_price / self.upv
@@ -118,6 +118,7 @@ class ProductMapper(CommonMapper):
                  ('product_code', '=', self.default_code)])
             if rec:
                 rec.price = self.standard_price
+                ret.min_qty = self.wholesaler_bulk
             else:
                 ret['seller_ids'] = [(0, 0, supplierinfo)]
 
@@ -199,7 +200,8 @@ class ProductMapper(CommonMapper):
             bc = barcode_obj.search([('name', '=', rec.barcode)])
             if not bc:
                 barcode_obj.create({
-                    'product_id': prod.id, 'name': rec.barcode
+                    'product_id': prod.id,
+                    'name': rec.barcode
                 })
 
     @staticmethod
