@@ -94,9 +94,9 @@ class AutoloadMgr(models.Model):
                 res[line[0]] = line[1]
         return res
 
-    @api.model
+    @api.multi
     def load_item(self, data_path, item=ITEM):
-        """ Carga los datos en una modelo, chequeando por modificaciones
+        """ Carga los datos en un modelo, chequeando por modificaciones
             Si cambio el precio recalcula todos preecios de los productos
         """
         prod_obj = self.env['product.template']
@@ -139,7 +139,7 @@ class AutoloadMgr(models.Model):
                         _logger.info('recalculate for create {}'
                                      ''.format(item.code))
 
-    @api.model
+    @api.multi
     def load_productcode(self, data_path):
         """ Borra la tabla productcode y la vuelve a crear con los datos nuevos
         """
@@ -160,12 +160,12 @@ class AutoloadMgr(models.Model):
                 }
                 item_obj.create(values)
 
-    @api.model
+    @api.multi
     def load_product(self, data_path):
         """ Carga todos los productos teniendo en cuenta la fecha
         """
         bulonfer = self.env['res.partner'].search(
-            [('name', 'like', 'Bulonfer')])
+            [('ref', '=', 'BULONFER')])
         if not bulonfer:
             raise Exception('Vendor Bulonfer not found')
 
@@ -185,6 +185,7 @@ class AutoloadMgr(models.Model):
     def run(self, item=ITEM):
         """ Actualiza todos los productos.
         """
+        _logger.info('REPLICATION: Start')
         # empezamos a contar el tiempo de proceso
         start_time = time()
         data_path = self.data_path
@@ -195,11 +196,13 @@ class AutoloadMgr(models.Model):
                             'Se inicio el proceso',
                             self.email_from, self.email_to)
 
+            _logger.info('REPLICATION: Load memoy tables')
             # Cargar en memoria las tablas chicas
             self._section = self.load_section(data_path)
             self._family = self.load_family(data_path)
             self.prod_processed = 0
 
+            _logger.info('REPLICATION: Load disk tables')
             # Cargar en bd las demas tablas
             self.load_item(data_path, item)
             self.load_productcode(data_path)
@@ -207,6 +210,7 @@ class AutoloadMgr(models.Model):
             # Aca carga solo los productos que tienen fecha de modificacion
             # posterior a la fecha de proceso y los actualiza o los crea segun
             # sea necesario
+            _logger.info('REPLICATION: Load products')
             self.load_product(data_path)
 
             # terminamos de contar el tiempo de proceso
@@ -218,12 +222,13 @@ class AutoloadMgr(models.Model):
                             self.email_from, self.email_to)
 
             self.last_replication = str(datetime.now())
+            _logger.info('REPLICATION: End')
 
         except Exception as ex:
+            _logger.error('Replicacion Bulonfer {}'.format(ex.message))
             self.send_email('Replicacion Bulonfer #{}, '
                             'ERROR'.format(rec.id), ex.message,
                             self.email_from, self.email_to)
-            _logger.error('Replicacion Bulonfer {}'.format(ex.message))
             raise
 
     @api.model
@@ -279,7 +284,7 @@ class AutoloadMgr(models.Model):
                 }
             )
 
-    @api.model
+    @api.multi
     def send_email(self, subject, body, email_from, email_to):
         email_to = email_to.split(',')
         if len(email_to) == 0:
@@ -293,7 +298,7 @@ class AutoloadMgr(models.Model):
         except Exception as ex:
             _logger.error('Falla envio de mail {}'.format(ex.message))
 
-    @api.model
+    @api.multi
     def get_stats(self, elapsed_time):
         elapsed = str(timedelta(seconds=elapsed_time))
 

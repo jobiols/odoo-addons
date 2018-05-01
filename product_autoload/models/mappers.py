@@ -87,7 +87,7 @@ class ProductMapper(CommonMapper):
         self.write_date = line[MAP_WRITE_DATE]
 
     def values(self, create=False):
-        ret = dict
+        ret = dict()
         ret['default_code'] = self.default_code
         ret['name'] = self.name
         ret['description_sale'] = self.description_sale
@@ -108,7 +108,8 @@ class ProductMapper(CommonMapper):
             'name': self._vendor.id,
             'min_qty': self.wholesaler_bulk,
             'price': self.standard_price,
-            'product_code': self.default_code
+            'product_code': self.default_code,
+            'date_start': self.write_date
         }
         if create:
             ret['seller_ids'] = [(0, 0, supplierinfo)]
@@ -118,7 +119,8 @@ class ProductMapper(CommonMapper):
                  ('product_code', '=', self.default_code)])
             if rec:
                 rec.price = self.standard_price
-                ret.min_qty = self.wholesaler_bulk
+                rec.min_qty = self.wholesaler_bulk
+                rec.date_start = self.write_date
             else:
                 ret['seller_ids'] = [(0, 0, supplierinfo)]
 
@@ -136,7 +138,7 @@ class ProductMapper(CommonMapper):
 
     def execute(self, env):
         """ Este es el corazon del proceso de replicacion, si encuentra el
-            producto en el modelo lo actualiza si no lo encuentra lo crea.
+            producto en la bd lo actualiza si no lo encuentra lo crea.
         """
 
         def choose_tax(tax_sale):
