@@ -50,7 +50,7 @@ class ProductProduct(models.Model):
     def _compute_system_cost(self):
         for prod in self:
             prod.system_cost = prod.standard_price / (
-            1 - prod.difference / 100)
+                1 - prod.difference / 100)
 
     @api.multi
     def recalculate_list_price(self, margin):
@@ -68,6 +68,7 @@ class ProductProduct(models.Model):
                 order="id desc",
                 limit=1)
 
+            p_dif = False
             if invoice_line and invoice_line.price_unit:
                 # precio que cargaron en la factura de compra
                 invoice_price = invoice_line.price_unit
@@ -75,18 +76,17 @@ class ProductProduct(models.Model):
                 invoice_price *= (1 + invoice_line.discount / 100)
                 # descuento global en la factura
                 invoice_price *= (1 + invoice_line.invoice_discount)
+                # descuento por nota de credito al final del mes
+                invoice_price *= (1 - 0.05)
 
-                # precio que vino de bulonfer
+                # precio que vino de bulonfer (puede ser cero)
                 system_price = prod.standard_price
+                if system_price:
+                    p_dif = (invoice_price - system_price) / invoice_price
 
-                prod.difference = (invoice_price - system_price) / invoice_price
-            else:
-                prod.difference = 0
-
-            prod.difference *= 100
-            prod.list_price = prod.standard_price * \
-                              (1 + margin) * \
-                              (1 + prod.difference / 100)
-            prod.margin = margin * 100
-
-            # TODO Optimizar estos writes a prod.
+            p_dif *= 100
+            prod.write({
+                'list_price': prod.standard_price * (1 + margin),
+                'margin': margin * 100,
+                'difference': p_dif
+            })

@@ -13,7 +13,7 @@
                            groups="iomaq_default.group_administrative_users,base.group_erp_manager"/>
                     <field name="margin" string="Margen%"
                            groups="iomaq_default.group_administrative_users,base.group_erp_manager"/>
-                    <field name="system_cost" string="Costo Bulonfer"
+                    <field name="system_cost" string="Costo Factura"
                            groups="iomaq_default.group_administrative_users,base.group_erp_manager"/>
                 </field>
             </field>
