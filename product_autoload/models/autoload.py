@@ -47,7 +47,8 @@ class AutoloadMgr(models.Model):
 
     @api.model
     def check_garbage(self):
-        _logger.info('/////////////////////////////////////////////////////////')
+        _logger.info(
+            '/////////////////////////////////////////////////////////')
 
         from bisect import bisect_left
 
@@ -64,11 +65,12 @@ class AutoloadMgr(models.Model):
             default_code = prod.default_code
             i = bisect_left(data, default_code)
             if i < len1 and i >= 0:
-                _logger.info('{} ------- {}'.format(i,default_code))
+                _logger.info('{} ------- {}'.format(i, default_code))
                 if data[i] != default_code:
                     prod.warranty = 99
 
-        _logger.info('/////////////////////////////////////////////////////////')
+        _logger.info(
+            '/////////////////////////////////////////////////////////')
 
     @staticmethod
     def load_section(data_path):
@@ -97,7 +99,7 @@ class AutoloadMgr(models.Model):
     @api.multi
     def load_item(self, data_path, item=ITEM):
         """ Carga los datos en un modelo, chequeando por modificaciones
-            Si cambio el precio recalcula todos preecios de los productos
+            Si cambio el precio recalcula todos precios de los productos
         """
         prod_obj = self.env['product.template']
         item_obj = self.env['product_autoload.item']
@@ -239,7 +241,7 @@ class AutoloadMgr(models.Model):
         item_obj = self.env['product_autoload.item']
 
         prods = self.env['product.template'].search(
-            [('invalidate_category', '=', True)], limit=200)
+            [('invalidate_category', '=', True)], limit=400)
         for prod in prods:
             # buscar el item que corresponde al producto
             item = item_obj.search([('code', '=', prod.item_code)])
@@ -335,3 +337,16 @@ class AutoloadMgr(models.Model):
     def last_replication(self, value):
         parameter_obj = self.env['ir.config_parameter']
         parameter_obj.set_param('last_replication', str(value))
+
+    @api.model
+    def process_invoice_discounts(self):
+        invoices = self.env['account.invoice'].search(
+            [('discount_processed', '=', False),
+             ('partner_id.ref', '=', 'BULONFER'),
+             ('state', 'in', ['open', 'paid']),
+             ('type', '=', 'in_invoice')])
+
+        for invoice in invoices:
+            _logger.info('processing discounts on invoice '
+                         '{}'.format(invoice.document_number))
+            invoice.compute_invoice_discount()

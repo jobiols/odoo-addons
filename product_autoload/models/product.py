@@ -32,7 +32,61 @@ class ProductProduct(models.Model):
         default=False
     )
 
+    difference = fields.Float(
+        help="Difference % in cost price between invoce and system, "
+             "calculated as (invoice_price-system_price)/invoice_price"
+             "this diference is an error and must go towars zero."
+    )
+
+    system_cost = fields.Float(
+        compute="_compute_system_cost"
+    )
+
+    margin = fields.Float(
+        help="bulonfer margin for this product"
+    )
+
+    @api.multi
+    def _compute_system_cost(self):
+        for prod in self:
+            prod.system_cost = prod.standard_price / (
+            1 - prod.difference / 100)
+
     @api.multi
     def recalculate_list_price(self, margin):
+        """ Recalcula los precios, verificando el precio que cargaron en la
+            factura de compra. Estoy seguro de que son solo compras a bulonfer
+            porque son las unicas que tienen discount_processed en True.
+        """
+
+        # buscar la linea de factura de compra que tiene el producto
+        invoice_lines_obj = self.env['account.invoice.line']
         for prod in self:
-            prod.list_price = prod.standard_price * (1 + margin)
+            invoice_line = invoice_lines_obj.search(
+                [('product_id.default_code', '=', prod.default_code),
+                 ('invoice_id.discount_processed', '=', True)],
+                order="id desc",
+                limit=1)
+
+            if invoice_line and invoice_line.price_unit:
+                # precio que cargaron en la factura de compra
+                invoice_price = invoice_line.price_unit
+                # descuento en la linea de factura
+                invoice_price *= (1 + invoice_line.discount / 100)
+                # descuento global en la factura
+                invoice_price *= (1 + invoice_line.invoice_discount)
+
+                # precio que vino de bulonfer
+                system_price = prod.standard_price
+
+                prod.difference = (invoice_price - system_price) / invoice_price
+            else:
+                prod.difference = 0
+
+            prod.difference *= 100
+            prod.list_price = prod.standard_price * \
+                              (1 + margin) * \
+                              (1 + prod.difference / 100)
+            prod.margin = margin * 100
+
+            # TODO Optimizar estos writes a prod.

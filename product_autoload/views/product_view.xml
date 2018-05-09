@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+    <data>
+        <!-- agregar difference - diferencia entre factura y sistema -->
+
+        <record id="product_template_tree_view" model="ir.ui.view">
+            <field name="name">IOMAQ: add difference</field>
+            <field name="model">product.template</field>
+            <field name="inherit_id" ref="product.product_template_tree_view"/>
+            <field name="arch" type="xml">
+                <field name="name" position="after">
+                    <field name="difference" string="Dif%"
+                           groups="iomaq_default.group_administrative_users,base.group_erp_manager"/>
+                    <field name="margin" string="Margen%"
+                           groups="iomaq_default.group_administrative_users,base.group_erp_manager"/>
+                    <field name="system_cost" string="Costo Bulonfer"
+                           groups="iomaq_default.group_administrative_users,base.group_erp_manager"/>
+                </field>
+            </field>
+        </record>
+    </data>
+</openerp>
