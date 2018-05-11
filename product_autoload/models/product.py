@@ -73,7 +73,7 @@ class ProductProduct(models.Model):
                 # precio que cargaron en la factura de compra
                 invoice_price = invoice_line.price_unit
                 # descuento en la linea de factura
-                invoice_price *= (1 + invoice_line.discount / 100)
+                invoice_price *= (1 - invoice_line.discount / 100)
                 # descuento global en la factura
                 invoice_price *= (1 + invoice_line.invoice_discount)
                 # descuento por nota de credito al final del mes
