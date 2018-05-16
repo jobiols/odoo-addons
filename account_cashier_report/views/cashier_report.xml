@@ -3,6 +3,7 @@
 <template id="cashier_report">
     <t t-call="report.html_container">
         <t t-foreach="docs" t-as="o">
+            <t t-debug="wdb"></t>
             <t t-call="report.internal_layout">
                 <div class="page">
                     <!--

@@ -126,6 +126,9 @@ class ReportCashier(models.AbstractModel):
 
         accounts = docs if self.model == 'account.account' else self.env['account.account'].search([])
         accounts_res = self.with_context(data['form'].get('used_context',{}))._get_account_move_entry(accounts, init_balance, sortby, display_account)
+
+        import wdb;wdb.set_trace()
+
         docargs = {
             'doc_ids': self.ids,
             'doc_model': self.model,
