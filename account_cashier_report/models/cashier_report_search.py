@@ -109,7 +109,6 @@ class ReportCashier(models.AbstractModel):
 
     @api.multi
     def render_html(self, data):
-        #import wdb;wdb.set_trace()
         #data['account_report_id'][1]
         data['form']['account_report_id'] = ['1', '2']
         data['form']['debit_credit'] = '2'
