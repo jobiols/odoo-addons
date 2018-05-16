@@ -17,5 +17,3 @@ class res_partner(models.Model):
                     raise ValidationError(
                             u'El CUIT {} ya está ingresado'.format(
                                     self.main_id_number))
-            else:
-                raise ValidationError(u'Debe ingresar un numero de CUIT')
