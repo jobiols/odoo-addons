@@ -14,15 +14,15 @@ class Kpis(models.TransientModel):
             'res.partner',
             domain="[('category_id.name', 'in', ['MERCADERIA'] )]",
             required=True,
-            digits_compute="2"
+            #digits_compute="2"
     )
     total_payable = fields.Float(
             required=True,
-            digits_compute="2"
+            #digits_compute="2"
     )
     for_sale = fields.Float(
             required=True,
-            digits_compute="2"
+            #digits_compute="2"
     )
     count = fields.Integer(
             required=True,
