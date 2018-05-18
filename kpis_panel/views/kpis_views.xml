@@ -40,6 +40,7 @@
     <menuitem id="menu_pki_form"
               name="Vendors Report"
               parent="account.menu_finance_entries"
+              groups="iomaq_default.group_administrative_users,base.group_erp_manager"
               action="action_kpi_form" />
 
 </odoo>
