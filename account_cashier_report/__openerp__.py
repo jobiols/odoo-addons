@@ -9,7 +9,6 @@
     'author': 'jeo Software',
     'depends': [
         'account',
-        'iomaq_default'
     ],
     'data': [
         'wizard/cashier_report_view.xml',

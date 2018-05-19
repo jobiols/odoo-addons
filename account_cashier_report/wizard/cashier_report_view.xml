@@ -6,16 +6,17 @@
         <field name="arch" type="xml">
             <form string="Report Options">
                 <separator string="Cashier Report"/>
-                <group col="4">
-                    <!--
-                    <field name="initial_balance"/>
-                    -->
-                    <field name="date_from"/>
-                    <field name="date_to"/>
-                    <field name="journal_ids" widget="many2many_tags"/>
+                <group>
+                    <group>
+                        <field name="date_from"/>
+                        <field name="date_to"/>
+                    </group>
+                    <group>
+                        <field name="display_journals" widget="radio"/>
+                        <field name="expand_moves"/>
+                    </group>
                 </group>
                 <label string="The cashier report is bla bla bla"/>
-                <field name="journal_ids" required="0" invisible="1"/>
                 <footer>
                     <button name="check_report" string="Print" type="object" default_focus="1" class="oe_highlight"/>
                     or
@@ -42,7 +43,7 @@
             name="Cashier report"
             parent="account.menu_finance_bank_and_cash"
             sequence="90"
-            groups="iomaq_default.group_cashier_users,iomaq_default.group_administrative_users,base.group_erp_manager"
+            groups="base.group_erp_manager"
             action="action_cashier_report_menu"
     />
 

@@ -7,36 +7,54 @@ from openerp import api, models
 class ReportCashier(models.AbstractModel):
     _name = 'report.account_cashier_report.cashier_report'
 
-    def _get_account_move_entry(self, accounts, init_balance, sortby, display_account):
+    def _get_account_move_entry(self, journals):
         """
         :param:
-                accounts: the recordset of accounts
-                init_balance: boolean value of initial_balance
-                sortby: sorting by date or partner and journal
-                display_account: type of account(receivable, payable and both)
+                journals: the recordset of journals
 
-        Returns a dictionary of accounts with following key and value {
-                'code': account code,
-                'name': account name,
-                'debit': sum of total debit amount,
-                'credit': sum of total credit amount,
-                'balance': total balance,
-                'amount_currency': sum of amount_currency,
-                'move_lines': list of move line
+        Returns a list of dictionaries each one is a jounral and all the moves
+         with following key and value {
+            'journal': 'ARGENCARD Ventas',
+            'balance': 123456.4545,
+            'lines': [
+                {
+                    'balance': 2089.64,
+                    'lcode': u'VEN01',
+                    'ldate': '2018-05-02',
+                    'lid': 1957,
+                    'lname': u'/',
+                    'lref': None,
+                    'move_name': u'VEN01/2018/0001',
+                    'partner_name': u'Juan de los palotes'
+                },
         }
         """
+
+        import wdb;        wdb.set_trace()
+
+        moves = self.env['account.move']
+        res = []
+        for journal in journals:
+            pass
+
+
+
         cr = self.env.cr
         MoveLine = self.env['account.move.line']
         move_lines = dict(map(lambda x: (x, []), accounts.ids))
 
         # Prepare initial sql query and Get the initial move lines
         if init_balance:
-            init_tables, init_where_clause, init_where_params = MoveLine.with_context(date_from=self.env.context.get('date_from'), date_to=False, initial_bal=True)._query_get()
+            init_tables, init_where_clause, init_where_params = MoveLine.with_context(
+                date_from=self.env.context.get('date_from'), date_to=False,
+                initial_bal=True)._query_get()
             init_wheres = [""]
             if init_where_clause.strip():
                 init_wheres.append(init_where_clause.strip())
             init_filters = " AND ".join(init_wheres)
-            filters = init_filters.replace('account_move_line__move_id', 'm').replace('account_move_line', 'l')
+            filters = init_filters.replace('account_move_line__move_id',
+                                           'm').replace('account_move_line',
+                                                        'l')
             sql = ("SELECT 0 AS lid, l.account_id AS account_id, '' AS ldate, '' AS lcode, NULL AS amount_currency, '' AS lref, 'Initial Balance' AS lname, COALESCE(SUM(l.debit),0.0) AS debit, COALESCE(SUM(l.credit),0.0) AS credit, COALESCE(SUM(l.debit),0) - COALESCE(SUM(l.credit), 0) as balance, '' AS lpartner_id,\
                 '' AS move_name, '' AS mmove_id, '' AS currency_code,\
                 NULL AS currency_id,\
@@ -64,7 +82,8 @@ class ReportCashier(models.AbstractModel):
         if where_clause.strip():
             wheres.append(where_clause.strip())
         filters = " AND ".join(wheres)
-        filters = filters.replace('account_move_line__move_id', 'm').replace('account_move_line', 'l')
+        filters = filters.replace('account_move_line__move_id', 'm').replace(
+            'account_move_line', 'l')
 
         # Get move lines base on sql query and Calculate the total balance of move lines
         sql = ('SELECT l.id AS lid, l.account_id AS account_id, l.date AS ldate, j.code AS lcode, l.currency_id, l.amount_currency, l.ref AS lref, l.name AS lname, COALESCE(l.debit,0) AS debit, COALESCE(l.credit,0) AS credit, COALESCE(SUM(l.debit),0) - COALESCE(SUM(l.credit), 0) AS balance,\
@@ -98,36 +117,82 @@ class ReportCashier(models.AbstractModel):
                 res['debit'] += line['debit']
                 res['credit'] += line['credit']
                 res['balance'] = line['balance']
-            if display_account == 'all':
-                account_res.append(res)
-            if display_account == 'movement' and res.get('move_lines'):
-                account_res.append(res)
-            if display_account == 'not_zero' and not currency.is_zero(res['balance']):
-                account_res.append(res)
+
+                # if display_account == 'all':
+                #    account_res.append(res)
+                # if display_account == 'movement' and res.get('move_lines'):
+                #    account_res.append(res)
+                # if display_account == 'not_zero' and not currency.is_zero(res['balance']):
+                #    account_res.append(res)
 
         return account_res
 
     @api.multi
     def render_html(self, data):
-        #data['account_report_id'][1]
-        data['form']['account_report_id'] = ['1', '2']
-        data['form']['debit_credit'] = '2'
-        data['form']['enable_filter'] = '2'
 
         self.model = self.env.context.get('active_model')
-        docs = self.env[self.model].browse(self.env.context.get('active_ids', []))
+        docs = self.env[self.model].browse(
+            self.env.context.get('active_ids', []))
 
-        init_balance = data['form'].get('initial_balance', True)
-        sortby = data['form'].get('sortby', 'sort_date')
-        display_account = data['form']['display_account'] = ['12']
-        codes = []
-        if data['form'].get('journal_ids', False):
-            codes = [journal.code for journal in self.env['account.journal'].search([('id', 'in', data['form']['journal_ids'])])]
+        # buscar los journals que nay que reportar
+        id = data['context']['uid']
+        journals = self.env['account.journal'].search(
+                [('cashier_id', '=', id)])
+        accounts_res = self._get_account_move_entry(journals)
 
-        accounts = docs if self.model == 'account.account' else self.env['account.account'].search([])
-        accounts_res = self.with_context(data['form'].get('used_context',{}))._get_account_move_entry(accounts, init_balance, sortby, display_account)
-
-        import wdb;wdb.set_trace()
+        accounts_res = [{
+            'journal': 'ARGENCARD Ventas',
+            'balance': 123456.4545,
+            'lines': [
+                {
+                    'balance': 2089.64,
+                    'lcode': u'VEN01',
+                    'ldate': '2018-05-02',
+                    'lid': 1957,
+                    'lname': u'/',
+                    'lref': None,
+                    'move_name': u'VEN01/2018/0001',
+                    'partner_name': u'Juan de los palotes'
+                },
+                {
+                    'balance': 489.64,
+                    'lcode': u'VEN01',
+                    'ldate': '2018-05-02',
+                    'lid': 1957,
+                    'lname': u'/',
+                    'lref': None,
+                    'move_name': u'VEN01/2018/0001',
+                    'partner_name': u'Maria auxiliadora'
+                },
+            ]
+        },
+            {
+                'journal': 'ARGENCARD Ventas',
+                'balance': 123456.4545,
+                'lines': [
+                    {
+                        'balance': 2089.64,
+                        'lcode': u'VEN01',
+                        'ldate': '2018-05-02',
+                        'lid': 1957,
+                        'lname': u'/',
+                        'lref': None,
+                        'move_name': u'VEN01/2018/0001',
+                        'partner_name': u'Juan de los palotes'
+                    },
+                    {
+                        'balance': 489.64,
+                        'lcode': u'VEN01',
+                        'ldate': '2018-05-02',
+                        'lid': 1957,
+                        'lname': u'/',
+                        'lref': None,
+                        'move_name': u'VEN01/2018/0001',
+                        'partner_name': u'Maria auxiliadora'
+                    },
+                ]
+            }
+        ]
 
         docargs = {
             'doc_ids': self.ids,
@@ -135,7 +200,7 @@ class ReportCashier(models.AbstractModel):
             'data': data['form'],
             'docs': docs,
             'time': time,
-            'Accounts': accounts_res,
-            'print_journal': codes,
+            'journals': accounts_res,
         }
-        return self.env['report'].render('account_cashier_report.cashier_report', docargs)
+        return self.env['report'].render(
+            'account_cashier_report.cashier_report', docargs)
