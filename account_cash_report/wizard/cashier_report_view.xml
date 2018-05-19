@@ -2,7 +2,7 @@
 <odoo>
     <record id="cashier_report_view" model="ir.ui.view">
         <field name="name">Daily Cash Report</field>
-        <field name="model">account_cashier_report.cashier.report</field>
+        <field name="model">account_cash_report.cashier.report</field>
         <field name="arch" type="xml">
             <form string="Report Options">
                 <separator string="Daily Cash Report"/>
@@ -32,7 +32,7 @@
     <record id="action_cashier_report_menu" model="ir.actions.act_window">
         <field name="name">Cashier Report</field>
         <field name="type">ir.actions.act_window</field>
-        <field name="res_model">account_cashier_report.cashier.report</field>
+        <field name="res_model">account_cash_report.cashier.report</field>
         <field name="view_type">form</field>
         <field name="view_mode">form</field>
         <field name="view_id" ref="cashier_report_view"/>
@@ -50,10 +50,10 @@
 
     <report
             id="action_cashier_report"
-            model="account_cashier_report.cashier.report"
+            model="account_cash_report.cashier.report"
             string="Cashier Report"
             report_type="qweb-pdf"
-            name="account_cashier_report.cashier_report"
+            name="account_cash_report.cashier_report"
             file="cashier_report"
     />
 

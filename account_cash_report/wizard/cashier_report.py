@@ -13,7 +13,7 @@ from openerp.exceptions import UserError
 
 class CashierReport(models.TransientModel):
     _inherit = "account.common.report"
-    _name = "account_cashier_report.cashier.report"
+    _name = "account_cash_report.cashier.report"
     _description = "Cashier Report"
 
     cashier_id = fields.Many2one('res.users')
@@ -39,11 +39,12 @@ class CashierReport(models.TransientModel):
                 'display_journals': self.display_journals,
                 'title': 'Reporte de caja',
                 'expand_moves': self.expand_moves,
-                #'cashier_id': self.cashier_id
+                #'cashier_id': self.cashier_id,
+                'cash': 'aaaaaaaaaaaaaaaaaaaaaaaaaa'
             }
         }
 
         return self.env['report'].get_action(
                 self,
-                'account_cashier_report.cashier_report',
+                'account_cash_report.cashier_report',
                 data=data)

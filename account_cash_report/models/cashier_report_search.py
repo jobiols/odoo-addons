@@ -5,7 +5,7 @@ from openerp import api, models
 
 
 class ReportCashier(models.AbstractModel):
-    _name = 'report.account_cashier_report.cashier_report'
+    _name = 'report.account_cash_report.cashier_report'
 
     def _get_account_move_entry(self, journals):
         """
@@ -36,6 +36,60 @@ class ReportCashier(models.AbstractModel):
         res = []
         for journal in journals:
             pass
+
+        return [{
+            'journal': 'ARGENCARD Ventas',
+            'balance': 123456.4545,
+            'lines': [
+                {
+                    'balance': 2089.64,
+                    'lcode': u'VEN01',
+                    'ldate': '2018-05-02',
+                    'lid': 1957,
+                    'lname': u'/',
+                    'lref': None,
+                    'move_name': u'VEN01/2018/0001',
+                    'partner_name': u'Juan de los palotes'
+                },
+                {
+                    'balance': 489.64,
+                    'lcode': u'VEN01',
+                    'ldate': '2018-05-02',
+                    'lid': 1957,
+                    'lname': u'/',
+                    'lref': None,
+                    'move_name': u'VEN01/2018/0001',
+                    'partner_name': u'Maria auxiliadora'
+                },
+            ]
+        },
+            {
+                'journal': 'ARGENCARD Ventas',
+                'balance': 123456.4545,
+                'lines': [
+                    {
+                        'balance': 2089.64,
+                        'lcode': u'VEN01',
+                        'ldate': '2018-05-02',
+                        'lid': 1957,
+                        'lname': u'/',
+                        'lref': None,
+                        'move_name': u'VEN01/2018/0001',
+                        'partner_name': u'Juan de los palotes'
+                    },
+                    {
+                        'balance': 489.64,
+                        'lcode': u'VEN01',
+                        'ldate': '2018-05-02',
+                        'lid': 1957,
+                        'lname': u'/',
+                        'lref': None,
+                        'move_name': u'VEN01/2018/0001',
+                        'partner_name': u'Maria auxiliadora'
+                    },
+                ]
+            }
+        ]
 
 
 
@@ -135,66 +189,13 @@ class ReportCashier(models.AbstractModel):
             self.env.context.get('active_ids', []))
 
         # buscar los journals que nay que reportar
-        import wdb;wdb.set_trace()
+        import wdb; wdb.set_trace()
         id = data['context']['uid']
         journals = self.env['account.journal'].search(
                 [('cashier_id', '=', id)])
         accounts_res = self._get_account_move_entry(journals)
 
-        accounts_res = [{
-            'journal': 'ARGENCARD Ventas',
-            'balance': 123456.4545,
-            'lines': [
-                {
-                    'balance': 2089.64,
-                    'lcode': u'VEN01',
-                    'ldate': '2018-05-02',
-                    'lid': 1957,
-                    'lname': u'/',
-                    'lref': None,
-                    'move_name': u'VEN01/2018/0001',
-                    'partner_name': u'Juan de los palotes'
-                },
-                {
-                    'balance': 489.64,
-                    'lcode': u'VEN01',
-                    'ldate': '2018-05-02',
-                    'lid': 1957,
-                    'lname': u'/',
-                    'lref': None,
-                    'move_name': u'VEN01/2018/0001',
-                    'partner_name': u'Maria auxiliadora'
-                },
-            ]
-        },
-            {
-                'journal': 'ARGENCARD Ventas',
-                'balance': 123456.4545,
-                'lines': [
-                    {
-                        'balance': 2089.64,
-                        'lcode': u'VEN01',
-                        'ldate': '2018-05-02',
-                        'lid': 1957,
-                        'lname': u'/',
-                        'lref': None,
-                        'move_name': u'VEN01/2018/0001',
-                        'partner_name': u'Juan de los palotes'
-                    },
-                    {
-                        'balance': 489.64,
-                        'lcode': u'VEN01',
-                        'ldate': '2018-05-02',
-                        'lid': 1957,
-                        'lname': u'/',
-                        'lref': None,
-                        'move_name': u'VEN01/2018/0001',
-                        'partner_name': u'Maria auxiliadora'
-                    },
-                ]
-            }
-        ]
-        import wdb;wdb.set_trace()
+        #import wdb;wdb.set_trace()
         docargs = {
             'doc_ids': self.ids,
             'doc_model': self.model,
@@ -204,4 +205,4 @@ class ReportCashier(models.AbstractModel):
             'journals': accounts_res,
         }
         return self.env['report'].render(
-            'account_cashier_report.cashier_report', docargs)
+            'account_cash_report.cashier_report', docargs)
