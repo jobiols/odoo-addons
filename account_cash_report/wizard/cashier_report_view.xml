@@ -1,22 +1,23 @@
 <?xml version="1.0" encoding="utf-8"?>
 <odoo>
     <record id="cashier_report_view" model="ir.ui.view">
-        <field name="name">Cashier Report</field>
+        <field name="name">Daily Cash Report</field>
         <field name="model">account_cashier_report.cashier.report</field>
         <field name="arch" type="xml">
             <form string="Report Options">
-                <separator string="Cashier Report"/>
+                <separator string="Daily Cash Report"/>
                 <group>
                     <group>
                         <field name="date_from"/>
                         <field name="date_to"/>
+                        <field name="cashier_id"/>
                     </group>
                     <group>
                         <field name="display_journals" widget="radio"/>
                         <field name="expand_moves"/>
                     </group>
                 </group>
-                <label string="The cashier report is bla bla bla"/>
+                <label string="The Daily Cash Report is bla bla bla"/>
                 <footer>
                     <button name="check_report" string="Print" type="object" default_focus="1" class="oe_highlight"/>
                     or

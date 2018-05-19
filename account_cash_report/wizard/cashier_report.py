@@ -16,6 +16,7 @@ class CashierReport(models.TransientModel):
     _name = "account_cashier_report.cashier.report"
     _description = "Cashier Report"
 
+    cashier_id = fields.Many2one('res.users')
     date_from = fields.Date(default=lambda *a: time.strftime('%Y-%m-%d'))
     date_to = fields.Date(default=lambda *a: time.strftime('%Y-%m-%d'))
     display_journals = fields.Selection([
@@ -29,6 +30,8 @@ class CashierReport(models.TransientModel):
     )
 
     def _print_report(self, data):
+        # no tenemos en cuenta lo que viene en data,
+        # le ponemos lo que queremos aca.
         data = {
             'form': {
                 'date_from': self.date_from,
@@ -36,7 +39,7 @@ class CashierReport(models.TransientModel):
                 'display_journals': self.display_journals,
                 'title': 'Reporte de caja',
                 'expand_moves': self.expand_moves,
-                'cashier': 'Evelyn'
+                #'cashier_id': self.cashier_id
             }
         }
 

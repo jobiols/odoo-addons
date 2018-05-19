@@ -135,6 +135,7 @@ class ReportCashier(models.AbstractModel):
             self.env.context.get('active_ids', []))
 
         # buscar los journals que nay que reportar
+        import wdb;wdb.set_trace()
         id = data['context']['uid']
         journals = self.env['account.journal'].search(
                 [('cashier_id', '=', id)])
@@ -193,7 +194,7 @@ class ReportCashier(models.AbstractModel):
                 ]
             }
         ]
-
+        import wdb;wdb.set_trace()
         docargs = {
             'doc_ids': self.ids,
             'doc_model': self.model,

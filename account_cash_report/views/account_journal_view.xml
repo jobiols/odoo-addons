@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+    <data>
+        <!-- agregar cajera al diario
+            si en el diario pongo una cajera solo esa cajera vera ese diario
+        -->
+
+        <record id="view_account_journal_form" model="ir.ui.view">
+            <field name="name">IOMAQ: agregar cajera</field>
+            <field name="model">account.journal</field>
+            <field name="inherit_id" ref="account.view_account_journal_form"/>
+            <field name="arch" type="xml">
+
+                <xpath expr="//field[@name='sequence_id']" position="after">
+                    <field name="cashier_id"/>
+                </xpath>
+
+            </field>
+        </record>
+    </data>
+
+</openerp>
