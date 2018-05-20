@@ -16,13 +16,22 @@
     <!-- cash form view -->
 
     <record model="ir.ui.view" id= "cash_form">
-        <field name="name">ACCOUNT_CASH_REPORT: Cash Form View</field>
+        <field name="name">CASH REPORT: Cash Form View</field>
         <field name="model">account_cash_report.cash</field>
         <field name="arch" type="xml">
             <form string="Cash Form View">
                 <group>
-                    <field name="name" />
-                    <field name="journal_ids"/>
+                    <field name="name" nolabel="1"/>
+                </group>
+                <group>
+                    <field name="journal_ids" nolabel="1">
+                        <tree create="false" delete="false">
+                            <field name="name"/>
+                            <field name="type"/>
+                            <field name="initial_balance"/>
+                            <field name="default_debit_account_id"/>
+                        </tree>
+                    </field>
                 </group>
             </form>
         </field>

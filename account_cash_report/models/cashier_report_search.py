@@ -47,7 +47,7 @@ class ReportCashier(models.AbstractModel):
                 },
         }
         """
-        #import wdb; wdb.set_trace()
+        # import wdb; wdb.set_trace()
 
 
         ret = []
@@ -64,21 +64,21 @@ class ReportCashier(models.AbstractModel):
             ])
 
             lines = []
-            accum_balance = self.initial_balance(account_id, data['date_to'])
-
-            lin = {}
-            lin['date'] = data['date_from']
-            lin['partner_name'] = ''
-            lin['ref'] = 'Balance Inicial'
-            lin['move_name'] = ''
-            lin['balance'] = accum_balance
-            lines.append(lin)
+            if journal.initial_balance:
+                accum_balance = self.initial_balance(account_id,
+                                                     data['date_to'])
+                lin = {}
+                lin['date'] = data['date_from']
+                lin['partner_name'] = ''
+                lin['ref'] = 'Balance Inicial'
+                lin['move_name'] = ''
+                lin['balance'] = accum_balance
+                lines.append(lin)
+            else:
+                accum_balance = 0
 
             for line in mlines:
                 lin = {}
-                # print '{} / {:30} / [{:20}] / [{}] C={:7.2f} D={:7.2f} B={:7.2f} [{}] {}'.format(line.date, line.partner_id.name, line.name, line.ref,
-                #         line.credit, line.debit, line.balance, line.narration,
-                #         line.account_id.name                )
                 accum_balance += line.balance
                 lin['date'] = line.date
                 lin['partner_name'] = line.partner_id.name
@@ -91,7 +91,7 @@ class ReportCashier(models.AbstractModel):
             jour['balance'] = accum_balance
             jour['lines'] = lines
 
-            # acumular el journal solo si es no nulo
+            # acumular el journal solo si tiene saldo
             if accum_balance:
                 ret.append(jour)
 

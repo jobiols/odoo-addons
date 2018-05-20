@@ -10,3 +10,8 @@ class AccountJournal(models.Model):
         'account_cash_report.cash',
         string="Cash"
     )
+
+    initial_balance = fields.Boolean(
+        default=False,
+        help="Perform an initial balance on the Cash Report"
+    )
