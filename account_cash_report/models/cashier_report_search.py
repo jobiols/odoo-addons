@@ -2,10 +2,31 @@
 # Part of Odoo. See LICENSE file for full copyright and licensing details.
 import time
 from openerp import api, models
+from datetime import datetime, timedelta
 
 
 class ReportCashier(models.AbstractModel):
     _name = 'report.account_cash_report.cashier_report'
+
+    def initial_balance(self, account_id, date_from):
+        """ Devuelve el balance de la cuenta al dia anterior a la fecha
+            dada, es lo que hay en la cuenta al iniciar el dia.
+        """
+        # import wdb;wdb.set_trace()
+
+        # obtener el dia anterior
+        date = datetime.strptime(date_from, '%Y-%m-%d')
+        date_from = datetime.strftime(date - timedelta(1), '%Y-%m-%d')
+
+        trial_balance = self.env['report.account.report_trialbalance']
+        account_res = trial_balance.with_context(date_from=date_from). \
+            _get_accounts(account_id, 'movement')
+
+        ret = 0
+        for account in account_res:
+            ret = account['balance']
+
+        return ret
 
     def _get_account_move_entry(self, data, journals):
         """
@@ -18,7 +39,7 @@ class ReportCashier(models.AbstractModel):
             'balance': 123456.4545,
             'lines': [
                 {
-                    'ldate': '2018-05-02',
+                    'date': '2018-05-02',
                     'partner_name': u'Juan de los palotes'
                     'lref': None,
                     'move_name': u'VEN01/2018/0001',
@@ -26,27 +47,40 @@ class ReportCashier(models.AbstractModel):
                 },
         }
         """
-        # import wdb; wdb.set_trace()
+        #import wdb; wdb.set_trace()
+
 
         ret = []
         move_lines_obj = self.env['account.move.line']
         for journal in journals:
             jour = {}
-            balance = 0
             # cuenta por defecto de este diario
             account_id = journal.default_debit_account_id
-            print journal.name
-            mlines = move_lines_obj.search(
-                    [('account_id', '=', account_id.id)])
+
+            mlines = move_lines_obj.search([
+                ('account_id', '=', account_id.id),
+                ('date', '>=', data['date_from']),
+                ('date', '<=', data['date_to']),
+            ])
 
             lines = []
+            accum_balance = self.initial_balance(account_id, data['date_from'])
+
+            lin = {}
+            lin['date'] = data['date_from']
+            lin['partner_name'] = ''
+            lin['ref'] = 'Balance Inicial'
+            lin['move_name'] = ''
+            lin['balance'] = accum_balance
+            lines.append(lin)
+
             for line in mlines:
                 lin = {}
-                #print '{} / {:30} / [{:20}] / [{}] C={:7.2f} D={:7.2f} B={:7.2f} [{}] {}'.format(line.date, line.partner_id.name, line.name, line.ref,
+                # print '{} / {:30} / [{:20}] / [{}] C={:7.2f} D={:7.2f} B={:7.2f} [{}] {}'.format(line.date, line.partner_id.name, line.name, line.ref,
                 #         line.credit, line.debit, line.balance, line.narration,
                 #         line.account_id.name                )
-                balance += line.balance
-                lin['ldate'] = line.date
+                accum_balance += line.balance
+                lin['date'] = line.date
                 lin['partner_name'] = line.partner_id.name
                 lin['ref'] = line.ref or '/'
                 lin['move_name'] = line.name
@@ -54,13 +88,12 @@ class ReportCashier(models.AbstractModel):
                 lines.append(lin)
 
             jour['journal'] = journal.name
-            jour['balance'] = balance
+            jour['balance'] = accum_balance
             jour['lines'] = lines
-            ret.append(jour)
 
-        #import pprint
-        #pp = pprint.PrettyPrinter()
-        #pp.pprint(ret)
+            # acumular el journal solo si es no nulo
+            if accum_balance:
+                ret.append(jour)
 
         return ret
 
@@ -76,8 +109,6 @@ class ReportCashier(models.AbstractModel):
         journals = self.env['account.journal'].search(domain)
         accounts_res = self._get_account_move_entry(data['form'], journals)
 
-        #import wdb;wdb.set_trace()
-
         docargs = {
             'doc_model': self.model,
             'data': data['form'],
@@ -85,5 +116,9 @@ class ReportCashier(models.AbstractModel):
             'time': time,
             'journals': accounts_res,
         }
-        return self.env['report'].render('account_cash_report.cashier_report',
-                                         docargs)
+
+        # poner landscape si tengo rango de fechas
+        # TODO no funciona el landscape.
+        landscape = data['form']['date_range']
+        return self.env['report'].with_context(landscape=landscape).render(
+                'account_cash_report.cashier_report', docargs)

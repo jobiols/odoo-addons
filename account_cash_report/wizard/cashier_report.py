@@ -44,6 +44,7 @@ class CashierReport(models.TransientModel):
             'form': {
                 'date_from': self.date_from,
                 'date_to': self.date_to,
+                'date_range': self.date_from != self.date_to,
                 'display_journals': self.display_journals,
                 'title': 'Reporte de caja',
                 'expand_moves': self.expand_moves,
