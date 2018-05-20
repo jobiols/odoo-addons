@@ -34,7 +34,8 @@ class CashierReport(models.TransientModel):
             default="movement"
     )
     expand_moves = fields.Boolean(
-
+        default=True,
+        help="Show account movements"
     )
 
     def _print_report(self, data):

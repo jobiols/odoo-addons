@@ -8,18 +8,18 @@ from datetime import datetime, timedelta
 class ReportCashier(models.AbstractModel):
     _name = 'report.account_cash_report.cashier_report'
 
-    def initial_balance(self, account_id, date_from):
+    def initial_balance(self, account_id, date_to):
         """ Devuelve el balance de la cuenta al dia anterior a la fecha
             dada, es lo que hay en la cuenta al iniciar el dia.
         """
         # import wdb;wdb.set_trace()
 
         # obtener el dia anterior
-        date = datetime.strptime(date_from, '%Y-%m-%d')
-        date_from = datetime.strftime(date - timedelta(1), '%Y-%m-%d')
+        date = datetime.strptime(date_to, '%Y-%m-%d')
+        date_to = datetime.strftime(date - timedelta(1), '%Y-%m-%d')
 
         trial_balance = self.env['report.account.report_trialbalance']
-        account_res = trial_balance.with_context(date_from=date_from). \
+        account_res = trial_balance.with_context(date_to=date_to). \
             _get_accounts(account_id, 'movement')
 
         ret = 0
@@ -64,7 +64,7 @@ class ReportCashier(models.AbstractModel):
             ])
 
             lines = []
-            accum_balance = self.initial_balance(account_id, data['date_from'])
+            accum_balance = self.initial_balance(account_id, data['date_to'])
 
             lin = {}
             lin['date'] = data['date_from']
