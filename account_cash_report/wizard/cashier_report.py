@@ -16,9 +16,17 @@ class CashierReport(models.TransientModel):
     _name = "account_cash_report.cashier.report"
     _description = "Cashier Report"
 
-    cashier_id = fields.Many2one('res.users')
-    date_from = fields.Date(default=lambda *a: time.strftime('%Y-%m-%d'))
-    date_to = fields.Date(default=lambda *a: time.strftime('%Y-%m-%d'))
+    cash_id = fields.Many2one(
+            'account_cash_report.cash',
+            required=True
+    )
+
+    date_from = fields.Date(
+            default=lambda *a: time.strftime('%Y-%m-%d')
+    )
+    date_to = fields.Date(
+            default=lambda *a: time.strftime('%Y-%m-%d')
+    )
     display_journals = fields.Selection([
         ('all', 'All'),
         ('movement', 'With Movement'),
@@ -39,8 +47,8 @@ class CashierReport(models.TransientModel):
                 'display_journals': self.display_journals,
                 'title': 'Reporte de caja',
                 'expand_moves': self.expand_moves,
-                #'cashier_id': self.cashier_id,
-                'cash': 'aaaaaaaaaaaaaaaaaaaaaaaaaa'
+                'cash_id': self.cash_id.id,
+                'cash': self.cash_id.name
             }
         }
 

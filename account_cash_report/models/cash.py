@@ -4,7 +4,7 @@ import time
 from openerp import api, models, fields
 
 
-class Cash(models.AbstractModel):
+class Cash(models.Model):
     _name = 'account_cash_report.cash'
 
     name = fields.Char(
@@ -12,5 +12,7 @@ class Cash(models.AbstractModel):
     )
 
     journal_ids = fields.One2many(
-
+        comodel_name="account.journal",
+        inverse_name="cash_id",
+        string="Journals"
     )

@@ -13,7 +13,8 @@
     'data': [
         'wizard/cashier_report_view.xml',
         'views/cashier_report.xml',
-        'views/account_journal_view.xml'
+        'views/account_journal_view.xml',
+        'views/cash_view.xml'
     ],
     'test': [
     ],

@@ -2,6 +2,10 @@
 <odoo>
 <template id="cashier_report">
     <t t-call="report.html_container">
+        <t t-set="data_report_margin_top" t-value="12"/>
+        <t t-set="data_report_header_spacing" t-value="9"/>
+        <t t-set="data_report_dpi" t-value="110"/>
+
         <t t-foreach="docs" t-as="o">
             <t t-call="report.internal_layout">
                 <div class="page">
@@ -51,7 +55,7 @@
 
                                 <tr t-foreach="journal['lines']" t-as="line">
                                     <td><span t-esc="line['partner_name']"/></td>
-                                    <td><span t-esc="line['lname']"/></td>
+                                    <td><span t-esc="line['ref']"/></td>
                                     <td><span t-esc="line['move_name']"/></td>
                                     <td class="text-right" style="white-space: text-nowrap;">
                                         <span t-att-style="style" t-esc="line['balance']" t-esc-options='{"widget": "monetary", "display_currency": "res_company.currency_id"}'/>

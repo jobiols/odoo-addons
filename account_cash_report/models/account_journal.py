@@ -6,6 +6,7 @@ from openerp import fields, models, api
 class AccountJournal(models.Model):
     _inherit = "account.journal"
 
-    cashier_id = fields.Many2one(
-        'res.partner'
+    cash_id = fields.Many2one(
+        'account_cash_report.cash',
+        string="Cash"
     )

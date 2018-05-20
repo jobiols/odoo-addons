@@ -1,20 +1,39 @@
 <?xml version="1.0" encoding="utf-8"?>
 <odoo>
 
-    <!-- agregar cajera al diario
-        si en el diario pongo una cajera solo esa cajera vera ese diario
+    <!-- agregar la caja al diario
+         este diario pertenecera a esta caja y sera visto por las cajeras
+         que tengan acceso a esta caja
     -->
 
     <record id="view_account_journal_form" model="ir.ui.view">
-        <field name="name">IOMAQ: agregar cajera</field>
+        <field name="name">IOMAQ: agregar caja</field>
         <field name="model">account.journal</field>
         <field name="inherit_id" ref="account.view_account_journal_form"/>
         <field name="arch" type="xml">
 
             <xpath expr="//field[@name='sequence_id']" position="after">
-                <field name="cashier_id"/>
+                <field name="cash_id"/>
             </xpath>
 
         </field>
     </record>
+
+    <!-- agregar columnas en vista tree de los diarios -->
+    <record id="view_account_bank_journal_tree" model="ir.ui.view">
+        <field name="name">IOMAQ: agregar columnas</field>
+        <field name="model">account.journal</field>
+        <field name="inherit_id" ref="account.view_account_bank_journal_tree"/>
+        <field name="arch" type="xml">
+
+            <xpath expr="//field[@name='name']" position="after">
+                <field name="cash_id"/>
+                <field name="default_credit_account_id"/>
+            </xpath>
+
+        </field>
+    </record>
+
+
+
 </odoo>
