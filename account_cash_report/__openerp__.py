@@ -11,6 +11,7 @@
         'account',
     ],
     'data': [
+        'security/ir.model.access.csv',
         'views/cash_view.xml',
         'wizard/cashier_report_view.xml',
         'views/cashier_report.xml',
