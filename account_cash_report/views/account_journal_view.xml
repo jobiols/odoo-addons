@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <!-- agregar la caja al diario
+         este diario pertenecera a esta caja y sera visto por las cajeras
+         que tengan acceso a esta caja
+    -->
+
+    <record id="view_account_journal_form" model="ir.ui.view">
+        <field name="name">CASH REPORT: customizar para reporte de cajas</field>
+        <field name="model">account.journal</field>
+        <field name="inherit_id" ref="account.view_account_journal_form"/>
+        <field name="arch" type="xml">
+
+            <xpath expr="//field[@name='sequence_id']" position="after">
+                <field name="cash_id"/>
+                <field name="initial_balance"/>
+            </xpath>
+
+        </field>
+    </record>
+
+    <!-- agregar columnas en vista tree de los diarios -->
+    <record id="view_account_bank_journal_tree" model="ir.ui.view">
+        <field name="name">CASH REPORT: mejorar usabilidad con columnas</field>
+        <field name="model">account.journal</field>
+        <field name="inherit_id" ref="account.view_account_bank_journal_tree"/>
+        <field name="arch" type="xml">
+
+            <xpath expr="//field[@name='name']" position="after">
+                <field name="cash_id"/>
+                <field name="initial_balance"/>
+                <field name="default_credit_account_id"/>
+            </xpath>
+
+        </field>
+    </record>
+
+
+
+</odoo>
