@@ -14,15 +14,13 @@ class Kpis(models.TransientModel):
             'res.partner',
             domain="[('category_id.name', 'in', ['MERCADERIA'] )]",
             required=True,
-            #digits_compute="2"
     )
     total_payable = fields.Float(
             required=True,
-            #digits_compute="2"
     )
-    for_sale = fields.Float(
+    stock_valuation = fields.Float(
             required=True,
-            #digits_compute="2"
+            string="Stock valuation (sale price w/tax)"
     )
     count = fields.Integer(
             required=True,
@@ -40,9 +38,8 @@ class Kpis(models.TransientModel):
             if not self.search([('id', '=', vendor.id)]):
                 self.create({'vendor_id': vendor.id,
                              'total_payable': 0,
-                             'for_sale': 0,
+                             'stock_valuation': 0,
                              'count': 0})
-                # print 'add vendor', vendor.id, vendor.name
 
         # miro la fecha de validez y me quedo con la mas nueva
         vendors = self.env['kpis_panel.kpis'].search([])
@@ -54,36 +51,29 @@ class Kpis(models.TransientModel):
             domain = [('seller_ids.name', '=', rec.vendor_id.id),
                       ('virtual_available', '>', 0)]
 
-            total_payable = count = 0
+            stock_valuation = count = 0
             stock = self.env['product.template'].search(domain)
             for prod in stock:
 
                 # verifico si el producto tiene mas de un proveedor
                 if len(prod.seller_ids) > 1:
-                    #print '====================================== mas de un proveedor'
-                    #import wdb; wdb.set_trace()
                     # de los proveedores me quedo con el mas nuevo
                     ref = {'date': '0000-00-00', 'id': 0}
                     for seller in prod.seller_ids:
-                        #print 'fecha', seller.date_start, seller.name.id
                         if seller.date_start > ref['date']:
                             ref['date'] = seller.date_start
                             ref['id'] = seller.name.id
 
                     # si el mas nuevo no coincide con el rec salteo y voy
                     # al siguiente
-                    #print ref['id'], '==', rec.vendor_id.id
                     if ref['id'] != rec.vendor_id.id:
-                        #print 'este lo salteo'
                         continue
 
-                total_payable += prod.virtual_available * prod.final_price
+                stock_valuation += prod.virtual_available * prod.final_price
                 count += prod.virtual_available
-                #print '>>>', prod.name
 
-            #print '=-=========================== actualizando datos'
             rec.write({
                 'total_payable': rec.vendor_id.debit,
-                'for_sale': total_payable,
+                'stock_valuation': stock_valuation,
                 'count': count
             })

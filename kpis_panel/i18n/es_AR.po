@@ -6,8 +6,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Odoo Server 9.0c-20180313\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2018-05-17 19:27+0000\n"
-"PO-Revision-Date: 2018-05-17 19:27+0000\n"
+"POT-Creation-Date: 2018-05-21 14:28+0000\n"
+"PO-Revision-Date: 2018-05-21 14:28+0000\n"
 "Last-Translator: <>\n"
 "Language-Team: \n"
 "MIME-Version: 1.0\n"
@@ -36,11 +36,6 @@ msgid "Display Name"
 msgstr "Mostrar Nombre"
 
 #. module: kpis_panel
-#: model:ir.model.fields,field_description:kpis_panel.field_kpis_panel_kpis_for_sale
-msgid "For sale"
-msgstr "Precio"
-
-#. module: kpis_panel
 #: model:ir.model.fields,field_description:kpis_panel.field_kpis_panel_kpis_id
 msgid "ID"
 msgstr "ID"
@@ -61,6 +56,11 @@ msgid "Last Updated on"
 msgstr "Última actualizacón el"
 
 #. module: kpis_panel
+#: model:ir.model.fields,field_description:kpis_panel.field_kpis_panel_kpis_stock_valuation
+msgid "Stock valuation (sale price w/tax)"
+msgstr "Valuacion de stock (P.Venta +IVA)"
+
+#. module: kpis_panel
 #: model:ir.ui.view,arch_db:kpis_panel.kpis_tree
 msgid "Survey"
 msgstr "Survey"
@@ -68,7 +68,7 @@ msgstr "Survey"
 #. module: kpis_panel
 #: model:ir.model.fields,field_description:kpis_panel.field_kpis_panel_kpis_total_payable
 msgid "Total payable"
-msgstr "Costo"
+msgstr "Deuda con el proveedor"
 
 #. module: kpis_panel
 #: model:ir.model.fields,field_description:kpis_panel.field_kpis_panel_kpis_vendor_id
@@ -80,11 +80,6 @@ msgstr "Proveedor de mercaderia"
 #: model:ir.ui.menu,name:kpis_panel.menu_pki_form
 msgid "Vendors Report"
 msgstr "Reporte de proveedores"
-
-#. module: kpis_panel
-#: model:ir.model,name:kpis_panel.model_kpis
-msgid "kpis"
-msgstr "Indicadores"
 
 #. module: kpis_panel
 #: model:ir.model,name:kpis_panel.model_kpis_panel_kpis

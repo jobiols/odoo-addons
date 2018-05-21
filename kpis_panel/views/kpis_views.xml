@@ -22,7 +22,7 @@
             <tree string="Survey" create="false" edit="false">
                 <field name="vendor_id" />
                 <field name="total_payable" />
-                <field name="for_sale" />
+                <field name="stock_valuation" />
                 <field name="count" />
             </tree>
         </field>
