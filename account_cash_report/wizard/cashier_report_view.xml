@@ -42,7 +42,6 @@
               name="Cash report"
               parent="menu_cash_main"
               sequence="90"
-              groups="base.group_erp_manager"
               action="action_cashier_report_menu"
     />
 
