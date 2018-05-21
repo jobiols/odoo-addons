@@ -61,6 +61,7 @@ class ReportCashier(models.AbstractModel):
                 ('account_id', '=', account_id.id),
                 ('date', '>=', data['date_from']),
                 ('date', '<=', data['date_to']),
+                ('journal_id', '=', journal.id)
             ])
 
             lines = []
