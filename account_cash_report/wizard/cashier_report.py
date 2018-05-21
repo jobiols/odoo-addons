@@ -29,7 +29,7 @@ class CashierReport(models.TransientModel):
             default=lambda *a: time.strftime('%Y-%m-%d')
     )
     expand_moves = fields.Boolean(
-            default=True,
+            default=False,
             help="Show account movements"
     )
 
@@ -39,7 +39,7 @@ class CashierReport(models.TransientModel):
             'form': {
                 'date_from': self.date_from,
                 'date_to': self.date_to,
-                'date_range': self.date_from != self.date_to,
+                'date_range': (self.date_from != self.date_to) and self.expand_moves,
                 'title': 'Reporte de caja',
                 'expand_moves': self.expand_moves,
                 'cash_id': self.cash_id.id,

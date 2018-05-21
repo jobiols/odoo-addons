@@ -67,25 +67,27 @@ class ReportCashier(models.AbstractModel):
             if journal.initial_balance:
                 accum_balance = self.initial_balance(account_id,
                                                      data['date_to'])
-                lin = {}
-                lin['date'] = data['date_from']
-                lin['partner_name'] = ''
-                lin['ref'] = 'Balance Inicial'
-                lin['move_name'] = ''
-                lin['balance'] = accum_balance
-                lines.append(lin)
+                if data['expand_moves']:
+                    lin = {}
+                    lin['date'] = data['date_from']
+                    lin['partner_name'] = ''
+                    lin['ref'] = 'Balance Inicial'
+                    lin['move_name'] = ''
+                    lin['balance'] = accum_balance
+                    lines.append(lin)
             else:
                 accum_balance = 0
 
             for line in mlines:
                 lin = {}
                 accum_balance += line.balance
-                lin['date'] = line.date
-                lin['partner_name'] = line.partner_id.name
-                lin['ref'] = line.ref or '/'
-                lin['move_name'] = line.name
-                lin['balance'] = line.balance
-                lines.append(lin)
+                if data['expand_moves']:
+                    lin['date'] = line.date
+                    lin['partner_name'] = line.partner_id.name
+                    lin['ref'] = line.ref or '/'
+                    lin['move_name'] = line.name
+                    lin['balance'] = line.balance
+                    lines.append(lin)
 
             jour['journal'] = journal.name
             jour['balance'] = accum_balance
