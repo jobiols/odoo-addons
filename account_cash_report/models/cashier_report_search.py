@@ -12,8 +12,6 @@ class ReportCashier(models.AbstractModel):
         """ Devuelve el balance de la cuenta al dia anterior a la fecha
             dada, es lo que hay en la cuenta al iniciar el dia.
         """
-        # import wdb;wdb.set_trace()
-
         # obtener el dia anterior
         date = datetime.strptime(date_to, '%Y-%m-%d')
         date_to = datetime.strftime(date - timedelta(1), '%Y-%m-%d')
@@ -80,6 +78,13 @@ class ReportCashier(models.AbstractModel):
                 accum_balance = 0
 
             for line in mlines:
+                reconciled = line.reconciled
+                frid = line.full_reconcile_id
+                print '---------------------------------------------------------'
+                print reconciled, frid
+
+
+
                 lin = {}
                 accum_balance += line.balance
                 if data['expand_moves']:
