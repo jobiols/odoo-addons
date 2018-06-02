@@ -30,7 +30,8 @@
     ],
     'demo': [],
     'depends': [
-        'base'
+        'base',
+        'account'
     ],
     'installable': True,
     'test': [],
