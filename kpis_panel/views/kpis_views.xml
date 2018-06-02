@@ -37,7 +37,7 @@
         <field name="view_mode">tree,form</field>
     </record>
 
-    <menuitem id="menu_pki_form"
+    <menuitem id="menu_kpi_form"
               name="Vendors Report"
               parent="account.menu_finance_entries"
               groups="iomaq_default.group_administrative_users,base.group_erp_manager"
