@@ -4,10 +4,10 @@
 #
 msgid ""
 msgstr ""
-"Project-Id-Version: Odoo Server 9.0c-20180313\n"
+"Project-Id-Version: Odoo Server 9.0c-20180504\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2018-05-20 20:06+0000\n"
-"PO-Revision-Date: 2018-05-20 20:06+0000\n"
+"POT-Creation-Date: 2018-06-03 23:11+0000\n"
+"PO-Revision-Date: 2018-06-03 23:11+0000\n"
 "Last-Translator: <>\n"
 "Language-Team: \n"
 "MIME-Version: 1.0\n"
@@ -67,15 +67,19 @@ msgid "Cash Form View"
 msgstr "Vista formulario de la caja"
 
 #. module: account_cash_report
-#: model:ir.actions.act_window,name:account_cash_report.action_cashier_report_menu
 #: model:ir.actions.report.xml,name:account_cash_report.action_cashier_report
-#: model:ir.model,name:account_cash_report.model_account_cash_report_cashier_report
-msgid "Cashier Report"
-msgstr "Reporte de Caja"
+msgid "Cash Report"
+msgstr "Reporte de cajas"
 
 #. module: account_cash_report
 #: model:ir.ui.menu,name:account_cash_report.menu_cash_item_report
-msgid "Cashier report"
+msgid "Cash report"
+msgstr "Reporte de cajas"
+
+#. module: account_cash_report
+#: model:ir.actions.act_window,name:account_cash_report.action_cashier_report_menu
+#: model:ir.model,name:account_cash_report.model_account_cash_report_cashier_report
+msgid "Cashier Report"
 msgstr "Reporte de Caja"
 
 #. module: account_cash_report
@@ -140,6 +144,11 @@ msgid "Initial balance"
 msgstr "Balance Inicial"
 
 #. module: account_cash_report
+#: model:ir.ui.view,arch_db:account_cash_report.cashier_report
+msgid "Invoice/Rec."
+msgstr "Factura/Rec."
+
+#. module: account_cash_report
 #: model:ir.model,name:account_cash_report.model_account_journal
 msgid "Journal"
 msgstr "Diario"
@@ -170,11 +179,6 @@ msgid "Last Updated on"
 msgstr "Última actualizacón el"
 
 #. module: account_cash_report
-#: model:ir.ui.view,arch_db:account_cash_report.cashier_report
-msgid "Move"
-msgstr "Movimiento"
-
-#. module: account_cash_report
 #: model:ir.model.fields,field_description:account_cash_report.field_account_cash_report_cash_name
 msgid "Name"
 msgstr "Nombre"
@@ -201,7 +205,7 @@ msgstr "Imprimir"
 
 #. module: account_cash_report
 #: model:ir.ui.view,arch_db:account_cash_report.cashier_report
-msgid "Ref"
+msgid "Ref."
 msgstr "Ref."
 
 #. module: account_cash_report

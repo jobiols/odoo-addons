@@ -2,14 +2,10 @@
 Reporte diario para cierre de cajas
 ===================================
 
-
-Reporte de Cajas
-----------------
 Este reporte se encuentra en Contabilidad / Cajas / Reporte de cajas
 
 El reporte de cajas esta personalizado para cada caja, y muestra el saldo total
 registrado en cada medio de pago, para la fecha o rango de fechas seleccionado.
-
 
 El filtro del reporte tiene los siguientes campos:
 
@@ -26,7 +22,6 @@ Definicion de caja
 Una caja es un conjunto de medios de pago que se puede asignar a una cajera,
 cuando la cajera selecciona el medio de pago se le muestran solo los que
 estan definidos en su caja.
-
 
 Medios de pago
 --------------
