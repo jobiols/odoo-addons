@@ -27,21 +27,18 @@
                         <br/>
                     </div>
 
-
                     <!-- reporte -->
                     <table class="table table-condensed">
                         <thead>
                             <tr>
                                 <th t-if="data['date_range']" class="test-left">Date</th>
-
+                                <th class="text-left">Invoice/Rec.</th>
                                 <th class="text-left">Partner</th>
-                                <th class="text-left">Ref</th>
-                                <th class="text-left">Move</th>
+                                <th class="text-left">Ref.</th>
                                 <th class="text-right">Balance</th>
                             </tr>
                         </thead>
                         <tbody>
-
                             <t t-foreach="journals" t-as="journal">
                                 <tr style="font-weight: bold;">
                                     <td colspan="3">
@@ -52,21 +49,18 @@
                                         <span t-att-style="style" t-esc="journal['balance']" t-esc-options='{"widget": "monetary", "display_currency": "res_company.currency_id"}'/>
                                     </td>
                                 </tr>
-
                                 <tr t-foreach="journal['lines']" t-as="line">
                                     <td t-if="data['date_range']"><span t-esc="line['date']"/></td>
+                                    <td><span t-esc="line['move_name']"/></td>
                                     <td><span t-esc="line['partner_name']"/></td>
                                     <td><span t-esc="line['ref']"/></td>
-                                    <td><span t-esc="line['move_name']"/></td>
                                     <td class="text-right" style="white-space: text-nowrap;">
                                         <span t-att-style="style" t-esc="line['balance']" t-esc-options='{"widget": "monetary", "display_currency": "res_company.currency_id"}'/>
                                     </td>
                                 </tr>
                             </t>
-
                         </tbody>
                     </table>
-
                 </div>
             </t>
         </t>

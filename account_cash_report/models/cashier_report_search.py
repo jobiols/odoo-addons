@@ -12,8 +12,6 @@ class ReportCashier(models.AbstractModel):
         """ Devuelve el balance de la cuenta al dia anterior a la fecha
             dada, es lo que hay en la cuenta al iniciar el dia.
         """
-        # import wdb;wdb.set_trace()
-
         # obtener el dia anterior
         date = datetime.strptime(date_to, '%Y-%m-%d')
         date_to = datetime.strftime(date - timedelta(1), '%Y-%m-%d')
@@ -80,13 +78,21 @@ class ReportCashier(models.AbstractModel):
                 accum_balance = 0
 
             for line in mlines:
+                display_names = []
+                if line.payment_id:
+                    if line.payment_id.payment_group_id:
+                        for mml in line.payment_id.payment_group_id.matched_move_line_ids:
+                            display_names.append(mml.move_id.display_name)
+
+                display_name = ', '.join(display_names)
+
                 lin = {}
                 accum_balance += line.balance
                 if data['expand_moves']:
                     lin['date'] = line.date
                     lin['partner_name'] = line.partner_id.name
                     lin['ref'] = line.ref or '/'
-                    lin['move_name'] = line.name
+                    lin['move_name'] = display_name if display_name else line.move_id.display_name
                     lin['balance'] = line.balance
                     lines.append(lin)
 
@@ -105,7 +111,7 @@ class ReportCashier(models.AbstractModel):
 
         self.model = self.env.context.get('active_model')
         docs = self.env[self.model].browse(
-                self.env.context.get('active_ids', []))
+            self.env.context.get('active_ids', []))
 
         # buscar los journals que nay que reportar
         domain = [('cash_id', '=', data['form']['cash_id'])]
@@ -124,4 +130,4 @@ class ReportCashier(models.AbstractModel):
         # TODO no funciona el landscape.
         landscape = data['form']['date_range']
         return self.env['report'].with_context(landscape=landscape).render(
-                'account_cash_report.cashier_report', docargs)
+            'account_cash_report.cashier_report', docargs)
