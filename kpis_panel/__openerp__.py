@@ -32,7 +32,6 @@
     'depends': [
         'base',
         'account',
-        'iomaq_default' #  TODO quitar esta dependencia
     ],
     'installable': True,
     'test': [],
