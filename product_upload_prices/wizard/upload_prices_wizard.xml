@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_product_load_wizard_form" model="ir.ui.view">
+        <field name="name">Upload Prices</field>
+        <field name="model">product_upload_prices.upload_prices</field>
+        <field name="arch" type="xml">
+            <form string="Price Update">
+                <separator string="Import File"/>
+                <p>Para importar precios al sistema crear una planilla excel
+                con tres columnas:</p>
+                <ul>
+                    <li>Código de producto</li>
+                    <li>Precio de lista sin iva</li>
+                    <li>Precio de costo sin iva</li>
+                </ul>
+                <group>
+                    <field name="data" filename="name"/>
+                </group>
+
+                <footer>
+                    <button name="import_file" string="Import" type="object"
+                            class="oe_highlight"/>
+                    or
+                    <button string="_Cancel" class="oe_link" special="cancel"/>
+                </footer>
+            </form>
+        </field>
+    </record>
+</odoo>

@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <record id="action_upload_prices" model="ir.actions.act_window">
+        <field name="name">Upload Prices</field>
+        <field name="type">ir.actions.act_window</field>
+        <field name="res_model">product_upload_prices.upload_prices</field>
+        <field name="view_mode">form</field>
+        <field name="target">new</field>
+    </record>
+
+    <menuitem id="menu_upload_prices"
+              name="Upload Prices"
+              parent="base.menu_sales"
+              sequence="16"
+              action="action_upload_prices"/>
+
+</odoo>
