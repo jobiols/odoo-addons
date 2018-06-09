@@ -37,6 +37,7 @@
         'data/cron_data.xml',
         'views/settings_view.xml',
         'views/product_view.xml',
+        'views/autoload_manager_view.xml',
     ],
     'test': [
     ],

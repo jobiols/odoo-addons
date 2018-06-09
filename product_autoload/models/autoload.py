@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 # Part of Odoo. See LICENSE file for full copyright and licensing details.
 import logging
-from time import time
+import time
 from datetime import datetime, timedelta
 import csv
 from mappers import MAP_WRITE_DATE
@@ -33,26 +33,23 @@ PC_LEN = 3
 class AutoloadMgr(models.Model):
     _name = 'product_autoload.manager'
     _description = "Manage product data import"
+    _order = 'id desc'
 
-    name = fields.Char()
+    name = fields.Char(
+
+    )
     start_time = fields.Datetime(
 
     )
-    elapsed_time = fields.Datetime(
+    elapsed_time = fields.Char(
 
     )
     statistics = fields.Html(
 
     )
-
-    @api.model
-    def check_garbage(self):
-        _logger.info(
-            '/////////////////////////////////////////////////////////')
-
-
-        _logger.info(
-            '/////////////////////////////////////////////////////////')
+    processed = fields.Integer(
+        string="Processed products"
+    )
 
     @staticmethod
     def load_section(data_path):
@@ -171,15 +168,11 @@ class AutoloadMgr(models.Model):
         """
         _logger.info('REPLICATION: Start')
         # empezamos a contar el tiempo de proceso
-        start_time = time()
+        start_time = time.time()
         data_path = self.data_path
 
-        rec = self.create({'name': 'Inicia Proceso'})
+        rec = self.create({})
         try:
-            self.send_email('Replicacion Bulonfer #{}, Inicio'.format(rec.id),
-                            'Se inicio el proceso',
-                            self.email_from, self.email_to)
-
             _logger.info('REPLICATION: Load memoy tables')
             # Cargar en memoria las tablas chicas
             self._section = self.load_section(data_path)
@@ -198,15 +191,23 @@ class AutoloadMgr(models.Model):
             self.load_product(data_path)
 
             # terminamos de contar el tiempo de proceso
-            elapsed_time = time() - start_time
-
-            rec.stats = self.get_stats(elapsed_time)
-            self.send_email('Replicacion Bulonfer #{}, Fin'.format(rec.id),
-                            self.get_stats(elapsed_time),
+            elapsed_time = time.time() - start_time
+            start = time.strftime('%Y-%m-%d %H:%M', time.localtime(start_time))
+            elapsed = time.strftime('%H:%M:%S', time.gmtime(elapsed_time))
+            self.send_email('Replicacion Bulonfer #{}'.format(rec.id),
+                            self.get_stats(start, elapsed),
                             self.email_from, self.email_to)
 
             self.last_replication = str(datetime.now())
             _logger.info('REPLICATION: End')
+
+            rec.write({
+                'name': 'Replicacion #{}'.format(rec.id),
+                'start_time': start,
+                'elapsed_time': elapsed,
+                'statistics': self.get_stats(start, elapsed),
+                'processed': self.prod_processed
+            })
 
         except Exception as ex:
             _logger.error('Replicacion Bulonfer {}'.format(ex.message))
@@ -283,12 +284,10 @@ class AutoloadMgr(models.Model):
             _logger.error('Falla envio de mail {}'.format(ex.message))
 
     @api.multi
-    def get_stats(self, elapsed_time):
-        elapsed = str(timedelta(seconds=elapsed_time))
-
-        ret = u'Terminó el proceso\n'
-        ret += u'Duración: {}\n'.format(elapsed)
-        ret += u'Productos procesados: {}'.format(self.prod_processed)
+    def get_stats(self, start, elapsed):
+        ret = u'Inicio: {}\n'.format(start)
+        ret = u'Duración: {}\n'.format(elapsed)
+        ret += u'Procesados: {} productos'.format(self.prod_processed)
         return ret
 
     @property
