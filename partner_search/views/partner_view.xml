@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<openerp>
+    <data>
+
+        <!--  Partners inherited searcho view -->
+
+        <record id="inherited_view_res_partner_filter" model="ir.ui.view">
+            <field name="name">Clientes - Busqueda</field>
+            <field name="model">res.partner</field>
+            <field name="inherit_id" ref="base.view_res_partner_filter"/>
+            <field name="arch" type="xml">
+                <xpath expr="filter[@string='Customers']"
+                       position="after">
+                    <field name="email"/>
+                    <field name="street"/>
+                    <field name="comment"/>
+                    <!--                    <field name="document_number" string="DNI/CUIT"/>
+                    TODO Arreglar esto del document_number
+                    -->
+                </xpath>
+            </field>
+        </record>
+
+    </data>
+</openerp>
