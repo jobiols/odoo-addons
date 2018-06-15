@@ -6,4 +6,4 @@
 Stock picking automatic
 =======================
 
-Provide an automatic picking when a Invoice is validated.
+Provide an automatic picking when an Invoice is validated.

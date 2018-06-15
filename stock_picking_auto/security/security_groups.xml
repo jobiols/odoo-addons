@@ -2,13 +2,6 @@
 <openerp>
     <data>
 
-        <!-- esto corrige un bug de odoo que aparece solo con chrome
-
-        <template id="mail_assets_backend" name="mail assets" inherit_id="mail.assets_backend">
-            <xpath expr="//script[@src='/mail/static/src/js/announcement.js']" position="replace"/>
-        </template>
-        -->
-
         <!-- Agregamos el grupo cajero para que haga la transferencia automatica -->
 
         <record id="module_stock_picking_auto" model="ir.module.category">
@@ -17,9 +10,10 @@
         </record>
 
         <record id="group_stock_picking_auto_cashier" model="res.groups">
-            <field name="name">Cashier</field>
+            <field name="name">Automatic</field>
             <field name="category_id" ref="module_stock_picking_auto"/>
-            <field name="comment">Grupo para los usuarios Cajero</field>
+            <field name="comment">This group allows selecting in configuration if the user will have the
+ability to make an automatic stock transfer when validating a sales order</field>
         </record>
 
     </data>

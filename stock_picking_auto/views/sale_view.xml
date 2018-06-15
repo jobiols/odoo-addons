@@ -2,8 +2,8 @@
 <odoo>
     <data>
 
-        <!-- cuando el usuario es cajero le aparece el boton confirmar y
-            transferir en la orden de compra -->
+        <!-- Si el usuario pertenece al grupo stock_picking_auto le aparece el
+            boton confirmar y transferir en la orden de compra -->
 
         <record id="view_order_form_spa" model="ir.ui.view">
             <field name="name">STOCK_PICKING_AUTO: Confirm and Transfer</field>

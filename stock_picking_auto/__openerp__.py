@@ -3,7 +3,7 @@
 
 {
     'name': 'Stock picking automatic',
-    'version': '9.0.0.1',
+    'version': '9.0.0.2',
     'category': 'Warehouse Management',
     'author': "jeo Software",
     'website': 'http://www.jeosoft.com.ar',
