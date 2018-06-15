@@ -20,7 +20,7 @@ class UploadPrices(models.TransientModel):
     )
 
     @staticmethod
-    def read_data(self, sheet):
+    def read_data(sheet):
         ret = []
         row_number = 0
         for row in sheet.iter_rows(min_row=1, min_col=1,
