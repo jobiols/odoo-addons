@@ -13,6 +13,12 @@
                     <li>Precio de lista sin iva</li>
                     <li>Precio de costo sin iva</li>
                 </ul>
+                <p>Al darle importar el sistema primero verifica si esta todo correcto.
+                    Si hay algun error lo muestra indicando el numero de fila de la planilla
+                    donde se produjo el error pero sin cargar ningun precio.
+                    Los productos deben existir y los precios deben ser numeros.
+                </p>
+                <p>Solo cuando no hay errores procede a cargar todos los precios.</p>
                 <group>
                     <field name="data" filename="name"/>
                 </group>
