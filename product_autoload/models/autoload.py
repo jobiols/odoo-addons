@@ -98,22 +98,23 @@ class AutoloadMgr(models.Model):
                 item = item_obj.search([('code', '=', values['code'])])
                 if item:
                     if not (item.origin == values['origin'] and
+                                    item.name == values['name'] and
                                     item.section == values['section'] and
                                     item.family == values['family'] and
                                     item.margin == float(values['margin'])):
                         item.write(values)
 
-                        ## forzar recalculo de precios.
-                        prod = prod_obj.search([
-                            ('item_code', '=', values['code'])])
+                        # forzar recalculo de precios.
+                        domain = [('item_code', '=', values['code'])]
+                        prod = prod_obj.search(domain)
                         if prod:
                             prod.recalculate_list_price(item.margin)
                 else:
                     item_obj.create(values)
 
                     # forzar recalculo de precios
-                    prod = prod_obj.search([
-                        ('item_code', '=', values['code'])])
+                    domain = [('item_code', '=', values['code'])]
+                    prod = prod_obj.search(domain)
                     if prod:
                         prod.recalculate_list_price(item.margin)
                         _logger.info('recalculate for create {}'
