@@ -120,7 +120,6 @@ class AutoloadMgr(models.Model):
                         _logger.info('recalculate for create {}'
                                      ''.format(item.code))
 
-    @api.multi
     def load_productcode(self, data_path):
         """ Borra la tabla productcode y la vuelve a crear con los datos nuevos
         """
@@ -145,8 +144,7 @@ class AutoloadMgr(models.Model):
     def load_product(self, data_path):
         """ Carga todos los productos teniendo en cuenta la fecha
         """
-        bulonfer = self.env['res.partner'].search(
-            [('ref', '=', 'BULONFER')])
+        bulonfer = self.env['res.partner'].search([('ref', '=', 'BULONFER')])
         if not bulonfer:
             raise Exception('Vendor Bulonfer not found')
 
