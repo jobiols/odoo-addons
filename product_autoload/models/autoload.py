@@ -55,11 +55,11 @@ class AutoloadMgr(models.Model):
     def load_section(data_path):
         """ Carga la estructura de datos en memoria
         """
+        _logger.info('REPLICATION: loading sections')
         res = dict()
         with open(data_path + SECTION, 'r') as file_csv:
             reader = csv.reader(file_csv)
             for line in reader:
-                _logger.info('loading section {}'.format(line[1]))
                 res[line[0]] = line[1]
         return res
 
@@ -67,26 +67,25 @@ class AutoloadMgr(models.Model):
     def load_family(data_path):
         """ Carga la estructura de datos en memoria
         """
+        _logger.info('REPLICATION: loading families')
         res = dict()
         with open(data_path + FAMILY, 'r') as file_csv:
             reader = csv.reader(file_csv)
             for line in reader:
-                _logger.info('loading family {}'.format(line[1]))
                 res[line[0]] = line[1]
         return res
 
-    @api.multi
     def load_item(self, data_path, item=ITEM):
         """ Carga los datos en un modelo, chequeando por modificaciones
             Si cambio el precio recalcula todos precios de los productos
         """
         prod_obj = self.env['product.template']
         item_obj = self.env['product_autoload.item']
+        _logger.info('REPLICATION: loading items')
 
         with open(data_path + item, 'r') as file_csv:
             reader = csv.reader(file_csv)
             for line in reader:
-                _logger.info('loading item {}'.format(line[IM_NAME]))
                 values = {
                     'code': line[IM_CODE].strip(),
                     'name': line[IM_NAME].strip(),
@@ -133,7 +132,7 @@ class AutoloadMgr(models.Model):
                 count += 1
                 if count == 2000:
                     count = 0
-                    _logger.info('loading +2000 barcodes')
+                    _logger.info('REPLICATION: loading +2000 barcodes')
                 values = {
                     'barcode': line[PC_BARCODE].strip(),
                     'product_code': line[PC_PRODUCT_CODE].strip(),
@@ -151,6 +150,9 @@ class AutoloadMgr(models.Model):
             raise Exception('Vendor Bulonfer not found')
 
         last_replication = self.last_replication
+        _logger.info('REPLICATION: Load products '
+                     'with timestamp > {}'.format(last_replication))
+
         supplierinfo = self.env['product.supplierinfo']
         self.prod_processed = 0
         with open(data_path + DATA, 'r') as file_csv:
@@ -166,14 +168,13 @@ class AutoloadMgr(models.Model):
     def run(self, item=ITEM):
         """ Actualiza todos los productos.
         """
-        _logger.info('REPLICATION: Start')
         # empezamos a contar el tiempo de proceso
         start_time = time.time()
         data_path = self.data_path
 
         rec = self.create({})
+        _logger.info('REPLICATION: Start #{}'.format(rec.id))
         try:
-            _logger.info('REPLICATION: Load memoy tables')
             # Cargar en memoria las tablas chicas
             self._section = self.load_section(data_path)
             self._family = self.load_family(data_path)
@@ -187,7 +188,6 @@ class AutoloadMgr(models.Model):
             # Aca carga solo los productos que tienen fecha de modificacion
             # posterior a la fecha de proceso y los actualiza o los crea segun
             # sea necesario
-            _logger.info('REPLICATION: Load products')
             self.load_product(data_path)
 
             # terminamos de contar el tiempo de proceso
