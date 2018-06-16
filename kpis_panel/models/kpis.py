@@ -7,7 +7,7 @@ from openerp import models, fields, api
 _logger = logging.getLogger(__name__)
 
 
-class Kpis(models.TransientModel):
+class Kpis(models.Model):
     _name = 'kpis_panel.kpis'
 
     vendor_id = fields.Many2one(

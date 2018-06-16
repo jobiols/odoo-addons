@@ -26,6 +26,7 @@
     'license': 'AGPL-3',
     'category': 'Accounting & Finance',
     'data': [
+        'security/ir.model.access.csv',
         'views/kpis_views.xml',
         'data/cron_data.xml'
     ],
