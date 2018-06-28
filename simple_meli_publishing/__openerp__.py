@@ -29,7 +29,8 @@
         'stock'
     ],
     'data': [
-        'views/product_view.xml'
+        'views/product_view.xml',
+        'wizard/process_excel_wizard.xml'
     ],
     'test': [
     ],
