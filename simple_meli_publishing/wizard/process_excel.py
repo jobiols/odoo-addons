@@ -7,7 +7,7 @@ import tempfile
 import openpyxl
 
 
-class UploadPrices(models.TransientModel):
+class SimpleMeliPublishing(models.TransientModel):
     _name = "simple_meli_publishing.process_excel"
 
     data = fields.Binary(
@@ -28,75 +28,36 @@ class UploadPrices(models.TransientModel):
         default="load"
     )
 
-    @staticmethod
-    def read_data(sheet):
-        ret = []
-        row_number = 0
-        for row in sheet.iter_rows(min_row=1, min_col=1,
-                                   max_col=3, max_row=40000):
-            row_number += 1
-            ret.append({
-                'default_code': str(row[0].value),
-                'list_price': row[1].value,
-                'standard_price': row[2].value,
-                'row': row_number
-            })
-        return ret
-
-    def check_data(self, data):
+    def process_data(self, fp_name):
         product_obj = self.env['product.product']
-        for row in data:
-            # check product exists
-            domain = [('default_code', '=', row['default_code'])]
-            if not product_obj.search(domain):
-                raise UserError(
-                    u'ERROR in line {}, product "{}" not found'
-                    u''.format(row['row'], row['default_code']))
-            try:
-                # check list price is a number
-                float(row['list_price'])
-            except ValueError as ve:
-                raise UserError(
-                    u'Error in line {}, list price "{}" not a number'
-                    u''.format(row['row'], row['list_price']))
 
-            try:
-                # check standard price is a number
-                float(row['standard_price'])
-            except ValueError as ve:
-                raise UserError(
-                    u'Error in line {}, standard price "{}" not a number'
-                    u''.format(row['row'], row['standard_price']))
+        # open worksheet
+        wb = openpyxl.load_workbook(filename=fp_name,
+                                    read_only=False,
+                                    data_only=True)
+        wb.active
 
-    def process_data(self, data):
-        product_obj = self.env['product.product']
-        for row in data:
-            domain = [('default_code', '=', row['default_code'])]
-            prod = product_obj.search(domain)
-            prod.list_price = float(row['list_price'])
-            prod.standard_price = float(row['standard_price'])
 
     @api.multi
     def load_file(self):
-        for pp in self:
+        for rec in self:
             #import wdb;wdb.set_trace()
-            pp.state = 'download'
-            pp.pdata = pp.data
 
+            # escribir la data en un archivo temporario
+            data = base64.decodestring(rec.data)
+            (fileno, fp_name) = tempfile.mkstemp('.xlsx', 'openerp_')
+#            openfile = open(fp_name, "w")
+#            openfile.write(data)
+#            openfile.close()
+            with open(fp_name, "w") as worksheet:
+                worksheet.write(data)
 
-        """
-        data = base64.decodestring(self.data)
-        (fileno, fp_name) = tempfile.mkstemp('.xlsx', 'openerp_')
-        openfile = open(fp_name, "w")
-        openfile.write(data)
-        openfile.close()
-        return
+            # procesar el archivo
+            #self.process_data(fp_name)
 
+            # leer el archivo temporario para hacer download
+            with open(fp_name, "r") as worksheet:
+                rec.pdata = base64.encodestring(worksheet.read())
 
-
-        wb = openpyxl.load_workbook(filename=fp_name, read_only=True,
-                                    data_only=True)
-        data = self.read_data(wb.active)
-        self.check_data(data)
-        self.process_data(data)
-        """
+            # cambiar la vista para que descarguen el archivo
+            rec.state = 'download'
