@@ -41,23 +41,22 @@ class UploadPrices(models.TransientModel):
             domain = [('default_code', '=', row['default_code'])]
             if not product_obj.search(domain):
                 raise UserError(
-                    _(u'ERROR in line {}, product "{}" not found') +
-                    _(u''.format(row['row'], row['default_code'])))
+                    _(u'ERROR in line %s, product "%s" not found') %
+                    (row['row'], row['default_code']))
             try:
                 # check list price is a number
                 float(row['list_price'])
             except (ValueError, TypeError):
                 raise UserError(
-                    _(u'Error in line {}, list price "{}" not a number') +
-                    _(u''.format(row['row'], row['list_price'])))
-
+                    _(u'Error in line %s, list price "%s" not a number') %
+                    (row['row'], row['list_price']))
             try:
                 # check standard price is a number
                 float(row['standard_price'])
             except (ValueError, TypeError):
                 raise UserError(
-                    _(u'Error in line {}, standard price "{}" not a number') +
-                    _(u''.format(row['row'], row['standard_price'])))
+                    _(u'Error in line %s, standard price "%s" not a number') %
+                    (row['row'], row['standard_price']))
 
     def process_data(self, data):
         product_obj = self.env['product.product']
