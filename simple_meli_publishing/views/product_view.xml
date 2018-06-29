@@ -18,5 +18,20 @@
             </field>
         </record>
 
+        <record id="action_process_meli_excel" model="ir.actions.act_window">
+            <field name="name">Process meli Excel</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">simple_meli_publishing.process_excel</field>
+            <field name="view_mode">form</field>
+            <field name="target">inline</field>
+        </record>
+
+        <menuitem id="menu_process_meli_excel"
+                  name="process meli prices"
+                  parent="base.menu_sales"
+                  sequence="16"
+                  action="action_process_meli_excel"/>
+
     </data>
+
 </openerp>

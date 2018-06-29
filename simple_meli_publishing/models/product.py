@@ -9,3 +9,7 @@ class ProductTemplate(models.Model):
     meli_code = fields.Char(
         string='Meli Publishing Code'
     )
+
+    _sql_constraints = [
+        ('uniq_meli_code', 'unique(meli_code)', "The Mercadolibre product code must be unique !"),
+    ]
