@@ -6,19 +6,19 @@
         <field name="arch" type="xml">
             <form string="Price Update">
                 <separator string="Import File"/>
-                <p>Para importar precios al sistema crear una planilla excel
-                con tres columnas:</p>
+                <p>To import prices in the system create a worksheet with three columns:</p>
                 <ul>
-                    <li>Código de producto</li>
-                    <li>Precio de lista sin iva</li>
-                    <li>Precio de costo sin iva</li>
+                    <li>Product Code</li>
+                    <li>List price without tax</li>
+                    <li>Cost price without tax</li>
                 </ul>
-                <p>Al darle importar el sistema primero verifica si esta todo correcto.
-                    Si hay algun error lo muestra indicando el numero de fila de la planilla
-                    donde se produjo el error pero sin cargar ningun precio.
-                    Los productos deben existir y los precios deben ser numeros.
+                <p>
+                    When hitting import the system checks all the file.
+                    If there are any error it is shown pointing the worksheet
+                    ofending row.
+                    The products must exist and the prices must be numbers.
                 </p>
-                <p>Solo cuando no hay errores procede a cargar todos los precios.</p>
+                <p>Only when there are no errors all the prices are updated.</p>
                 <group>
                     <field name="data" filename="name"/>
                 </group>

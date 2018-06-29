@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 # Part of Odoo. See LICENSE file for full copyright and licensing details.
-from openerp import api, models, fields
+from openerp import api, models, fields, _
 from openerp.exceptions import UserError, Warning
 import base64
 import tempfile
@@ -41,23 +41,23 @@ class UploadPrices(models.TransientModel):
             domain = [('default_code', '=', row['default_code'])]
             if not product_obj.search(domain):
                 raise UserError(
-                    u'ERROR in line {}, product "{}" not found'
-                    u''.format(row['row'], row['default_code']))
+                    _(u'ERROR in line {}, product "{}" not found') +
+                    _(u''.format(row['row'], row['default_code'])))
             try:
                 # check list price is a number
                 float(row['list_price'])
-            except ValueError as ve:
+            except (ValueError, TypeError):
                 raise UserError(
-                    u'Error in line {}, list price "{}" not a number'
-                    u''.format(row['row'], row['list_price']))
+                    _(u'Error in line {}, list price "{}" not a number') +
+                    _(u''.format(row['row'], row['list_price'])))
 
             try:
                 # check standard price is a number
                 float(row['standard_price'])
-            except ValueError as ve:
+            except (ValueError, TypeError):
                 raise UserError(
-                    u'Error in line {}, standard price "{}" not a number'
-                    u''.format(row['row'], row['standard_price']))
+                    _(u'Error in line {}, standard price "{}" not a number') +
+                    _(u''.format(row['row'], row['standard_price'])))
 
     def process_data(self, data):
         product_obj = self.env['product.product']

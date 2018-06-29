@@ -6,14 +6,19 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Odoo Server 9.0c-20180504\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2018-06-08 03:06+0000\n"
-"PO-Revision-Date: 2018-06-08 03:06+0000\n"
+"POT-Creation-Date: 2018-06-29 02:09+0000\n"
+"PO-Revision-Date: 2018-06-29 02:09+0000\n"
 "Last-Translator: <>\n"
 "Language-Team: \n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: \n"
 "Plural-Forms: \n"
+
+#. module: product_upload_prices
+#: model:ir.ui.view,arch_db:product_upload_prices.view_product_load_wizard_form
+msgid "Cost price without tax"
+msgstr "Precio de costo sin IVA"
 
 #. module: product_upload_prices
 #: model:ir.model.fields,field_description:product_upload_prices.field_product_upload_prices_upload_prices_create_uid
@@ -29,6 +34,24 @@ msgstr "Creado el"
 #: model:ir.model.fields,field_description:product_upload_prices.field_product_upload_prices_upload_prices_display_name
 msgid "Display Name"
 msgstr "Mostrar Nombre"
+
+#. module: product_upload_prices
+#: code:addons/product_upload_prices/wizard/upload_prices.py:44
+#, python-format
+msgid "ERROR in line {}, product \"{}\" not found"
+msgstr "ERROR en linea {}, el producto \"{}\" no se encuentra"
+
+#. module: product_upload_prices
+#: code:addons/product_upload_prices/wizard/upload_prices.py:51
+#, python-format
+msgid "Error in line {}, list price \"{}\" not a number"
+msgstr "Error en linea {}, el precio de lista \"{}\" no es un numero"
+
+#. module: product_upload_prices
+#: code:addons/product_upload_prices/wizard/upload_prices.py:59
+#, python-format
+msgid "Error in line {}, standard price \"{}\" not a number"
+msgstr "Error en linea {}, el precio de costo \"{}\" no es un numero"
 
 #. module: product_upload_prices
 #: model:ir.model.fields,field_description:product_upload_prices.field_product_upload_prices_upload_prices_data
@@ -72,14 +95,45 @@ msgstr "Última actualizacón el"
 
 #. module: product_upload_prices
 #: model:ir.ui.view,arch_db:product_upload_prices.view_product_load_wizard_form
+msgid "List price without tax"
+msgstr "Precio de lista sin IVA"
+
+#. module: product_upload_prices
+#: model:ir.ui.view,arch_db:product_upload_prices.view_product_load_wizard_form
+msgid "Only when there are no errors all the prices are updated."
+msgstr "Solo cuando no hay errores todos los precios son actualizados."
+
+#. module: product_upload_prices
+#: model:ir.ui.view,arch_db:product_upload_prices.view_product_load_wizard_form
 msgid "Price Update"
 msgstr "Actualizar precios"
+
+#. module: product_upload_prices
+#: model:ir.ui.view,arch_db:product_upload_prices.view_product_load_wizard_form
+msgid "Product Code"
+msgstr "Codigo de producto"
+
+#. module: product_upload_prices
+#: model:ir.ui.view,arch_db:product_upload_prices.view_product_load_wizard_form
+msgid "To import prices in the system create a worksheet with three columns:"
+msgstr "Para importar precios en el sistema crear una planilla con tres columnas:"
 
 #. module: product_upload_prices
 #: model:ir.actions.act_window,name:product_upload_prices.action_upload_prices
 #: model:ir.ui.menu,name:product_upload_prices.menu_upload_prices
 msgid "Upload Prices"
 msgstr "Importar precios"
+
+#. module: product_upload_prices
+#: model:ir.ui.view,arch_db:product_upload_prices.view_product_load_wizard_form
+msgid "When hitting import the system checks all the file.\n"
+"                    If there are any error it is shown pointing the worksheet\n"
+"                    ofending row.\n"
+"                    The products must exist and the prices must be numbers."
+msgstr "Al darle importar, el sistema primero verifica si esta todo correcto.\n"
+"                    Si hay algun error lo muestra indicando el numero de fila de la\n"
+"                    planilla donde se produjo el error pero sin cargar ningun precio.\n"
+"                    Los productos deben existir y los precios deben ser numeros."
 
 #. module: product_upload_prices
 #: model:ir.ui.view,arch_db:product_upload_prices.view_product_load_wizard_form
