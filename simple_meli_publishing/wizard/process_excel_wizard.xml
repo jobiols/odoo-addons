@@ -26,9 +26,9 @@
                     </div>
                 </group>
 
-                <group states="error" string="Errors found">
+                <group states="error" string="Errors">
                     <div>
-                        <p>Not implemented</p>
+                        <field name="errors" widget="html"/>
                     </div>
                 </group>
 
