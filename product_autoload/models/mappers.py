@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 # Part of Odoo. See LICENSE file for full copyright and licensing details.
+from __future__ import division
 import logging
 
 _logger = logging.getLogger(__name__)
@@ -10,20 +11,23 @@ class CommonMapper(object):
     def check_string(field, value):
         try:
             value.decode('utf-8')
-        except:
-            raise Exception(
-                'Unicode Encode Error in field {}, '
-                'The codification must be utf-8'.format(field))
+        except Exception as ex:
+            _logger.error('Error reading data.csv: Can not convert Field: '
+                          '%s Value: %s to unicode, '
+                          '%s' % (field, value, ex.message))
+            raise
         return value
 
     @staticmethod
     def check_numeric(field, value):
         try:
             ret = int(value)
+            return ret
         except ValueError as ex:
-            _logger.error(
-                '{} Value: "{}": {}'.format(field, value, ex.message))
-        return ret
+            _logger.error('Error reading data.csv: '
+                          'Can not convert Field: %s Value: %s to number, '
+                          '%s' % (field, value, ex.message))
+            raise
 
 
 MAP_DEFAULT_CODE = 0
@@ -58,7 +62,7 @@ class ProductMapper(CommonMapper):
         self._default_code = False
         self._name = False
         self._description_sale = False
-        self._standard_price = 0
+        self._bulonfer_cost = 0
         self._upv = 0
         self._weight = 0
         self._volume = 0
@@ -74,8 +78,9 @@ class ProductMapper(CommonMapper):
         self.default_code = line[MAP_DEFAULT_CODE]
         self.name = line[MAP_NAME]
         self.description_sale = line[MAP_DESCRIPTION_SALE]
-        self.standard_price = line[MAP_STANDARD_PRICE]
         self.upv = line[MAP_UPV]
+        self.bulonfer_cost = line[MAP_STANDARD_PRICE]
+        self.bulonfer_cost /= self.upv
         self.weight = line[MAP_WEIGHT]
         self.volume = line[MAP_VOLUME]
         self.wholesaler_bulk = line[MAP_WHOLESALER_BULK]
@@ -86,12 +91,11 @@ class ProductMapper(CommonMapper):
         self.item_code = line[MAP_ITEM_CODE]
         self.write_date = line[MAP_WRITE_DATE]
 
-    def values(self, create=False):
+    def values(self):
         ret = dict()
         ret['default_code'] = self.default_code
         ret['name'] = self.name
         ret['description_sale'] = self.description_sale
-        ret['standard_price'] = self.standard_price / self.upv
         ret['upv'] = self.upv
         ret['weight'] = self.weight
         ret['volume'] = self.volume
@@ -101,28 +105,9 @@ class ProductMapper(CommonMapper):
         ret['write_date'] = self.write_date
         ret['item_code'] = self.item_code
         ret['invalidate_category'] = self._invalidate_category
+        ret['bulonfer_cost'] = self._bulonfer_cost
         if self._image:
             ret['image'] = self._image
-
-        supplierinfo = {
-            'name': self._vendor.id,
-            'min_qty': self.wholesaler_bulk,
-            'price': self.standard_price,
-            'product_code': self.default_code,
-            'date_start': self.write_date
-        }
-        if create:
-            ret['seller_ids'] = [(0, 0, supplierinfo)]
-        else:
-            rec = self._supplierinfo_obj.search(
-                [('name', '=', self._vendor.id),
-                 ('product_code', '=', self.default_code)])
-            if rec:
-                rec.price = self.standard_price
-                rec.min_qty = self.wholesaler_bulk
-                rec.date_start = self.write_date
-            else:
-                ret['seller_ids'] = [(0, 0, supplierinfo)]
 
         # agregar valores por defecto
         ret.update(self.default_values())
@@ -155,10 +140,13 @@ class ProductMapper(CommonMapper):
         prod = product_obj.search([('default_code', '=', self.default_code)])
         if prod:
             prod.write(self.values())
-            _logger.info('Updating product {}'.format(self.default_code))
+            _logger.info('Updating product %s' % self.default_code)
         else:
-            prod = product_obj.create(self.values(create=True))
-            _logger.info('Creating product {}'.format(self.default_code))
+            prod = product_obj.create(self.values())
+            _logger.info('Creating product %s' % self.default_code)
+
+        prod.set_cost(self._vendor, self.wholesaler_bulk, self.bulonfer_cost,
+                      self.write_date, self.default_code)
 
         tax_obj = env['account.tax']
 
@@ -167,10 +155,9 @@ class ProductMapper(CommonMapper):
                                    ('tax_group_id.tax', '=', 'vat'),
                                    ('type_tax_use', '=', 'sale')])
         if not tax_sale:
-            raise Exception('Product {} needs Customer Tax {}% (IVA Sales)'
-                            ' not found in Accounting'.format(
-                self.default_code, self.iva))
-
+            raise Exception('Product %s needs Customer Tax %s (IVA Sales)'
+                            ' not found in Accounting' %
+                            (self.default_code, self.iva))
         # analizando el iva
         tax = choose_tax(tax_sale)
 
@@ -182,9 +169,9 @@ class ProductMapper(CommonMapper):
                                        ('tax_group_id.tax', '=', 'vat'),
                                        ('type_tax_use', '=', 'purchase')])
         if not tax_purchase:
-            raise Exception('Product {} needs Customer Tax {}% (IVA Purchases)'
-                            ' not found in Accounting'.format(
-                self.default_code, self.iva))
+            raise Exception('Product %s needs Customer Tax %s (IVA Purchases)'
+                            ' not found in Accounting' %
+                            (self.default_code, self.iva))
 
         # analizando el iva
         tax = choose_tax(tax_purchase)
@@ -198,7 +185,7 @@ class ProductMapper(CommonMapper):
 
         recs = prodcode_obj.search([('product_code', '=', prod.default_code)])
         for rec in recs:
-            _logger.info('Linking barcode {}'.format(rec.barcode))
+            _logger.info('Linking barcode %s' % rec.barcode)
             bc = barcode_obj.search([('name', '=', rec.barcode)])
             if not bc:
                 barcode_obj.create({
@@ -212,8 +199,10 @@ class ProductMapper(CommonMapper):
             ret = float(value)
             return ret
         except ValueError as ex:
-            raise Exception(
-                '{} Value: "{}": {}'.format(field, value, ex.message))
+            _logger.error('Error reading data.csv: '
+                          'Can not convert Field: %s Value: %s to currency, '
+                          '%s' % (field, value, ex.message))
+            raise
 
     @staticmethod
     def check_float(field, value):
@@ -221,8 +210,10 @@ class ProductMapper(CommonMapper):
             ret = float(value)
             return ret
         except ValueError as ex:
-            raise Exception(
-                '{} Value "{}": {}'.format(field, value, ex.message))
+            _logger.error('Error reading data.csv: '
+                          'Can not convert Field: %s Value: %s to float, '
+                          '%s' % (field, value, ex.message))
+            raise
 
     def slugify(self, field, value):
         ret = self.check_string(field, value)
@@ -300,13 +291,13 @@ class ProductMapper(CommonMapper):
         self._retail_bulk = self.check_numeric('retail_bulk', value)
 
     @property
-    def standard_price(self):
-        return self._standard_price
+    def bulonfer_cost(self):
+        return self._bulonfer_cost
 
-    @standard_price.setter
-    def standard_price(self, value):
+    @bulonfer_cost.setter
+    def bulonfer_cost(self, value):
         if value:
-            self._standard_price = self.check_currency('standard_price', value)
+            self._bulonfer_cost = self.check_currency('bulonfer_cost', value)
 
     @property
     def image_name(self):

@@ -77,7 +77,7 @@ class AutoloadMgr(models.Model):
 
     def load_item(self, data_path, item=ITEM):
         """ Carga los datos en un modelo, chequeando por modificaciones
-            Si cambio el precio recalcula todos precios de los productos
+            Si cambio el margen recalcula todos precios de los productos
         """
         prod_obj = self.env['product.template']
         item_obj = self.env['product_autoload.item']
@@ -117,8 +117,6 @@ class AutoloadMgr(models.Model):
                     prod = prod_obj.search(domain)
                     if prod:
                         prod.recalculate_list_price(item.margin)
-                        _logger.info('recalculate for create {}'
-                                     ''.format(item.code))
 
     def load_productcode(self, data_path):
         """ Borra la tabla productcode y la vuelve a crear con los datos nuevos
@@ -130,9 +128,9 @@ class AutoloadMgr(models.Model):
             reader = csv.reader(file_csv)
             for line in reader:
                 count += 1
-                if count == 2000:
+                if count == 4000:
                     count = 0
-                    _logger.info('REPLICATION: loading +2000 barcodes')
+                    _logger.info('REPLICATION: loading +4000 barcodes')
                 values = {
                     'barcode': line[PC_BARCODE].strip(),
                     'product_code': line[PC_PRODUCT_CODE].strip(),
@@ -140,7 +138,6 @@ class AutoloadMgr(models.Model):
                 }
                 item_obj.create(values)
 
-    @api.multi
     def load_product(self, data_path):
         """ Carga todos los productos teniendo en cuenta la fecha
         """
@@ -221,7 +218,6 @@ class AutoloadMgr(models.Model):
         _logger.info('update categories')
         categ_obj = self.env['product.category']
         item_obj = self.env['product_autoload.item']
-
         prods = self.env['product.template'].search(
             [('invalidate_category', '=', True)], limit=400)
         for prod in prods:
@@ -259,8 +255,9 @@ class AutoloadMgr(models.Model):
             if not categ_id:
                 categ_id = categ_obj.create({'name': item.name,
                                              'parent_id': sec_fam_id.id})
-            _logger.info('Setting {} --> {}'.format(
-                prod.default_code, categ_id.complete_name))
+
+            _logger.info('Setting %s --> %s' %
+                         (prod.default_code, categ_id.complete_name))
             prod.write(
                 {
                     'categ_id': categ_id.id,
