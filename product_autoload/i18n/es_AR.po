@@ -4,21 +4,16 @@
 #
 msgid ""
 msgstr ""
-"Project-Id-Version: Odoo Server 9.0c-20180313\n"
+"Project-Id-Version: Odoo Server 9.0c-20180504\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2018-05-08 22:21+0000\n"
-"PO-Revision-Date: 2018-05-08 22:21+0000\n"
+"POT-Creation-Date: 2018-06-30 21:23+0000\n"
+"PO-Revision-Date: 2018-06-30 21:23+0000\n"
 "Last-Translator: <>\n"
 "Language-Team: \n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: \n"
 "Plural-Forms: \n"
-
-#. module: product_autoload
-#: model:ir.model.fields,help:product_autoload.field_account_invoice_line_invoice_discount
-msgid "A discount made with a negative invoice line wich afects all lines in the invoice."
-msgstr "A discount made with a negative invoice line wich afects all lines in the invoice."
 
 #. module: product_autoload
 #: model:ir.model.fields,help:product_autoload.field_product_template_upv
@@ -58,9 +53,24 @@ msgid "Bulk retail quantity of units"
 msgstr "Cantidad de unidades en compra minorista"
 
 #. module: product_autoload
+#: model:ir.model.fields,help:product_autoload.field_product_template_bulonfer_cost
+msgid "Bulonfer Cost price from last replication"
+msgstr "Ultimo Costo Bulonfer"
+
+#. module: product_autoload
+#: model:ir.model.fields,field_description:product_autoload.field_product_template_bulonfer_cost
+msgid "Bulonfer cost"
+msgstr "Bulonfer cost"
+
+#. module: product_autoload
 #: model:ir.ui.view,arch_db:product_autoload.view_custom_config_settings
 msgid "Cancel"
 msgstr "Cancelar"
+
+#. module: product_autoload
+#: model:ir.ui.view,arch_db:product_autoload.product_autoload_tree_view
+msgid "Cash"
+msgstr "Caja"
 
 #. module: product_autoload
 #: model:ir.model.fields,help:product_autoload.field_product_template_invalidate_category
@@ -84,6 +94,11 @@ msgstr "Codigo de bulonfer, no se muestra"
 #: model:ir.ui.view,arch_db:product_autoload.view_custom_config_settings
 msgid "Configure Accounting"
 msgstr "Configurar Contabilidad"
+
+#. module: product_autoload
+#: model:ir.model.fields,help:product_autoload.field_product_template_oldest_cost
+msgid "Cost price from oldest product in stock"
+msgstr "Costo del producto mas viejo en stock"
 
 #. module: product_autoload
 #: model:ir.model.fields,field_description:product_autoload.field_product_autoload_item_create_uid
@@ -112,14 +127,9 @@ msgid "Date and time of last replication"
 msgstr "Fecha hora de la ultima replicacion"
 
 #. module: product_autoload
-#: model:ir.model.fields,field_description:product_autoload.field_product_template_difference
-msgid "Difference"
-msgstr "Dif %"
-
-#. module: product_autoload
-#: model:ir.model.fields,help:product_autoload.field_product_template_difference
-msgid "Difference % in cost price between invoce and system, calculated as (invoice_price-system_price)/invoice_pricethis diference is an error and must go towars zero."
-msgstr "Diferencia % en el precio de costo entre las facturas de compra y el sistema (bulonfer), calculado como (preciofactura-preciosistema)/preciofactura esta diferencia es un error y debe tender a cero."
+#: model:ir.ui.view,arch_db:product_autoload.product_template_tree_view1
+msgid "Dif%"
+msgstr "Dif%"
 
 #. module: product_autoload
 #: model:ir.model.fields,field_description:product_autoload.field_account_invoice_discount_processed
@@ -188,9 +198,9 @@ msgid "Invoice"
 msgstr "Factura"
 
 #. module: product_autoload
-#: model:ir.model.fields,field_description:product_autoload.field_account_invoice_line_invoice_discount
-msgid "Invoice Discount"
-msgstr "Descuenta en factura"
+#: model:ir.ui.view,arch_db:product_autoload.product_template_tree_view1
+msgid "Invoice Cost"
+msgstr "Invoice Cost"
 
 #. module: product_autoload
 #: model:ir.model,name:product_autoload.model_account_invoice_line
@@ -247,6 +257,11 @@ msgid "Margin"
 msgstr "Margen"
 
 #. module: product_autoload
+#: model:ir.ui.view,arch_db:product_autoload.product_template_tree_view1
+msgid "Margin%"
+msgstr "Margen%"
+
+#. module: product_autoload
 #: model:ir.model.fields,field_description:product_autoload.field_product_autoload_item_name
 #: model:ir.model.fields,field_description:product_autoload.field_product_autoload_manager_name
 msgid "Name"
@@ -258,9 +273,26 @@ msgid "No Categorizado"
 msgstr "No Categorizado"
 
 #. module: product_autoload
+#: model:ir.model.fields,field_description:product_autoload.field_product_template_oldest_cost
+msgid "Oldest cost"
+msgstr "Costo mas viejo"
+
+#. module: product_autoload
 #: model:ir.model.fields,field_description:product_autoload.field_product_autoload_item_origin
 msgid "Origin"
 msgstr "Origen"
+
+#. module: product_autoload
+#: model:ir.model.fields,field_description:product_autoload.field_product_autoload_manager_processed
+msgid "Processed products"
+msgstr "Productos procesados"
+
+#. module: product_autoload
+#: model:ir.actions.act_window,name:product_autoload.action_product_autoload
+#: model:ir.ui.menu,name:product_autoload.menu_product_autoload
+#: model:ir.ui.view,arch_db:product_autoload.product_autoload_form_view
+msgid "Product Autoload"
+msgstr "Carga automatica de productos"
 
 #. module: product_autoload
 #: model:ir.model,name:product_autoload.model_product_template
@@ -316,6 +348,11 @@ msgstr "El codigo de barras debe ser unico !"
 #: sql_constraint:product_autoload.item:0
 msgid "The item code must be unique !"
 msgstr "El codigo de item debe ser unico !"
+
+#. module: product_autoload
+#: model:ir.ui.view,arch_db:product_autoload.product_template_tree_view1
+msgid "Today Cost"
+msgstr "Costo hoy"
 
 #. module: product_autoload
 #: model:ir.model.fields,field_description:product_autoload.field_product_template_upv

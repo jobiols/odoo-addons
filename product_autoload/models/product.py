@@ -5,6 +5,7 @@ import logging
 _logger = logging.getLogger(__name__)
 
 from openerp import api, models, fields
+from datetime import datetime, timedelta
 
 
 class ProductProduct(models.Model):
@@ -33,23 +34,42 @@ class ProductProduct(models.Model):
     )
 
     difference = fields.Float(
-        help="Difference % in cost price between invoce and system, "
-             "calculated as (invoice_price-system_price)/invoice_price"
-             "this diference is an error and must go towars zero."
+        help="Difference % in cost price between invoce and bulonfer data, "
+             "calculated as (invoice_price - system_price)/invoice_price"
+             "this diference is an error and must go towards zero."
     )
 
     system_cost = fields.Float(
-        compute="_compute_system_cost"
+        compute="_compute_system_cost",
+        help="Cost price based on the purchase invoice"
     )
 
     margin = fields.Float(
-        help="bulonfer margin for this product"
+        help="Bulonfer suggested product margin from last replication"
+    )
+
+    bulonfer_cost = fields.Float(
+        help="Bulonfer Cost price from last replication"
+    )
+
+    oldest_cost = fields.Float(
+        help="Cost price from oldest product in stock",
+        compute="_compute_oldest_cost",
+        digits=(7, 2)
     )
 
     @api.multi
-    def _compute_system_cost(self):
+    @api.depends('standard_price')
+    def _compute_oldest_cost(self):
         for prod in self:
-            prod.system_cost = prod.standard_price / (
+            prod.oldest_cost = prod.standard_price
+
+    @api.multi
+    @api.depends('bulonfer_cost', 'difference')
+    def _compute_system_cost(self):
+        # Calcula el costo de la factura basado en el costo que viene de
+        for prod in self:
+            prod.system_cost = prod.bulonfer_cost / (
                 1 - prod.difference / 100)
 
     @api.multi
@@ -59,7 +79,9 @@ class ProductProduct(models.Model):
             porque son las unicas que tienen discount_processed en True.
         """
 
+        # TODO Revisar si esto es valido
         # buscar la linea de factura de compra que tiene el producto
+        # me traigo la ultima vez que lo compre.
         invoice_lines_obj = self.env['account.invoice.line']
         for prod in self:
             invoice_line = invoice_lines_obj.search(
@@ -80,13 +102,47 @@ class ProductProduct(models.Model):
                 invoice_price *= (1 - 0.05)
 
                 # precio que vino de bulonfer (puede ser cero)
-                system_price = prod.standard_price
+                system_price = prod.bulonfer_cost
                 if system_price:
                     p_dif = (invoice_price - system_price) / invoice_price
 
             p_dif *= 100
             prod.write({
-                'list_price': prod.standard_price * (1 + margin),
+                'list_price': prod.bulonfer_cost * (1 + margin),
                 'margin': margin * 100,
                 'difference': p_dif
             })
+
+    @api.multi
+    def set_cost(self, vendor_id, min_qty, cost, date, vendors_code):
+        """ Setea el costo del producto, el costo se pone en suplierinfo, no
+            en standard price. Cuando se ingresa la mercaderia el quant queda
+            valorizado al precio que esta en supplierinfo y cuando se egresa
+            mercaderia el standard_price queda al precio del quant que salio.
+        """
+
+        supplierinfo = {
+            'name': vendor_id.id,
+            'min_qty': min_qty,
+            'price': cost,
+            'product_code': vendors_code,  # vendors product code
+            'product_name': self.name,  # vendors product name
+            'date_start': date,
+            'product_tmpl_id': self.id
+        }
+
+        # si hay registros abiertos cerrarlos
+        sellers = self.seller_ids.search(
+            [('name', '=', vendor_id.id),
+             ('product_code', '=', self.default_code),
+             ('product_tmpl_id', '=', self.id),
+             ('date_end', '=', False)])
+
+        # restar un dia y cerrar las lineas si las hay
+        dt = datetime.strptime(date[0:10], "%Y-%m-%d")
+        dt = datetime.strftime(dt - timedelta(1), "%Y-%m-%d")
+        for reg in sellers:
+            reg.date_end = dt
+
+        # crear un nuevo registro
+        sellers.create(supplierinfo)

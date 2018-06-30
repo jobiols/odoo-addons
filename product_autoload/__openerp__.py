@@ -29,7 +29,8 @@
         'stock',
         'sale',
         'purchase',
-        'product_multi_barcode'
+        'product_multi_barcode',
+        'price_security'
     ],
 
     'data': [
@@ -42,7 +43,7 @@
     'test': [
     ],
     'demo': [
-
+        'data/demo_data.xml'
     ],
     'installable': True,
     'application': False,
