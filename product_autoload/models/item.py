@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 # Part of Odoo. See LICENSE file for full copyright and licensing details.
 
-from openerp import api, models, fields
+from openerp import models, fields
 
 
 class Item(models.Model):
@@ -33,11 +33,11 @@ class Item(models.Model):
     ]
 
     # NO SE PORQUE ESTO NO FUNCIONA
-    #@api.onchange('margin')
-    #def onchange_margin(self):
+    # @api.onchange('margin')
+    # def onchange_margin(self):
     #    import wdb;wdb.set_trace()
 
-        # forzar recalculo de precios y categorias
+    # forzar recalculo de precios y categorias
     #    prod_obj = self.env['product.template']
     #    prod = prod_obj.search([('item_code', '=', self.code)])
     #    if prod:

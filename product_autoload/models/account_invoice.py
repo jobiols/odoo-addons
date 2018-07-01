@@ -1,11 +1,9 @@
 # -*- coding: utf-8 -*-
 # Part of Odoo. See LICENSE file for full copyright and licensing details.
-
+from openerp import api, models, fields
 import logging
 
 _logger = logging.getLogger(__name__)
-
-from openerp import api, models, fields
 
 
 class AccountInvoiceLine(models.Model):

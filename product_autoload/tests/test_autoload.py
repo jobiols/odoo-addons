@@ -130,8 +130,8 @@ class TestBusiness(TransactionCase):
         line = self.line
         line[MAP_NAME] = b'\x00\xFF\x00\xFF'  # string no utf-8
         with self.assertRaises(Exception):
-            prod = ProductMapper(line, self._data_path, self._vendor,
-                                 self._supinfo)
+            ProductMapper(line, self._data_path, self._vendor,
+                          self._supinfo)
 
     def test_03_(self):
         """ numero es un string ---------------------------------------------03
@@ -139,8 +139,8 @@ class TestBusiness(TransactionCase):
         line = self.line
         line[MAP_UPV] = 'HHH'  # debe ser numero y es string
         with self.assertRaises(Exception):
-            prod = ProductMapper(line, self._data_path, self._vendor,
-                                 self._supinfo)
+            ProductMapper(line, self._data_path, self._vendor,
+                          self._supinfo)
 
     def test_04_(self):
         """ currency es un string -------------------------------------------04
@@ -148,8 +148,8 @@ class TestBusiness(TransactionCase):
         line = self.line
         line[MAP_STANDARD_PRICE] = 'HHH'  # debe ser currency y es string
         with self.assertRaises(Exception):
-            prod = ProductMapper(line, self._data_path, self._vendor,
-                                 self._supinfo)
+            ProductMapper(line, self._data_path, self._vendor,
+                          self._supinfo)
 
     def test_05_(self):
         """ float es un string ----------------------------------------------05
@@ -157,8 +157,8 @@ class TestBusiness(TransactionCase):
         line = self.line
         line[MAP_WEIGHT] = 'HHH'  # debe ser numero y es string
         with self.assertRaises(Exception):
-            prod = ProductMapper(line, self._data_path, self._vendor,
-                                 self._supinfo)
+            ProductMapper(line, self._data_path, self._vendor,
+                          self._supinfo)
 
     def test_06_update(self):
         """ Chequear que NO replique registros viejos------------------------06
@@ -254,4 +254,3 @@ class TestBusiness(TransactionCase):
         prod = self.prod_obj.search([('default_code', '=', '106.24')])
         self.assertAlmostEqual(prod.bulonfer_cost * 1.6, prod.list_price,
                                places=2)
-

@@ -3,7 +3,7 @@
 # For copyright and license notices, see __openerp__.py file in module root
 # directory
 ##############################################################################
-from openerp import fields, models, api
+from openerp import models, api
 from openerp.tools import float_compare
 
 
@@ -32,10 +32,10 @@ class AccountInvoiceLine(models.Model):
                 # chequeamos si la orden de venta permitió un descuento mayor
                 if any(
                         float_compare(
-                        x.discount, il.discount, precision_digits=precision
+                            x.discount, il.discount, precision_digits=precision
                         ) >= 0 for x in il.sale_line_ids):
                     return True
                 il.env.user.check_discount(
                     il.discount,
                     il.invoice_id.partner_id.
-                    property_product_pricelist.id)
+                        property_product_pricelist.id)

@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 # Part of Odoo. See LICENSE file for full copyright and licensing details.
 
-from openerp import api, fields, models, _
+from openerp import api, models, _
 from openerp.exceptions import except_orm
 from openerp.exceptions import UserError
 
@@ -21,20 +21,28 @@ class SaleOrder(models.Model):
                 # forzar para que funcione aunque no haya stock
                 if not pick.force_assign():
                     raise except_orm(
-                        _('Can not assign product for transfer. Unknown error'))
+                        _('Can not assign product for transfer. '
+                          'Unknown error'))
 
                 if not pick.move_lines and not pick.pack_operation_ids:
-                    raise UserError(_('Please create some Initial Demand or Mark as Todo and create some Operations. '))
+                    raise UserError(_('Please create some Initial Demand or '
+                                      'Mark as Todo and create some '
+                                      'Operations. '))
 
-
-                # In draft or with no pack operations edited yet, ask if we can just do everything
-                if pick.state == 'draft' or all([x.qty_done == 0.0 for x in pick.pack_operation_ids]):
+                # In draft or with no pack operations edited yet,
+                # ask if we can just do everything
+                if pick.state == 'draft' or all([x.qty_done == 0.0 for x in
+                                                 pick.pack_operation_ids]):
                     # If no lots when needed, raise error
                     picking_type = pick.picking_type_id
-                    if (picking_type.use_create_lots or picking_type.use_existing_lots):
+                    if (picking_type.use_create_lots or
+                            picking_type.use_existing_lots):
                         for pack in pick.pack_operation_ids:
-                            if pack.product_id and pack.product_id.tracking != 'none':
-                                raise UserError(_('Some products require lots, so you need to specify those first!'))
+                            if (pack.product_id and
+                                        pack.product_id.tracking != 'none'):
+                                raise UserError(_(
+                                    'Some products require lots, so you need '
+                                    'to specify those first!'))
 
                 # If still in draft => confirm and assign
                 if pick.state == 'draft':
@@ -42,7 +50,10 @@ class SaleOrder(models.Model):
                     if pick.state != 'assigned':
                         pick.action_assign()
                         if pick.state != 'assigned':
-                            raise UserError(_("Could not reserve all requested products. Please use the \'Mark as Todo\' button to handle the reservation manually."))
+                            raise UserError(_(
+                                "Could not reserve all requested products. "
+                                "Please use the \'Mark as Todo\' button to "
+                                "handle the reservation manually."))
 
                 for pack in pick.pack_operation_ids:
                     if pack.product_qty > 0:

@@ -30,7 +30,7 @@
         'price_security'
     ],
     'data': [
-        #'security/security.xml'
+        # 'security/security.xml'
     ],
     'installable': True,
 }

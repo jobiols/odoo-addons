@@ -11,19 +11,19 @@ class Kpis(models.Model):
     _name = 'kpis_panel.kpis'
 
     vendor_id = fields.Many2one(
-            'res.partner',
-            domain="[('category_id.name', 'in', ['MERCADERIA'] )]",
-            required=True,
+        'res.partner',
+        domain="[('category_id.name', 'in', ['MERCADERIA'] )]",
+        required=True,
     )
     total_payable = fields.Float(
-            required=True,
+        required=True,
     )
     stock_valuation = fields.Float(
-            required=True,
-            string="Stock valuation (sale price w/tax)"
+        required=True,
+        string="Stock valuation (sale price w/tax)"
     )
     count = fields.Integer(
-            required=True,
+        required=True,
     )
 
     @api.model

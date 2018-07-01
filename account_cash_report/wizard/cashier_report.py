@@ -1,14 +1,8 @@
 # -*- coding: utf-8 -*-
 # Part of Odoo. See LICENSE file for full copyright and licensing details.
 
-from openerp import fields, api, models, _
-from openerp.exceptions import UserError
-
+from openerp import fields, models
 import time
-from datetime import datetime
-from dateutil.relativedelta import relativedelta
-from openerp import api, fields, models, _
-from openerp.exceptions import UserError
 
 
 class CashierReport(models.TransientModel):
@@ -17,20 +11,20 @@ class CashierReport(models.TransientModel):
     _description = "Cashier Report"
 
     cash_id = fields.Many2one(
-            'account_cash_report.cash',
-            required=True,
-            string="Cash"
+        'account_cash_report.cash',
+        required=True,
+        string="Cash"
     )
 
     date_from = fields.Date(
-            default=lambda *a: time.strftime('%Y-%m-%d')
+        default=lambda *a: time.strftime('%Y-%m-%d')
     )
     date_to = fields.Date(
-            default=lambda *a: time.strftime('%Y-%m-%d')
+        default=lambda *a: time.strftime('%Y-%m-%d')
     )
     expand_moves = fields.Boolean(
-            default=False,
-            help="Show account movements"
+        default=False,
+        help="Show account movements"
     )
 
     def _print_report(self, data):
@@ -39,7 +33,8 @@ class CashierReport(models.TransientModel):
             'form': {
                 'date_from': self.date_from,
                 'date_to': self.date_to,
-                'date_range': (self.date_from != self.date_to) and self.expand_moves,
+                'date_range': (self.date_from != self.date_to) and
+                              self.expand_moves,
                 'title': 'Reporte de caja',
                 'expand_moves': self.expand_moves,
                 'cash_id': self.cash_id.id,
@@ -48,4 +43,4 @@ class CashierReport(models.TransientModel):
         }
 
         return self.env['report'].get_action(
-                self, 'account_cash_report.cashier_report', data=data)
+            self, 'account_cash_report.cashier_report', data=data)

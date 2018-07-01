@@ -2,7 +2,7 @@
 # Part of Odoo. See LICENSE file for full copyright and licensing details.
 import logging
 import time
-from datetime import datetime, timedelta
+from datetime import datetime
 import csv
 from mappers import MAP_WRITE_DATE
 from openerp import api, models, fields
@@ -98,10 +98,10 @@ class AutoloadMgr(models.Model):
                 item = item_obj.search([('code', '=', values['code'])])
                 if item:
                     if not (item.origin == values['origin'] and
-                                    item.name == values['name'] and
-                                    item.section == values['section'] and
-                                    item.family == values['family'] and
-                                    item.margin == float(values['margin'])):
+                            item.name == values['name'] and
+                            item.section == values['section'] and
+                            item.family == values['family'] and
+                            item.margin == float(values['margin'])):
                         item.write(values)
 
                         # forzar recalculo de precios.

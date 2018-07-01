@@ -1,5 +1,5 @@
 # -*- encoding: utf-8 -*-
-from openerp import models, api, _
+from openerp import models, api
 from openerp.exceptions import ValidationError
 
 
@@ -15,5 +15,5 @@ class res_partner(models.Model):
                 recordset = self.search(domain)
                 if len(recordset) > 1:
                     raise ValidationError(
-                            u'El CUIT {} ya está ingresado'.format(
-                                    self.main_id_number))
+                        u'El CUIT {} ya está ingresado'.format(
+                            self.main_id_number))
