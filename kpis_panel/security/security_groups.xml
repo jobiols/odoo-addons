@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+    <data>
+        <!-- GRUPO KPIS -->
+        <record id="group_kpis_users" model="res.groups">
+            <field name="name">kpis</field>
+            <field name="comment">Habilita ver los kpis</field>
+         </record>
+    </data>
+</openerp>

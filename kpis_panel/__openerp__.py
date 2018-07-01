@@ -20,15 +20,16 @@
 ##############################################################################
 {
     'name': 'KPIs Panel',
-    'version': '9.0.0.0.0',
+    'version': '9.0.1.0.0',
     'author': 'jeo Software',
     'website': 'www.jeosoft.com.ar',
     'license': 'AGPL-3',
     'category': 'Accounting & Finance',
     'data': [
         'security/ir.model.access.csv',
+        'data/cron_data.xml',
+        'security/security_groups.xml',
         'views/kpis_views.xml',
-        'data/cron_data.xml'
     ],
     'demo': [],
     'depends': [

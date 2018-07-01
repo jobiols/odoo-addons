@@ -6,7 +6,7 @@
 KPIs Panel
 ==========
 
-This module adds a report to show wizard to add global discount on invoices based on a product
+This module adds a report to show some kpis
 
 Installation
 ============
