@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 # Part of Odoo. See LICENSE file for full copyright and licensing details.
-from openerp import fields, models, api
+from openerp import fields, models
 
 
 class ProductTemplate(models.Model):
@@ -11,5 +11,6 @@ class ProductTemplate(models.Model):
     )
 
     _sql_constraints = [
-        ('uniq_meli_code', 'unique(meli_code)', "The Mercadolibre product code must be unique !"),
+        ('uniq_meli_code', 'unique(meli_code)', 'The Mercadolibre product code'
+                                                ' must be unique !'),
     ]

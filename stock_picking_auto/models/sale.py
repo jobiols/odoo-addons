@@ -38,8 +38,8 @@ class SaleOrder(models.Model):
                     if (picking_type.use_create_lots or
                             picking_type.use_existing_lots):
                         for pack in pick.pack_operation_ids:
-                            if (pack.product_id and
-                                        pack.product_id.tracking != 'none'):
+                            if pack.product_id and \
+                                    pack.product_id.tracking != 'none':
                                 raise UserError(_(
                                     'Some products require lots, so you need '
                                     'to specify those first!'))

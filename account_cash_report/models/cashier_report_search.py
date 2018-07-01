@@ -79,7 +79,7 @@ class ReportCashier(models.AbstractModel):
             for line in mlines:
                 display_names = []
                 if line.payment_id and line.payment_id.payment_group_id:
-                    for mml in line.payment_id.payment_group_id.matched_move_line_ids:  #noqa
+                    for mml in line.payment_id.payment_group_id.matched_move_line_ids:  # noqa
                         display_names.append(mml.move_id.display_name)
 
                 display_name = ', '.join(display_names)
@@ -90,7 +90,7 @@ class ReportCashier(models.AbstractModel):
                     lin['date'] = line.date
                     lin['partner_name'] = line.partner_id.name
                     lin['ref'] = line.ref or '/'
-                    lin['move_name'] = display_name if display_name else line.move_id.display_name #noqa
+                    lin['move_name'] = display_name if display_name else line.move_id.display_name  # noqa
                     lin['balance'] = line.balance
                     lines.append(lin)
 

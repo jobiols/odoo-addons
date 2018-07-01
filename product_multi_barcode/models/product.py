@@ -83,16 +83,17 @@ class ProductProduct(models.Model):
                                                ('id', 'not in', ids)],
                                        limit=limit2, context=context)
             elif not ids and operator in expression.NEGATIVE_TERM_OPERATORS:
-                ids = self.search(cr, user, args + ['&', (
-                    'default_code', operator, name), ('name', operator, name)],
-                                  limit=limit, context=context)
+                ids = self.search(cr, user, args + [
+                    '&',
+                    ('default_code', operator, name),
+                    ('name', operator, name)], limit=limit, context=context)
             if not ids and operator in positive_operators:
                 ptrn = re.compile('(\[(.*?)\])')
                 res = ptrn.search(name)
                 if res:
                     ids = self.search(cr, user, [
-                        ('default_code', '=', res.group(2))] + args,
-                                      limit=limit, context=context)
+                        ('default_code', '=', res.group(2))
+                    ] + args, limit=limit, context=context)
             # still no results, partner in context: search on supplier info as
             # last hope to find something
             if not ids and context.get('partner_id'):
@@ -105,8 +106,8 @@ class ProductProduct(models.Model):
                     ], context=context)
                 if supplier_ids:
                     ids = self.search(cr, user, [
-                        ('product_tmpl_id.seller_ids', 'in', supplier_ids)],
-                                      limit=limit, context=context)
+                        ('product_tmpl_id.seller_ids', 'in',
+                         supplier_ids)], limit=limit, context=context)
         else:
             ids = self.search(cr, user, args, limit=limit, context=context)
         result = self.name_get(cr, user, ids, context=context)

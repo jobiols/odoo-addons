@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 # Part of Odoo. See LICENSE file for full copyright and licensing details.
 from openerp import api, models, fields, _
-from openerp.exceptions import UserError, Warning
+from openerp.exceptions import UserError
 import base64
 import tempfile
 import openpyxl

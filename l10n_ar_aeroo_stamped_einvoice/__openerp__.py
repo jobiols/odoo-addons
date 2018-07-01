@@ -24,13 +24,6 @@
     'category': 'Support',
     'sequence': 14,
     'summary': '',
-    'description': """
-Sale Paid Stamp
-===============
-Pone un sello de pagado al imprimir la factura cuando el balance es cero.
-(fue pagada)
-
-    """,
     'author':  'jeo Soft',
     'website': 'jeosoft.com.ar',
     'license': 'AGPL-3',
@@ -54,4 +47,3 @@ Pone un sello de pagado al imprimir la factura cuando el balance es cero.
     'application': False,
 }
 
-# vim:expandtab:smartindent:tabstop=4:softtabstop=4:shiftwidth=4:

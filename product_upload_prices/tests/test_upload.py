@@ -2,10 +2,7 @@
 # Part of Odoo. See LICENSE file for full copyright and licensing details.
 from __future__ import division
 
-from odoo.addons.business.models.business import Kpis
 from odoo.tests.common import TransactionCase
-from odoo.addons.business.models.business import _margin
-
 
 #    Forma de correr el test
 #    -----------------------

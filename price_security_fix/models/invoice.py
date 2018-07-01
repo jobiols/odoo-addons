@@ -25,15 +25,15 @@ class AccountInvoiceLine(models.Model):
             'Product Unit of Measure')
         for il in self:
             # only customer invoices
-            if il.invoice_id and il.invoice_id.type in (
-                'out_invoice', 'out_refund') and (il.user_has_groups(
-                    'price_security.group_restrict_prices') and
-                    not il.product_can_modify_prices):
+            cond_1 = il.invoice_id and il.invoice_id.type in ('out_invoice',
+                                                              'out_refund')
+            cond_2 = il.user_has_groups('price_security.group_restrict_prices')
+            cond_3 = not il.product_can_modify_prices
+            if cond_1 and cond_2 and cond_3:
                 # chequeamos si la orden de venta permitió un descuento mayor
-                if any(
-                        float_compare(
-                            x.discount, il.discount, precision_digits=precision
-                        ) >= 0 for x in il.sale_line_ids):
+                if any(float_compare(x.discount, il.discount,
+                                     precision_digits=precision
+                                     ) >= 0 for x in il.sale_line_ids):
                     return True
                 il.env.user.check_discount(
                     il.discount,
