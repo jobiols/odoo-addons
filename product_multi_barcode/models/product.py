@@ -4,7 +4,7 @@
 # © 2016 Pedro M. Baeza
 # License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl.html).
 
-from openerp import models, fields
+from openerp import models, fields, api
 from openerp.osv import expression
 import re
 
@@ -27,6 +27,31 @@ class ProductBarcode(models.Model):
     _sql_constraints = [
         ('uniq_barcode', 'unique(name)', "The barcode must be unique !"),
     ]
+
+    @api.multi
+    def add_barcode(self, product_id, barcode):
+        """ add a new barcode if it does not exist
+            raise exception if exists with another product
+
+        :param product_id: the product
+        :param barcode: the barcode
+        :return: none
+        """
+
+        bc = self.search([('product_id', '=', product_id.id),
+                          ('name', '=', barcode)])
+        if not bc:
+            try:
+                self.create({
+                    'product_id': product_id.id,
+                    'name': barcode
+                })
+            except Exception as ex:
+                raise type(ex)(ex.message + 'The barcode %s already exists for'
+                                            ' product %s wich raises an error'
+                                            ' %s' % (barcode,
+                                                     product_id.default_code,
+                                                     ex.message))
 
 
 class ProductTemplate(models.Model):

@@ -26,7 +26,6 @@ from ..models.mappers import ProductMapper, MAP_NAME, MAP_UPV, \
 #
 #   oe -Q product_autoload -c iomaq -d iomaq_test
 #
-#
 
 import os
 
@@ -254,3 +253,9 @@ class TestBusiness(TransactionCase):
         prod = self.prod_obj.search([('default_code', '=', '106.24')])
         self.assertAlmostEqual(prod.bulonfer_cost * 1.6, prod.list_price,
                                places=2)
+
+    def test_11_barcodes(self):
+        """ Testear barcode duplicado
+        """
+        with self.assertRaises(Exception):
+            self.manager_obj.run(productcode='productcode_changed.csv')

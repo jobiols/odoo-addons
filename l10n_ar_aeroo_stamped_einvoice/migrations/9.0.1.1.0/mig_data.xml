@@ -1,8 +1,0 @@
-<?xml version="1.0" encoding="utf-8"?>
-<openerp>
-    <data noupdate="1">
-        <record id="action_aeroo_report_ar_einvoice" context="{'no_key_lines':True}" model="ir.actions.report.xml">
-            <field name="download_filename">${o.document_type_id.report_name or 'Comprobante'} ${o.document_number}.pdf</field>
-        </record>
-    </data>
-</openerp>

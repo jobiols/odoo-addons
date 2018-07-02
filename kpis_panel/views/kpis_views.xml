@@ -1,21 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <odoo>
 
-    <!-- kpi form view -->
-
-    <record model="ir.ui.view" id= "kpis_tree">
-        <field name="name">KPIS: Tree view</field>
-        <field name="model">kpis_panel.kpis</field>
-        <field name="arch" type="xml">
-            <tree string="Survey">
-                <field name="vendor_id" />
-            </tree>
-        </field>
-    </record>
-
     <!-- kpi tree view -->
 
-    <record model="ir.ui.view" id= "kpis_tree">
+    <record model="ir.ui.view" id= "kpis_tree_view">
         <field name="name">KPIS: Tree view</field>
         <field name="model">kpis_panel.kpis</field>
         <field name="arch" type="xml">

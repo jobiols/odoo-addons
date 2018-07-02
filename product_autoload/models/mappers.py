@@ -186,12 +186,7 @@ class ProductMapper(CommonMapper):
         recs = prodcode_obj.search([('product_code', '=', prod.default_code)])
         for rec in recs:
             _logger.info('Linking barcode %s' % rec.barcode)
-            bc = barcode_obj.search([('name', '=', rec.barcode)])
-            if not bc:
-                barcode_obj.create({
-                    'product_id': prod.id,
-                    'name': rec.barcode
-                })
+            barcode_obj.add_barcode(prod, rec.barcode)
 
     @staticmethod
     def check_currency(field, value):

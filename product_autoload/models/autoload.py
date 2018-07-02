@@ -118,13 +118,13 @@ class AutoloadMgr(models.Model):
                     if prod:
                         prod.recalculate_list_price(item.margin)
 
-    def load_productcode(self, data_path):
+    def load_productcode(self, data_path, productcode):
         """ Borra la tabla productcode y la vuelve a crear con los datos nuevos
         """
         item_obj = self.env['product_autoload.productcode']
         item_obj.search([]).unlink()
         count = 0
-        with open(data_path + PRODUCTCODE, 'r') as file_csv:
+        with open(data_path + productcode, 'r') as file_csv:
             reader = csv.reader(file_csv)
             for line in reader:
                 count += 1
@@ -161,7 +161,7 @@ class AutoloadMgr(models.Model):
                     self.prod_processed += 1
 
     @api.model
-    def run(self, item=ITEM):
+    def run(self, item=ITEM, productcode=PRODUCTCODE):
         """ Actualiza todos los productos.
         """
         # empezamos a contar el tiempo de proceso
@@ -179,7 +179,7 @@ class AutoloadMgr(models.Model):
             _logger.info('REPLICATION: Load disk tables')
             # Cargar en bd las demas tablas
             self.load_item(data_path, item)
-            self.load_productcode(data_path)
+            self.load_productcode(data_path, productcode)
 
             # Aca carga solo los productos que tienen fecha de modificacion
             # posterior a la fecha de proceso y los actualiza o los crea segun
@@ -277,7 +277,7 @@ class AutoloadMgr(models.Model):
             message = smtp.build_email(email_from, email_to, subject, body)
             smtp.send_email(message)
         except Exception as ex:
-            _logger.error('Falla envio de mail {}'.format(ex.message))
+            _logger.error('Falla envio de mail %s' % ex.message)
 
     @api.multi
     def get_stats(self, start, elapsed):
