@@ -20,7 +20,7 @@
 # -----------------------------------------------------------------------------
 {
     'name': 'Product Upload Prices',
-    'version': '9.0.0.0.0',
+    'version': '9.0.0.1.0',
     'license': 'AGPL-3',
     'category': 'Tools',
     'summary': 'Actualizar precios con planilla',
@@ -39,5 +39,10 @@
     'installable': True,
     'application': False,
     'auto_install': False,
-    'images': []
+    'images': [],
+    'external_dependencies': {
+        'python': [
+            'openpyxl',
+        ],
+    },
 }

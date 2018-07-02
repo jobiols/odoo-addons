@@ -1,7 +1,5 @@
 # -*- coding: utf-8 -*-
 # Part of Odoo. See LICENSE file for full copyright and licensing details.
-from __future__ import division
-
 from odoo.tests.common import TransactionCase
 
 #    Forma de correr el test
@@ -25,4 +23,4 @@ class TestUpload(TransactionCase):
     """ Cada metodo de test corre en su propia transacción y se hace rollback
         despues de cada uno.
     """
-    print 'running test'
+    pass
