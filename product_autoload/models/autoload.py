@@ -5,8 +5,14 @@ import time
 from datetime import datetime
 import csv
 from mappers import MAP_WRITE_DATE
-from openerp import api, models, fields
+from openerp import api, models, fields, registry
 from mappers import ProductMapper
+
+
+class ExceptionBarcodeDuplicated(Exception):
+    def __init__(self, msg):
+        self.message = msg
+
 
 _logger = logging.getLogger(__name__)
 
@@ -46,6 +52,9 @@ class AutoloadMgr(models.Model):
     )
     statistics = fields.Html(
 
+    )
+    created = fields.Integer(
+        string="Created products"
     )
     processed = fields.Integer(
         string="Processed products"
@@ -136,7 +145,14 @@ class AutoloadMgr(models.Model):
                     'product_code': line[PC_PRODUCT_CODE].strip(),
                     'uxb': line[PC_UXB].strip(),
                 }
-                item_obj.create(values)
+                try:
+                    item_obj.create(values)
+                except:
+                    raise ExceptionBarcodeDuplicated(
+                        'Barcode Duplicated %s for product %s' %
+                        (line[PC_BARCODE].strip(),
+                         line[PC_PRODUCT_CODE].strip())
+                    )
 
     def load_product(self, data_path):
         """ Carga todos los productos teniendo en cuenta la fecha
@@ -149,32 +165,43 @@ class AutoloadMgr(models.Model):
         _logger.info('REPLICATION: Load products '
                      'with timestamp > {}'.format(last_replication))
 
-        supplierinfo = self.env['product.supplierinfo']
-        self.prod_processed = 0
+        prod_processed = prod_created = 0
+
         with open(data_path + DATA, 'r') as file_csv:
             reader = csv.reader(file_csv)
             for line in reader:
                 if line and line[MAP_WRITE_DATE] > last_replication:
-                    obj = ProductMapper(line, data_path, bulonfer,
-                                        supplierinfo)
-                    obj.execute(self.env)
-                    self.prod_processed += 1
+                    obj = ProductMapper(line, data_path, bulonfer)
+                    stats = obj.execute(self.env)
+                    if stats == 'processed':
+                        prod_processed += 1
+                    else:
+                        prod_created += 1
+
+            return {'processed': prod_processed,
+                    'created': prod_created}
 
     @api.model
     def run(self, item=ITEM, productcode=PRODUCTCODE):
         """ Actualiza todos los productos.
         """
+        config_obj = self.env['ir.config_parameter']
+        email_from = config_obj.get_param('email_from', '')
+        email_to = config_obj.get_param('email_notification', '')
+
         # empezamos a contar el tiempo de proceso
         start_time = time.time()
         data_path = self.data_path
-
         rec = self.create({})
         _logger.info('REPLICATION: Start #{}'.format(rec.id))
         try:
+            start = time.strftime('%Y-%m-%d %H:%M:%S',
+                                  time.localtime(start_time))
+            rec.start_time = start
+
             # Cargar en memoria las tablas chicas
             self._section = self.load_section(data_path)
             self._family = self.load_family(data_path)
-            self.prod_processed = 0
 
             _logger.info('REPLICATION: Load disk tables')
             # Cargar en bd las demas tablas
@@ -184,36 +211,56 @@ class AutoloadMgr(models.Model):
             # Aca carga solo los productos que tienen fecha de modificacion
             # posterior a la fecha de proceso y los actualiza o los crea segun
             # sea necesario
-            self.load_product(data_path)
+            stats = self.load_product(data_path)
 
             # terminamos de contar el tiempo de proceso
             elapsed_time = time.time() - start_time
-            start = time.strftime('%Y-%m-%d %H:%M', time.localtime(start_time))
             elapsed = time.strftime('%H:%M:%S', time.gmtime(elapsed_time))
             self.send_email('Replicacion Bulonfer #{}'.format(rec.id),
-                            self.get_stats(start, elapsed),
-                            self.email_from, self.email_to)
+                            self.get_stats(start, elapsed, stats),
+                            email_from, email_to)
 
             self.last_replication = str(datetime.now())
             _logger.info('REPLICATION: End')
 
             rec.write({
-                'name': 'Replicacion #{}'.format(rec.id),
+                'name': '#{} Replicacion'.format(rec.id),
                 'start_time': start,
                 'elapsed_time': elapsed,
-                'statistics': self.get_stats(start, elapsed),
-                'processed': self.prod_processed
+                'statistics': self.get_stats(start, elapsed, stats),
+                'processed': stats['processed'],
+                'created': stats['created']
             })
 
         except Exception as ex:
             _logger.error('Replicacion Bulonfer {}'.format(ex.message))
-            self.send_email('Replicacion Bulonfer #{}, '
-                            'ERROR'.format(rec.id), ex.message,
-                            self.email_from, self.email_to)
-            raise
+            with api.Environment.manage():
+                with registry(self.env.cr.dbname).cursor() as new_cr:
+                    # Create a new environment with new cursor database
+                    new_env = api.Environment(new_cr, self.env.uid,
+                                              self.env.context)
+                    # with_env replace original env for this method
+
+                    self.with_env(new_env).create({
+                        'name': '#{} ERROR'.format(rec.id),
+                        'statistics': ex.message,
+                    })  # isolated transaction to commit
+
+                    self.with_env(new_env).send_email(
+                        'Replicacion Bulonfer #{}, '
+                        'ERROR'.format(rec.id), ex.message,
+                        email_from, email_to)
+
+                    new_env.cr.commit()  # Don't show invalid-commit
+                    # don't need close cr because is closed when finish "with"
+                    # don't need clear caches, is cleared when finish "with"
 
     @api.model
     def update_categories(self):
+        config_obj = self.env['ir.config_parameter']
+        email_from = config_obj.get_param('email_from', '')
+        email_to = config_obj.get_param('email_notification', '')
+
         # linkear las categorias
         _logger.info('update categories')
         categ_obj = self.env['product.category']
@@ -227,7 +274,7 @@ class AutoloadMgr(models.Model):
                 text = 'product {} has item = {} but there is no such item ' \
                        'in item.csv'.format(prod.default_code, prod.item_code)
                 self.send_email('Replicacion Bulonfer, ERROR', text,
-                                self.email_from, self.email_to)
+                                email_from, email_to)
                 raise Exception(text)
 
             # calcular el precio de lista
@@ -285,21 +332,12 @@ class AutoloadMgr(models.Model):
         except Exception as ex:
             _logger.error('Falla envio de mail %s' % ex.message)
 
-    @api.multi
-    def get_stats(self, start, elapsed):
-        ret = u'Inicio: {}\n'.format(start)
-        ret = u'Duración: {}\n'.format(elapsed)
-        ret += u'Procesados: {} productos'.format(self.prod_processed)
+    def get_stats(self, start, elapsed, stats):
+        ret = u'Productos procesados: {}\n'.format(stats['processed'])
+        ret += u'Productos creados: {}\n'.format(stats['created'])
+        ret += u'Inicio: {}\n'.format(start)
+        ret += u'Duración: {}\n'.format(elapsed)
         return ret
-
-    @property
-    def email_from(self):
-        return self.env['ir.config_parameter'].get_param('email_from', '')
-
-    @property
-    def email_to(self):
-        return self.env['ir.config_parameter'].get_param('email_notification',
-                                                         '')
 
     @property
     def data_path(self):

@@ -12,6 +12,7 @@
                     <field name="start_time"/>
                     <field name="elapsed_time"/>
                     <field name="processed"/>
+                    <field name="created"/>
                 </group>
                 <field name="statistics"/>
             </form>
@@ -23,11 +24,12 @@
         <field name="name">AUTOLOAD: Tree view</field>
         <field name="model">product_autoload.manager</field>
         <field name="arch" type="xml">
-            <tree string="Cash">
+            <tree string="Autoload">
                 <field name="name"/>
                 <field name="start_time"/>
                 <field name="elapsed_time"/>
                 <field name="processed"/>
+                <field name="created"/>
             </tree>
         </field>
     </record>

@@ -48,13 +48,11 @@ MAP_LEN = 14
 
 
 class ProductMapper(CommonMapper):
-    def __init__(self, line, image_path=False, vendor=False,
-                 supplierinfo=False):
+    def __init__(self, line, image_path=False, vendor=False):
 
         if len(line) != MAP_LEN:
             raise Exception('data.csv len is {} '
                             'must be {}'.format(len(line), MAP_LEN))
-        self._supplierinfo_obj = supplierinfo
         self._vendor = vendor
         self._image_path = image_path
         self._image = False
@@ -140,9 +138,11 @@ class ProductMapper(CommonMapper):
         prod = product_obj.search([('default_code', '=', self.default_code)])
         if prod:
             prod.write(self.values())
+            stats = 'processed'
             _logger.info('Updating product %s' % self.default_code)
         else:
             prod = product_obj.create(self.values())
+            stats = 'created'
             _logger.info('Creating product %s' % self.default_code)
 
         prod.set_cost(self._vendor, self.wholesaler_bulk, self.bulonfer_cost,
@@ -187,6 +187,7 @@ class ProductMapper(CommonMapper):
         for rec in recs:
             _logger.info('Linking barcode %s' % rec.barcode)
             barcode_obj.add_barcode(prod, rec.barcode)
+        return stats
 
     @staticmethod
     def check_currency(field, value):
