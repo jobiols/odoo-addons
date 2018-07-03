@@ -225,9 +225,20 @@ class TestBusiness(TransactionCase):
 
         # verificar creacion de categorias
         categ_obj = self.env['product.category']
-        categs = categ_obj.search([('name', '=', 'Ferretería'),
-                                   ('parent_id', '=', False)])
-        self.assertEqual(len(categs), 1)
+        categ = categ_obj.search([('name', '=', u'Bulonería'),
+                                  ('parent_id', '=', False)])
+        self.assertEqual(categ.property_cost_method, 'real')
+        self.assertEqual(categ.removal_strategy_id.method, 'fifo')
+
+        categ = categ_obj.search([('name', '=', u'ARANDELAS'),
+                                  ('parent_id.name', '=', u'Bulonería')])
+        self.assertEqual(categ.property_cost_method, 'real')
+        self.assertEqual(categ.removal_strategy_id.method, 'fifo')
+
+        categ = categ_obj.search([('name', '=', u'ARANDELA AUTOMOTOR FIXO'),
+                                  ('parent_id.name', '=', u'ARANDELAS')])
+        self.assertEqual(categ.property_cost_method, 'real')
+        self.assertEqual(categ.removal_strategy_id.method, 'fifo')
 
         # verificar precios de lista
         prod = prod_obj.search([('default_code', '=', '102.B.12')])

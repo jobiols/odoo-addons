@@ -237,7 +237,9 @@ class AutoloadMgr(models.Model):
             sec_id = categ_obj.search([('name', '=', item.section),
                                        ('parent_id', '=', False)])
             if not sec_id:
-                sec_id = categ_obj.create({'name': item.section})
+                sec_id = categ_obj.create({'name': item.section,
+                                           'property_cost_method': 'real',
+                                           'removal_strategy_id': 1})
 
             # buscar seccion / familia o crearla
             sec_fam_id = categ_obj.search([('name', '=', item.family),
@@ -245,7 +247,9 @@ class AutoloadMgr(models.Model):
                                             item.section)])
             if not sec_fam_id:
                 sec_fam_id = categ_obj.create({'name': item.family,
-                                               'parent_id': sec_id.id})
+                                               'parent_id': sec_id.id,
+                                               'property_cost_method': 'real',
+                                               'removal_strategy_id': 1})
 
             # buscar seccion / familia / item o crearla
             categ_id = categ_obj.search([('name', '=', item.name),
@@ -254,7 +258,9 @@ class AutoloadMgr(models.Model):
                                           item.section)])
             if not categ_id:
                 categ_id = categ_obj.create({'name': item.name,
-                                             'parent_id': sec_fam_id.id})
+                                             'parent_id': sec_fam_id.id,
+                                             'property_cost_method': 'real',
+                                             'removal_strategy_id': 1})
 
             _logger.info('Setting %s --> %s' %
                          (prod.default_code, categ_id.complete_name))
