@@ -31,8 +31,10 @@ class TestProductMultiEan(common.TransactionCase):
         self.product_barcode_obj.add_barcode(self.product4, 4211821800007)
         self.product_barcode_obj.add_barcode(self.product4, 2112345678900)
 
-        # si ya existe no lo agrega y no falla
-        self.product_barcode_obj.add_barcode(self.product4, 4044471900007)
+        # si ya existe no lo agrega y no falla y devuelve []
+        a = self.product_barcode_obj.add_barcode(self.product4, 2112345678900)
+        self.assertEqual(a, [])
+
         self.assertEqual(len(self.product4.barcode_ids), 3)
 
     def test_03(self):
