@@ -37,21 +37,20 @@ class ProductBarcode(models.Model):
         :param barcode: the barcode
         :return: none
         """
-
         # search for the barcode
         bc = self.search([('name', '=', barcode)])
         if bc:
             # check if it has the correct product and correct if necessary
-            if bc.product_id != product_id.id:
+            if bc.product_id.id != product_id.id:
                 bc.product_id = product_id.id
-                return 'changed'
+                return ['barc_changed']
         else:
             # no barcode, then create it
             self.create({
                 'product_id': product_id.id,
                 'name': barcode
             })
-            return 'created'
+            return ['barc_created']
 
 
 class ProductTemplate(models.Model):
