@@ -31,27 +31,27 @@ class ProductBarcode(models.Model):
     @api.multi
     def add_barcode(self, product_id, barcode):
         """ add a new barcode if it does not exist
-            raise exception if exists with another product
+            if it exists with another product, fix it
 
         :param product_id: the product
         :param barcode: the barcode
         :return: none
         """
 
-        bc = self.search([('product_id', '=', product_id.id),
-                          ('name', '=', barcode)])
-        if not bc:
-            try:
-                self.create({
-                    'product_id': product_id.id,
-                    'name': barcode
-                })
-            except Exception as ex:
-                raise type(ex)(ex.message + 'The barcode %s already exists for'
-                                            ' product %s wich raises an error'
-                                            ' %s' % (barcode,
-                                                     product_id.default_code,
-                                                     ex.message))
+        # search for the barcode
+        bc = self.search([('name', '=', barcode)])
+        if bc:
+            # check if it has the correct product and correct if necessary
+            if bc.product_id != product_id.id:
+                bc.product_id = product_id.id
+                return 'changed'
+        else:
+            # no barcode, then create it
+            self.create({
+                'product_id': product_id.id,
+                'name': barcode
+            })
+            return 'created'
 
 
 class ProductTemplate(models.Model):

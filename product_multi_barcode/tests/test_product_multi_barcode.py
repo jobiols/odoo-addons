@@ -40,8 +40,9 @@ class TestProductMultiEan(common.TransactionCase):
         """
         self.product_barcode_obj.add_barcode(self.product4, 4044471900007)
         self.product_barcode_obj.add_barcode(self.product4, 4211821800007)
-        self.product_barcode_obj.add_barcode(self.product4, 2112345678900)
+        a = self.product_barcode_obj.add_barcode(self.product4, 2112345678900)
+        self.assertEqual(a, 'created')
 
         # debe generar execpcion de barcode duplicado
-        with self.assertRaises(Exception):
-            self.product_barcode_obj.add_barcode(self.product5, 4044471900007)
+        a = self.product_barcode_obj.add_barcode(self.product5, 4044471900007)
+        self.assertEqual(a, 'changed')
