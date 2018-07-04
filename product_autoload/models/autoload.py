@@ -165,21 +165,27 @@ class AutoloadMgr(models.Model):
         _logger.info('REPLICATION: Load products '
                      'with timestamp > {}'.format(last_replication))
 
-        prod_processed = prod_created = 0
-
+        prod_processed = prod_created = barc_changed = barc_created = 0
         with open(data_path + DATA, 'r') as file_csv:
             reader = csv.reader(file_csv)
             for line in reader:
                 if line and line[MAP_WRITE_DATE] > last_replication:
                     obj = ProductMapper(line, data_path, bulonfer)
                     stats = obj.execute(self.env)
-                    if stats == 'processed':
+
+                    if 'barc_created' in stats:
+                        barc_created += 1
+                    if 'barc_changed' in stats:
+                        barc_changed += 1
+                    if 'prod_processed' in stats:
                         prod_processed += 1
-                    else:
+                    if 'prod_created' in stats:
                         prod_created += 1
 
-            return {'processed': prod_processed,
-                    'created': prod_created}
+            return {'barc_created': barc_created,
+                    'barc_changed': barc_changed,
+                    'prod_processed': prod_processed,
+                    'prod_created': prod_created}
 
     @api.model
     def run(self, item=ITEM, productcode=PRODUCTCODE):
@@ -228,8 +234,8 @@ class AutoloadMgr(models.Model):
                 'start_time': start,
                 'elapsed_time': elapsed,
                 'statistics': self.get_stats(start, elapsed, stats),
-                'processed': stats['processed'],
-                'created': stats['created']
+                'processed': stats['prod_processed'],
+                'created': stats['prod_created']
             })
 
         except Exception as ex:
@@ -333,10 +339,13 @@ class AutoloadMgr(models.Model):
             _logger.error('Falla envio de mail %s' % ex.message)
 
     def get_stats(self, start, elapsed, stats):
-        ret = u'Productos procesados: {}\n'.format(stats['processed'])
-        ret += u'Productos creados: {}\n'.format(stats['created'])
+        ret = u'Productos procesados: {}\n'.format(stats['prod_processed'])
+        ret += u'Productos creados: {}\n'.format(stats['prod_created'])
         ret += u'Inicio: {}\n'.format(start)
         ret += u'Duración: {}\n'.format(elapsed)
+        ret += u'Codigos de barra creados {}\n'.format(stats['barc_created'])
+        ret += u'Codigos de barra modificados {}\n'.format(
+            stats['barc_changed'])
         return ret
 
     @property

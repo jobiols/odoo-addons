@@ -138,11 +138,11 @@ class ProductMapper(CommonMapper):
         prod = product_obj.search([('default_code', '=', self.default_code)])
         if prod:
             prod.write(self.values())
-            stats = 'processed'
+            stats = ['prod_processed']
             _logger.info('Updating product %s' % self.default_code)
         else:
             prod = product_obj.create(self.values())
-            stats = 'created'
+            stats = ['prod_created']
             _logger.info('Creating product %s' % self.default_code)
 
         prod.set_cost(self._vendor, self.wholesaler_bulk, self.bulonfer_cost,
@@ -186,7 +186,7 @@ class ProductMapper(CommonMapper):
         recs = prodcode_obj.search([('product_code', '=', prod.default_code)])
         for rec in recs:
             _logger.info('Linking barcode %s' % rec.barcode)
-            barcode_obj.add_barcode(prod, rec.barcode)
+            stats += barcode_obj.add_barcode(prod, rec.barcode)
         return stats
 
     @staticmethod
