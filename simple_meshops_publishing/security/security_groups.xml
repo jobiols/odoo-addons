@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+    <data>
+        <!-- GRUPO MESHOPS -->
+        <record id="group_meshop_users" model="res.groups">
+            <field name="name">Mercado Shops</field>
+            <field name="comment">Habilita poblicar</field>
+         </record>
+    </data>
+</openerp>

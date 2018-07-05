@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_meshops_process_wizard_form" model="ir.ui.view">
+        <field name="name">meshops process</field>
+        <field name="model">simple_meshops_publishing.process_excel</field>
+        <field name="arch" type="xml">
+            <form string="Process meshops prices">
+                <field name="state" invisible="1"/>
+                <field name="name" invisible="1"/>
+
+                <group states="load" string="Load spreadsheet">
+                    <field widget="binary" name="data" filename="name"/>
+                </group>
+
+                <group states="download"
+                       string="Download processed spreadsheet">
+                    <div>
+                        <p>Completed succesfully,
+                            <br/>
+                            Now you can download the
+                            spreadsheet and upload it to Mercadolibre.
+                        </p>
+                        <p>Here is the processed mercadolibre spreadsheet:
+                            <field name="pdata" filename="name" readonly="1"/>
+                        </p>
+                    </div>
+                </group>
+
+                <group states="error" string="Errors">
+                    <div>
+                        <field name="errors" widget="html"/>
+                    </div>
+                </group>
+
+                <footer states="load">
+                    <button name="load_file" string="Load" type="object"
+                            class="oe_highlight"/>
+                    or
+                    <button string="_Cancel" class="oe_link" special="cancel"/>
+                </footer>
+                <footer states="download">
+                    <button special="cancel" string="Close" type="object"
+                            class="btn-primary"/>
+                </footer>
+                <footer states="error">
+                    <button special="cancel" string="Close" type="object"
+                            class="btn-primary"/>
+                </footer>
+            </form>
+        </field>
+    </record>
+</odoo>
