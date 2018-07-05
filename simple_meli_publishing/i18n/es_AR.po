@@ -177,7 +177,7 @@ msgstr "o"
 #. module: simple_meli_publishing
 #: model:ir.ui.menu,name:simple_meli_publishing.menu_process_meli_excel
 msgid "process meli prices"
-msgstr "procesar precios meli"
+msgstr "Procesar precios meli"
 
 #. module: simple_meli_publishing
 #: model:ir.model,name:simple_meli_publishing.model_simple_meli_publishing_process_excel

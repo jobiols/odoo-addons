@@ -6,8 +6,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Odoo Server 9.0c-20180504\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2018-06-30 21:23+0000\n"
-"PO-Revision-Date: 2018-06-30 21:23+0000\n"
+"POT-Creation-Date: 2018-07-05 02:24+0000\n"
+"PO-Revision-Date: 2018-07-05 02:24+0000\n"
 "Last-Translator: <>\n"
 "Language-Team: \n"
 "MIME-Version: 1.0\n"
@@ -24,6 +24,11 @@ msgstr "Agrupacion mayorista"
 #: model:ir.ui.view,arch_db:product_autoload.view_custom_config_settings
 msgid "Apply"
 msgstr "Aplicar"
+
+#. module: product_autoload
+#: model:ir.ui.view,arch_db:product_autoload.product_autoload_tree_view
+msgid "Autoload"
+msgstr "Autoload"
 
 #. module: product_autoload
 #: model:ir.actions.act_window,name:product_autoload.action_custom_config
@@ -68,11 +73,6 @@ msgid "Cancel"
 msgstr "Cancelar"
 
 #. module: product_autoload
-#: model:ir.ui.view,arch_db:product_autoload.product_autoload_tree_view
-msgid "Cash"
-msgstr "Caja"
-
-#. module: product_autoload
 #: model:ir.model.fields,help:product_autoload.field_product_template_invalidate_category
 msgid "Category needs rebuild"
 msgstr "La categoria requiere reprocesarse"
@@ -115,6 +115,11 @@ msgstr "Creado por"
 #: model:ir.model.fields,field_description:product_autoload.field_product_autoload_settings_create_date
 msgid "Created on"
 msgstr "Creado el"
+
+#. module: product_autoload
+#: model:ir.model.fields,field_description:product_autoload.field_product_autoload_manager_created
+msgid "Created products"
+msgstr "Productos creados"
 
 #. module: product_autoload
 #: model:ir.model.fields,field_description:product_autoload.field_product_autoload_settings_data_path
@@ -408,4 +413,3 @@ msgstr "unidades por bulto"
 #: model:ir.model.fields,help:product_autoload.field_product_autoload_item_origin
 msgid "where the product was made"
 msgstr "Donde fue hecho el producto"
-
