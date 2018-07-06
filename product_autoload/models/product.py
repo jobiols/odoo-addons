@@ -50,18 +50,10 @@ class ProductProduct(models.Model):
     bulonfer_cost = fields.Float(
         help="Bulonfer Cost price from last replication"
     )
-
-    oldest_cost = fields.Float(
-        help="Cost price from oldest product in stock",
-        compute="_compute_oldest_cost",
-        digits=(7, 2)
+    standard_price = fields.Float(
+        string="Oldest Cost",
+        help="The purchase cost of the oldest product in stock"
     )
-
-    @api.multi
-    @api.depends('standard_price')
-    def _compute_oldest_cost(self):
-        for prod in self:
-            prod.oldest_cost = prod.standard_price
 
     @api.multi
     @api.depends('bulonfer_cost', 'difference')

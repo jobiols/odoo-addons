@@ -13,10 +13,6 @@
                     <field name="margin" string="Margin%"/>
                     <field name="system_cost" string="Invoice Cost"/>
                     <field name="bulonfer_cost" string="Today Cost"/>
-                    <field name="oldest_cost"/>
-                </field>
-                <field name="standard_price" position="attributes">
-                    <attribute name="invisible">1</attribute>
                 </field>
             </field>
         </record>
@@ -40,9 +36,6 @@
                 <field name="bulonfer_cost" position="attributes">
                     <attribute name="invisible">1</attribute>
                 </field>
-                <field name="oldest_cost" position="attributes">
-                    <attribute name="invisible">1</attribute>
-                </field>
             </field>
         </record>
 
@@ -63,9 +56,6 @@
                     <attribute name="invisible">0</attribute>
                 </field>
                 <field name="bulonfer_cost" position="attributes">
-                    <attribute name="invisible">0</attribute>
-                </field>
-                <field name="oldest_cost" position="attributes">
                     <attribute name="invisible">0</attribute>
                 </field>
             </field>
