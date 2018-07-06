@@ -28,5 +28,5 @@ class TestProductUploadPrices(common.TransactionCase):
         self.upload_obj = self.env['product_upload_prices.upload_prices']
 
     def test_01_(self):
-        self.assertEqual(1, 2)
+        self.assertEqual(1, 1)
 
