@@ -97,15 +97,19 @@ class ProductProduct(models.Model):
             })
 
     @api.multi
-    def set_cost(self, vendor_id, min_qty, cost, date, vendors_code):
+    def set_cost(self, vendor_ref, cost, date, min_qty=1, vendors_code=False):
         """ Setea el costo del producto, el costo se pone en supplierinfo, no
             en standard price. Cuando se ingresa la mercaderia el quant queda
             valorizado al precio que esta en supplierinfo y cuando se egresa
             mercaderia el standard_price queda al precio del quant que salio.
         """
+        vendor_id = self.env['res.partner'].search(
+            [('ref', '=', vendor_ref)])
+        if not vendor_id:
+            raise Exception('Vendor %s not found' % vendor_ref)
 
         supplierinfo = {
-            'name': vendor_id.id if vendor_id else False,
+            'name': vendor_id.id,
             'min_qty': min_qty,
             'price': cost,
             'product_code': vendors_code,  # vendors product code

@@ -26,6 +26,7 @@
     'summary': 'Actualizar precios con planilla',
     'author': 'jeo Software',
     'depends': [
+        'product_autoload'
     ],
     'data': [
         'views/product_upload_prices_view.xml',

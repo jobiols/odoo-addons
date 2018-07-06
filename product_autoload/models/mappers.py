@@ -48,12 +48,12 @@ MAP_LEN = 14
 
 
 class ProductMapper(CommonMapper):
-    def __init__(self, line, image_path=False, vendor=False):
+    def __init__(self, line, image_path=False, vendor_ref=False):
 
         if len(line) != MAP_LEN:
             raise Exception('data.csv len is {} '
                             'must be {}'.format(len(line), MAP_LEN))
-        self._vendor = vendor
+        self._vendor_ref = vendor_ref
         self._image_path = image_path
         self._image = False
 
@@ -145,8 +145,8 @@ class ProductMapper(CommonMapper):
             stats = ['prod_created']
             _logger.info('Creating product %s' % self.default_code)
 
-        prod.set_cost(self._vendor, self.wholesaler_bulk, self.bulonfer_cost,
-                      self.write_date, self.default_code)
+        prod.set_cost(self._vendor_ref, self.bulonfer_cost, self.write_date,
+                      self.wholesaler_bulk, self.default_code)
 
         tax_obj = env['account.tax']
 

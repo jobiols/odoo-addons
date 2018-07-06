@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 # Part of Odoo. See LICENSE file for full copyright and licensing details.
-from odoo.tests.common import TransactionCase
+from openerp.tests import common
 
 #    Forma de correr el test
 #    -----------------------
@@ -15,14 +15,18 @@ from odoo.tests.common import TransactionCase
 #   El usuario admin tiene que tener password admin, Language English, Country
 #   United States.
 #
-#   oe -Q product_upload_prices -c iomaq -d iomaq_test
+#   oe -Q product_upload_prices -c iomaq -d product_upload_prices_test
 #
 
 
-class TestUpload(TransactionCase):
+class TestProductUploadPrices(common.TransactionCase):
     """ Cada metodo de test corre en su propia transacción y se hace rollback
         despues de cada uno.
     """
-    # TODO Hacer los tests
+    def setUp(self):
+        super(TestProductUploadPrices, self).setUp()
+        self.upload_obj = self.env['product_upload_prices.upload_prices']
 
-    pass
+    def test_01_(self):
+        self.assertEqual(1, 2)
+

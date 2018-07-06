@@ -157,8 +157,9 @@ class AutoloadMgr(models.Model):
     def load_product(self, data_path):
         """ Carga todos los productos teniendo en cuenta la fecha
         """
-        bulonfer = self.env['res.partner'].search([('ref', '=', 'BULONFER')])
-        if not bulonfer:
+        bulonfer_id = self.env['res.partner'].search(
+            [('ref', '=', 'BULONFER')])
+        if not bulonfer_id:
             raise Exception('Vendor Bulonfer not found')
 
         last_replication = self.last_replication
@@ -170,7 +171,7 @@ class AutoloadMgr(models.Model):
             reader = csv.reader(file_csv)
             for line in reader:
                 if line and line[MAP_WRITE_DATE] > last_replication:
-                    obj = ProductMapper(line, data_path, bulonfer)
+                    obj = ProductMapper(line, data_path, bulonfer_id.ref)
                     stats = obj.execute(self.env)
 
                     if 'barc_created' in stats:

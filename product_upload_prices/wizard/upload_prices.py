@@ -22,6 +22,8 @@ class UploadPrices(models.TransientModel):
 
     @staticmethod
     def read_data(sheet):
+        """ Read the spreadsheet into a data structure
+        """
         ret = []
         row_number = 0
         for row in sheet.iter_rows(min_row=1, min_col=1,
@@ -36,6 +38,8 @@ class UploadPrices(models.TransientModel):
         return ret
 
     def check_data(self, data):
+        """ Check data structure for errors
+        """
         product_obj = self.env['product.product']
         for row in data:
             # check product exists
@@ -60,18 +64,16 @@ class UploadPrices(models.TransientModel):
                     (row['row'], row['standard_price']))
 
     def process_data(self, data):
+        """ Process data structure setting prices in system
+        """
         product_obj = self.env['product.product']
         for row in data:
             domain = [('default_code', '=', row['default_code'])]
             prod = product_obj.search(domain)
             prod.list_price = float(row['list_price'])
-
-            prod.product_tmpl_id.set_cost('', 1, float(row['standard_price']),
-                          str(datetime.datetime.now())[0:10], '')
-
-            # set_cost(self, vendor_id, min_qty, cost, date, vendors_code):
-
-            # TODO usar el add_cost de set_cost del producto, definir un vendor
+            prod.product_tmpl_id.set_cost('BULONFER',
+                                          float(row['standard_price']),
+                                          str(datetime.datetime.now())[0:10])
 
     @api.multi
     def import_file(self):
