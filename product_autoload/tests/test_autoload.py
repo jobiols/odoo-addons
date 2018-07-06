@@ -95,8 +95,7 @@ class TestBusiness(TransactionCase):
         }
 
         # cargamos la linea en el mapper
-        prod = ProductMapper(self.line, self._data_path, self._vendor,
-                             self._supinfo)
+        prod = ProductMapper(self.line, self._data_path, self._vendor)
 
         # chequeamos que cada propiedad este correcta
         self.assertEqual(prod.default_code, val['default_code'])
@@ -268,5 +267,4 @@ class TestBusiness(TransactionCase):
     def test_11_barcodes(self):
         """ Testear barcode duplicado
         """
-        with self.assertRaises(Exception):
-            self.manager_obj.run(productcode='productcode_changed.csv')
+        self.manager_obj.run(productcode='productcode_changed.csv')

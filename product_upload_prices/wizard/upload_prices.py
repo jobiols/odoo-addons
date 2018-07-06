@@ -5,6 +5,7 @@ from openerp.exceptions import UserError
 import base64
 import tempfile
 import openpyxl
+import datetime
 
 
 class UploadPrices(models.TransientModel):
@@ -64,7 +65,13 @@ class UploadPrices(models.TransientModel):
             domain = [('default_code', '=', row['default_code'])]
             prod = product_obj.search(domain)
             prod.list_price = float(row['list_price'])
-            prod.standard_price = float(row['standard_price'])
+
+            prod.product_tmpl_id.set_cost('', 1, float(row['standard_price']),
+                          str(datetime.datetime.now())[0:10], '')
+
+            # set_cost(self, vendor_id, min_qty, cost, date, vendors_code):
+
+            # TODO usar el add_cost de set_cost del producto, definir un vendor
 
     @api.multi
     def import_file(self):
