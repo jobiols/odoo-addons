@@ -1,13 +1,12 @@
 # -*- coding: utf-8 -*-
 # Part of Odoo. See LICENSE file for full copyright and licensing details.
 from openerp import api, models, fields
-from datetime import datetime, timedelta
 import logging
 
 _logger = logging.getLogger(__name__)
 
 
-class ProductProduct(models.Model):
+class ProductTemplate(models.Model):
     _inherit = "product.template"
 
     item_code = fields.Char(
@@ -40,11 +39,17 @@ class ProductProduct(models.Model):
         help="Bulonfer suggested product margin from last replication"
     )
     bulonfer_cost = fields.Float(
-        help="Bulonfer Cost price from last replication"
+        help="Actual cost price from last actualization"
     )
     standard_price = fields.Float(
         string="Oldest Cost",
-        help="The purchase cost of the oldest product in stock"
+        help="The purchase cost of the oldest product in stock, after it has "
+             "been delivered."
+    )
+    cost_history_ids = fields.One2many(
+        comodel_name="stock.quant",
+        inverse_name="product_tmpl_id",
+        domain=[('location_id.usage', '=', 'internal')]
     )
 
     @api.multi
