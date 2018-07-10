@@ -293,7 +293,8 @@ class AutoloadMgr(models.Model):
             if not sec_id:
                 sec_id = categ_obj.create({'name': item.section,
                                            'property_cost_method': 'real',
-                                           'removal_strategy_id': 1})
+                                           'removal_strategy_id': 1,
+                                           'property_valuation': 'real_time'})
 
             # buscar seccion / familia o crearla
             sec_fam_id = categ_obj.search([('name', '=', item.family),
@@ -303,7 +304,9 @@ class AutoloadMgr(models.Model):
                 sec_fam_id = categ_obj.create({'name': item.family,
                                                'parent_id': sec_id.id,
                                                'property_cost_method': 'real',
-                                               'removal_strategy_id': 1})
+                                               'removal_strategy_id': 1,
+                                               'property_valuation':
+                                                   'real_time'})
 
             # buscar seccion / familia / item o crearla
             categ_id = categ_obj.search([('name', '=', item.name),
@@ -314,7 +317,9 @@ class AutoloadMgr(models.Model):
                 categ_id = categ_obj.create({'name': item.name,
                                              'parent_id': sec_fam_id.id,
                                              'property_cost_method': 'real',
-                                             'removal_strategy_id': 1})
+                                             'removal_strategy_id': 1,
+                                             'property_valuation':
+                                                 'real_time'})
 
             _logger.info('Setting %s --> %s' %
                          (prod.default_code, categ_id.complete_name))
@@ -381,3 +386,22 @@ class AutoloadMgr(models.Model):
             _logger.info('processing discounts on invoice '
                          '{}'.format(invoice.document_number))
             invoice.compute_invoice_discount()
+
+    @api.model
+    def check_cost(self):
+        """ Revisa los costos del cost history
+        """
+        import wdb; wdb.set_trace()
+        stock_quant_obj = self.env['stock.quant']
+        for sq in stock_quant_obj.search([]):
+            print sq.cost,
+            print sq.product_tmpl_id.standard_price
+
+    @api.model
+    def fix_category(self):
+        """ corrige las categorias
+        """
+        for categ in self.env['product.category'].search([]):
+            categ.property_cost_method = 'real'
+            categ.property_valuation = 'real_time'
+            categ.removal_strategy_id = 1

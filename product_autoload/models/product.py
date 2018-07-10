@@ -39,7 +39,7 @@ class ProductTemplate(models.Model):
         help="Bulonfer suggested product margin from last replication"
     )
     bulonfer_cost = fields.Float(
-        help="Actual cost price from last actualization"
+        help="Actual cost from last actualization"
     )
     standard_price = fields.Float(
         string="Oldest Cost",
