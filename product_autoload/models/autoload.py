@@ -389,7 +389,7 @@ class AutoloadMgr(models.Model):
 
     @api.model
     def check_cost(self):
-        """ Revisa los costos del cost history
+        """ Revisa los costos del cost history, para lanzar manualmente
         """
         import wdb; wdb.set_trace()
         stock_quant_obj = self.env['stock.quant']
@@ -399,7 +399,7 @@ class AutoloadMgr(models.Model):
 
     @api.model
     def fix_category(self):
-        """ corrige las categorias
+        """ corrige las categorias, para lanzar manualmente
         """
         for categ in self.env['product.category'].search([]):
             categ.property_cost_method = 'real'

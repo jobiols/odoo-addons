@@ -4,7 +4,7 @@
         <!-- GRUPO MESHOPS -->
         <record id="group_meshop_users" model="res.groups">
             <field name="name">Mercado Shops</field>
-            <field name="comment">Habilita poblicar</field>
+            <field name="comment">Enable access to mercadoshops</field>
          </record>
     </data>
 </openerp>
