@@ -20,6 +20,9 @@ class SimpleMeShopsPublishing(models.TransientModel):
          ('download', 'Download')],  # download spreadsheet
         default="process"
     )
+    date_from = fields.Date(
+        default=fields.date.today()
+    )
 
     @api.one
     def process_data(self, fp_name):
@@ -28,7 +31,8 @@ class SimpleMeShopsPublishing(models.TransientModel):
         FIRST_ROW = 2
 
         product_obj = self.env['product.product']
-        products = product_obj.search([('meshops_code', '=', True)])
+        products = product_obj.search([('meshops_code', '=', True),
+                                       ('write_date', '>=', self.date_from)])
 
         # open worksheet
         wb = openpyxl.load_workbook(filename=fp_name,
