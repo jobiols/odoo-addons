@@ -8,8 +8,12 @@
                 <field name="state" invisible="1"/>
 
                 <group states="process" string="Process spreadsheet">
-                    <p>Click process to start processing the prices of
-                    mercadoshop products into a worksheet</p>
+                    <p>Click process to create a worksheet with the product
+                        prices marked as mercadoshop and modified since
+                        Date From (included)</p>
+                    <br/>
+                    <field name="date_from"/>
+                    <br/>
                 </group>
 
                 <group states="download"

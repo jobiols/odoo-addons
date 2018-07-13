@@ -6,8 +6,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Odoo Server 9.0c-20180504\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2018-07-12 23:09+0000\n"
-"PO-Revision-Date: 2018-07-12 23:09+0000\n"
+"POT-Creation-Date: 2018-07-13 00:19+0000\n"
+"PO-Revision-Date: 2018-07-13 00:19+0000\n"
 "Last-Translator: <>\n"
 "Language-Team: \n"
 "MIME-Version: 1.0\n"
@@ -17,20 +17,22 @@ msgstr ""
 
 #. module: simple_meshops_publishing
 #: model:ir.ui.view,arch_db:simple_meshops_publishing.view_meshops_process_wizard_form
-msgid "Click process to start processing the prices of\n"
-"                    mercadoshop products into a worksheet"
-msgstr "Click en procesar para empezar a procesar los precios de\n"
-"                    los productos mercadoshop en una planilla excel."
+msgid "Click process to create a worksheet with the product\n"
+"                        prices marked as mercadoshop and modified since\n"
+"                        Date From (included)"
+msgstr "Click procesar para crear una planilla con los precios de los\n"
+" productos marcados como mercadoshop y modificados a partir de la fecha\n"
+" inical"
 
 #. module: simple_meshops_publishing
 #: model:ir.ui.view,arch_db:simple_meshops_publishing.view_meshops_process_wizard_form
 msgid "Completed succesfully,\n"
 "                            <br/>\n"
 "                            Now you can download the\n"
-"                            spreadsheet and upload it to Mercadolibre."
+"                            spreadsheet and upload it to Mercadoshops."
 msgstr "Completado con exito,\n"
 "                            <br/>\n"
-"                            Ahora puedes bajar la\n"
+"                            Ahora se puede descargar la\n"
 "                            planilla y subirla a Mercadoshops."
 
 #. module: simple_meshops_publishing
@@ -41,12 +43,17 @@ msgstr "Creado por"
 #. module: simple_meshops_publishing
 #: model:ir.model.fields,field_description:simple_meshops_publishing.field_simple_meshops_publishing_process_excel_create_date
 msgid "Created on"
-msgstr "Creado el"
+msgstr "Creado en"
+
+#. module: simple_meshops_publishing
+#: model:ir.model.fields,field_description:simple_meshops_publishing.field_simple_meshops_publishing_process_excel_date_from
+msgid "Date from"
+msgstr "Fecha desde"
 
 #. module: simple_meshops_publishing
 #: model:ir.model.fields,field_description:simple_meshops_publishing.field_simple_meshops_publishing_process_excel_display_name
 msgid "Display Name"
-msgstr "Mostrar Nombre"
+msgstr "Nombre"
 
 #. module: simple_meshops_publishing
 #: selection:simple_meshops_publishing.process_excel,state:0
@@ -56,27 +63,27 @@ msgstr "Descarga"
 #. module: simple_meshops_publishing
 #: model:ir.ui.menu,name:simple_meshops_publishing.menu_process_meshops_excel
 msgid "Download meshop prices"
-msgstr "Descargar los precios meshop"
+msgstr "Descargar precios mercaodshop"
 
 #. module: simple_meshops_publishing
 #: model:ir.ui.view,arch_db:simple_meshops_publishing.view_meshops_process_wizard_form
 msgid "Download processed spreadsheet"
-msgstr "Descargar planilla procesada"
+msgstr "Descargar plannilla procesada"
+
+#. module: simple_meshops_publishing
+#: model:res.groups,comment:simple_meshops_publishing.group_meshop_users
+msgid "Enable access to mercadoshops"
+msgstr "Habilitar acceso a mercadoshops"
 
 #. module: simple_meshops_publishing
 #: model:ir.model.fields,field_description:simple_meshops_publishing.field_simple_meshops_publishing_process_excel_name
 msgid "File Name"
-msgstr "Nombre del archivo"
-
-#. module: simple_meshops_publishing
-#: model:res.groups,comment:simple_meshops_publishing.group_meshop_users
-msgid "Habilita acceso a bajar planilla mercadoshops"
-msgstr "Habilita acceso a bajar planilla mercadoshops"
+msgstr "Nombre de archivo"
 
 #. module: simple_meshops_publishing
 #: model:ir.ui.view,arch_db:simple_meshops_publishing.view_meshops_process_wizard_form
-msgid "Here is the processed mercadolibre spreadsheet:"
-msgstr "Aqui esta la planilla de mercadoshops procesada:"
+msgid "Here is the processed mercadoshops spreadsheet:"
+msgstr "Aqui esta la planilla procesada con los precios"
 
 #. module: simple_meshops_publishing
 #: model:ir.model.fields,field_description:simple_meshops_publishing.field_simple_meshops_publishing_process_excel_id
@@ -86,17 +93,17 @@ msgstr "ID"
 #. module: simple_meshops_publishing
 #: model:ir.model.fields,field_description:simple_meshops_publishing.field_simple_meshops_publishing_process_excel___last_update
 msgid "Last Modified on"
-msgstr "Última modificación el"
+msgstr "Ultima modificacon el"
 
 #. module: simple_meshops_publishing
 #: model:ir.model.fields,field_description:simple_meshops_publishing.field_simple_meshops_publishing_process_excel_write_uid
 msgid "Last Updated by"
-msgstr "Última actualización por"
+msgstr "Ultima actualizacion por"
 
 #. module: simple_meshops_publishing
 #: model:ir.model.fields,field_description:simple_meshops_publishing.field_simple_meshops_publishing_process_excel_write_date
 msgid "Last Updated on"
-msgstr "Última actualizacón el"
+msgstr "Ultima actualizacon en"
 
 #. module: simple_meshops_publishing
 #: model:res.groups,name:simple_meshops_publishing.group_meshop_users
@@ -107,17 +114,17 @@ msgstr "Mercado Shops"
 #: model:ir.ui.view,arch_db:simple_meshops_publishing.view_meshops_process_wizard_form
 #: selection:simple_meshops_publishing.process_excel,state:0
 msgid "Process"
-msgstr "Procesar"
+msgstr "Procesado"
 
 #. module: simple_meshops_publishing
 #: model:ir.actions.act_window,name:simple_meshops_publishing.action_process_meshops_excel
 msgid "Process meshops Excel"
-msgstr "Procesar meshops Excel"
+msgstr "Procesar Excel de mercadoshop"
 
 #. module: simple_meshops_publishing
 #: model:ir.ui.view,arch_db:simple_meshops_publishing.view_meshops_process_wizard_form
 msgid "Process meshops prices"
-msgstr "Procesar precios meshops"
+msgstr "Procesar precios meshop"
 
 #. module: simple_meshops_publishing
 #: model:ir.ui.view,arch_db:simple_meshops_publishing.view_meshops_process_wizard_form
@@ -127,7 +134,7 @@ msgstr "Procesar planilla de calculo"
 #. module: simple_meshops_publishing
 #: model:ir.model,name:simple_meshops_publishing.model_product_template
 msgid "Product Template"
-msgstr "Plantilla de Producto"
+msgstr "Plantilla de producto"
 
 #. module: simple_meshops_publishing
 #: model:ir.model.fields,field_description:simple_meshops_publishing.field_product_template_meshops_code
