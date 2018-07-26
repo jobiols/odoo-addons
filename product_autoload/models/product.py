@@ -2,6 +2,7 @@
 # Part of Odoo. See LICENSE file for full copyright and licensing details.
 from openerp import api, models, fields
 import logging
+from datetime import datetime, timedelta
 
 _logger = logging.getLogger(__name__)
 
@@ -104,9 +105,14 @@ class ProductTemplate(models.Model):
     @api.multi
     def set_cost(self, vendor_ref, cost, date, min_qty=1, vendors_code=False):
         """ Setea el costo del producto, el costo se pone en supplierinfo, no
-            en standard price. Cuando se ingresa la mercaderia el quant queda
-            valorizado al precio que esta en supplierinfo y cuando se egresa
-            mercaderia el standard_price queda al precio del quant que salio.
+            en standard price.
+
+            Cuando se hace la orden de compra saca el precio y la cantidad de
+            supplierinfo y luego al validarla y posteriormente ingresar la
+            mercaderia el precio pasa al quant.
+
+            Cuando se egresa mercaderia el standard_price queda al precio del
+            quant que salio y segun la estrategia FIFO sale el mas antiguo.
         """
         vendor_id = self.env['res.partner'].search(
             [('ref', '=', vendor_ref)])
@@ -123,10 +129,19 @@ class ProductTemplate(models.Model):
             'product_tmpl_id': self.id
         }
 
-        # reemplaza todos los registros del id por el supplierinfo
-        self.seller_ids.unlink()
-        self.seller_ids = [(0, 0, supplierinfo)]  # agrega uno
+        # si hay registros abiertos cerrarlos
+        sellers = self.seller_ids.search(
+            [('name', '=', vendor_id.id),
+             ('product_code', '=', self.default_code),
+             ('product_tmpl_id', '=', self.id),
+             ('date_end', '=', False)])
 
-        # no sirve dejar aca la historia de los precios porque al
-        # tomar el costo toma el primero que encuentra sin importar
-        # las fechas ni el partner
+        # restar un dia y cerrar las lineas si las hay
+        dt = datetime.strptime(date[0:10], "%Y-%m-%d")
+        dt = datetime.strftime(dt - timedelta(1), "%Y-%m-%d")
+        for reg in sellers:
+            reg.date_end = dt if dt >= reg.date_start else reg.date_start
+
+        # pongo un registro con el precio del proveedor
+        self.seller_ids = [(0, 0, supplierinfo)]
+

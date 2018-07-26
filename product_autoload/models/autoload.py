@@ -272,8 +272,23 @@ class AutoloadMgr(models.Model):
         _logger.info('update categories')
         categ_obj = self.env['product.category']
         item_obj = self.env['product_autoload.item']
+        account_obj = self.env['account.account']
         prods = self.env['product.template'].search(
             [('invalidate_category', '=', True)], limit=400)
+
+        stock = account_obj.search([('code', '=', '1.1.05.01.010')])
+        input = account_obj.search([('code', '=', '1.1.05.01.020')])
+        output = account_obj.search([('code', '=', '1.1.05.01.030')])
+
+        categ_data = {
+            'property_stock_account_input_categ_id': input,
+            'property_stock_account_output_categ_id': output,
+            'property_stock_valuation_account_id': stock,
+            'property_cost_method': 'real',
+            'removal_strategy_id': 1,
+            'property_valuation': 'real_time'
+        }
+
         for prod in prods:
             # buscar el item que corresponde al producto
             item = item_obj.search([('code', '=', prod.item_code)])
@@ -291,22 +306,19 @@ class AutoloadMgr(models.Model):
             sec_id = categ_obj.search([('name', '=', item.section),
                                        ('parent_id', '=', False)])
             if not sec_id:
-                sec_id = categ_obj.create({'name': item.section,
-                                           'property_cost_method': 'real',
-                                           'removal_strategy_id': 1,
-                                           'property_valuation': 'real_time'})
+                values = {'name': item.section}
+                values.update(categ_data)
+                sec_id = categ_obj.create(values)
 
             # buscar seccion / familia o crearla
             sec_fam_id = categ_obj.search([('name', '=', item.family),
                                            ('parent_id.name', '=',
                                             item.section)])
             if not sec_fam_id:
-                sec_fam_id = categ_obj.create({'name': item.family,
-                                               'parent_id': sec_id.id,
-                                               'property_cost_method': 'real',
-                                               'removal_strategy_id': 1,
-                                               'property_valuation':
-                                                   'real_time'})
+                values = {'name': item.family,
+                          'parent_id': sec_id.id}
+                values.update(categ_data)
+                sec_fam_id = categ_obj.create(values)
 
             # buscar seccion / familia / item o crearla
             categ_id = categ_obj.search([('name', '=', item.name),
@@ -314,12 +326,10 @@ class AutoloadMgr(models.Model):
                                          ('parent_id.parent_id.name', '=',
                                           item.section)])
             if not categ_id:
-                categ_id = categ_obj.create({'name': item.name,
-                                             'parent_id': sec_fam_id.id,
-                                             'property_cost_method': 'real',
-                                             'removal_strategy_id': 1,
-                                             'property_valuation':
-                                                 'real_time'})
+                values = {'name': item.name,
+                          'parent_id': sec_fam_id.id}
+                values.update(categ_data)
+                categ_id = categ_obj.create(values)
 
             _logger.info('Setting %s --> %s' %
                          (prod.default_code, categ_id.complete_name))
@@ -332,17 +342,17 @@ class AutoloadMgr(models.Model):
 
     @api.multi
     def send_email(self, subject, body, email_from, email_to):
-        email_to = email_to.split(',')
-        if len(email_to) == 0:
-            _logger.error('No hay destinatario de mail')
+        if not email_to:
+            _logger.error('No email recipient')
             return
+        email_to = email_to.split(',')
 
         smtp = self.env['ir.mail_server']
         try:
             message = smtp.build_email(email_from, email_to, subject, body)
             smtp.send_email(message)
         except Exception as ex:
-            _logger.error('Falla envio de mail %s' % ex.message)
+            _logger.error('Can not send mail %s' % ex.message)
 
     def get_stats(self, start, elapsed, stats):
         ret = u'Productos procesados: {}\n'.format(stats['prod_processed'])
@@ -391,7 +401,6 @@ class AutoloadMgr(models.Model):
     def check_cost(self):
         """ Revisa los costos del cost history, para lanzar manualmente
         """
-        import wdb; wdb.set_trace()
         stock_quant_obj = self.env['stock.quant']
         for sq in stock_quant_obj.search([]):
             print sq.cost,
@@ -401,7 +410,28 @@ class AutoloadMgr(models.Model):
     def fix_category(self):
         """ corrige las categorias, para lanzar manualmente
         """
+        account_obj = self.env['account.account']
+        stock = account_obj.search([('code', '=', '1.1.05.01.010')])
+        input = account_obj.search([('code', '=', '1.1.05.01.020')])
+        output = account_obj.search([('code', '=', '1.1.05.01.030')])
+
         for categ in self.env['product.category'].search([]):
             categ.property_cost_method = 'real'
             categ.property_valuation = 'real_time'
             categ.removal_strategy_id = 1
+            categ.property_stock_account_input_categ_id = input
+            categ.property_stock_account_output_categ_id = output
+            categ.property_stock_valuation_account_id = stock
+            _logger.info('CATEG: %s' % categ.name)
+
+    @api.model
+    def fix_supplierinfo(self):
+        """ corrige fechas inicio fin en supplierinfo
+        """
+        # si hay registros con fechas cruzadas los arregla
+        sellers_obj = self.env['product.supplierinfo']
+        sellers = sellers_obj.search([('date_end', '!=', False)])
+        for rec in sellers:
+            if rec.date_end < rec.date_start:
+                rec.date_end = rec.date_start
+                _logger.info('FIX INFO: %s' % rec.date_start)

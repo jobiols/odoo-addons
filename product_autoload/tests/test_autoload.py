@@ -228,20 +228,37 @@ class TestBusiness(TransactionCase):
                                   ('parent_id', '=', False)])
         self.assertEqual(categ.property_cost_method, 'real')
         self.assertEqual(categ.removal_strategy_id.method, 'fifo')
-        self.assertEqual(categ.property_cost_method, 'real_time')
-
+        self.assertEqual(categ.property_valuation, 'real_time')
+        self.assertEqual(categ.property_stock_account_input_categ_id.code,
+                         u'1.1.05.01.020')
+        self.assertEqual(categ.property_stock_account_output_categ_id.code,
+                         u'1.1.05.01.030')
+        self.assertEqual(categ.property_stock_valuation_account_id.code,
+                         u'1.1.05.01.010')
 
         categ = categ_obj.search([('name', '=', u'ARANDELAS'),
                                   ('parent_id.name', '=', u'Bulonería')])
         self.assertEqual(categ.property_cost_method, 'real')
         self.assertEqual(categ.removal_strategy_id.method, 'fifo')
-        self.assertEqual(categ.property_cost_method, 'real_time')
+        self.assertEqual(categ.property_valuation, 'real_time')
+        self.assertEqual(categ.property_stock_account_input_categ_id.code,
+                         u'1.1.05.01.020')
+        self.assertEqual(categ.property_stock_account_output_categ_id.code,
+                         u'1.1.05.01.030')
+        self.assertEqual(categ.property_stock_valuation_account_id.code,
+                         u'1.1.05.01.010')
 
         categ = categ_obj.search([('name', '=', u'ARANDELA AUTOMOTOR FIXO'),
                                   ('parent_id.name', '=', u'ARANDELAS')])
         self.assertEqual(categ.property_cost_method, 'real')
         self.assertEqual(categ.removal_strategy_id.method, 'fifo')
-        self.assertEqual(categ.property_cost_method, 'real_time')
+        self.assertEqual(categ.property_valuation, 'real_time')
+        self.assertEqual(categ.property_stock_account_input_categ_id.code,
+                         u'1.1.05.01.020')
+        self.assertEqual(categ.property_stock_account_output_categ_id.code,
+                         u'1.1.05.01.030')
+        self.assertEqual(categ.property_stock_valuation_account_id.code,
+                         u'1.1.05.01.010')
 
         # verificar precios de lista
         prod = prod_obj.search([('default_code', '=', '102.B.12')])

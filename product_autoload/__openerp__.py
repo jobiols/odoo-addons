@@ -26,6 +26,7 @@
     'summary': 'Carga automatica de productos',
     'author': 'jeo Software',
     'depends': [
+        'l10n_ar_account',
         'stock',
         'sale',
         'purchase',
