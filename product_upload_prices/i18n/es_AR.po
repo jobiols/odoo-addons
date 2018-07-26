@@ -6,8 +6,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Odoo Server 9.0c-20180504\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2018-06-29 02:31+0000\n"
-"PO-Revision-Date: 2018-06-29 02:31+0000\n"
+"POT-Creation-Date: 2018-07-26 06:42+0000\n"
+"PO-Revision-Date: 2018-07-26 06:42+0000\n"
 "Last-Translator: <>\n"
 "Language-Team: \n"
 "MIME-Version: 1.0\n"
@@ -36,22 +36,22 @@ msgid "Display Name"
 msgstr "Mostrar Nombre"
 
 #. module: product_upload_prices
-#: code:addons/product_upload_prices/wizard/upload_prices.py:44
+#: code:addons/product_upload_prices/wizard/upload_prices.py:49
 #, python-format
-msgid "ERROR in line %s, product \"%s\" not found"
-msgstr "ERROR en linea %s, el producto \"%s\" no se encuentra"
+msgid "ERROR in line %s, from vendor %s, product \"%s\" not found"
+msgstr "ERROR en linea %s, proveedor: %s, el producto \"%s\" no se encuentra"
 
 #. module: product_upload_prices
-#: code:addons/product_upload_prices/wizard/upload_prices.py:51
+#: code:addons/product_upload_prices/wizard/upload_prices.py:57
 #, python-format
-msgid "Error in line %s, list price \"%s\" not a number"
-msgstr "Error en linea %s, el precio de lista \"%s\" no es un numero"
+msgid "Error in line %s, from vendor %s list price \"%s\" is not a number"
+msgstr "Error in linea %s, proveedor: %s el precio de lista \"%s\" no es un numero"
 
 #. module: product_upload_prices
-#: code:addons/product_upload_prices/wizard/upload_prices.py:58
+#: code:addons/product_upload_prices/wizard/upload_prices.py:65
 #, python-format
-msgid "Error in line %s, standard price \"%s\" not a number"
-msgstr "Error en linea %s, el precio de costo \"%s\" no es un numero"
+msgid "Error in line %s, from vendor %s, standard price \"%s\" is not a number"
+msgstr "Error in linea %s, proveedor: %s, el precio de costo \"%s\" no es un numero"
 
 #. module: product_upload_prices
 #: model:ir.model.fields,field_description:product_upload_prices.field_product_upload_prices_upload_prices_data
@@ -125,6 +125,12 @@ msgid "Upload Prices"
 msgstr "Importar precios"
 
 #. module: product_upload_prices
+#: code:addons/product_upload_prices/wizard/upload_prices.py:102
+#, python-format
+msgid "Vendor %s not found."
+msgstr "El proveedor %s no se encuentra en el sistema."
+
+#. module: product_upload_prices
 #: model:ir.ui.view,arch_db:product_upload_prices.view_product_load_wizard_form
 msgid "When hitting import the system checks all the file.\n"
 "                    If there are any error it is shown pointing the worksheet\n"
@@ -134,6 +140,15 @@ msgstr "Al darle importar, el sistema primero verifica si esta todo correcto.\n"
 "                    Si hay algun error lo muestra indicando el numero de fila de la\n"
 "                    planilla donde se produjo el error pero sin cargar ningun precio.\n"
 "                    Los productos deben existir y los precios deben ser numeros."
+
+#. module: product_upload_prices
+#: model:ir.ui.view,arch_db:product_upload_prices.view_product_load_wizard_form
+msgid "You can have several sheets in the spreadsheet where each\n"
+"                    one corresponds to a vendor.\n"
+"                    Each sheet must have the vendor's reference as its name."
+msgstr "Se pueden tener varias hojas en la planilla de calculo donde cada una\n"
+"                corresponde a un proveedor.\n"
+"                Cada hoja debe tener como nombre la referencia del proveedor."
 
 #. module: product_upload_prices
 #: model:ir.ui.view,arch_db:product_upload_prices.view_product_load_wizard_form

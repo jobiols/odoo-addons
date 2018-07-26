@@ -132,7 +132,6 @@ class ProductTemplate(models.Model):
         # si hay registros abiertos cerrarlos
         sellers = self.seller_ids.search(
             [('name', '=', vendor_id.id),
-             ('product_code', '=', self.default_code),
              ('product_tmpl_id', '=', self.id),
              ('date_end', '=', False)])
 

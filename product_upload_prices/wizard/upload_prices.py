@@ -37,7 +37,7 @@ class UploadPrices(models.TransientModel):
             })
         return ret
 
-    def check_data(self, data):
+    def check_data(self, data, vendor):
         """ Check data structure for errors
         """
         product_obj = self.env['product.product']
@@ -46,24 +46,27 @@ class UploadPrices(models.TransientModel):
             domain = [('default_code', '=', row['default_code'])]
             if not product_obj.search(domain):
                 raise UserError(
-                    _(u'ERROR in line %s, product "%s" not found') %
-                    (row['row'], row['default_code']))
+                    _(u'ERROR in line %s, from vendor %s, product '
+                      u'"%s" not found') %
+                    (row['row'], vendor, row['default_code']))
             try:
                 # check list price is a number
                 float(row['list_price'])
             except (ValueError, TypeError):
                 raise UserError(
-                    _(u'Error in line %s, list price "%s" not a number') %
-                    (row['row'], row['list_price']))
+                    _(u'Error in line %s, from vendor %s list price "%s" '
+                      u'is not a number') %
+                    (row['row'], vendor, row['list_price']))
             try:
                 # check standard price is a number
                 float(row['standard_price'])
             except (ValueError, TypeError):
                 raise UserError(
-                    _(u'Error in line %s, standard price "%s" not a number') %
-                    (row['row'], row['standard_price']))
+                    _(u'Error in line %s, from vendor %s, standard price '
+                      u'"%s" is not a number') %
+                    (row['row'], vendor, row['standard_price']))
 
-    def process_data(self, data):
+    def process_data(self, data, vendor):
         """ Process data structure setting prices in system
         """
         product_obj = self.env['product.product']
@@ -71,7 +74,7 @@ class UploadPrices(models.TransientModel):
             domain = [('default_code', '=', row['default_code'])]
             prod = product_obj.search(domain)
             prod.list_price = float(row['list_price'])
-            prod.product_tmpl_id.set_cost('BULONFER',
+            prod.product_tmpl_id.set_cost(vendor,
                                           float(row['standard_price']),
                                           str(datetime.datetime.now())[0:10])
 
@@ -79,11 +82,24 @@ class UploadPrices(models.TransientModel):
     def import_file(self):
         data = base64.decodestring(self.data)
         (fileno, fp_name) = tempfile.mkstemp('.xlsx', 'openerp_')
+
+        # escribir la planilla en un temporario
         openfile = open(fp_name, "w")
         openfile.write(data)
         openfile.close()
+
+        # leer la planilla del temporario en solo lectura
         wb = openpyxl.load_workbook(filename=fp_name, read_only=True,
                                     data_only=True)
-        data = self.read_data(wb.active)
-        self.check_data(data)
-        self.process_data(data)
+
+        partner_obj = self.env['res.partner']
+
+        # cada hoja de la planilla es un vendor
+        vendors = wb.sheetnames
+        for vendor in vendors:
+            partner = partner_obj.search([('ref', '=', vendor)])
+            if not partner:
+                raise UserError(_('Vendor %s not found.') % vendor)
+            data = self.read_data(wb[vendor])
+            self.check_data(data, vendor)
+            self.process_data(data, vendor)

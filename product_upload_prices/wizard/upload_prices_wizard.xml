@@ -13,6 +13,11 @@
                     <li>Cost price without tax</li>
                 </ul>
                 <p>
+                    You can have several sheets in the spreadsheet where each
+                    one corresponds to a vendor.
+                    Each sheet must have the vendor's reference as its name.
+                </p>
+                <p>
                     When hitting import the system checks all the file.
                     If there are any error it is shown pointing the worksheet
                     ofending row.
