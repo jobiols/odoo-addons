@@ -60,6 +60,7 @@ class SaleOrder(models.Model):
                         pack.write({'qty_done': pack.product_qty})
                     else:
                         pack.unlink()
-                pick.do_transfer()
+                # TODO Revisar porque necesito un sudo aca, antes no pasaba.
+                pick.sudo().do_transfer()
 
                 return True
