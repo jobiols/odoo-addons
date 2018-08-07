@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<openerp>
+
+    <data>
+
+        <!-- Card Commission Form View -->
+
+        <record model="ir.ui.view" id="view_card_commission_form">
+            <field name="name">Comision Tarjetas</field>
+            <field name="model">card_commission</field>
+            <field name="arch" type="xml">
+                <form string="Comisiones de tarjetas">
+                    <group col="2">
+                        <field name="installment"/>
+                        <field name="TNA"/>
+                        <field name="TEM"/>
+                        <field name="coefficient"/>
+                        <field name="card"/>
+                    </group>
+                </form>
+            </field>
+        </record>
+
+        <!-- Card Commission Tree view -->
+        <record model="ir.ui.view" id="view_card_commission_tree">
+            <field name="name">Comision tarjetas</field>
+            <field name="model">card_commission</field>
+            <field name="arch" type="xml">
+                <tree string="Comisiones de tarjetas">
+                    <field name="installment"/>
+                    <field name="TNA"/>
+                    <field name="TEM"/>
+                    <field name="coefficient"/>
+                    <field name="card"/>
+                </tree>
+            </field>
+        </record>
+
+        <!--  Card Commission Action -->
+        <record id="action_card_commission" model="ir.actions.act_window">
+            <field name="name">Comisiones Tarjetas</field>
+            <field name="res_model">card_commission</field>
+            <field name="view_type">form</field>
+        </record>
+
+        <!--  Card Commission Menu -->
+        <menuitem name="Comisiones Tarjetas"
+                  id="menu_comission_tarjetas" parent="menu_card_config"
+                  action="action_card_commission" groups=""/>
+
+    </data>
+</openerp>

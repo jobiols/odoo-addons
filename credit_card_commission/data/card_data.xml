@@ -1,0 +1,186 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<openerp>
+    <data noupdate="0">
+        <record model="credit_card" id="visa_card">
+            <field name="name">VISA</field>
+            <field name="surcharge">10</field>
+        </record>
+        <record model="credit_card" id="master_card">
+            <field name="name">MASTERCARD</field>
+            <field name="surcharge">10</field>
+        </record>
+        <record model="credit_card" id="maestro_card">
+            <field name="name">MAESTRO</field>
+            <field name="surcharge">10</field>
+        </record>
+
+        <record model="card_commission" id="quotes_1">
+            <field name="installment">1</field>
+            <field name="TNA">42</field>
+            <field name="TEM">3.50</field>
+            <field name="coefficient">1</field>
+            <field name="card" ref="visa_card"/>
+        </record>
+        <record model="card_commission" id="quotes_2">
+            <field name="installment">2</field>
+            <field name="TNA">42</field>
+            <field name="TEM">3.50</field>
+            <field name="coefficient">1.0504</field>
+            <field name="card" ref="visa_card"/>
+        </record>
+        <record model="card_commission" id="quotes_3">
+            <field name="installment">3</field>
+            <field name="TNA">42</field>
+            <field name="TEM">3.50</field>
+            <field name="coefficient">1.0684</field>
+            <field name="card" ref="visa_card"/>
+        </record>
+        <record model="card_commission" id="quotes_4">
+            <field name="installment">4</field>
+            <field name="TNA">42</field>
+            <field name="TEM">3.50</field>
+            <field name="coefficient">1.0865</field>
+            <field name="card" ref="visa_card"/>
+        </record>
+        <record model="card_commission" id="quotes_5">
+            <field name="installment">5</field>
+            <field name="TNA">42</field>
+            <field name="TEM">3.50</field>
+            <field name="coefficient">1.1049</field>
+            <field name="card" ref="visa_card"/>
+        </record>
+        <record model="card_commission" id="quotes_6">
+            <field name="installment">6</field>
+            <field name="TNA">42</field>
+            <field name="TEM">3.50</field>
+            <field name="coefficient">1.1235</field>
+            <field name="card" ref="visa_card"/>
+        </record>
+        <record model="card_commission" id="quotes_7">
+            <field name="installment">7</field>
+            <field name="TNA">46</field>
+            <field name="TEM">3.83</field>
+            <field name="coefficient">1.1562</field>
+            <field name="card" ref="visa_card"/>
+        </record>
+        <record model="card_commission" id="quotes_8">
+            <field name="installment">8</field>
+            <field name="TNA">46</field>
+            <field name="TEM">3.83</field>
+            <field name="coefficient">1.1772</field>
+            <field name="card" ref="visa_card"/>
+        </record>
+        <record model="card_commission" id="quotes_9">
+            <field name="installment">9</field>
+            <field name="TNA">46</field>
+            <field name="TEM">3.83</field>
+            <field name="coefficient">1.1983</field>
+            <field name="card" ref="visa_card"/>
+        </record>
+        <record model="card_commission" id="quotes_10">
+            <field name="installment">10</field>
+            <field name="TNA">46</field>
+            <field name="TEM">3.83</field>
+            <field name="coefficient">1.2197</field>
+            <field name="card" ref="visa_card"/>
+        </record>
+        <record model="card_commission" id="quotes_11">
+            <field name="installment">11</field>
+            <field name="TNA">46</field>
+            <field name="TEM">3.83</field>
+            <field name="coefficient">1.2413</field>
+            <field name="card" ref="visa_card"/>
+        </record>
+        <record model="card_commission" id="quotes_12">
+            <field name="installment">12</field>
+            <field name="TNA">46</field>
+            <field name="TEM">3.83</field>
+            <field name="coefficient">1.2632</field>
+            <field name="card" ref="visa_card"/>
+        </record>
+        <record model="card_commission" id="quotes_13">
+            <field name="installment">13</field>
+            <field name="TNA">46</field>
+            <field name="TEM">3.83</field>
+            <field name="coefficient">1.2853</field>
+            <field name="card" ref="visa_card"/>
+        </record>
+        <record model="card_commission" id="quotes_14">
+            <field name="installment">14</field>
+            <field name="TNA">46</field>
+            <field name="TEM">3.83</field>
+            <field name="coefficient">1.3076</field>
+            <field name="card" ref="visa_card"/>
+        </record>
+        <record model="card_commission" id="quotes_15">
+            <field name="installment">15</field>
+            <field name="TNA">46</field>
+            <field name="TEM">3.83</field>
+            <field name="coefficient">1.3302</field>
+            <field name="card" ref="visa_card"/>
+        </record>
+        <record model="card_commission" id="quotes_16">
+            <field name="installment">16</field>
+            <field name="TNA">46</field>
+            <field name="TEM">3.83</field>
+            <field name="coefficient">1.3530</field>
+            <field name="card" ref="visa_card"/>
+        </record>
+        <record model="card_commission" id="quotes_17">
+            <field name="installment">17</field>
+            <field name="TNA">46</field>
+            <field name="TEM">3.83</field>
+            <field name="coefficient">1.3760</field>
+            <field name="card" ref="visa_card"/>
+        </record>
+        <record model="card_commission" id="quotes_18">
+            <field name="installment">18</field>
+            <field name="TNA">46</field>
+            <field name="TEM">3.83</field>
+            <field name="coefficient">1.3992</field>
+            <field name="card" ref="visa_card"/>
+        </record>
+        <record model="card_commission" id="quotes_19">
+            <field name="installment">19</field>
+            <field name="TNA">46</field>
+            <field name="TEM">3.83</field>
+            <field name="coefficient">1.4227</field>
+            <field name="card" ref="visa_card"/>
+        </record>
+        <record model="card_commission" id="quotes_20">
+            <field name="installment">20</field>
+            <field name="TNA">46</field>
+            <field name="TEM">3.83</field>
+            <field name="coefficient">1.4464</field>
+            <field name="card" ref="visa_card"/>
+        </record>
+        <record model="card_commission" id="quotes_21">
+            <field name="installment">21</field>
+            <field name="TNA">46</field>
+            <field name="TEM">3.83</field>
+            <field name="coefficient">1.4704</field>
+            <field name="card" ref="visa_card"/>
+        </record>
+        <record model="card_commission" id="quotes_22">
+            <field name="installment">22</field>
+            <field name="TNA">46</field>
+            <field name="TEM">3.83</field>
+            <field name="coefficient">1.4945</field>
+            <field name="card" ref="visa_card"/>
+        </record>
+        <record model="card_commission" id="quotes_23">
+            <field name="installment">23</field>
+            <field name="TNA">46</field>
+            <field name="TEM">3.83</field>
+            <field name="coefficient">1.5189</field>
+            <field name="card" ref="visa_card"/>
+        </record>
+        <record model="card_commission" id="quotes_24">
+            <field name="installment">24</field>
+            <field name="TNA">46</field>
+            <field name="TEM">3.83</field>
+            <field name="coefficient">1.5435</field>
+            <field name="card" ref="visa_card"/>
+        </record>
+    </data>
+</openerp>

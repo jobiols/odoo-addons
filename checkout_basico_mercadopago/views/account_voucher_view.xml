@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<openerp>
+    <data>
+
+        <!-- agregar el boton de cobrar con mercaodpago en pagos de cliente-->
+        <record id="view_vendor_receipt_form_mpc" model="ir.ui.view">
+            <field name="name">account.voucher.form.receipts.pay.inherit</field>
+            <field name="model">account.voucher</field>
+            <field name="inherit_id" ref="account_voucher.view_vendor_receipt_form"/>
+            <field name="arch" type="xml">
+                <field name="name" position="after">
+                        <button name="button_pay_mercadopago" colspan="4"
+                                type="object"
+                                string="Cobrar con Mercadopago"
+                                />
+<!--
+                        <button name="button_refund_mercadopago" colspan="4"
+                                type="object"
+                                string="Devolver dinero con Mercadopago"/>
+-->
+                </field>
+            </field>
+        </record>
+
+        <!-- agregar el boton de cobrar con mercaodpago en registrar pago desde factura-->
+        <record id="view_vendor_receipt_form_mpf" model="ir.ui.view">
+            <field name="name">account.voucher.form.receipts.pay.inherit</field>
+            <field name="model">account.voucher</field>
+            <field name="inherit_id" ref="account_voucher.view_vendor_receipt_dialog_form"/>
+            <field name="arch" type="xml">
+                <field name="name" position="after">
+                        <button name="button_pay_mercadopago" colspan="4"
+                                type="object"
+                                string="Cobrar con Mercadopago"
+
+                                />
+<!--
+                        <button name="button_refund_mercadopago" colspan="4"
+                                type="object"
+                                string="Devolver dinero con Mercadopago"/>
+-->
+                </field>
+            </field>
+        </record>
+
+    </data>
+</openerp>

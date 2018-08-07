@@ -1,0 +1,4 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_credit_card,access_credit_card,model_credit_card,,1,1,1,1
+access_card_commission,access_card_commission,model_card_commission,,1,1,1,1
+access_credit_plan,access_credit_plan,model_credit_plan,,1,1,1,1

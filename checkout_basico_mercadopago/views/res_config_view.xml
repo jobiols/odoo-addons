@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<openerp>
+    <data>
+
+        <!--  Add payment options to sale.order and invoice forms -->
+        <record model="ir.ui.view" id="payment_acquirer_installation">
+            <field name="model">account.config.settings</field>
+            <field name="inherit_id" ref="account.view_account_config_settings"/>
+            <field name="arch" type="xml">
+                <xpath expr="//div[@name='payment_acquirer']" position="inside">
+                    <div name="mercadopago">
+                        <div name="module_checkout_basico_mercadopago" >
+                            <field name="module_checkout_basico_mercadopago" class="oe_inline"/>
+                            <label for="module_checkout_basico_mercadopago"/>
+                        </div>
+                        <div name="module_checkout_basico_mercadopago_data" attrs="{'invisible':[('module_checkout_basico_mercadopago','=',False)]}">
+                            <field name="mercadopago_client_id" class="oe_inline" string="id"/>
+                            <field name="mercadopago_client_secret" class="oe_inline" string="secret"/>
+                        </div>
+                    </div>
+                </xpath>
+            </field>
+        </record>
+
+    </data>
+</openerp>

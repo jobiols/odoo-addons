@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<openerp>
+    <data>
+
+        <!-- Card Form View
+
+        <record model="ir.ui.view" id="view_card_commission_form">
+            <field name="name">Comision de Tarjetas</field>
+            <field name="model">card_commission</field>
+            <field name="arch" type="xml">
+                <form string="Comisiones de tarjetas">
+                    <group col="2">
+                        <field name="installment"/>
+                        <field name="TNA"/>
+                        <field name="TEM"/>
+                        <field name="coefficient"/>
+                        <field name="card"/>
+                    </group>
+                </form>
+            </field>
+        </record>
+-->
+
+        <!-- Card Tree view
+        <record model="ir.ui.view" id="view_card_commission_tree">
+            <field name="name">Comision de tarjetas</field>
+            <field name="model">card_commission</field>
+            <field name="arch" type="xml">
+                <tree string="Comisiones de tarjetas">
+                        <field name="installment"/>
+                        <field name="TNA"/>
+                        <field name="TEM"/>
+                        <field name="coefficient"/>
+                        <field name="card"/>
+                </tree>
+            </field>
+        </record>
+-->
+
+        <!--  Card Action -->
+        <record id="action_card" model="ir.actions.act_window">
+            <field name="name">Tarjetas</field>
+            <field name="res_model">credit_card</field>
+            <field name="view_type">form</field>
+        </record>
+
+        <!--  Card Menu Technical menu -->
+        <menuitem name="Configuración Tarjetas"
+                  id="menu_card_config" parent="base.menu_custom"/>
+
+        <!--  Card Menu -->
+        <menuitem name="Tarjetas"
+                  id="menu_tarjetas" parent="menu_card_config"
+                  action="action_card" groups=""/>
+
+    </data>
+</openerp>
