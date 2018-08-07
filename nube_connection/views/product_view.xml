@@ -9,20 +9,37 @@
             <field name='inherit_id' ref='product.product_normal_form_view'/>
             <field name='type'>form</field>
             <field name='arch' type='xml'>
+
+                <!-- poner publicado en tienda nube y las categorias -->
                 <xpath expr="//div[@class='oe_left']" position="after">
-                    <group colspan="4" col="4">
-                        <field name="published"/>
-                        <field name="woo_categ"/>
+                    <group col="8" colspan="8">
+                        <group col="2" colspan="2">
+                            <div class="oe_left" name="published">
+                                <div>
+                                    <field name="published"/>
+                                    <label for="published"/>
+                                </div>
+                            </div>
+                        </group>
+                        <group col="1" colspan="6">
+                            <field name="woo_categ" widget="many2many_tags"
+                                   nolabel="1"/>
+                        </group>
                     </group>
                 </xpath>
 
-                <xpath expr="//field[@name='description']" position="attributes">
+                <!-- hacer texto enriquecido en la descripcion -->
+                <xpath expr="//field[@name='description']"
+                       position="attributes">
                     <attribute name="widget">html</attribute>
                     <attribute name="safe">True</attribute>
                 </xpath>
 
+                <!-- poner el precio promocional -->
                 <xpath expr="//field[@name='lst_price']" position="after">
-                    <field name="promotional_price"/>
+                    <field name="promotional_price"
+                           string="Precio promocional"/>
+
                 </xpath>
 
             </field>

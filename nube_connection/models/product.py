@@ -11,10 +11,10 @@ from openerp.exceptions import ValidationError
 class ProductProduct(models.Model):
     _inherit = 'product.product'
 
-    woo_categ = fields.Many2one(
-        'curso.woo.categ',
-        'Categoría Tienda Nube',
-        help=u'Categoría Tienda Nube'
+    woo_categ = fields.Many2many(
+        comodel_name='curso.woo.categ',
+        string='Categorías Tienda Nube',
+        help=u'Categorías Tienda Nube'
     )
 
     nube_id = fields.Integer(
