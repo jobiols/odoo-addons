@@ -6,7 +6,7 @@
 Account Invoice Global Discount
 ===============================
 
-This module adds a wizard to add global discount on invoices based on a product
+This module adds a wizard to add global discount on purchase invoices based on a product
 
 Installation
 ============
