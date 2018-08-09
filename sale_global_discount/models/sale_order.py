@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 # Part of Odoo. See LICENSE file for full copyright and licensing details.
-from openerp import api, fields, models
+from openerp import api, fields, models, _
 
 
 class SaleOrder(models.Model):
@@ -16,7 +16,7 @@ class SaleOrder(models.Model):
                 )
 
             return {
-                'name': 'Aplicar el descuento a todas las lineas de la orden',
+                'name': _('Apply discount to all SO lines'),
                 'view_type': 'form',
                 'view_mode': 'form',
                 'type': 'ir.actions.act_window',
