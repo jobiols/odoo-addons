@@ -40,7 +40,8 @@ class ProductTemplate(models.Model):
         help="Bulonfer suggested product margin from last replication"
     )
     bulonfer_cost = fields.Float(
-        help="Actual cost from last actualization"
+        help="Actual cost from last actualization or from uploading a "
+             "spreadsheet"
     )
     standard_price = fields.Float(
         string="Oldest Cost",
@@ -56,7 +57,7 @@ class ProductTemplate(models.Model):
     @api.multi
     @api.depends('bulonfer_cost', 'difference')
     def _compute_system_cost(self):
-        # Calcula el costo de la factura basado en el costo que viene de
+        # Calcula el costo de la factura
         for prod in self:
             prod.system_cost = prod.bulonfer_cost / (
                 1 - prod.difference / 100)
@@ -90,9 +91,9 @@ class ProductTemplate(models.Model):
                 # descuento por nota de credito al final del mes
                 invoice_price *= (1 - 0.05)
 
-                # precio que vino de bulonfer (puede ser cero)
+                # costo que vino de bulonfer (puede ser cero)
                 system_price = prod.bulonfer_cost
-                if system_price:
+                if invoice_price:
                     p_dif = (invoice_price - system_price) / invoice_price
 
             p_dif *= 100
@@ -113,34 +114,55 @@ class ProductTemplate(models.Model):
 
             Cuando se egresa mercaderia el standard_price queda al precio del
             quant que salio y segun la estrategia FIFO sale el mas antiguo.
+
+            Poner el precio que esta en la linea mas antigua de quants en el
+            standard price, si no tengo ninguno pongo el costo de hoy.
+
+            Finalmente actualizo el bulonfer_cost que es el costo de hoy
         """
-        vendor_id = self.env['res.partner'].search(
-            [('ref', '=', vendor_ref)])
-        if not vendor_id:
-            raise Exception('Vendor %s not found' % vendor_ref)
+        self.ensure_one()
+        for prod in self:
+            vendor_id = self.env['res.partner'].search(
+                [('ref', '=', vendor_ref)])
+            if not vendor_id:
+                raise Exception('Vendor %s not found' % vendor_ref)
 
-        supplierinfo = {
-            'name': vendor_id.id,
-            'min_qty': min_qty,
-            'price': cost,
-            'product_code': vendors_code,  # vendors product code
-            'product_name': self.name,  # vendors product name
-            'date_start': date,
-            'product_tmpl_id': self.id
-        }
+            supplierinfo = {
+                'name': vendor_id.id,
+                'min_qty': min_qty,
+                'price': cost,
+                'product_code': vendors_code,  # vendors product code
+                'product_name': self.name,  # vendors product name
+                'date_start': date,
+                'product_tmpl_id': self.id
+            }
 
-        # si hay registros abiertos cerrarlos
-        sellers = self.seller_ids.search(
-            [('name', '=', vendor_id.id),
-             ('product_tmpl_id', '=', self.id),
-             ('date_end', '=', False)])
+            # obtener los registros abiertos deberia haber solo uno
+            sellers = self.seller_ids.search(
+                [('name', '=', vendor_id.id),
+                 ('product_tmpl_id', '=', self.id),
+                 ('date_end', '=', False)])
 
-        # restar un dia y cerrar las lineas si las hay
-        dt = datetime.strptime(date[0:10], "%Y-%m-%d")
-        dt = datetime.strftime(dt - timedelta(1), "%Y-%m-%d")
-        for reg in sellers:
-            reg.date_end = dt if dt >= reg.date_start else reg.date_start
+            # restar un dia y cerrar los registros
+            for reg in sellers:
+                dt = datetime.strptime(date[0:10], "%Y-%m-%d")
+                dt = datetime.strftime(dt - timedelta(1), "%Y-%m-%d")
+                # asegurarse de que no cierro con fecha < start
+                reg.date_end = dt if dt >= reg.date_start else reg.date_start
 
-        # pongo un registro con el precio del proveedor
-        self.seller_ids = [(0, 0, supplierinfo)]
+            # pongo un registro con el precio del proveedor
+            self.seller_ids = [(0, 0, supplierinfo)]
 
+            # buscar el quant mas antiguo de este producto, (puede no haber)
+            quant_obj = self.env['stock.quant']
+            quant = quant_obj.search([('product_tmpl_id', '=', prod.id)],
+                                     order='in_date', limit=1)
+            if quant:
+                # actualizar el standard_price a este precio
+                prod.standard_price = quant.cost
+            else:
+                # no tengo stock le pongo el costo de hoy
+                prod.standard_price = cost
+
+            # el costo hoy
+            prod.bulonfer_cost = cost
