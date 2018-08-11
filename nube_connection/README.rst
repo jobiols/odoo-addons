@@ -5,7 +5,7 @@
 Conexion con Tienda Nube
 ========================
 
-- Soporta categorias para la tienda sobre los productos.
+- Soporta multiples categorias para la tienda sobre los productos
 - Define el campo published en categorias y productos
 - Agrega soporte de texto enriquecido para las descripciones
 - Agrega precio promocional para ofertas
