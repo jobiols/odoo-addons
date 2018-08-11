@@ -9,3 +9,4 @@ from . import productcode
 from . import settings
 from . import autoload
 from . import account_invoice
+from . import purchase

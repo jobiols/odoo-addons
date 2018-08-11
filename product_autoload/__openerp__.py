@@ -40,6 +40,8 @@
         'views/settings_view.xml',
         'views/product_view.xml',
         'views/autoload_manager_view.xml',
+        'views/purchase_view.xml',
+        'wizard/check_prices_view.xml'
     ],
     'test': [
     ],
