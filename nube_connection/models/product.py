@@ -11,7 +11,7 @@ from openerp.exceptions import ValidationError
 class ProductProduct(models.Model):
     _inherit = 'product.product'
 
-    woo_categ = fields.Many2many(
+    woo_categ_ids = fields.Many2many(
         comodel_name='curso.woo.categ',
         string='Categorías Tienda Nube',
         help=u'Categorías Tienda Nube'
@@ -31,3 +31,15 @@ class ProductProduct(models.Model):
         help=u'Precio promocional para tienda nube, si se pone un precio aca"'
              u'aparece como promocion, con precio publico tachado'
     )
+
+    @api.multi
+    def get_woo_categs(self):
+        """ Obtiene las categorias tienda nube de este producto esto se accede
+            por xmlrpc al subir el producto a la tienda
+        """
+        for prod in self:
+            ret = []
+            for wc in prod.woo_categ_ids:
+                ret.append(wc.nube_id)
+
+        return ret
