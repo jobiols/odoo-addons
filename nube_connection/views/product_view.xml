@@ -42,6 +42,11 @@
 
                 </xpath>
 
+                <!-- poner el nube_id -->
+                <xpath expr="//field[@name='virtual_available']" position="after">
+                    <field name="nube_id" string="Id de tienda nube"/>
+                </xpath>
+
             </field>
         </record>
 
