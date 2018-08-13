@@ -33,6 +33,16 @@ class ProductProduct(models.Model):
     )
 
     @api.multi
+    def copy(self, default=None):
+        self.ensure_one()
+
+        if default is None:
+            default = {}
+
+        default['nube_id'] = 0
+        return super(ProductProduct, self).copy(default=default)
+
+    @api.multi
     def get_woo_categs(self):
         """ Obtiene las categorias tienda nube de este producto esto se accede
             por xmlrpc al subir el producto a la tienda
