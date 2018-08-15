@@ -5,8 +5,8 @@ from openerp import api, models
 from datetime import datetime, timedelta
 
 
-class CashierReport(models.AbstractModel):
-    _name = 'report.account_cash_report.cashier_report'
+class InvoiceReport(models.AbstractModel):
+    _name = 'report.account_cash_report.invoice_report'
 
     def initial_balance(self, account_id, date_to):
         """ Devuelve el balance de la cuenta al dia anterior a la fecha
@@ -48,6 +48,11 @@ class CashierReport(models.AbstractModel):
         # import wdb; wdb.set_trace()
 
         ret = []
+        return ret
+
+
+
+
         move_lines_obj = self.env['account.move.line']
         for journal in journals:
             jour = {}
@@ -106,7 +111,7 @@ class CashierReport(models.AbstractModel):
 
     @api.multi
     def render_html(self, data):
-
+        import wdb;wdb.set_trace()
         self.model = self.env.context.get('active_model')
         docs = self.env[self.model].browse(
             self.env.context.get('active_ids', []))
@@ -128,4 +133,4 @@ class CashierReport(models.AbstractModel):
         # TODO no funciona el landscape.
         landscape = data['form']['date_range']
         return self.env['report'].with_context(landscape=landscape).render(
-            'account_cash_report.cashier_report', docargs)
+            'account_cash_report.invoice_report', docargs)

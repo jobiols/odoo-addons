@@ -1,3 +1,39 @@
+=============================
+Reporte diario de facturacion
+=============================
+
+Este reporte se encuentra en Contabilidad / Cajas / Reporte de facturacion
+
+El reporte de facturacion esta personalizado para cada caja, y muestra las
+facturase que fueron validadas en esta caja y el total acumulado en cada medio
+de pago, agregando un medio de pago ficticio llamado **Cuenta Corriente** el
+cual acumula el total de las facturas impagas.
+
+Ejemplo:
+--------
+
+Facturas validadas
+------------------
+
+ | Nro de Factura | Total | Medio de pago | Cliente | Vendedor |
+ |----------------|-------|---------------|---------|----------|
+ | FA-A 001-00180 | $ 540 | Efectivo      | Nikron  | Mariano  |
+ | FA-A 001-00181 | $ 343 | Efectivo      | Nikron  | Mariano  |
+ | FA-A 001-00182 | $2333 | Cuenta Corriente | Grupro | Gonzalo |
+ | FA-A 001-00182 | $2333 | VISA | Grupro | Gonzalo |
+
+Totales por medio de pago
+-------------------------
+
+ | Medio de pago | Monto |
+ |--|--|
+ | Efectivo | 21577.20 |
+ | Tarjetas | 29348 |
+ | Cuenta corriente | 329 |
+ | Notas de credito | 8294 |
+ | Mercadopago | 0954 |
+
+
 ===================================
 Reporte diario para cierre de cajas
 ===================================

@@ -16,7 +16,8 @@
         'wizard/cashier_report_view.xml',
         'views/cashier_report.xml',
         'views/account_journal_view.xml',
-        'views/res_users_view.xml'
+        'views/res_users_view.xml',
+        'views/invoice_report.xml'
     ],
     'test': [
     ],
