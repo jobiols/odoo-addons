@@ -57,7 +57,8 @@
                                             style="white-space: text-nowrap;">
                                             <span t-att-style="style"
                                                   t-esc="invoice['total']"
-                                                  t-esc-options='{"widget": "monetary", "display_currency": "res_company.currency_id"}'/>
+                                                  t-esc-options='{"widget": "monetary",
+                                                  "display_currency": "res_company.currency_id"}'/>
                                         </td>
                                         <td>
                                             <span t-esc="invoice['journal']"/>
@@ -70,29 +71,36 @@
                                         </td>
                                     </tr>
                                 </t>
-                                <t t-foreach="total1" t-as="total11">
-                                <tr>
+                                <tr style="font-weight: bold;">
                                     <td>
                                         <span class="text-left">Total Invoiced</span>
                                     </td>
                                         <td class="text-right"
                                             style="white-space: text-nowrap;">
                                             <span t-att-style="style"
-                                                  t-esc="total11['total']"
-                                                  t-esc-options='{"widget": "monetary", "display_currency": "res_company.currency_id"}'/>
+                                                  t-esc="total_invoiced"
+                                                  t-esc-options='{"widget": "monetary",
+                                                  "display_currency": "res_company.currency_id"}'/>
                                         </td>
+                                    <td/>
+                                    <td/>
+                                    <td/>
                                 </tr>
-                                </t>
                             </tbody>
                         </table>
 
                         <br/>
+
                         <!-- reporte de medios de pago -->
                         <table class="table table-condensed">
+                            <col width="40%"/>
+                            <col width="30%"/>
+                            <col width="30%"/>
                             <thead>
                                 <tr>
                                     <th class="text-left">Journal</th>
                                     <th class="text-right">Balance</th>
+                                    <th/>
                                 </tr>
                             </thead>
                             <tbody>
@@ -105,9 +113,11 @@
                                             style="white-space: text-nowrap;">
                                             <span t-att-style="style"
                                                   t-esc="journal['total']"
-                                                  t-esc-options='{"widget": "monetary", "display_currency": "res_company.currency_id"}'/>
+                                                  t-esc-options='{"widget": "monetary",
+                                                  "display_currency": "res_company.currency_id"}'/>
                                         </td>
                                     </tr>
+                                    <tr/>
                                 </t>
                             </tbody>
                         </table>

@@ -26,92 +26,59 @@ class InvoiceReport(models.AbstractModel):
 
         return ret
 
-    def _get_account_move_entry(self, data, journals):
+    def _get_journal(self, invoice):
+        return 'Efectivo'
+
+    def _get_invoices(self, data):
+
+        domain = [
+            ('date', '>=', data['date_from']),
+            ('date', '<=', data['date_to'])
+        ]
+
+        invoice_obj = self.env['account.invoice']
+        ret = []
+        total = 0
+        for invoice in invoice_obj.search(domain):
+            inv = {
+                'number': invoice.display_name,
+                'total': invoice.amount_total,
+                'journal': self._get_journal(invoice),
+                'partner': invoice.partner_id.name,
+                'salesperson': invoice.user_id.name
+            }
+            total += invoice.amount_total
+            ret.append(inv)
+
+        return ret, total
+
         """
-        :param:
-                journals: the recordset of journals
-
-        Returns a list of dictionaries each one is a jounral and all the moves
-         with following key and value {
-            'journal': 'ARGENCARD Ventas',
-            'balance': 123456.4545,
-            'lines': [
-                {
-                    'date': '2018-05-02',
-                    'partner_name': u'Juan de los palotes',
-                    'lref': None,
-                    'move_name': u'VEN01/2018/0001',
-                    'balance': 2089.64,
-                },
-        }
+        [
+                   {'number': 'FA-A 0001-00005487',
+                    'total': 2133,
+                    'journal': 'Efectivo',
+                    'partner': 'efeca sa',
+                    'salesperson': 'Gustavo'
+                    },
+                   {'number': 'FA-A 0001-00023424',
+                    'total': 2324,
+                    'journal': 'Tarjeta',
+                    'partner': 'Liona sa',
+                    'salesperson': 'Marcelo'
+                    },
+               ], 134144
         """
-        # import wdb; wdb.set_trace()
 
-        ret = [{'afip-number': 'FA-A 0001-00005487',
-                'total': 2133,
-                'journal': 'Efectivo',
-                'partner': 'efeca sa',
-                'salesperson': 'Gustavo'
-                }]
-
-        return ret
-
-        move_lines_obj = self.env['account.move.line']
-        for journal in journals:
-            jour = {}
-            # cuenta por defecto de este diario
-            account_id = journal.default_debit_account_id
-
-            mlines = move_lines_obj.search([
-                ('account_id', '=', account_id.id),
-                ('date', '>=', data['date_from']),
-                ('date', '<=', data['date_to']),
-                ('journal_id', '=', journal.id)
-            ])
-
-            lines = []
-            if journal.initial_balance:
-                accum_balance = self.initial_balance(account_id,
-                                                     data['date_to'])
-                if data['expand_moves']:
-                    lin = {}
-                    lin['date'] = data['date_from']
-                    lin['partner_name'] = ''
-                    lin['ref'] = 'Balance Inicial'
-                    lin['move_name'] = ''
-                    lin['balance'] = accum_balance
-                    lines.append(lin)
-            else:
-                accum_balance = 0
-
-            for line in mlines:
-                display_names = []
-                if line.payment_id and line.payment_id.payment_group_id:
-                    for mml in line.payment_id.payment_group_id.matched_move_line_ids:  # noqa
-                        display_names.append(mml.move_id.display_name)
-
-                display_name = ', '.join(display_names)
-
-                lin = {}
-                accum_balance += line.balance
-                if data['expand_moves']:
-                    lin['date'] = line.date
-                    lin['partner_name'] = line.partner_id.name
-                    lin['ref'] = line.ref or '/'
-                    lin[
-                        'move_name'] = display_name if display_name else line.move_id.display_name  # noqa
-                    lin['balance'] = line.balance
-                    lines.append(lin)
-
-            jour['journal'] = journal.name
-            jour['balance'] = accum_balance
-            jour['lines'] = lines
-
-            # acumular el journal solo si tiene saldo
-            if accum_balance:
-                ret.append(jour)
-
-        return ret
+    def _get_journals(self, journals):
+        return [{'journal': 'Efectivo',
+                 'total': 200},
+                {'journal': 'Tarjetas',
+                 'total': 233},
+                {'journal': 'Cuenta corriente',
+                 'total': 23433},
+                {'journal': 'Banco Galicia',
+                 'total': 233243},
+                ]
 
     @api.multi
     def render_html(self, data):
@@ -123,37 +90,18 @@ class InvoiceReport(models.AbstractModel):
         # buscar los journals que nay que reportar
         domain = [('cash_id', '=', data['form']['cash_id'])]
         journals = self.env['account.journal'].search(domain)
-        accounts_res = self._get_account_move_entry(data['form'], journals)
+
+        invoices, total_invoiced = self._get_invoices(data['form'])
+        journals = self._get_journals(journals)
 
         docargs = {
             'doc_model': self.model,
             'data': data['form'],
             'docs': docs,
             'time': time,
-            'invoices': [
-                {'number': 'FA-A 0001-00005487',
-                 'total': 2133,
-                 'journal': 'Efectivo',
-                 'partner': 'efeca sa',
-                 'salesperson': 'Gustavo'
-                 },
-                {'number': 'FA-A 0001-00023424',
-                 'total': 2324,
-                 'journal': 'Tarjeta',
-                 'partner': 'Liona sa',
-                 'salesperson': 'Marcelo'
-                 },
-            ],
-            'total1': [{'total': 123456}],
-            'journals': [{'journal': 'Efectivo',
-                          'total': 200},
-                         {'journal': 'Tarjetas',
-                          'total': 233},
-                         {'journal': 'Cuenta corriente',
-                          'total': 23433},
-                         {'journal': 'Banco Galicia',
-                          'total': 233243},
-                         ]
+            'invoices': invoices,
+            'total_invoiced': total_invoiced,
+            'journals': journals
         }
 
         # poner landscape si tengo rango de fechas
