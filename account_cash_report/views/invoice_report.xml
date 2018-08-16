@@ -50,7 +50,7 @@
                             <tbody>
                                 <t t-foreach="invoices" t-as="invoice">
                                     <tr>
-                                        <td>
+                                        <td style="white-space: nowrap;">
                                             <span t-esc="invoice['number']"/>
                                         </td>
                                         <td class="text-right"
