@@ -102,6 +102,10 @@ class CashierReport(models.AbstractModel):
             if accum_balance:
                 ret.append(jour)
 
+        import pprint
+        pp = pprint.PrettyPrinter(indent=4)
+        print pp.pprint(ret)
+
         return ret
 
     @api.multi

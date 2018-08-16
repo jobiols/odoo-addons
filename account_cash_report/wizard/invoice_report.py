@@ -5,10 +5,10 @@ from openerp import fields, models
 import time
 
 
-class CashierReport(models.TransientModel):
+class InvoiceReport(models.TransientModel):
     _inherit = "account.common.report"
-    _name = "account_cash_report.cashier.report"
-    _description = "Cashier Report"
+    _name = "account_cash_report.invoice.report"
+    _description = "Invoice Report"
 
     cash_id = fields.Many2one(
         'account_cash_report.cash',
@@ -22,10 +22,6 @@ class CashierReport(models.TransientModel):
     date_to = fields.Date(
         default=lambda *a: time.strftime('%Y-%m-%d')
     )
-    expand_moves = fields.Boolean(
-        default=False,
-        help="Show account movements"
-    )
 
     def _print_report(self, data):
         # no tenemos en cuenta lo que viene en data, le ponemos los datos aca.
@@ -33,14 +29,12 @@ class CashierReport(models.TransientModel):
             'form': {
                 'date_from': self.date_from,
                 'date_to': self.date_to,
-                'date_range':
-                    (self.date_from != self.date_to) and self.expand_moves,
-                'title': 'Reporte de caja',
-                'expand_moves': self.expand_moves,
+                'date_range': False,  # (self.date_from != self.date_to) and self.expand_moves,
+                'title': 'Reporte de facturacion',
                 'cash_id': self.cash_id.id,
                 'cash': self.cash_id.name
             }
         }
 
         return self.env['report'].get_action(
-            self, 'account_cash_report.cashier_report', data=data)
+            self, 'account_cash_report.invoice_report', data=data)

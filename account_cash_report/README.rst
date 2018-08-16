@@ -15,23 +15,23 @@ Ejemplo:
 Facturas validadas
 ------------------
 
- | Nro de Factura | Total | Medio de pago | Cliente | Vendedor |
- |----------------|-------|---------------|---------|----------|
- | FA-A 001-00180 | $ 540 | Efectivo      | Nikron  | Mariano  |
- | FA-A 001-00181 | $ 343 | Efectivo      | Nikron  | Mariano  |
- | FA-A 001-00182 | $2333 | Cuenta Corriente | Grupro | Gonzalo |
- | FA-A 001-00182 | $2333 | VISA | Grupro | Gonzalo |
+     | Nro de Factura | Total | Medio de pago | Cliente | Vendedor |
+     |----------------|-------|---------------|---------|----------|
+     | FA-A 001-00180 | $ 540 | Efectivo      | Nikron  | Mariano  |
+     | FA-A 001-00181 | $ 343 | Efectivo      | Nikron  | Mariano  |
+     | FA-A 001-00182 | $2333 | Cuenta Corriente | Grupro | Gonzalo |
+     | FA-A 001-00182 | $2333 | VISA | Grupro | Gonzalo |
 
 Totales por medio de pago
 -------------------------
 
- | Medio de pago | Monto |
- |--|--|
- | Efectivo | 21577.20 |
- | Tarjetas | 29348 |
- | Cuenta corriente | 329 |
- | Notas de credito | 8294 |
- | Mercadopago | 0954 |
+     | Medio de pago | Monto |
+     |--|--|
+     | Efectivo | 21577.20 |
+     | Tarjetas | 29348 |
+     | Cuenta corriente | 329 |
+     | Notas de credito | 8294 |
+     | Mercadopago | 0954 |
 
 
 ===================================

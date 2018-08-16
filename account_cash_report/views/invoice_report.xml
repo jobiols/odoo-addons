@@ -1,69 +1,120 @@
 <?xml version="1.0" encoding="utf-8"?>
 <odoo>
-<template id="invoice_report">
-    <t t-call="report.html_container">
-        <t t-set="data_report_margin_top" t-value="12"/>
-        <t t-set="data_report_header_spacing" t-value="9"/>
-        <t t-set="data_report_dpi" t-value="110"/>
+    <template id="invoice_report">
+        <t t-call="report.html_container">
+            <t t-set="data_report_margin_top" t-value="12"/>
+            <t t-set="data_report_header_spacing" t-value="9"/>
+            <t t-set="data_report_dpi" t-value="110"/>
 
-        <t t-foreach="docs" t-as="o">
-            <t t-call="report.internal_layout">
-                <div class="page">
+            <t t-foreach="docs" t-as="o">
+                <t t-call="report.internal_layout">
+                    <div class="page">
 
-                    <!-- titulo del reporte -->
-                    <h2 t-esc="data['title']"/>
+                        <!-- titulo del reporte -->
+                        <h2 t-esc="data['title']"/>
 
-                    <!-- filtros del reporte -->
-                    <div class="row">
-                        <div class="col-xs-4">
-                          <t t-if="data['date_from']"><strong>Date from :</strong> <span t-esc="data['date_from']"/></t>
+                        <!-- filtros del reporte -->
+                        <div class="row">
+                            <div class="col-xs-4">
+                                <t t-if="data['date_from']">
+                                    <strong>Date from :</strong>
+                                    <span t-esc="data['date_from']"/>
+                                </t>
+                            </div>
+                            <div class="col-xs-4">
+                                <t t-if="data['date_to']">
+                                    <strong>Date to :</strong>
+                                    <span t-esc="data['date_to']"/>
+                                </t>
+                            </div>
+                            <div class="col-xs-4">
+                                <strong>Cash :</strong>
+                                <span t-esc="data['cash']"/>
+                            </div>
+                            <br/>
                         </div>
-                        <div class="col-xs-4">
-                          <t t-if="data['date_to']"><strong>Date to :</strong> <span t-esc="data['date_to']"/></t>
-                        </div>
-                        <div class="col-xs-4">
-                          <strong>Cash :</strong> <span t-esc="data['cash']"/>
-                        </div>
+
                         <br/>
-                    </div>
 
-                    <!-- reporte -->
-                    <table class="table table-condensed">
-                        <thead>
-                            <tr>
-                                <th t-if="data['date_range']" class="test-left">Date</th>
-                                <th class="text-left">Invoice/Rec.</th>
-                                <th class="text-left">Partner</th>
-                                <th class="text-left">Ref.</th>
-                                <th class="text-right">Balance</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <t t-foreach="journals" t-as="journal">
-                                <tr style="font-weight: bold;">
-                                    <td colspan="3">
-                                        <span style="color: white;" t-esc="'..'"/>
-                                        <span t-esc="journal['journal']"/>
-                                    </td>
-                                    <td class="text-right" style="white-space: text-nowrap;">
-                                        <span t-att-style="style" t-esc="journal['balance']" t-esc-options='{"widget": "monetary", "display_currency": "res_company.currency_id"}'/>
-                                    </td>
+                        <!-- reporte de facturacion -->
+                        <table class="table table-condensed">
+                            <thead>
+                                <tr>
+                                    <th class="text-left">Invoice No.</th>
+                                    <th class="text-right">Total</th>
+                                    <th class="text-left">Journal</th>
+                                    <th class="text-left">Partner</th>
+                                    <th class="text-left">Salesperson</th>
                                 </tr>
-                                <tr t-foreach="journal['lines']" t-as="line">
-                                    <td t-if="data['date_range']"><span t-esc="line['date']"/></td>
-                                    <td><span t-esc="line['move_name']"/></td>
-                                    <td><span t-esc="line['partner_name']"/></td>
-                                    <td><span t-esc="line['ref']"/></td>
-                                    <td class="text-right" style="white-space: text-nowrap;">
-                                        <span t-att-style="style" t-esc="line['balance']" t-esc-options='{"widget": "monetary", "display_currency": "res_company.currency_id"}'/>
+                            </thead>
+                            <tbody>
+                                <t t-foreach="invoices" t-as="invoice">
+                                    <tr>
+                                        <td>
+                                            <span t-esc="invoice['number']"/>
+                                        </td>
+                                        <td class="text-right"
+                                            style="white-space: text-nowrap;">
+                                            <span t-att-style="style"
+                                                  t-esc="invoice['total']"
+                                                  t-esc-options='{"widget": "monetary", "display_currency": "res_company.currency_id"}'/>
+                                        </td>
+                                        <td>
+                                            <span t-esc="invoice['journal']"/>
+                                        </td>
+                                        <td>
+                                            <span t-esc="invoice['partner']"/>
+                                        </td>
+                                        <td>
+                                            <span t-esc="invoice['salesperson']"/>
+                                        </td>
+                                    </tr>
+                                </t>
+                                <t t-foreach="total1" t-as="total11">
+                                <tr>
+                                    <td>
+                                        <span class="text-left">Total Invoiced</span>
                                     </td>
+                                        <td class="text-right"
+                                            style="white-space: text-nowrap;">
+                                            <span t-att-style="style"
+                                                  t-esc="total11['total']"
+                                                  t-esc-options='{"widget": "monetary", "display_currency": "res_company.currency_id"}'/>
+                                        </td>
                                 </tr>
-                            </t>
-                        </tbody>
-                    </table>
-                </div>
+                                </t>
+                            </tbody>
+                        </table>
+
+                        <br/>
+                        <!-- reporte de medios de pago -->
+                        <table class="table table-condensed">
+                            <thead>
+                                <tr>
+                                    <th class="text-left">Journal</th>
+                                    <th class="text-right">Balance</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <t t-foreach="journals" t-as="journal">
+                                    <tr>
+                                        <td>
+                                            <span t-esc="journal['journal']"/>
+                                        </td>
+                                        <td class="text-right"
+                                            style="white-space: text-nowrap;">
+                                            <span t-att-style="style"
+                                                  t-esc="journal['total']"
+                                                  t-esc-options='{"widget": "monetary", "display_currency": "res_company.currency_id"}'/>
+                                        </td>
+                                    </tr>
+                                </t>
+                            </tbody>
+                        </table>
+
+                    </div>
+                </t>
             </t>
         </t>
-    </t>
-</template>
+    </template>
 </odoo>

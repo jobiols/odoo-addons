@@ -38,7 +38,7 @@ class InvoiceReport(models.AbstractModel):
             'lines': [
                 {
                     'date': '2018-05-02',
-                    'partner_name': u'Juan de los palotes'
+                    'partner_name': u'Juan de los palotes',
                     'lref': None,
                     'move_name': u'VEN01/2018/0001',
                     'balance': 2089.64,
@@ -47,11 +47,14 @@ class InvoiceReport(models.AbstractModel):
         """
         # import wdb; wdb.set_trace()
 
-        ret = []
+        ret = [{'afip-number': 'FA-A 0001-00005487',
+                'total': 2133,
+                'journal': 'Efectivo',
+                'partner': 'efeca sa',
+                'salesperson': 'Gustavo'
+                }]
+
         return ret
-
-
-
 
         move_lines_obj = self.env['account.move.line']
         for journal in journals:
@@ -95,7 +98,8 @@ class InvoiceReport(models.AbstractModel):
                     lin['date'] = line.date
                     lin['partner_name'] = line.partner_id.name
                     lin['ref'] = line.ref or '/'
-                    lin['move_name'] = display_name if display_name else line.move_id.display_name  # noqa
+                    lin[
+                        'move_name'] = display_name if display_name else line.move_id.display_name  # noqa
                     lin['balance'] = line.balance
                     lines.append(lin)
 
@@ -111,7 +115,7 @@ class InvoiceReport(models.AbstractModel):
 
     @api.multi
     def render_html(self, data):
-        import wdb;wdb.set_trace()
+
         self.model = self.env.context.get('active_model')
         docs = self.env[self.model].browse(
             self.env.context.get('active_ids', []))
@@ -126,7 +130,30 @@ class InvoiceReport(models.AbstractModel):
             'data': data['form'],
             'docs': docs,
             'time': time,
-            'journals': accounts_res,
+            'invoices': [
+                {'number': 'FA-A 0001-00005487',
+                 'total': 2133,
+                 'journal': 'Efectivo',
+                 'partner': 'efeca sa',
+                 'salesperson': 'Gustavo'
+                 },
+                {'number': 'FA-A 0001-00023424',
+                 'total': 2324,
+                 'journal': 'Tarjeta',
+                 'partner': 'Liona sa',
+                 'salesperson': 'Marcelo'
+                 },
+            ],
+            'total1': [{'total': 123456}],
+            'journals': [{'journal': 'Efectivo',
+                          'total': 200},
+                         {'journal': 'Tarjetas',
+                          'total': 233},
+                         {'journal': 'Cuenta corriente',
+                          'total': 23433},
+                         {'journal': 'Banco Galicia',
+                          'total': 233243},
+                         ]
         }
 
         # poner landscape si tengo rango de fechas
