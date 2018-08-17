@@ -28,7 +28,8 @@ class InvoiceReport(models.AbstractModel):
 
         return ret
 
-    def _get_journal_names(self, invoice):
+    @staticmethod
+    def _get_journal_names(invoice):
         """ obtener una lista de medios de pago con los que se pago esta
             factura
         """
@@ -50,7 +51,9 @@ class InvoiceReport(models.AbstractModel):
         return CUENTA_CORRIENTE
 
     def _get_invoices(self, data):
-
+        """ Obtener todas las facturas validadas por la cajera de esta caja
+            que son al cliente, y que estan en el periodo.
+        """
         user_obj = self.env['res.users']
         user = user_obj.search([('cash_id', '=', data['cash_id'])])
 
@@ -63,21 +66,21 @@ class InvoiceReport(models.AbstractModel):
 
         invoice_obj = self.env['account.invoice']
         ret = []
-        total = total_res = 0
+        total = total_residual = 0
         for invoice in invoice_obj.search(domain):
-            sign = 1 if invoice.type == 'out_invoice' else -1
+            journal_names = self._get_journal_names(invoice)
             inv = {
                 'number': invoice.display_name,
-                'total': invoice.amount_total * sign,
-                'journal': self._get_journal_names(invoice),
+                'total': invoice.amount_total_signed,
+                'journal': journal_names,
                 'partner': invoice.partner_id.name,
                 'salesperson': invoice.user_id.name
             }
-            total += invoice.amount_total
-            total_res += invoice.residual
+            total += invoice.amount_total_signed
+            total_residual += invoice.residual
             ret.append(inv)
 
-        return ret, total, total_res
+        return ret, total, total_residual
 
     def _get_journals(self, data, journals, total_res):
         """ obtiene los medios de pago y el total acumulado en cada uno en el
@@ -132,7 +135,8 @@ class InvoiceReport(models.AbstractModel):
         journals = self.env['account.journal'].search(domain)
 
         invoices, total_inv, total_res = self._get_invoices(data['form'])
-        journals, total_journal = self._get_journals(data['form'], journals,
+        journals, total_journal = self._get_journals(data['form'],
+                                                     journals,
                                                      total_res)
 
         docargs = {
