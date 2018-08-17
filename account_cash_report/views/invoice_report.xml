@@ -110,7 +110,7 @@
                                             <span t-esc="journal['journal']"/>
                                         </td>
                                         <td class="text-right"
-                                            style="white-space: text-nowrap;">
+                                            style="white-space: nowrap;">
                                             <span t-att-style="style"
                                                   t-esc="journal['total']"
                                                   t-esc-options='{"widget": "monetary",
@@ -119,6 +119,21 @@
                                     </tr>
                                     <tr/>
                                 </t>
+                                <tr style="font-weight: bold;">
+                                    <td>
+                                        <span class="text-left">Total Incoming</span>
+                                    </td>
+                                        <td class="text-right"
+                                            style="white-space: nowrap;">
+                                            <span t-att-style="style"
+                                                  t-esc="total_journal"
+                                                  t-esc-options='{"widget": "monetary",
+                                                  "display_currency": "res_company.currency_id"}'/>
+                                        </td>
+                                    <td/>
+                                    <td/>
+                                    <td/>
+                                </tr>
                             </tbody>
                         </table>
 

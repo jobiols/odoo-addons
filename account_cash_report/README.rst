@@ -9,29 +9,41 @@ facturase que fueron validadas en esta caja y el total acumulado en cada medio
 de pago, agregando un medio de pago ficticio llamado **Cuenta Corriente** el
 cual acumula el total de las facturas impagas.
 
-Ejemplo:
+Facturas
 --------
 
-Facturas validadas
-------------------
+Se listan todas las facturas validadas por el usuario de la caja que se seleccionó
+en el filtro. Estos son las columnas del listado:
 
-     | Nro de Factura | Total | Medio de pago | Cliente | Vendedor |
-     |----------------|-------|---------------|---------|----------|
-     | FA-A 001-00180 | $ 540 | Efectivo      | Nikron  | Mariano  |
-     | FA-A 001-00181 | $ 343 | Efectivo      | Nikron  | Mariano  |
-     | FA-A 001-00182 | $2333 | Cuenta Corriente | Grupro | Gonzalo |
-     | FA-A 001-00182 | $2333 | VISA | Grupro | Gonzalo |
+**Nro de Factura** Es en numero de la factura que se compone del tipo de factura
+FA-A, FA-B, NC-A, NC-B, ND-A, ND-B el punto de venta (4 digitos) y el numero de
+comprobante (8 digitos). Por ejemplo FA-A 0001-00000054
 
-Totales por medio de pago
--------------------------
+**Diario** Es el diario que se usa como medio de pago para recibir el pago de
+la factura, son todos los medios de pago habilitados para la caja, pero también
+pueden ser otros por ejemplo:
 
-     | Medio de pago | Monto |
-     |--|--|
-     | Efectivo | 21577.20 |
-     | Tarjetas | 29348 |
-     | Cuenta corriente | 329 |
-     | Notas de credito | 8294 |
-     | Mercadopago | 0954 |
+*RETENCIONES SUFRIDAS*, si la factura se pagó en parte con una retención,
+
+*Ventas 01* si es una nota de credito que cancela una factura en ese caso se
+esta pagando con la factura.
+
+*Cuenta corriente* si parte o toda la factura no esta cancelada.
+
+Por ultimo la factura puede tener varios pagos con distintos medios de pago, en
+ese caso se listan todos los diarios separados por coma.
+
+**Cliente** El cliente que aparece en la factura
+
+**Vendedor** El vendedor que genero la venta
+
+
+Diarios involucrados
+--------------------
+Son todos los diarios que estan involucrados en la cancelacion de las facturas
+listadas anteriormente. Mas un diario ficticio llamado Cuenta corriente que no
+esta cancelando facturas sino que se calcula como la suma de los saldos no
+cancelados de todas las facturas listadas.
 
 
 ===================================

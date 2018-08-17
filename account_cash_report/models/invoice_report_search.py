@@ -4,6 +4,8 @@ import time
 from openerp import api, models
 from datetime import datetime, timedelta
 
+CUENTA_CORRIENTE = 'Cuenta Corriente'
+
 
 class InvoiceReport(models.AbstractModel):
     _name = 'report.account_cash_report.invoice_report'
@@ -26,59 +28,97 @@ class InvoiceReport(models.AbstractModel):
 
         return ret
 
-    def _get_journal(self, invoice):
-        return 'Efectivo'
+    def _get_journal_names(self, invoice):
+        """ obtener una lista de medios de pago con los que se pago esta
+            factura
+        """
+        payments = invoice.payments_widget.replace('false', 'False')
+        payments = eval(payments)
+        if payments:
+            payments = payments['content']
+
+            journals = []
+            for payment in payments:
+                if payment['journal_name'] not in journals:
+                    journals.append(payment['journal_name'])
+
+            if invoice.state == 'open':
+                journals.append(CUENTA_CORRIENTE)
+
+            return ', '.join(journals)
+
+        return CUENTA_CORRIENTE
 
     def _get_invoices(self, data):
 
+        user_obj = self.env['res.users']
+        user = user_obj.search([('cash_id', '=', data['cash_id'])])
+
         domain = [
             ('date', '>=', data['date_from']),
-            ('date', '<=', data['date_to'])
+            ('date', '<=', data['date_to']),
+            ('type', 'in', ['out_invoice', 'out_refund']),
+            ('create_uid', '=', user.id)
         ]
 
         invoice_obj = self.env['account.invoice']
         ret = []
-        total = 0
+        total = total_res = 0
         for invoice in invoice_obj.search(domain):
+            sign = 1 if invoice.type == 'out_invoice' else -1
             inv = {
                 'number': invoice.display_name,
-                'total': invoice.amount_total,
-                'journal': self._get_journal(invoice),
+                'total': invoice.amount_total * sign,
+                'journal': self._get_journal_names(invoice),
                 'partner': invoice.partner_id.name,
                 'salesperson': invoice.user_id.name
             }
             total += invoice.amount_total
+            total_res += invoice.residual
             ret.append(inv)
 
+        return ret, total, total_res
+
+    def _get_journals(self, data, journals, total_res):
+        """ obtiene los medios de pago y el total acumulado en cada uno en el
+            periodo considerado
+        """
+
+        ret = []
+        total = 0
+        move_lines_obj = self.env['account.move.line']
+        for journal in journals:
+            # cuenta por defecto de este diario
+            account_id = journal.default_debit_account_id
+
+            mlines = move_lines_obj.search([
+                ('account_id', '=', account_id.id),
+                ('date', '>=', data['date_from']),
+                ('date', '<=', data['date_to']),
+                ('journal_id', '=', journal.id)
+            ])
+
+            accum_balance = 0
+            for line in mlines:
+                accum_balance += line.balance
+
+            # acumular el journal solo si tiene saldo
+            if accum_balance:
+                ret.append({
+                    'journal': journal.name,
+                    'total': accum_balance
+                })
+                total += accum_balance
+
+        # acumular cuenta corriente si hay saldo residual
+        if total_res:
+            ret.append({
+                'journal': CUENTA_CORRIENTE,
+                'total': total_res
+            })
+            total += total_res
+
         return ret, total
-
-        """
-        [
-                   {'number': 'FA-A 0001-00005487',
-                    'total': 2133,
-                    'journal': 'Efectivo',
-                    'partner': 'efeca sa',
-                    'salesperson': 'Gustavo'
-                    },
-                   {'number': 'FA-A 0001-00023424',
-                    'total': 2324,
-                    'journal': 'Tarjeta',
-                    'partner': 'Liona sa',
-                    'salesperson': 'Marcelo'
-                    },
-               ], 134144
-        """
-
-    def _get_journals(self, journals):
-        return [{'journal': 'Efectivo',
-                 'total': 200},
-                {'journal': 'Tarjetas',
-                 'total': 233},
-                {'journal': 'Cuenta corriente',
-                 'total': 23433},
-                {'journal': 'Banco Galicia',
-                 'total': 233243},
-                ]
 
     @api.multi
     def render_html(self, data):
@@ -91,8 +131,9 @@ class InvoiceReport(models.AbstractModel):
         domain = [('cash_id', '=', data['form']['cash_id'])]
         journals = self.env['account.journal'].search(domain)
 
-        invoices, total_invoiced = self._get_invoices(data['form'])
-        journals = self._get_journals(journals)
+        invoices, total_inv, total_res = self._get_invoices(data['form'])
+        journals, total_journal = self._get_journals(data['form'], journals,
+                                                     total_res)
 
         docargs = {
             'doc_model': self.model,
@@ -100,12 +141,10 @@ class InvoiceReport(models.AbstractModel):
             'docs': docs,
             'time': time,
             'invoices': invoices,
-            'total_invoiced': total_invoiced,
-            'journals': journals
+            'total_invoiced': total_inv,
+            'journals': journals,
+            'total_journal': total_journal
         }
 
-        # poner landscape si tengo rango de fechas
-        # TODO no funciona el landscape.
-        landscape = data['form']['date_range']
-        return self.env['report'].with_context(landscape=landscape).render(
-            'account_cash_report.invoice_report', docargs)
+        return self.env['report'].render('account_cash_report.invoice_report',
+                                         docargs)
