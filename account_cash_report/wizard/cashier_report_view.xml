@@ -81,7 +81,7 @@
     />
 
     <menuitem id="menu_invoice_item_report"
-              name="Invoice report"
+              name="Invoice Report"
               parent="menu_cash_main"
               sequence="91"
               action="action_invoice_report_menu"

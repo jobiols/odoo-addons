@@ -6,8 +6,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Odoo Server 9.0c-20180504\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2018-06-03 23:11+0000\n"
-"PO-Revision-Date: 2018-06-03 23:11+0000\n"
+"POT-Creation-Date: 2018-08-18 01:58+0000\n"
+"PO-Revision-Date: 2018-08-18 01:58+0000\n"
 "Last-Translator: <>\n"
 "Language-Team: \n"
 "MIME-Version: 1.0\n"
@@ -16,36 +16,53 @@ msgstr ""
 "Plural-Forms: \n"
 
 #. module: account_cash_report
+#: model:ir.ui.view,arch_db:account_cash_report.invoice_report
+msgid "<span class=\"text-left\">Total Incoming</span>"
+msgstr "<span class=\"text-left\">Total ingresado</span>"
+
+#. module: account_cash_report
+#: model:ir.ui.view,arch_db:account_cash_report.invoice_report
+msgid "<span class=\"text-left\">Total Invoiced</span>"
+msgstr "<span class=\"text-left\">Total Facturado</span>"
+
+#. module: account_cash_report
 #: model:ir.ui.view,arch_db:account_cash_report.cashier_report
+#: model:ir.ui.view,arch_db:account_cash_report.invoice_report
 msgid "<strong>Cash :</strong>"
 msgstr "<strong>Caja :</strong>"
 
 #. module: account_cash_report
 #: model:ir.ui.view,arch_db:account_cash_report.cashier_report
+#: model:ir.ui.view,arch_db:account_cash_report.invoice_report
 msgid "<strong>Date from :</strong>"
 msgstr "<strong>Fecha desde:</strong>"
 
 #. module: account_cash_report
 #: model:ir.ui.view,arch_db:account_cash_report.cashier_report
+#: model:ir.ui.view,arch_db:account_cash_report.invoice_report
 msgid "<strong>Date to :</strong>"
 msgstr "<strong>Fecha hasta:</strong>"
 
 #. module: account_cash_report
 #: selection:account_cash_report.cashier.report,target_move:0
+#: selection:account_cash_report.invoice.report,target_move:0
 msgid "All Entries"
-msgstr "All Entries"
+msgstr "Todos los movimientos"
 
 #. module: account_cash_report
 #: selection:account_cash_report.cashier.report,target_move:0
+#: selection:account_cash_report.invoice.report,target_move:0
 msgid "All Posted Entries"
-msgstr "All Posted Entries"
+msgstr "Todos los movimientos publicados"
 
 #. module: account_cash_report
 #: model:ir.ui.view,arch_db:account_cash_report.cashier_report
+#: model:ir.ui.view,arch_db:account_cash_report.invoice_report
 msgid "Balance"
 msgstr "Saldo"
 
 #. module: account_cash_report
+#: model:ir.ui.view,arch_db:account_cash_report.cashier_invoice_report_view
 #: model:ir.ui.view,arch_db:account_cash_report.cashier_report_view
 msgid "Cancel"
 msgstr "Cancelar"
@@ -53,6 +70,7 @@ msgstr "Cancelar"
 #. module: account_cash_report
 #: model:ir.actions.act_window,name:account_cash_report.action_cash_form
 #: model:ir.model.fields,field_description:account_cash_report.field_account_cash_report_cashier_report_cash_id
+#: model:ir.model.fields,field_description:account_cash_report.field_account_cash_report_invoice_report_cash_id
 #: model:ir.model.fields,field_description:account_cash_report.field_account_journal_cash_id
 #: model:ir.model.fields,field_description:account_cash_report.field_res_users_cash_id
 #: model:ir.ui.menu,name:account_cash_report.menu_cash_main
@@ -69,12 +87,12 @@ msgstr "Vista formulario de la caja"
 #. module: account_cash_report
 #: model:ir.actions.report.xml,name:account_cash_report.action_cashier_report
 msgid "Cash Report"
-msgstr "Reporte de cajas"
+msgstr "Reporte de caja"
 
 #. module: account_cash_report
 #: model:ir.ui.menu,name:account_cash_report.menu_cash_item_report
 msgid "Cash report"
-msgstr "Reporte de cajas"
+msgstr "Reporte de caja"
 
 #. module: account_cash_report
 #: model:ir.actions.act_window,name:account_cash_report.action_cashier_report_menu
@@ -84,18 +102,21 @@ msgstr "Reporte de Caja"
 
 #. module: account_cash_report
 #: model:ir.model.fields,field_description:account_cash_report.field_account_cash_report_cashier_report_company_id
+#: model:ir.model.fields,field_description:account_cash_report.field_account_cash_report_invoice_report_company_id
 msgid "Company"
 msgstr "Compañía"
 
 #. module: account_cash_report
 #: model:ir.model.fields,field_description:account_cash_report.field_account_cash_report_cash_create_uid
 #: model:ir.model.fields,field_description:account_cash_report.field_account_cash_report_cashier_report_create_uid
+#: model:ir.model.fields,field_description:account_cash_report.field_account_cash_report_invoice_report_create_uid
 msgid "Created by"
 msgstr "Creado por"
 
 #. module: account_cash_report
 #: model:ir.model.fields,field_description:account_cash_report.field_account_cash_report_cash_create_date
 #: model:ir.model.fields,field_description:account_cash_report.field_account_cash_report_cashier_report_create_date
+#: model:ir.model.fields,field_description:account_cash_report.field_account_cash_report_invoice_report_create_date
 msgid "Created on"
 msgstr "Creado el"
 
@@ -105,6 +126,11 @@ msgid "Daily Cash Report"
 msgstr "Reporte diario de caja"
 
 #. module: account_cash_report
+#: model:ir.ui.view,arch_db:account_cash_report.cashier_invoice_report_view
+msgid "Daily Invoice Report"
+msgstr "Reporte diario de Facturacion"
+
+#. module: account_cash_report
 #: model:ir.ui.view,arch_db:account_cash_report.cashier_report
 msgid "Date"
 msgstr "Fecha"
@@ -112,7 +138,9 @@ msgstr "Fecha"
 #. module: account_cash_report
 #: model:ir.model.fields,field_description:account_cash_report.field_account_cash_report_cash_display_name
 #: model:ir.model.fields,field_description:account_cash_report.field_account_cash_report_cashier_report_display_name
+#: model:ir.model.fields,field_description:account_cash_report.field_account_cash_report_invoice_report_display_name
 #: model:ir.model.fields,field_description:account_cash_report.field_report_account_cash_report_cashier_report_display_name
+#: model:ir.model.fields,field_description:account_cash_report.field_report_account_cash_report_invoice_report_display_name
 msgid "Display Name"
 msgstr "Mostrar Nombre"
 
@@ -123,6 +151,7 @@ msgstr "Cajas habilitadas"
 
 #. module: account_cash_report
 #: model:ir.model.fields,field_description:account_cash_report.field_account_cash_report_cashier_report_date_to
+#: model:ir.model.fields,field_description:account_cash_report.field_account_cash_report_invoice_report_date_to
 msgid "End Date"
 msgstr "Fecha Final"
 
@@ -134,7 +163,9 @@ msgstr "Expandir movimientos"
 #. module: account_cash_report
 #: model:ir.model.fields,field_description:account_cash_report.field_account_cash_report_cash_id
 #: model:ir.model.fields,field_description:account_cash_report.field_account_cash_report_cashier_report_id
+#: model:ir.model.fields,field_description:account_cash_report.field_account_cash_report_invoice_report_id
 #: model:ir.model.fields,field_description:account_cash_report.field_report_account_cash_report_cashier_report_id
+#: model:ir.model.fields,field_description:account_cash_report.field_report_account_cash_report_invoice_report_id
 msgid "ID"
 msgstr "ID"
 
@@ -144,37 +175,60 @@ msgid "Initial balance"
 msgstr "Balance Inicial"
 
 #. module: account_cash_report
+#: model:ir.ui.view,arch_db:account_cash_report.invoice_report
+msgid "Invoice No."
+msgstr "Nro de Factura"
+
+#. module: account_cash_report
+#: model:ir.actions.act_window,name:account_cash_report.action_invoice_report_menu
+#: model:ir.actions.report.xml,name:account_cash_report.action_invoice_cashier_report
+#: model:ir.model,name:account_cash_report.model_account_cash_report_invoice_report
+msgid "Invoice Report"
+msgstr "Reporte de Facturacion"
+
+#. module: account_cash_report
+#: model:ir.ui.menu,name:account_cash_report.menu_invoice_item_report
+msgid "Invoice report"
+msgstr "Reporte de Facturacion"
+
+#. module: account_cash_report
 #: model:ir.ui.view,arch_db:account_cash_report.cashier_report
 msgid "Invoice/Rec."
 msgstr "Factura/Rec."
 
 #. module: account_cash_report
 #: model:ir.model,name:account_cash_report.model_account_journal
+#: model:ir.ui.view,arch_db:account_cash_report.invoice_report
 msgid "Journal"
 msgstr "Diario"
 
 #. module: account_cash_report
 #: model:ir.model.fields,field_description:account_cash_report.field_account_cash_report_cash_journal_ids
 #: model:ir.model.fields,field_description:account_cash_report.field_account_cash_report_cashier_report_journal_ids
+#: model:ir.model.fields,field_description:account_cash_report.field_account_cash_report_invoice_report_journal_ids
 msgid "Journals"
 msgstr "Diarios"
 
 #. module: account_cash_report
 #: model:ir.model.fields,field_description:account_cash_report.field_account_cash_report_cash___last_update
 #: model:ir.model.fields,field_description:account_cash_report.field_account_cash_report_cashier_report___last_update
+#: model:ir.model.fields,field_description:account_cash_report.field_account_cash_report_invoice_report___last_update
 #: model:ir.model.fields,field_description:account_cash_report.field_report_account_cash_report_cashier_report___last_update
+#: model:ir.model.fields,field_description:account_cash_report.field_report_account_cash_report_invoice_report___last_update
 msgid "Last Modified on"
 msgstr "Última modificación el"
 
 #. module: account_cash_report
 #: model:ir.model.fields,field_description:account_cash_report.field_account_cash_report_cash_write_uid
 #: model:ir.model.fields,field_description:account_cash_report.field_account_cash_report_cashier_report_write_uid
+#: model:ir.model.fields,field_description:account_cash_report.field_account_cash_report_invoice_report_write_uid
 msgid "Last Updated by"
 msgstr "Última actualización por"
 
 #. module: account_cash_report
 #: model:ir.model.fields,field_description:account_cash_report.field_account_cash_report_cash_write_date
 #: model:ir.model.fields,field_description:account_cash_report.field_account_cash_report_cashier_report_write_date
+#: model:ir.model.fields,field_description:account_cash_report.field_account_cash_report_invoice_report_write_date
 msgid "Last Updated on"
 msgstr "Última actualizacón el"
 
@@ -190,6 +244,7 @@ msgstr "Nombre de esta caja"
 
 #. module: account_cash_report
 #: model:ir.ui.view,arch_db:account_cash_report.cashier_report
+#: model:ir.ui.view,arch_db:account_cash_report.invoice_report
 msgid "Partner"
 msgstr "Empresa"
 
@@ -199,6 +254,7 @@ msgid "Perform an initial balance on the Cash Report"
 msgstr "Hacer el balance inicial en este reporte de Caja"
 
 #. module: account_cash_report
+#: model:ir.ui.view,arch_db:account_cash_report.cashier_invoice_report_view
 #: model:ir.ui.view,arch_db:account_cash_report.cashier_report_view
 msgid "Print"
 msgstr "Imprimir"
@@ -209,9 +265,15 @@ msgid "Ref."
 msgstr "Ref."
 
 #. module: account_cash_report
+#: model:ir.ui.view,arch_db:account_cash_report.cashier_invoice_report_view
 #: model:ir.ui.view,arch_db:account_cash_report.cashier_report_view
 msgid "Report Options"
 msgstr "Opciones del Reporte"
+
+#. module: account_cash_report
+#: model:ir.ui.view,arch_db:account_cash_report.invoice_report
+msgid "Salesperson"
+msgstr "Vendedor"
 
 #. module: account_cash_report
 #: model:ir.model.fields,help:account_cash_report.field_account_cash_report_cashier_report_expand_moves
@@ -220,13 +282,20 @@ msgstr "Mostrar movimientos de cuenta"
 
 #. module: account_cash_report
 #: model:ir.model.fields,field_description:account_cash_report.field_account_cash_report_cashier_report_date_from
+#: model:ir.model.fields,field_description:account_cash_report.field_account_cash_report_invoice_report_date_from
 msgid "Start Date"
 msgstr "Fecha de inicio"
 
 #. module: account_cash_report
 #: model:ir.model.fields,field_description:account_cash_report.field_account_cash_report_cashier_report_target_move
+#: model:ir.model.fields,field_description:account_cash_report.field_account_cash_report_invoice_report_target_move
 msgid "Target Moves"
 msgstr "Movimientos destino"
+
+#. module: account_cash_report
+#: model:ir.ui.view,arch_db:account_cash_report.invoice_report
+msgid "Total"
+msgstr "Total"
 
 #. module: account_cash_report
 #: model:ir.model,name:account_cash_report.model_res_users
@@ -239,6 +308,7 @@ msgid "account_cash_report.cash"
 msgstr "account_cash_report.cash"
 
 #. module: account_cash_report
+#: model:ir.ui.view,arch_db:account_cash_report.cashier_invoice_report_view
 #: model:ir.ui.view,arch_db:account_cash_report.cashier_report_view
 msgid "or"
 msgstr "o"
@@ -247,4 +317,9 @@ msgstr "o"
 #: model:ir.model,name:account_cash_report.model_report_account_cash_report_cashier_report
 msgid "report.account_cash_report.cashier_report"
 msgstr "report.account_cash_report.cashier_report"
+
+#. module: account_cash_report
+#: model:ir.model,name:account_cash_report.model_report_account_cash_report_invoice_report
+msgid "report.account_cash_report.invoice_report"
+msgstr "report.account_cash_report.invoice_report"
 
