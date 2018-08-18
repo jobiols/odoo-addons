@@ -60,8 +60,7 @@ class InvoiceReport(models.AbstractModel):
         domain = [
             ('date', '>=', data['date_from']),
             ('date', '<=', data['date_to']),
-            ('type', 'in', ['out_invoice', 'out_refund']),
-            ('create_uid', '=', user.id)
+            ('type', 'in', ['out_invoice', 'out_refund'])
         ]
 
         invoice_obj = self.env['account.invoice']
