@@ -4,8 +4,8 @@ Reporte diario de facturacion
 
 Este reporte se encuentra en Contabilidad / Cajas / Reporte de facturacion
 
-El reporte de facturacion esta personalizado para cada caja, y muestra las
-facturase que fueron validadas en esa caja y el total acumulado en cada medio
+El reporte de facturacion esta personalizado para cada caja, y muestra todas
+las que fueron validadas en el periodo y el total acumulado en cada medio
 de pago, agregando un medio de pago ficticio llamado **Cuenta Corriente** el
 cual acumula el monto adeudado de todas las facturas listadas.
 
@@ -53,8 +53,8 @@ ese caso se listan todos los diarios separados por coma.
 Debajo de todas las facturas se encuentra el **Total Facturado** que es la suma
 de los totales de cada factura.
 
-Medios de pago
---------------
+Medios de pago y cuenta corriente
+---------------------------------
 Los medios de pago representan exactamente (salvo cuentas corrientes) el dinero
 ingresado por la caja.
 

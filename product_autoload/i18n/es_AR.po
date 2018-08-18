@@ -252,7 +252,7 @@ msgstr "Factura"
 #. module: product_autoload
 #: model:ir.ui.view,arch_db:product_autoload.product_template_tree_view1
 msgid "Invoice Cost"
-msgstr "Costo extraido de la factura"
+msgstr "Costo de factura"
 
 #. module: product_autoload
 #: model:ir.model,name:product_autoload.model_account_invoice_line
