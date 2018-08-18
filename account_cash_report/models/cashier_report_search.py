@@ -5,7 +5,7 @@ from openerp import api, models
 from datetime import datetime, timedelta
 
 
-class ReportCashier(models.AbstractModel):
+class CashierReport(models.AbstractModel):
     _name = 'report.account_cash_report.cashier_report'
 
     def initial_balance(self, account_id, date_to):

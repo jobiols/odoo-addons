@@ -46,7 +46,9 @@
                                         <span t-esc="journal['journal']"/>
                                     </td>
                                     <td class="text-right" style="white-space: text-nowrap;">
-                                        <span t-att-style="style" t-esc="journal['balance']" t-esc-options='{"widget": "monetary", "display_currency": "res_company.currency_id"}'/>
+                                        <span t-att-style="style" t-esc="journal['balance']"
+                                              t-esc-options='{"widget": "monetary",
+                                              "display_currency": "res_company.currency_id"}'/>
                                     </td>
                                 </tr>
                                 <tr t-foreach="journal['lines']" t-as="line">

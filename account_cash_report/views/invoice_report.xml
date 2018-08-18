@@ -1,0 +1,145 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <template id="invoice_report">
+        <t t-call="report.html_container">
+            <t t-set="data_report_margin_top" t-value="12"/>
+            <t t-set="data_report_header_spacing" t-value="9"/>
+            <t t-set="data_report_dpi" t-value="110"/>
+
+            <t t-foreach="docs" t-as="o">
+                <t t-call="report.internal_layout">
+                    <div class="page">
+
+                        <!-- titulo del reporte -->
+                        <h2 t-esc="data['title']"/>
+
+                        <!-- filtros del reporte -->
+                        <div class="row">
+                            <div class="col-xs-4">
+                                <t t-if="data['date_from']">
+                                    <strong>Date from :</strong>
+                                    <span t-esc="data['date_from']"/>
+                                </t>
+                            </div>
+                            <div class="col-xs-4">
+                                <t t-if="data['date_to']">
+                                    <strong>Date to :</strong>
+                                    <span t-esc="data['date_to']"/>
+                                </t>
+                            </div>
+                            <div class="col-xs-4">
+                                <strong>Cash :</strong>
+                                <span t-esc="data['cash']"/>
+                            </div>
+                            <br/>
+                        </div>
+
+                        <br/>
+
+                        <!-- reporte de facturacion -->
+                        <table class="table table-condensed">
+                            <thead>
+                                <tr>
+                                    <th class="text-left">Invoice No.</th>
+                                    <th class="text-right">Total</th>
+                                    <th class="text-left">Journal</th>
+                                    <th class="text-left">Partner</th>
+                                    <th class="text-left">Salesperson</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <t t-foreach="invoices" t-as="invoice">
+                                    <tr>
+                                        <td style="white-space: nowrap;">
+                                            <span t-esc="invoice['number']"/>
+                                        </td>
+                                        <td class="text-right"
+                                            style="white-space: text-nowrap;">
+                                            <span t-att-style="style"
+                                                  t-esc="invoice['total']"
+                                                  t-esc-options='{"widget": "monetary",
+                                                  "display_currency": "res_company.currency_id"}'/>
+                                        </td>
+                                        <td>
+                                            <span t-esc="invoice['journal']"/>
+                                        </td>
+                                        <td>
+                                            <span t-esc="invoice['partner']"/>
+                                        </td>
+                                        <td>
+                                            <span t-esc="invoice['salesperson']"/>
+                                        </td>
+                                    </tr>
+                                </t>
+                                <tr style="font-weight: bold;">
+                                    <td>
+                                        <span class="text-left">Total Invoiced</span>
+                                    </td>
+                                        <td class="text-right"
+                                            style="white-space: text-nowrap;">
+                                            <span t-att-style="style"
+                                                  t-esc="total_invoiced"
+                                                  t-esc-options='{"widget": "monetary",
+                                                  "display_currency": "res_company.currency_id"}'/>
+                                        </td>
+                                    <td/>
+                                    <td/>
+                                    <td/>
+                                </tr>
+                            </tbody>
+                        </table>
+
+                        <br/>
+
+                        <!-- reporte de medios de pago -->
+                        <table class="table table-condensed">
+                            <col width="40%"/>
+                            <col width="30%"/>
+                            <col width="30%"/>
+                            <thead>
+                                <tr>
+                                    <th class="text-left">Journal</th>
+                                    <th class="text-right">Balance</th>
+                                    <th/>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <t t-foreach="journals" t-as="journal">
+                                    <tr>
+                                        <td>
+                                            <span t-esc="journal['journal']"/>
+                                        </td>
+                                        <td class="text-right"
+                                            style="white-space: nowrap;">
+                                            <span t-att-style="style"
+                                                  t-esc="journal['total']"
+                                                  t-esc-options='{"widget": "monetary",
+                                                  "display_currency": "res_company.currency_id"}'/>
+                                        </td>
+                                    </tr>
+                                    <tr/>
+                                </t>
+                                <tr style="font-weight: bold;">
+                                    <td>
+                                        <span class="text-left">Total Incoming</span>
+                                    </td>
+                                        <td class="text-right"
+                                            style="white-space: nowrap;">
+                                            <span t-att-style="style"
+                                                  t-esc="total_journal"
+                                                  t-esc-options='{"widget": "monetary",
+                                                  "display_currency": "res_company.currency_id"}'/>
+                                        </td>
+                                    <td/>
+                                    <td/>
+                                    <td/>
+                                </tr>
+                            </tbody>
+                        </table>
+
+                    </div>
+                </t>
+            </t>
+        </t>
+    </template>
+</odoo>

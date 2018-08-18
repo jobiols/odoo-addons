@@ -1,3 +1,92 @@
+=============================
+Reporte diario de facturacion
+=============================
+
+Este reporte se encuentra en Contabilidad / Cajas / Reporte de facturacion
+
+El reporte de facturacion esta personalizado para cada caja, y muestra las
+facturase que fueron validadas en esa caja y el total acumulado en cada medio
+de pago, agregando un medio de pago ficticio llamado **Cuenta Corriente** el
+cual acumula el monto adeudado de todas las facturas listadas.
+
+El filtro del reporte tiene los siguientes campos:
+
+**Fecha Inicial** y **Fecha Final** Rango de fechas sobre el cual se genera el
+reporte, en general la fecha inicial y final coinciden.
+
+**Caja**: Es la caja para la cual se genera el reporte
+
+Facturas
+--------
+
+Se listan todas las facturas validadas por el usuario de la caja que se
+seleccionó en el filtro. Las cuales representan razonablemente las ventas
+del periodo.
+Estos son las columnas del listado:
+
+**Nro de Factura** Es en numero de la factura que se compone del tipo de factura
+FA-A, FA-B, NC-A, NC-B, ND-A, ND-B el punto de venta (4 digitos) y el numero de
+comprobante (8 digitos). Por ejemplo FA-A 0001-00000054
+
+**Total** Valor total de la factura con impuestos.
+
+**Diario** Es el diario que se usa como medio de pago para recibir el pago de
+la factura, son todos los medios de pago habilitados para la caja, pero también
+pueden ser otros por ejemplo:
+
+*RETENCIONES SUFRIDAS*, si la factura se pagó en parte con una retención,
+
+*Ventas 01* Si es una nota de credito que cancela una factura, ambas se pagan
+con el diario de facturacion. Se pueden dar casos mas complejos en donde se hace
+una nota de credito parcial y se paga el resto con algun medio de pago.
+
+*Cuenta corriente* si parte o toda la factura no esta cancelada se acumula en
+este concepto que no es un diario, ni un medio de pago.
+
+Por ultimo la factura puede tener varios pagos con distintos medios de pago, en
+ese caso se listan todos los diarios separados por coma.
+
+**Cliente** El cliente que aparece en la factura
+
+**Vendedor** El vendedor que genero la venta
+
+Debajo de todas las facturas se encuentra el **Total Facturado** que es la suma
+de los totales de cada factura.
+
+Medios de pago
+--------------
+Los medios de pago representan exactamente (salvo cuentas corrientes) el dinero
+ingresado por la caja.
+
+Son los medios de pago que la cajera usa para cobrar las facturas, con el total
+procesado en cada uno, mas un medio de pago ficticio llamado Cuenta corriente
+que no esta cancelando facturas sino que se calcula como la suma de los saldos
+no cancelados de todas las facturas listadas.
+
+
+Debajo de los diarios se encuentra un totalizador que suma el total de cada
+medio de pago mas el de las cuentas corrientes.
+
+NOTA: Tener en cuenta que el total en Cuenta Corriente depende de la fecha en
+la que se genera el reporte, por ejemplo si se genera un reporte en un periodo
+anterior puede ser que el monto adeudado se haya saldado y la cuenta corriente
+queden en cero.
+
+NOTA: Tener en cuenta que el medio de pago Efectivo Ventas responde a las
+transferencias que se hacen de Efectivo Ventas a Efectivo con lo cual si esa
+transferencia no se hizo correctamente el total de este medio de pago no sera
+correcto.
+
+NOTA: Tener en cuenta que el total Facturado en general no coincidira con el
+balance de los diarios por varias razones, por ejemplo:
+- Se valida una nota de credito que cancela una factura con fecha fuera del
+periodo analizado.
+- Se cobran facturas que se validaron en fechas fuera del periodo.
+- Una factura que en parte se paga con una retencion.
+
+NOTA: En caso de dudas ver el reporte de cajas con apertura para determinar que
+movimientos componen el total de cada medio de pago.
+
 ===================================
 Reporte diario para cierre de cajas
 ===================================
