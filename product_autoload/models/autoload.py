@@ -107,10 +107,10 @@ class AutoloadMgr(models.Model):
                 item = item_obj.search([('code', '=', values['code'])])
                 if item:
                     if not (item.origin == values['origin'] and
-                            item.name == values['name'] and
-                            item.section == values['section'] and
-                            item.family == values['family'] and
-                            item.margin == float(values['margin'])):
+                                    item.name == values['name'] and
+                                    item.section == values['section'] and
+                                    item.family == values['family'] and
+                                    item.margin == float(values['margin'])):
                         item.write(values)
 
                         # forzar recalculo de precios.
@@ -399,12 +399,23 @@ class AutoloadMgr(models.Model):
 
     @api.model
     def check_cost(self):
+        """ si el costo es cero se trae el costo del quant
+        """
+        stock_quant_obj = self.env['stock.quant']
+        prod_obj = self.env['product.product']
+        for product in prod_obj.search([('standard_price', '=', 0)]):
+            sq = stock_quant_obj.search([('product_id', '=', product.id)],
+                                        order='id desc', limit=1)
+            product.standard_price = sq.cost
+
+    @api.model
+    def check_quant_cost(self):
         """ Revisa los costos del cost history, para lanzar manualmente
             si el costo en el quant es cero le ponemos el costo de la factura
         """
         stock_quant_obj = self.env['stock.quant']
         for sq in stock_quant_obj.search([('cost', '=', 0),
-                                          ('location_id.name','=','Stock')]):
+                                          ('location_id.name', '=', 'Stock')]):
             if sq.product_id.system_cost:
                 # si tengo el costo factura lo pongo, esto es bulonfer.
                 sq.cost = sq.product_id.system_cost
@@ -416,7 +427,8 @@ class AutoloadMgr(models.Model):
                 # el costo sigue en cero busco la factura
                 invoice_lines_obj = self.env['account.invoice.line']
                 invoice_line = invoice_lines_obj.search(
-                    [('product_id.default_code', '=', sq.product_id.default_code)],
+                    [('product_id.default_code', '=',
+                      sq.product_id.default_code)],
                     order="id desc",
                     limit=1)
 
@@ -428,7 +440,8 @@ class AutoloadMgr(models.Model):
                     sq.cost = invoice_price
 
             print 'qty= {:4} price={} cost={:4} system cost={} bulocost={} code={}'.format(
-                sq.qty, sq.product_id.list_price, sq.cost, sq.product_id.system_cost,
+                sq.qty, sq.product_id.list_price, sq.cost,
+                sq.product_id.system_cost,
                 sq.product_id.bulonfer_cost,
                 sq.product_id.default_code)
 
