@@ -23,7 +23,7 @@ class AccountInvoice(models.Model):
 
     discount_processed = fields.Boolean(
         default=False,
-        help='Shows wether this invoice was processed with invoice_discounts'
+        help='Shows whether this invoice was processed with invoice_discounts'
     )
 
     @api.one

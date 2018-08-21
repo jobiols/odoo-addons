@@ -122,11 +122,13 @@ class ProductTemplate(models.Model):
         """
         self.ensure_one()
         for prod in self:
+            # obtiene el vendor_id a partir del vendor_ref
             vendor_id = self.env['res.partner'].search(
                 [('ref', '=', vendor_ref)])
             if not vendor_id:
                 raise Exception('Vendor %s not found' % vendor_ref)
 
+            # arma el registro para insertar
             supplierinfo = {
                 'name': vendor_id.id,
                 'min_qty': min_qty,
@@ -158,6 +160,11 @@ class ProductTemplate(models.Model):
             quant = quant_obj.search([('product_tmpl_id', '=', prod.id)],
                                      order='in_date', limit=1)
             if quant:
+                # si el quant cost esta en cero es critico, le pongo el costo
+                # esto no debiera pasar
+                if not quant.cost:
+                    quant.cost = cost
+
                 # actualizar el standard_price a este precio
                 prod.standard_price = quant.cost
             else:

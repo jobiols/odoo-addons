@@ -400,11 +400,37 @@ class AutoloadMgr(models.Model):
     @api.model
     def check_cost(self):
         """ Revisa los costos del cost history, para lanzar manualmente
+            si el costo en el quant es cero le ponemos el costo de la factura
         """
         stock_quant_obj = self.env['stock.quant']
-        for sq in stock_quant_obj.search([]):
-            print sq.cost,
-            print sq.product_tmpl_id.standard_price
+        for sq in stock_quant_obj.search([('cost', '=', 0),
+                                          ('location_id.name','=','Stock')]):
+            if sq.product_id.system_cost:
+                # si tengo el costo factura lo pongo, esto es bulonfer.
+                sq.cost = sq.product_id.system_cost
+            else:
+                # tengo el costo hoy, lo pongo
+                sq.cost = sq.product_id.bulonfer_cost
+
+            if not sq.cost:
+                # el costo sigue en cero busco la factura
+                invoice_lines_obj = self.env['account.invoice.line']
+                invoice_line = invoice_lines_obj.search(
+                    [('product_id.default_code', '=', sq.product_id.default_code)],
+                    order="id desc",
+                    limit=1)
+
+                if invoice_line and invoice_line.price_unit:
+                    # precio que cargaron en la factura de compra
+                    invoice_price = invoice_line.price_unit
+                    # descuento en la linea de factura
+                    invoice_price *= (1 - invoice_line.discount / 100)
+                    sq.cost = invoice_price
+
+            print 'qty= {:4} price={} cost={:4} system cost={} bulocost={} code={}'.format(
+                sq.qty, sq.product_id.list_price, sq.cost, sq.product_id.system_cost,
+                sq.product_id.bulonfer_cost,
+                sq.product_id.default_code)
 
     @api.model
     def fix_category(self):
