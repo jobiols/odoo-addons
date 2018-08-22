@@ -157,13 +157,14 @@ class ProductTemplate(models.Model):
 
             # buscar el quant mas antiguo de este producto, (puede no haber)
             quant_obj = self.env['stock.quant']
-            quant = quant_obj.search([('product_tmpl_id', '=', prod.id)],
+            quant = quant_obj.search([('product_tmpl_id', '=', prod.id),
+                                      ('location_id.usage', '=', 'internal')],
                                      order='in_date', limit=1)
             if quant:
                 # si el quant cost esta en cero es critico, le pongo el costo
-                # esto no debiera pasar
+                # esto no debiera pasar, encima hay que hacerlo con sudo
                 if not quant.cost:
-                    quant.cost = cost
+                    quant.sudo().write({'cost': cost})
 
                 # actualizar el standard_price a este precio
                 prod.standard_price = quant.cost
