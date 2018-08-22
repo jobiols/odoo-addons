@@ -118,10 +118,14 @@ class ProductTemplate(models.Model):
             Poner el precio que esta en la linea mas antigua de quants en el
             standard price, si no tengo ninguno pongo el costo de hoy.
 
-            Finalmente actualizo el bulonfer_cost que es el costo de hoy
+            Finalmente actualizo el bulonfer_cost que es el costo de hoy.
         """
         self.ensure_one()
         for prod in self:
+            # si el costo es cero no lo pongo
+            if not cost:
+                return
+
             # obtiene el vendor_id a partir del vendor_ref
             vendor_id = self.env['res.partner'].search(
                 [('ref', '=', vendor_ref)])

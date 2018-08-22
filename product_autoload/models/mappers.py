@@ -103,7 +103,6 @@ class ProductMapper(CommonMapper):
         ret['write_date'] = self.write_date
         ret['item_code'] = self.item_code
         ret['invalidate_category'] = self._invalidate_category
-        ret['bulonfer_cost'] = self._bulonfer_cost
         if self._image:
             ret['image'] = self._image
 
