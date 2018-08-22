@@ -21,7 +21,7 @@
 
     <!-- tree view -->
     <record model="ir.ui.view" id="product_autoload_tree_view">
-        <field name="name">AUTOLOAD: Tree view</field>
+        <field name="name">PRODUCT AUTOLOAD: logging tree view</field>
         <field name="model">product_autoload.manager</field>
         <field name="arch" type="xml">
             <tree string="Autoload">
@@ -47,6 +47,7 @@
     <menuitem id="menu_product_autoload"
               name="Product Autoload"
               parent="base.menu_sales"
+              groups="stock.group_stock_manager,base.group_erp_manager"
               sequence="16"
               action="action_product_autoload"/>
 

@@ -31,7 +31,6 @@
         'sale',
         'purchase',
         'product_multi_barcode',
-        'price_security'
     ],
 
     'data': [
@@ -41,7 +40,8 @@
         'views/product_view.xml',
         'views/autoload_manager_view.xml',
         'views/purchase_view.xml',
-        'wizard/check_prices_view.xml'
+        'wizard/check_prices_view.xml',
+        'security/security.xml'
     ],
     'test': [
     ],

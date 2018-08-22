@@ -27,8 +27,9 @@
         </record>
 
         <menuitem id="menu_process_meli_excel"
-                  name="process meli prices"
+                  name="Process meli prices"
                   parent="base.menu_sales"
+                  groups="stock.group_stock_manager,base.group_erp_manager"
                   sequence="16"
                   action="action_process_meli_excel"/>
 

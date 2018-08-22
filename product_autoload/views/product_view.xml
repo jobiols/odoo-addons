@@ -3,7 +3,7 @@
     <data>
         <!-- agregar difference - diferencia entre factura y sistema -->
         <record id="product_template_tree_view1" model="ir.ui.view">
-            <field name="name">AUTOLOAD: add cost fields</field>
+            <field name="name">PRODUCT AUTOLOAD: add cost fields</field>
             <field name="model">product.template</field>
             <field name="inherit_id" ref="product.product_template_tree_view"/>
             <field name="arch" type="xml">
@@ -17,7 +17,7 @@
         </record>
 
         <record id="product_template_tree_view2" model="ir.ui.view">
-            <field name="name">AUTOLOAD: hide cost fields</field>
+            <field name="name">PRODUCT AUTOLOAD: hide cost fields</field>
             <field name="model">product.template</field>
             <field name="groups_id"
                    eval="[(6, 0, [ref('price_security.group_restrict_prices')])]"/>
@@ -39,7 +39,7 @@
         </record>
 
         <record id="product_template_tree_view3" model="ir.ui.view">
-            <field name="name">AUTOLOAD: show cost fields</field>
+            <field name="name">PRODUCT AUTOLOAD: show cost fields</field>
             <field name="model">product.template</field>
             <field name="groups_id"
                    eval="[(6, 0, [ref('price_security.group_only_view')])]"/>
@@ -61,12 +61,13 @@
         </record>
 
         <record id="product_template_only_form_view" model="ir.ui.view">
-            <field name="name">AUTOLOAD: cost history</field>
+            <field name="name">PRODUCT AUTOLOAD: cost history</field>
             <field name="model">product.template</field>
             <field name="inherit_id" ref="product.product_template_only_form_view"/>
             <field name="arch" type="xml">
                  <xpath expr="//page[@name='notes']" position="after">
-                    <page name="cost_history" string="Cost History" groups="price_security.group_only_view,base.group_erp_manager">
+                    <page name="cost_history" string="Cost History"
+                          groups="product_autoload.group_show_history_cost,base.group_erp_manager">
                         <field name="cost_history_ids">
                             <tree string="Cost History">
                                 <field name="qty"/>

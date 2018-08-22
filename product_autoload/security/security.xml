@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+    <data>
+        <!-- grupo con acceso total a precios (muestra el precio de los quants) -->
+        <record model="res.groups" id="group_show_history_cost">
+            <field name="name">Acceso al historial de costos</field>
+        </record>
+    </data>
+</openerp>
