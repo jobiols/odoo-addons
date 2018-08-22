@@ -218,7 +218,7 @@ class TestBusiness(TransactionCase):
         prod = prod_obj.search([('default_code', '=', '102.B.12')])
         self.assertEqual(prod.bulonfer_cost, 2.2372)
         prod = prod_obj.search([('default_code', '=', '106.32')])
-        self.assertEqual(prod.bulonfer_cost, 15.0620)
+        self.assertAlmostEqual(prod.bulonfer_cost, 15.0620, places=12)
 
         self.manager_obj.update_categories()
 
