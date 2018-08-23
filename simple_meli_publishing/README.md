@@ -7,12 +7,13 @@ Para actualizar los precios publicados en mercadolibre con planilla
 excel se deberan cargar en los productos el codigo de publicacion, eso
 aparece en la solapa Ventas de la ficha de producto.
 
-Una vez cargado se sube la planilla a odoo desde Ventas / procesar precios
-mercadolibre.
+Una vez cargado se sube la planilla que bajamos de mercadolibre con los
+productos a odoo desde Ventas / procesar precios mercadolibre.
 
-Al bajar la planilla los precios estaran actualizados al precio de lista mas iva
+Al bajar nuevamente la planilla los precios estaran actualizados al 
+precio de lista mas iva.
 
-Finalmente se sube la planilla a Mercadolibre.
+Finalmente vuelve a subir la planilla a Mercadolibre.
 
 Se chequean los siguientes errores:
 - El codigo de producto no existe en odoo
