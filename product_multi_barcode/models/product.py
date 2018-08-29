@@ -69,7 +69,8 @@ class ProductProduct(models.Model):
     _inherit = 'product.product'
 
     barcode_ids = fields.One2many(
-        related='product_tmpl_id.barcode_ids'
+        related='product_tmpl_id.barcode_ids',
+        readonly=True
     )
 
     def name_search(self, cr, user, name='', args=None, operator='ilike',
