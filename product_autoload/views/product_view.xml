@@ -71,9 +71,10 @@
                         <field name="cost_history_ids">
                             <tree string="Cost History">
                                 <field name="qty"/>
-                                <field name="cost" widget="monetary" />
+                                <field name="cost" widget="monetary" options="{'currency_field': 'currency_id'}"/>
                                 <field name="in_date"/>
                                 <field name="location_id"/>
+                                <field name="currency_id" invisible="1" />
                             </tree>
                         </field>
                     </page>
