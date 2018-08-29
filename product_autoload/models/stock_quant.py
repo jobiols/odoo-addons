@@ -8,5 +8,6 @@ class StockQuant(models.Model):
 
     product_tmpl_id = fields.Many2one(
         related="product_id.product_tmpl_id",
-        store=True
+        store=True,
+        readonly=True
     )

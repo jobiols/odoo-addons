@@ -43,11 +43,11 @@ class ProductTemplate(models.Model):
         help="Actual cost from last actualization or from uploading a "
              "spreadsheet"
     )
-    standard_price = fields.Float(
-        string="Oldest Cost",
-        help="The purchase cost of the oldest product in stock, after it has "
-             "been delivered."
-    )
+    #standard_price = fields.Float(
+    #    string="Oldest Cost",
+    #    help="The purchase cost of the oldest product in stock, after it has "
+    #         "been delivered."
+    #)
     cost_history_ids = fields.One2many(
         comodel_name="stock.quant",
         inverse_name="product_tmpl_id",
