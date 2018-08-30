@@ -20,7 +20,6 @@ class StockMove(models.Model):
              "during a picking confirmation (when costing method used is "
              "'average price' or 'real'). Value given in PRODUCT currency and "
              "in product uom.")
-
     # as it's a technical field, we intentionally don't provide the digits
     # attribute
 
@@ -50,6 +49,41 @@ class StockMove(models.Model):
             return move.price_unit
         return super(StockMove, self).get_price_unit(cr, uid, move,
                                                       context=context)
+
+    def _store_average_cost_price(self, cr, uid, move, context=None):
+        """ move is a browe record
+            aqui le agregamos el costo en la moneda del producto
+        """
+        product_obj = self.pool.get('product.product')
+        if any([q.qty <= 0 for q in move.quant_ids]) or move.product_qty == 0:
+            # if there is a negative quant,
+            # the standard price shouldn't be updated
+            return
+        # Note: here we can't store a quant.cost directly as we may have moved
+        # out 2 units (1 unit to 5€ and 1 unit to 7€) and in case of a product
+        # return of 1 unit, we can't know which of the 2 costs has to be used
+        # (5€ or 7€?). So at that time, thanks to the average valuation price
+        # we are storing we will valuate it at 6€
+        average_valuation_price = 0.0
+        average_prod_val_price = 0.0
+        for q in move.quant_ids:
+            average_valuation_price += q.qty * q.cost
+            average_prod_val_price += q.qty * q.cost_product
+        average_valuation_price = average_valuation_price / move.product_qty
+        average_prod_val_price = average_prod_val_price / move.product_qty
+        # Write the standard price, as SUPERUSER_ID because a warehouse manager
+        # may not have the right to write on products
+        ctx = dict(context or {}, force_company=move.company_id.id)
+        product_obj.write(cr, SUPERUSER_ID,
+                          [move.product_id.id], {
+                              'standard_price': average_valuation_price,
+                              'standard_product_price': average_prod_val_price
+                          }, context=ctx)
+        self.write(cr, uid, [move.id], {
+                       'price_unit': average_valuation_price,
+                       'price_product_unit': average_prod_val_price
+                   },
+                   context=context)
 
 
 class StockQuant(models.Model):
