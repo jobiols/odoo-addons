@@ -11,5 +11,5 @@ class ProductTemplate(models.Model):
         digits_compute=dp.get_precision('Product Price'),
         help="Purchase cost in the product currency.",
         groups="base.group_user",
-        string="Product Cost",
+        string="Product Cost"
     )

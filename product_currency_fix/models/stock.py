@@ -7,7 +7,8 @@ from openerp.exceptions import UserError, AccessError
 from datetime import datetime
 from openerp.tools.float_utils import float_compare, float_round
 from openerp.tools.translate import _
-from openerp.tools import DEFAULT_SERVER_DATETIME_FORMAT, DEFAULT_SERVER_DATE_FORMAT
+from openerp.tools import DEFAULT_SERVER_DATETIME_FORMAT, \
+    DEFAULT_SERVER_DATE_FORMAT
 from openerp import SUPERUSER_ID, api, models
 from openerp.exceptions import UserError
 
@@ -20,6 +21,7 @@ class StockMove(models.Model):
              "during a picking confirmation (when costing method used is "
              "'average price' or 'real'). Value given in PRODUCT currency and "
              "in product uom.")
+
     # as it's a technical field, we intentionally don't provide the digits
     # attribute
 
@@ -42,13 +44,13 @@ class StockMove(models.Model):
                 price_unit, price_product_unit = \
                     move.purchase_line_id._get_stock_move_price_unit()
                 move.write({
-                     'price_unit': price_unit,
-                     'price_product_unit': price_product_unit
+                    'price_unit': price_unit,
+                    'price_product_unit': price_product_unit
                 })
                 return price_unit, price_product_unit
             return move.price_unit
         return super(StockMove, self).get_price_unit(cr, uid, move,
-                                                      context=context)
+                                                     context=context)
 
     def _store_average_cost_price(self, cr, uid, move, context=None):
         """ move is a browe record
@@ -80,9 +82,9 @@ class StockMove(models.Model):
                               'standard_product_price': average_prod_val_price
                           }, context=ctx)
         self.write(cr, uid, [move.id], {
-                       'price_unit': average_valuation_price,
-                       'price_product_unit': average_prod_val_price
-                   },
+            'price_unit': average_valuation_price,
+            'price_product_unit': average_prod_val_price
+        },
                    context=context)
 
 
@@ -93,13 +95,23 @@ class StockQuant(models.Model):
         help="Technical field used to record the product cost in product currency"
     )
 
-    def _quant_create(self, cr, uid, qty, move, lot_id=False, owner_id=False, src_package_id=False, dest_package_id=False,
-                      force_location_from=False, force_location_to=False, context=None):
+    currency_id = fields.Many2one(
+        'res.currency',
+        related='product_tmpl_id.currency_id',
+        readonly=True,
+        help="Product currency"
+    )
+
+    def _quant_create(self, cr, uid, qty, move, lot_id=False, owner_id=False,
+                      src_package_id=False, dest_package_id=False,
+                      force_location_from=False, force_location_to=False,
+                      context=None):
         """Create a quant in the destination location and create a negative quant in the source location if it's an internal location.
         """
         if context is None:
             context = {}
-        price_unit, price_product_unit = self.pool.get('stock.move').get_price_unit(cr, uid, move, context=context)
+        price_unit, price_product_unit = self.pool.get(
+            'stock.move').get_price_unit(cr, uid, move, context=context)
         location = force_location_to or move.location_dest_id
         rounding = move.product_id.uom_id.rounding
         vals = {
@@ -116,22 +128,56 @@ class StockQuant(models.Model):
             'package_id': dest_package_id,
         }
         if move.location_id.usage == 'internal':
-            #if we were trying to move something from an internal location and reach here (quant creation),
-            #it means that a negative quant has to be created as well.
+            # if we were trying to move something from an internal location and reach here (quant creation),
+            # it means that a negative quant has to be created as well.
             negative_vals = vals.copy()
-            negative_vals['location_id'] = force_location_from and force_location_from.id or move.location_id.id
-            negative_vals['qty'] = float_round(-qty, precision_rounding=rounding)
+            negative_vals[
+                'location_id'] = force_location_from and force_location_from.id or move.location_id.id
+            negative_vals['qty'] = float_round(-qty,
+                                               precision_rounding=rounding)
             negative_vals['cost'] = price_unit
             negative_vals['negative_move_id'] = move.id
             negative_vals['package_id'] = src_package_id
-            negative_quant_id = self.create(cr, SUPERUSER_ID, negative_vals, context=context)
+            negative_quant_id = self.create(cr, SUPERUSER_ID, negative_vals,
+                                            context=context)
             vals.update({'propagated_from_id': negative_quant_id})
 
         picking_type = move.picking_id and move.picking_id.picking_type_id or False
-        if lot_id and move.product_id.tracking == 'serial' and (not picking_type or (picking_type.use_create_lots or picking_type.use_existing_lots)):
+        if lot_id and move.product_id.tracking == 'serial' and (
+                not picking_type or (
+                    picking_type.use_create_lots or picking_type.use_existing_lots)):
             if qty != 1.0:
-                raise UserError(_('You should only receive by the piece with the same serial number'))
+                raise UserError(_(
+                    'You should only receive by the piece with the same serial number'))
 
-        #create the quant as superuser, because we want to restrict the creation of quant manually: we should always use this method to create quants
+        # create the quant as superuser, because we want to restrict the creation of quant manually: we should always use this method to create quants
         quant_id = self.create(cr, SUPERUSER_ID, vals, context=context)
         return self.browse(cr, uid, quant_id, context=context)
+
+    @api.model
+    def stock_fix_cost(self):
+        """ Para ejecutar a mano calcula los costos en dolares basado en los costos en pesos
+        """
+        company_currency_obj = self.env['res.currency']
+        cc = company_currency_obj.search([('name', '=', 'ARS')])
+
+        import wdb;  wdb.set_trace()
+
+        # stock quant
+        stock_quant_obj = self.env['stock.quant']
+        stock_quant = stock_quant_obj.search([('cost', '!=', 0)])
+        for sq in stock_quant:
+            sq.cost_product = cc.with_context(
+                {'date': sq.in_date}).compute(
+                sq.cost, sq.currency_product_id,
+                round=False
+            )
+
+        # stock.move
+        stock_move = self.env['stock.move'].search([('price_unit', '!=', 0)])
+        for sm in stock_move:
+            print sm.product_id.default_code
+            sm.price_product_unit = cc.with_context(
+                {'date': sm.create_date}).compute(
+                sm.price_unit, sm.product_id.product_tmpl_id.currency_id,
+                round=False)
