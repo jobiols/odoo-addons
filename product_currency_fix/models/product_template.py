@@ -9,7 +9,7 @@ class ProductTemplate(models.Model):
 
     standard_product_price = fields.Float(
         digits_compute=dp.get_precision('Product Price'),
-        help="Purchase cost in the product currency.",
         groups="base.group_user",
-        string="Product Cost"
+        string="Product Cost",
+        help="Purchase cost in the product currency."
     )

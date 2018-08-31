@@ -1,16 +1,21 @@
 # -*- coding: utf-8 -*-
 # Part of Odoo. See LICENSE file for full copyright and licensing details.
 from openerp import api, fields, models, _, SUPERUSER_ID
-from openerp.tools import DEFAULT_SERVER_DATETIME_FORMAT
-from openerp.tools.translate import _
-from openerp.exceptions import UserError, AccessError
-from datetime import datetime
 from openerp.tools.float_utils import float_compare, float_round
-from openerp.tools.translate import _
+from datetime import datetime
+from openerp.exceptions import UserError, AccessError
 from openerp.tools import DEFAULT_SERVER_DATETIME_FORMAT, \
     DEFAULT_SERVER_DATE_FORMAT
-from openerp import SUPERUSER_ID, api, models
-from openerp.exceptions import UserError
+
+#from openerp.tools import DEFAULT_SERVER_DATETIME_FORMAT
+#from openerp.tools.translate import _
+#from openerp.tools.translate import _
+#from openerp import SUPERUSER_ID, api, models
+#from openerp.exceptions import UserError
+
+import logging
+
+_logger = logging.getLogger(__name__)
 
 
 class StockMove(models.Model):
@@ -106,7 +111,8 @@ class StockQuant(models.Model):
                       src_package_id=False, dest_package_id=False,
                       force_location_from=False, force_location_to=False,
                       context=None):
-        """Create a quant in the destination location and create a negative quant in the source location if it's an internal location.
+        """ Create a quant in the destination location and create a negative
+            quant in the source location if it's an internal location.
         """
         if context is None:
             context = {}
@@ -128,8 +134,9 @@ class StockQuant(models.Model):
             'package_id': dest_package_id,
         }
         if move.location_id.usage == 'internal':
-            # if we were trying to move something from an internal location and reach here (quant creation),
-            # it means that a negative quant has to be created as well.
+            # if we were trying to move something from an internal location
+            # and reach here (quant creation), it means that a negative quant
+            # has to be created as well.
             negative_vals = vals.copy()
             negative_vals[
                 'location_id'] = force_location_from and force_location_from.id or move.location_id.id
@@ -147,36 +154,37 @@ class StockQuant(models.Model):
                 not picking_type or (
                     picking_type.use_create_lots or picking_type.use_existing_lots)):
             if qty != 1.0:
-                raise UserError(_(
-                    'You should only receive by the piece with the same serial number'))
+                raise UserError(_('You should only receive by the piece with the same serial number'))
 
-        # create the quant as superuser, because we want to restrict the creation of quant manually: we should always use this method to create quants
+        # create the quant as superuser, because we want to restrict the
+        # creation of quant manually: we should always use this method to
+        # create quants
         quant_id = self.create(cr, SUPERUSER_ID, vals, context=context)
         return self.browse(cr, uid, quant_id, context=context)
 
     @api.model
     def stock_fix_cost(self):
-        """ Para ejecutar a mano calcula los costos en dolares basado en los costos en pesos
+        """ Para ejecutar a mano calcula los costos en dolares basado en los
+            costos en pesos
         """
         company_currency_obj = self.env['res.currency']
         cc = company_currency_obj.search([('name', '=', 'ARS')])
-
-        import wdb;  wdb.set_trace()
 
         # stock quant
         stock_quant_obj = self.env['stock.quant']
         stock_quant = stock_quant_obj.search([('cost', '!=', 0)])
         for sq in stock_quant:
+            _logger.info('FIXING quant %d %s' % (sq.product_id.product_tmpl_id.currency_id.id,sq.product_id.default_code))
             sq.cost_product = cc.with_context(
                 {'date': sq.in_date}).compute(
-                sq.cost, sq.currency_product_id,
+                sq.cost, sq.product_id.product_tmpl_id.currency_id,
                 round=False
             )
 
         # stock.move
         stock_move = self.env['stock.move'].search([('price_unit', '!=', 0)])
         for sm in stock_move:
-            print sm.product_id.default_code
+            _logger.info('FIXING move %d %s' % (sm.product_id.product_tmpl_id.currency_id.id, sm.product_id.default_code))
             sm.price_product_unit = cc.with_context(
                 {'date': sm.create_date}).compute(
                 sm.price_unit, sm.product_id.product_tmpl_id.currency_id,
