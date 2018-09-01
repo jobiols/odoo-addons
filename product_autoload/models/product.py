@@ -43,11 +43,6 @@ class ProductTemplate(models.Model):
         help="Actual cost from last actualization or from uploading a "
              "spreadsheet"
     )
-    #standard_price = fields.Float(
-    #    string="Oldest Cost",
-    #    help="The purchase cost of the oldest product in stock, after it has "
-    #         "been delivered."
-    #)
     cost_history_ids = fields.One2many(
         comodel_name="stock.quant",
         inverse_name="product_tmpl_id",
@@ -60,7 +55,7 @@ class ProductTemplate(models.Model):
         # Calcula el costo de la factura
         for prod in self:
             prod.system_cost = prod.bulonfer_cost / (
-                1 - prod.difference / 100)
+                1 - prod.difference / 100) if prod.difference else False
 
     @api.multi
     def recalculate_list_price(self, margin):
@@ -106,7 +101,7 @@ class ProductTemplate(models.Model):
     @api.multi
     def set_cost(self, vendor_ref, cost, date, min_qty=1, vendors_code=False):
         """ Setea el costo del producto, el costo se pone en supplierinfo, no
-            en standard price.
+            en standard price. El costo viene en la currency del producto.
 
             Cuando se hace la orden de compra saca el precio y la cantidad de
             supplierinfo y luego al validarla y posteriormente ingresar la
@@ -125,7 +120,6 @@ class ProductTemplate(models.Model):
             # si el costo es cero no lo pongo
             if not cost:
                 return
-
             # obtiene el vendor_id a partir del vendor_ref
             vendor_id = self.env['res.partner'].search(
                 [('ref', '=', vendor_ref)])
@@ -164,17 +158,23 @@ class ProductTemplate(models.Model):
             quant = quant_obj.search([('product_tmpl_id', '=', prod.id),
                                       ('location_id.usage', '=', 'internal')],
                                      order='in_date', limit=1)
-            if quant:
-                # si el quant cost esta en cero es critico, le pongo el costo
-                # esto no debiera pasar, encima hay que hacerlo con sudo
-                if not quant.cost:
-                    quant.sudo().write({'cost': cost})
+            self.fix_quant_data(quant, prod, cost)
 
-                # actualizar el standard_price a este precio
-                prod.standard_price = quant.cost
-            else:
-                # no tengo stock le pongo el costo de hoy
-                prod.standard_price = cost
+    def fix_quant_data(self, quant, prod, cost):
+        """ Overrideable function
+        """
+        if quant:
+            # si el quant cost esta en cero es critico, le pongo el costo
+            # esto no debiera pasar, encima hay que hacerlo con sudo
+            if not quant.cost:
+                quant.sudo().write({'cost': cost})
+                _logger.error('Zero cost QUANT for %s' % quant.product_id.default_code)
 
-            # el costo hoy
-            prod.bulonfer_cost = cost
+            # actualizar el standard_price a este precio
+            prod.standard_price = quant.cost
+        else:
+            # no tengo stock le pongo el costo de hoy
+            prod.standard_price = cost
+
+        # el costo hoy
+        prod.bulonfer_cost = cost
