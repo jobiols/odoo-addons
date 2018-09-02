@@ -10,8 +10,8 @@ class PurchaseOrderLine(models.Model):
     @api.multi
     def _get_stock_move_price_unit(self):
         """ sobreescribe la original y devuelve el precio unitario en la moneda
-            de la compaia como antes y le agrega el precio unitario en la moneda
-            del producto llamado price_product_unit.
+            de la compaia como antes y le agrega el precio unitario en la
+            moneda del producto llamado price_product_unit.
             En algunos casos seran iguales...
         """
         self.ensure_one()
@@ -55,7 +55,7 @@ class PurchaseOrderLine(models.Model):
                 'procurement_id': False,
                 'origin': line.order_id.name,
                 'route_ids': line.order_id.picking_type_id.warehouse_id and [(6, 0, [x.id for x in line.order_id.picking_type_id.warehouse_id.route_ids])] or [],
-                'warehouse_id':line.order_id.picking_type_id.warehouse_id.id,
+                'warehouse_id': line.order_id.picking_type_id.warehouse_id.id,
             }
 
             # Fullfill all related procurements with this po line

@@ -91,7 +91,8 @@ class StockQuant(models.Model):
     _inherit = "stock.quant"
 
     cost_product = fields.Float(
-        help="Technical field used to record the product cost in product currency"
+        help="Technical field used to record the product cost in product "
+             "currency"
     )
 
     currency_id = fields.Many2one(
@@ -148,8 +149,8 @@ class StockQuant(models.Model):
                 not picking_type or (
                     picking_type.use_create_lots or picking_type.use_existing_lots)):
             if qty != 1.0:
-                raise UserError(_(
-                    'You should only receive by the piece with the same serial number'))
+                raise UserError(_('You should only receive by the piece with '
+                                  'the same serial number'))
 
         # create the quant as superuser, because we want to restrict the
         # creation of quant manually: we should always use this method to
@@ -159,8 +160,10 @@ class StockQuant(models.Model):
 
     @api.model
     def stock_fix_cost(self):
-        """ Para ejecutar a mano calcula los costos en dolares basado en los
-            costos en pesos
+        """ Para ejecutar a mano
+            rellena los campos recien creados calcula los costos en dolares
+            basado en los costos en pesos.
+            Elimina historicos con precio cero
         """
 
         # stock quant calcular el cost_product

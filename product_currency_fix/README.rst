@@ -8,9 +8,11 @@ Product Currency Fix
 
 Corrige un problema en Product Currency, vale en estas condiciones
 
-- Hay productos con precio / costo en una currency distinta a la de la compania usando el modulo Product Currency
+- Hay productos con precio / costo en una currency distinta a la de la compania
+  usando el modulo Product Currency
 - En inventario / contabilidad esta definido Valoracion de inventario perpetuo
-- En las categorias esta definido Metodo costo Precio real, Valoracion inventario Perpetuo, Forzar estrategia FIFO
+- En las categorias esta definido Metodo costo Precio real, Valoracion inventario
+  Perpetuo, Forzar estrategia FIFO
 
 En estas condiciones en odoo standard, cuando se valida una orden de compra,
 se crea un stock.move con el costo del producto para luego ponerlo en el
