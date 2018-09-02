@@ -14,12 +14,15 @@
                 <xpath expr="//field[@name='barcode']" position="attributes">
                     <attribute name="invisible">True</attribute>
                 </xpath>
-                <xpath expr="//field[@name='barcode']" position="after">
-                    <field name="barcode_ids">
-                        <tree string="Barcodes" editable="bottom">
-                            <field name="name"/>
-                        </tree>
-                    </field>
+
+                <xpath expr="//field[@name='default_code']" position="after">
+                    <group colspan="2" col="1">
+                        <field name="barcode_ids" nolabel="1">
+                            <tree string="Barcodes" editable="bottom">
+                                <field name="name"/>
+                            </tree>
+                        </field>
+                    </group>
                 </xpath>
 
             </field>
