@@ -439,12 +439,6 @@ class AutoloadMgr(models.Model):
                     invoice_price *= (1 - invoice_line.discount / 100)
                     sq.cost = invoice_price
 
-            print 'qty= {:4} price={} cost={:4} system cost={} bulocost={} code={}'.format(
-                sq.qty, sq.product_id.list_price, sq.cost,
-                sq.product_id.system_cost,
-                sq.product_id.bulonfer_cost,
-                sq.product_id.default_code)
-
     @api.model
     def fix_category(self):
         """ corrige las categorias, para lanzar manualmente

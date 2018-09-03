@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
-# -----------------------------------------------------------------------------
+##############################################################################
 #
-#    Copyright (C) 2016  jeo Software  (http://www.jeosoft.com.ar)
+#    Copyright (C) 2015  ADHOC SA  (http://www.adhoc.com.ar)
 #    All Rights Reserved.
 #
 #    This program is free software: you can redistribute it and/or modify
@@ -17,29 +17,23 @@
 #    You should have received a copy of the GNU Affero General Public License
 #    along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #
-# -----------------------------------------------------------------------------
+##############################################################################
 {
-    'name': 'Simple Meshops Publishing',
+    'name': 'Product Currency fix',
     'version': '9.0.0.0.0',
-    'license': 'AGPL-3',
-    'category': 'Tools',
-    'summary': 'Update Mercadoshops Prices',
+    'category': 'Contabilidad',
     'author': 'jeo Software',
+    'website': 'http://jeosoft.com.ar/',
+    'license': 'AGPL-3',
     'depends': [
-        'stock'
+        'product_currency',
+        'stock',
+        'stock_account',
+        'purchase',
+        'product_autoload' # quitar esta dependencia
     ],
     'data': [
-        'security/security_groups.xml',
-        'views/product_view.xml',
-        'wizard/process_excel_wizard.xml',
-    ],
-    'test': [
-    ],
-    'demo': [
-
+        'views/product_template_view.xml'
     ],
     'installable': True,
-    'application': False,
-    'auto_install': False,
-    'images': []
 }

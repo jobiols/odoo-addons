@@ -14,6 +14,6 @@ class StockQuant(models.Model):
 
     currency_id = fields.Many2one(
         'res.currency',
-        related='product_id.company_id.currency_id',
+        related="product_id.currency_id",
         readonly=True
     )
