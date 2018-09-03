@@ -168,6 +168,11 @@ class StockQuant(models.Model):
             basado en los costos en pesos.
             Elimina historicos con precio cero
         """
+        # eliminar precio cero en supplierinfo
+        _logger.info('REMOVING zero price in supplierinfo')
+        supp_obj = self.env['product.supplierinfo']
+        supp = supp_obj.search([('price', '=', 0)])
+        supp.unlink()
 
         # stock quant calcular el cost_product
         stock_quant_obj = self.env['stock.quant']
@@ -177,8 +182,18 @@ class StockQuant(models.Model):
             # el que computa tiene que tener la fecha
             cc = sq.company_id.currency_id.with_context(date=sq.in_date)
             pc = sq.product_id.product_tmpl_id.currency_id
-            # pasar de company currency (cc) a product currency (pc)
-            sq.cost_product = cc.compute(sq.cost, pc, round=False)
+
+            # si el producto esta en dolares
+            if sq.product_id.currency_id.name == 'USD':
+                sellers = sq.product_id.product_tmpl_id.seller_ids
+                if sellers:
+                    sq.cost_product = sellers[0].price
+                    pc = pc.with_context(date=sq.in_date)
+                    sq.cost = pc.compute(sq.cost_product, cc, round=False)
+            else:
+                # pasar de company currency (cc) a product currency (pc)
+                sq.cost_product = sq.cost
+
             _logger.info('FIXING quant %d %s' % (pc.id,
                                                  sq.product_id.default_code))
 
@@ -191,12 +206,6 @@ class StockQuant(models.Model):
             sm.price_product_unit = cc.compute(sm.price_unit, pc, round=False)
             _logger.info('FIXING move %d %s' % (pc.id,
                                                 sm.product_id.default_code))
-
-        # eliminar precio cero en supplierinfo
-        _logger.info('REMOVING zero price in supplierinfo')
-        supp_obj = self.env['product.supplierinfo']
-        supp = supp_obj.search([('price', '=', 0)])
-        supp.unlink()
 
         # corregir standard_product_price en cero
         prod_obj = self.env['product.template']
