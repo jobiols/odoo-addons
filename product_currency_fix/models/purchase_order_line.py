@@ -17,6 +17,7 @@ class PurchaseOrderLine(models.Model):
         self.ensure_one()
         line = self[0]
         order = line.order_id
+        price_unit = line.price_unit
         price_product_unit = line.price_unit
         if line.taxes_id:
             price_product_unit = line.taxes_id.with_context(round=False).compute_all(price_product_unit, currency=line.order_id.currency_id, quantity=1.0)['total_excluded']

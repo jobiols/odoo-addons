@@ -47,9 +47,12 @@ class StockMove(models.Model):
                     'price_product_unit': price_product_unit
                 })
                 return price_unit, price_product_unit
-            return move.price_unit
-        return super(StockMove, self).get_price_unit(cr, uid, move,
-                                                     context=context)
+            return move.price_unit, move.price_product_unit
+
+        # TODO Revisar cuando va al super
+        ret = super(StockMove, self).get_price_unit(cr, uid, move,
+                                                    context=context)
+        return ret, ret
 
     def _store_average_cost_price(self, cr, uid, move, context=None):
         """ move is a browe record
@@ -168,7 +171,8 @@ class StockQuant(models.Model):
 
         # stock quant calcular el cost_product
         stock_quant_obj = self.env['stock.quant']
-        stock_quant = stock_quant_obj.search([('cost_product', '=', 0)])
+        stock_quant = stock_quant_obj.search([('cost_product', '=', 0),
+                                              ('cost', '!=', 0)])
         for sq in stock_quant:
             # el que computa tiene que tener la fecha
             cc = sq.company_id.currency_id.with_context(date=sq.in_date)
@@ -180,7 +184,7 @@ class StockQuant(models.Model):
 
         # stock.move calcular el price_product_unit
         stock_move = self.env['stock.move'].search([
-            ('price_product_unit', '=', 0)])
+            ('price_product_unit', '=', 0), ('price_unit', '!=', 0)])
         for sm in stock_move:
             cc = sm.company_id.currency_id.with_context(date=sm.create_date)
             pc = sm.product_id.product_tmpl_id.currency_id
