@@ -1,4 +1,0 @@
-id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
-access_product_autoload_item,access_product_autoload_item,model_product_autoload_item,,1,0,0,0
-access_product_autoload_productcode,access_product_autoload_productcode,model_product_autoload_productcode,,1,0,0,0
-access_product_autoload_manager,access_product_autoload_manager,model_product_autoload_manager,,1,0,0,0
