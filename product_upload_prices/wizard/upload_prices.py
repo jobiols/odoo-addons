@@ -69,14 +69,19 @@ class UploadPrices(models.TransientModel):
     def process_data(self, data, vendor):
         """ Process data structure setting prices in system
         """
-        product_obj = self.env['product.product']
+        product_obj = self.env['product.template']
         for row in data:
             domain = [('default_code', '=', row['default_code'])]
             prod = product_obj.search(domain)
-            prod.list_price = float(row['list_price'])
-            prod.product_tmpl_id.set_cost(vendor,
-                                          float(row['standard_price']),
-                                          str(datetime.datetime.now())[0:10])
+
+            price = float(row['list_price'])
+            cost = float(row['standard_price'])
+
+            margin = (price - cost) / cost if cost != 0 else 0
+            prod.margin = margin
+
+            prod.set_cost(vendor, cost, str(datetime.datetime.now())[0:10])
+            prod.recalculate_list_price(margin)
 
     @api.multi
     def import_file(self):
@@ -93,7 +98,6 @@ class UploadPrices(models.TransientModel):
                                     data_only=True)
 
         partner_obj = self.env['res.partner']
-
         # cada hoja de la planilla es un vendor
         vendors = wb.sheetnames
         for vendor in vendors:
