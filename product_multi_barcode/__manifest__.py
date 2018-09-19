@@ -6,7 +6,7 @@
 
 {
     'name': 'Multiple Barcode on products',
-    'version': '9.0.0.0.0',
+    'version': '11.0.0.0.0',
     'license': 'AGPL-3',
     'author': "jeo Software",
     'category': 'Product Management',
@@ -16,5 +16,5 @@
         'views/product_view.xml',
         'security/ir.model.access.csv',
     ],
-    'installable': True,
+    'installable': False,
 }

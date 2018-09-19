@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 ##############################################################################
 #
-#    Copyright (C) 2015  JEOSOFT  (http://www.jeosoft.com.ar)
+#    Copyright (C) 2015  ADHOC SA  (http://www.adhoc.com.ar)
 #    All Rights Reserved.
 #
 #    This program is free software: you can redistribute it and/or modify
@@ -19,30 +19,18 @@
 #
 ##############################################################################
 {
-    'name': 'Sale Paid Stamp',
-    'version': '9.0.0.0.0',
-    'category': 'Support',
-    'sequence': 14,
-    'summary': '',
-    'author':  'jeo Soft',
-    'website': 'jeosoft.com.ar',
+    'name': 'Account Invoice Global Discount',
+    'version': '11.0.0.0.0',
+    'author': 'jeo Software',
+    'website': 'www.jeosoft.com.ar',
     'license': 'AGPL-3',
-    'images': [
-    ],
-    'depends': [
-        'l10n_ar_afipws_fe'
-
-    ],
+    'category': 'Accounting & Finance',
     'data': [
-        'report_configuration_defaults_data.xml',
-        'invoice_report.xml',
-        'invoice_template.xml',
+        'wizard/account_invoice_tax_wizard_view.xml',
+        'views/account_invoice_view.xml',
     ],
-    'demo': [
-    ],
-    'test': [
-    ],
-    'installable': True,
-    'auto_install': False,
-    'application': False,
+    'demo': [],
+    'depends': ['account'],
+    'test': [],
+    'installable': False,
 }

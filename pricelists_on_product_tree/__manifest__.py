@@ -19,27 +19,27 @@
 #
 # -----------------------------------------------------------------------------
 {
-    'name': 'Simple Meshops Publishing',
-    'version': '9.0.0.0.0',
+    'name': 'Pricelists on Product Tree',
+    'version': '11.0.0.0.0',
     'license': 'AGPL-3',
     'category': 'Tools',
-    'summary': 'Update Mercadoshops Prices',
+    'summary': 'Show up to three pricelists on product tree',
     'author': 'jeo Software',
     'depends': [
-        'stock'
+        'product'
     ],
+
     'data': [
-        'security/security_groups.xml',
-        'views/product_view.xml',
-        'wizard/process_excel_wizard.xml',
+        'views/res_product.xml',
+        'views/res_config_view.xml'
     ],
     'test': [
     ],
     'demo': [
 
     ],
-    'installable': True,
+    'installable': False,
     'application': False,
     'auto_install': False,
-    'images': []
+    'images': [],
 }

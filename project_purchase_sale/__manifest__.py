@@ -19,31 +19,23 @@
 #
 # -----------------------------------------------------------------------------
 {
-    'name': 'Product Upload Prices',
-    'version': '9.0.0.1.0',
+    'name': 'Project purchase sale',
+    'version': '11.0.0.0.0',
     'license': 'AGPL-3',
     'category': 'Tools',
-    'summary': 'Actualizar precios con planilla',
+    'summary': 'Relate proyects with purchases and sales',
     'author': 'jeo Software',
     'depends': [
-        'product_autoload'
+
     ],
     'data': [
-        'views/product_upload_prices_view.xml',
-        'wizard/upload_prices_wizard.xml'
     ],
     'test': [
     ],
     'demo': [
-
     ],
     'installable': True,
     'application': False,
     'auto_install': False,
     'images': [],
-    'external_dependencies': {
-        'python': [
-            'openpyxl',
-        ],
-    },
 }

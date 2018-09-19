@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-# -----------------------------------------------------------------------------
+# -----------------------------------------------------------------------------------
 #
 #    Copyright (C) 2016  jeo Software  (http://www.jeosoft.com.ar)
 #    All Rights Reserved.
@@ -17,28 +17,23 @@
 #    You should have received a copy of the GNU Affero General Public License
 #    along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #
-# -----------------------------------------------------------------------------
+# -----------------------------------------------------------------------------------
 {
-    'name': 'Simple Meli Publishing',
-    'version': '9.0.1.0.0',
-    'license': 'AGPL-3',
-    'category': 'Tools',
-    'summary': 'Update Mercadolibre Prices',
-    'author': 'jeo Software',
-    'depends': [
-        'stock'
+    "name": "Partner search",
+    "version": "11.0.0.0.0",
+    "author": "jeo Software",
+    'website': 'http://www.jeosoft.com.ar',
+    "depends": ["l10n_ar_base"],
+    "category": "Generic Modules",
+    "description": """
+Allows searching form multiple fields
+""",
+    "demo_xml": [],
+    "data": [
+        'views/partner_view.xml'
     ],
-    'data': [
-        'views/product_view.xml',
-        'wizard/process_excel_wizard.xml'
-    ],
-    'test': [
-    ],
-    'demo': [
-
-    ],
-    'installable': True,
-    'application': False,
+    'installable': False,
+    'application': True,
     'auto_install': False,
-    'images': []
+    'images': [],
 }
