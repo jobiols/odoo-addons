@@ -15,7 +15,7 @@ from openerp.tests import common
 #   El usuario admin tiene que tener password admin, Language English, Country
 #   United States.
 #
-#   oe -Q product_upload_prices -c iomaq -d product_upload_prices_test
+#   oe -Q product_upload_prices -c iomaq -d iomaq_test
 #
 
 
