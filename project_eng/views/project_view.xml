@@ -3,7 +3,7 @@
     <data>
         <!-- Agregar smart buttons -->
         <record id="edit_project" model="ir.ui.view">
-            <field name="name">PROJECT PURCHASE SALE Add smart buttons</field>
+            <field name="name">PROJECT ENG Add smart buttons</field>
             <field name="model">project.project</field>
             <field name="inherit_id" ref="project.edit_project"/>
             <field name="arch" type="xml">
@@ -32,7 +32,7 @@
 
         <!-- Agregar campos a la vista de lista del proyecto -->
         <record id="view_project" model="ir.ui.view">
-            <field name="name">PROJECT PURCHASE SALE Add list fields</field>
+            <field name="name">PROJECT ENG Add list fields</field>
             <field name="model">project.project</field>
             <field name="inherit_id" ref="project.view_project"/>
             <field name="arch" type="xml">
