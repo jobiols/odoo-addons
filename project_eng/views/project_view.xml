@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <!-- Agregar smart buttons -->
+        <record id="edit_project" model="ir.ui.view">
+            <field name="name">PROJECT PURCHASE SALE Add smart buttons</field>
+            <field name="model">project.project</field>
+            <field name="inherit_id" ref="project.edit_project"/>
+            <field name="arch" type="xml">
+                <xpath expr="//button[@name='247']" position="before">
+
+                    <button class="oe_stat_button" name="action_view_purchases"
+                            type="object" icon="fa-shopping-cart">
+                        <field string="Purchases" name="purchase_count"
+                               widget="statinfo"/>
+                    </button>
+
+                    <button class="oe_stat_button" name="action_view_sales"
+                            type="object" icon="fa-usd">
+                        <field string="Sales" name="sales_count"
+                               widget="statinfo"/>
+                    </button>
+                </xpath>
+                <xpath expr="//field[@name='user_id']" position="before">
+                    <field name="work"/>
+                    <field name="obs"/>
+                    <field name="status"/>
+                </xpath>
+
+            </field>
+        </record>
+
+        <!-- Agregar campos a la vista de lista del proyecto -->
+        <record id="view_project" model="ir.ui.view">
+            <field name="name">PROJECT PURCHASE SALE Add list fields</field>
+            <field name="model">project.project</field>
+            <field name="inherit_id" ref="project.view_project"/>
+            <field name="arch" type="xml">
+                <xpath expr="//field[@name='name']" position="after">
+                    <field name="work"/>
+                    <field name="obs"/>
+                    <field name="status"/>
+                    <field name="total_sales" widget="monetary"/>
+                </xpath>
+            </field>
+        </record>
+
+    </data>
+</odoo>

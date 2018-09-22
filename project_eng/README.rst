@@ -2,10 +2,10 @@
    :target: http://www.gnu.org/licenses/agpl-3.0-standalone.html
    :alt: License: AGPL-3
 
-=====================
-Project Purchase Sale
-=====================
+===================
+Project Engineering
+===================
 
 This module adds two smart buttons to project form, one pointing to Sales order
 and the other pointing to Purchases order related to this project.
-
+And perform some enhacements for engineering projects.

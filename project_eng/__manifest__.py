@@ -19,16 +19,20 @@
 #
 # -----------------------------------------------------------------------------
 {
-    'name': 'Project purchase sale',
+    'name': 'Project Eng',
     'version': '11.0.0.0.0',
     'license': 'AGPL-3',
     'category': 'Tools',
-    'summary': 'Relate proyects with purchases and sales',
+    'summary': 'Project enhacements for engineering',
     'author': 'jeo Software',
     'depends': [
-
+        'project',
+        'purchase',
+        'sale'
     ],
     'data': [
+        'views/project_view.xml',
+        'views/purchase_order_view.xml'
     ],
     'test': [
     ],
