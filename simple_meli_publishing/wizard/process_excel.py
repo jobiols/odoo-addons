@@ -64,14 +64,13 @@ class SimpleMeliPublishing(models.TransientModel):
             sku = sheet.cell(column=SKU_COL, row=row).value
             prod = product_obj.search([('meli_code', '=', meli_code)])
             if prod:
-                if sku != prod.default_code:
-                    pass
-                    #self.state = 'error'
-                    #self.add_error('sku', row=row, sku=sku,
-                    cd #               default_code=prod.default_code)
-                else:
-                    sheet.cell(column=PRICE_COL, row=row,
-                               value=prod.final_price)
+                #if sku != prod.default_code:
+                #    pass
+                #    #self.state = 'error'
+                #    #self.add_error('sku', row=row, sku=sku,
+                #    #cd    default_code=prod.default_code)
+                #else:
+                sheet.cell(column=PRICE_COL, row=row, value=prod.final_price)
             else:
                 self.state = 'error'
                 self.add_error('not_found', row=row, meli_code=meli_code)

@@ -5,7 +5,9 @@ from openerp.exceptions import UserError
 import base64
 import tempfile
 import openpyxl
-import datetime
+import logging
+
+_logger = logging.getLogger(__name__)
 
 
 class UploadPrices(models.TransientModel):
@@ -77,11 +79,9 @@ class UploadPrices(models.TransientModel):
             price = float(row['list_price'])
             cost = float(row['standard_price'])
 
-            margin = (price - cost) / cost if cost != 0 else 0
-            prod.margin = margin
-
-            prod.set_cost(vendor, cost, str(datetime.datetime.now())[0:10])
-            prod.recalculate_list_price(margin)
+            prod.set_prices(cost, vendor, price=price)
+            prod.set_invoice_cost()
+            _logger.info('Importing price %s' % prod.default_code)
 
     @api.multi
     def import_file(self):
