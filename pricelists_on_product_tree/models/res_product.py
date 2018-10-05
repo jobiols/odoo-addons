@@ -20,25 +20,25 @@ class ProductProduct(models.Model):
         compute='_compute_prices'
     )
 
-    @api.one
+    @api.multi
     @api.depends('standard_price')
     def _compute_prices(self):
+        for prod in self:
+            # traer las pricelist configuradas
+            pricelists = prod._get_pricelists()
 
-        # traer las pricelist configuradas
-        pricelists = self._get_pricelists()
+            ppobj = self.env['product.pricelist']
+            prices = ppobj.price_get(self.product_variant_ids.id, 1.0)
 
-        ppobj = self.env['product.pricelist']
-        prices = ppobj.price_get(self.product_variant_ids.id, 1.0)
+            for pricelist in pricelists:
+                if pricelist == 'pricelist_1' and pricelists[pricelist]:
+                    prod.pricelist_1 = prices[pricelists[pricelist].id]
 
-        for pricelist in pricelists:
-            if pricelist == 'pricelist_1' and pricelists[pricelist]:
-                self.pricelist_1 = prices[pricelists[pricelist].id]
+                if pricelist == 'pricelist_2' and pricelists[pricelist]:
+                    prod.pricelist_2 = prices[pricelists[pricelist].id]
 
-            if pricelist == 'pricelist_2' and pricelists[pricelist]:
-                self.pricelist_2 = prices[pricelists[pricelist].id]
-
-            if pricelist == 'pricelist_3' and pricelists[pricelist]:
-                self.pricelist_3 = prices[pricelists[pricelist].id]
+                if pricelist == 'pricelist_3' and pricelists[pricelist]:
+                    prod.pricelist_3 = prices[pricelists[pricelist].id]
 
     @api.model
     def fields_view_get(self, view_id=None, view_type='tree', context=None,

@@ -45,7 +45,7 @@ class SimpleMeliPublishing(models.TransientModel):
                                 'at row %s in the worksheet.'
                                 '</p>') % (sku, default_code, row)
 
-    @api.one
+    @api.multi
     def process_data(self, fp_name):
         PUB_CODE_COL = 2
         PRICE_COL = 7
@@ -60,23 +60,24 @@ class SimpleMeliPublishing(models.TransientModel):
                                     read_only=False,
                                     data_only=True)
         sheet = wb.active
-        for row in range(FIRST_ROW, sheet.max_row):
-            meli_code = sheet.cell(column=PUB_CODE_COL, row=row).value
-            sku = sheet.cell(column=SKU_COL, row=row).value
-            prod = product_obj.search([('meli_code', '=', meli_code)])
-            if prod:
-                sheet.cell(column=PRICE_COL,
-                           row=row,
-                           value=prod.final_price)
-                sheet.cell(column=STOCK_COL,
-                           row=row,
-                           value=prod.virtual_available)
-            else:
-                self.state = 'error'
-                self.add_error('not_found', row=row, meli_code=meli_code)
+        for reg in self:
+            for row in range(FIRST_ROW, sheet.max_row):
+                meli_code = sheet.cell(column=PUB_CODE_COL, row=row).value
+                sku = sheet.cell(column=SKU_COL, row=row).value
+                prod = product_obj.search([('meli_code', '=', meli_code)])
+                if prod:
+                    sheet.cell(column=PRICE_COL,
+                               row=row,
+                               value=prod.final_price)
+                    sheet.cell(column=STOCK_COL,
+                               row=row,
+                               value=prod.virtual_available)
+                else:
+                    reg.state = 'error'
+                    reg.add_error('not_found', row=row, meli_code=meli_code)
 
-        if self.state != 'error':
-            wb.save(fp_name)
+            if reg.state != 'error':
+                wb.save(fp_name)
 
     @api.multi
     def load_file(self):

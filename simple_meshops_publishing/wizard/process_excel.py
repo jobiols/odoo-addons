@@ -24,29 +24,31 @@ class SimpleMeShopsPublishing(models.TransientModel):
         default=fields.date.today()
     )
 
-    @api.one
+    @api.multi
     def process_data(self, fp_name):
         CODE_COL = 1
         PRICE_COL = 2
         FIRST_ROW = 2
 
         product_obj = self.env['product.product']
-        products = product_obj.search([('meshops_code', '=', True),
-                                       ('write_date', '>=', self.date_from)])
+        for reg in self:
+            products = product_obj.search([
+                ('meshops_code', '=', True),
+                ('write_date', '>=', reg.date_from)])
 
-        # open worksheet
-        wb = openpyxl.load_workbook(filename=fp_name,
-                                    read_only=False,
-                                    data_only=True)
-        sheet = wb.active
-        row = FIRST_ROW
-        for product in products:
-            sheet.cell(column=CODE_COL,
-                       row=row).value = product.default_code
-            sheet.cell(column=PRICE_COL,
-                       row=row).value = product.final_price
-            row += 1
-        wb.save(fp_name)
+            # open worksheet
+            wb = openpyxl.load_workbook(filename=fp_name,
+                                        read_only=False,
+                                        data_only=True)
+            sheet = wb.active
+            row = FIRST_ROW
+            for product in products:
+                sheet.cell(column=CODE_COL,
+                           row=row).value = product.default_code
+                sheet.cell(column=PRICE_COL,
+                           row=row).value = product.final_price
+                row += 1
+            wb.save(fp_name)
 
     @api.multi
     def process_spreadsheet(self):
