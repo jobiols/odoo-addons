@@ -10,12 +10,11 @@ aparece en la solapa Ventas de la ficha de producto.
 Una vez cargado se sube la planilla que bajamos de mercadolibre con los
 productos a odoo desde Ventas / procesar precios mercadolibre.
 
-Al bajar nuevamente la planilla los precios estaran actualizados al 
-precio de lista mas iva.
+Al bajar nuevamente la planilla desde odoo los precios estaran 
+actualizados al precio de lista mas iva y el stock sera el forecasting
 
-Finalmente vuelve a subir la planilla a Mercadolibre.
+Finalmente se vuelve a subir la planilla a Mercadolibre.
 
 Se chequean los siguientes errores:
-- El codigo de producto no existe en odoo
-- El sku de la planilla no coincide con la referencia interna de odoo
-- Odoo no deja cargar codigos de producto repetidos
+- El codigo de producto MLA no existe en odoo
+- Odoo no deja cargar codigos de producto MLA repetidos
