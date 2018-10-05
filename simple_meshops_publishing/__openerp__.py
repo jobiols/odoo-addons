@@ -41,5 +41,10 @@
     'installable': True,
     'application': False,
     'auto_install': False,
-    'images': []
+    'images': [],
+    'external_dependencies': {
+        'python': [
+            'openpyxl',
+        ],
+    }
 }

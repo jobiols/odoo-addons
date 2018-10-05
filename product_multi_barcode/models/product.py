@@ -116,7 +116,7 @@ class ProductProduct(models.Model):
                     ('default_code', operator, name),
                     ('name', operator, name)], limit=limit, context=context)
             if not ids and operator in positive_operators:
-                ptrn = re.compile('(\[(.*?)\])')
+                ptrn = re.compile('(\[(.*?)\])')    # noqa
                 res = ptrn.search(name)
                 if res:
                     ids = self.search(cr, user, [

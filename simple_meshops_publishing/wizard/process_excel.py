@@ -3,8 +3,15 @@
 from openerp import api, models, fields, _
 import base64
 import tempfile
-import openpyxl
 import os
+import logging
+
+_logger = logging.getLogger(__name__)
+
+try:
+    import openpyxl
+except (ImportError, IOError) as err:
+    _logger.debug(err)
 
 
 class SimpleMeShopsPublishing(models.TransientModel):
