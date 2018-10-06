@@ -4,10 +4,10 @@
 #
 msgid ""
 msgstr ""
-"Project-Id-Version: Odoo Server 9.0c-20180206\n"
+"Project-Id-Version: Odoo Server 9.0c-20180827\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2018-04-21 19:15+0000\n"
-"PO-Revision-Date: 2018-04-21 19:15+0000\n"
+"POT-Creation-Date: 2018-10-06 19:25+0000\n"
+"PO-Revision-Date: 2018-10-06 19:25+0000\n"
 "Last-Translator: <>\n"
 "Language-Team: \n"
 "MIME-Version: 1.0\n"
@@ -16,15 +16,15 @@ msgstr ""
 "Plural-Forms: \n"
 
 #. module: stock_picking_auto
+#: model:res.groups,name:stock_picking_auto.group_stock_picking_auto_cashier
+msgid "Automatic stock picking"
+msgstr "Transferencia automatica de stock"
+
+#. module: stock_picking_auto
 #: code:addons/stock_picking_auto/models/sale.py:24
 #, python-format
 msgid "Can not assign product for transfer. Unknown error"
-msgstr "No se puede asignar producto para transferir. Error desconocido"
-
-#. module: stock_picking_auto
-#: model:res.groups,name:stock_picking_auto.group_stock_picking_auto_cashier
-msgid "Cashier"
-msgstr "Cajero"
+msgstr "No se puede asignar un producto para transferir. Error desconocido"
 
 #. module: stock_picking_auto
 #: model:ir.ui.view,arch_db:stock_picking_auto.view_order_form_spa
@@ -32,21 +32,16 @@ msgid "Confirm and Transfer"
 msgstr "Confirmar y Transferir"
 
 #. module: stock_picking_auto
-#: code:addons/stock_picking_auto/models/sale.py:45
+#: code:addons/stock_picking_auto/models/sale.py:53
 #, python-format
 msgid "Could not reserve all requested products. Please use the 'Mark as Todo' button to handle the reservation manually."
-msgstr "No se pueden reservar todos los productos requeridos. Por favor use el boton 'Para hacer' para manejar la reserva manualmente."
+msgstr "No se puede reservar todas las cantidades pedidas. Por favor use el boton 'Marcar para hacer' para manejar la reserva manualmente."
 
 #. module: stock_picking_auto
-#: model:res.groups,comment:stock_picking_auto.group_stock_picking_auto_cashier
-msgid "Grupo para los usuarios Cajero"
-msgstr "Grupo para los usuarios Cajero"
-
-#. module: stock_picking_auto
-#: code:addons/stock_picking_auto/models/sale.py:27
+#: code:addons/stock_picking_auto/models/sale.py:28
 #, python-format
 msgid "Please create some Initial Demand or Mark as Todo and create some Operations. "
-msgstr "Por favor cree Demanda Inicial o Marcar para Hacer y cree algunas operaciones. "
+msgstr "Por favor cree alguna demanda inicial o marque Para Hacer y cree algunas operaciones."
 
 #. module: stock_picking_auto
 #: model:ir.model,name:stock_picking_auto.model_sale_order
@@ -54,13 +49,15 @@ msgid "Sales Order"
 msgstr "Orden de Ventas"
 
 #. module: stock_picking_auto
-#: code:addons/stock_picking_auto/models/sale.py:37
+#: code:addons/stock_picking_auto/models/sale.py:43
 #, python-format
 msgid "Some products require lots, so you need to specify those first!"
-msgstr "Algunos productos requieren lotes, los tiene que especificar antes de seguir!"
+msgstr "Algunos productos requieren lotes, entonces, ud. necesita especificarlos primero!"
 
 #. module: stock_picking_auto
-#: model:ir.module.category,name:stock_picking_auto.module_stock_picking_auto
-msgid "Stock Picking Auto"
-msgstr "Transferencia Automatica de Stock"
-
+#: model:res.groups,comment:stock_picking_auto.group_stock_picking_auto_cashier
+msgid "This group allows selecting in configuration\n"
+"                if the user will have the ability to make an automatic stock\n"
+"                transfer when validating a sales order"
+msgstr "Este grupo permite darle al usuario la habilidad de hacer una "
+"transferencia automatica de stock cuando se valida una orden de venta."

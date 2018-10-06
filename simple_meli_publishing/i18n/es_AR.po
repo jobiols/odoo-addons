@@ -4,10 +4,10 @@
 #
 msgid ""
 msgstr ""
-"Project-Id-Version: Odoo Server 9.0c-20180504\n"
+"Project-Id-Version: Odoo Server 9.0c-20180827\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2018-06-29 20:24+0000\n"
-"PO-Revision-Date: 2018-06-29 20:24+0000\n"
+"POT-Creation-Date: 2018-10-06 18:43+0000\n"
+"PO-Revision-Date: 2018-10-06 18:43+0000\n"
 "Last-Translator: <>\n"
 "Language-Team: \n"
 "MIME-Version: 1.0\n"
@@ -16,13 +16,13 @@ msgstr ""
 "Plural-Forms: \n"
 
 #. module: simple_meli_publishing
-#: code:addons/simple_meli_publishing/wizard/process_excel.py:39
+#: code:addons/simple_meli_publishing/wizard/process_excel.py:46
 #, python-format
 msgid "<p>The product code %s from row %s on the worksheet can not be found in the system.</p>"
 msgstr "<p>El codigo de producto %s que se encuentra el la fila %s de la planilla no se encuentra en el sistema.</p>"
 
 #. module: simple_meli_publishing
-#: code:addons/simple_meli_publishing/wizard/process_excel.py:43
+#: code:addons/simple_meli_publishing/wizard/process_excel.py:50
 #, python-format
 msgid "<p>The sku from worksheet does not match with the product internal reference \"%s\" <> \"%s\" at row %s in the worksheet.</p>"
 msgstr "<p>El sku de la planilla no coincide con la referencia interna del producto \"%s\" <> \"%s\" se encuentra en la fila %s de la planilla.</p>"
@@ -41,7 +41,7 @@ msgid "Completed succesfully,\n"
 msgstr "Completado con exito,\n"
 "                            <br/>\n"
 "                            Ahora puedes bajar la\n"
-"                            planilla y subirla a Mercadolibre."
+"                            planilla y subirla nuevamente a Mercadolibre."
 
 #. module: simple_meli_publishing
 #: model:ir.model.fields,field_description:simple_meli_publishing.field_simple_meli_publishing_process_excel_create_uid
@@ -69,19 +69,20 @@ msgid "Download processed spreadsheet"
 msgstr "Descargar planilla procesada"
 
 #. module: simple_meli_publishing
+#: model:res.groups,comment:simple_meli_publishing.group_meli_users
+msgid "Enable access to mercadolibre"
+msgstr "Habilitar accesso a mercadolibre"
+
+#. module: simple_meli_publishing
 #: selection:simple_meli_publishing.process_excel,state:0
 msgid "Error"
 msgstr "Error"
 
 #. module: simple_meli_publishing
 #: model:ir.model.fields,field_description:simple_meli_publishing.field_simple_meli_publishing_process_excel_errors
+#: model:ir.ui.view,arch_db:simple_meli_publishing.view_meli_process_wizard_form
 msgid "Errors"
 msgstr "Errores"
-
-#. module: simple_meli_publishing
-#: model:ir.ui.view,arch_db:simple_meli_publishing.view_meli_process_wizard_form
-msgid "Errors found"
-msgstr "Se encontraron errores"
 
 #. module: simple_meli_publishing
 #: model:ir.model.fields,field_description:simple_meli_publishing.field_simple_meli_publishing_process_excel_name
@@ -130,11 +131,17 @@ msgid "Meli Publishing Code"
 msgstr "Codigo de publicacion mercadolibre"
 
 #. module: simple_meli_publishing
+#: model:res.groups,name:simple_meli_publishing.group_meli_users
+msgid "Prices / Stock for mercadolibre"
+msgstr "Precios y stock para mercadolibre"
+
+#. module: simple_meli_publishing
 #: model:ir.actions.act_window,name:simple_meli_publishing.action_process_meli_excel
 msgid "Process meli Excel"
 msgstr "Procesar meli Excel"
 
 #. module: simple_meli_publishing
+#: model:ir.ui.menu,name:simple_meli_publishing.menu_process_meli_excel
 #: model:ir.ui.view,arch_db:simple_meli_publishing.view_meli_process_wizard_form
 msgid "Process meli prices"
 msgstr "Procesar precios meli"
@@ -175,11 +182,7 @@ msgid "or"
 msgstr "o"
 
 #. module: simple_meli_publishing
-#: model:ir.ui.menu,name:simple_meli_publishing.menu_process_meli_excel
-msgid "Process meli prices"
-msgstr "Procesar precios meli"
-
-#. module: simple_meli_publishing
 #: model:ir.model,name:simple_meli_publishing.model_simple_meli_publishing_process_excel
 msgid "simple_meli_publishing.process_excel"
 msgstr "simple_meli_publishing.process_excel"
+

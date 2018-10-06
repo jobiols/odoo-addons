@@ -3,7 +3,7 @@
     <data>
         <!-- GRUPO MELI -->
         <record id="group_meli_users" model="res.groups">
-            <field name="name">Mercado Libre</field>
+            <field name="name">Prices / Stock for mercadolibre</field>
             <field name="comment">Enable access to mercadolibre</field>
          </record>
     </data>
