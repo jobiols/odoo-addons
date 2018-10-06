@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+    <data>
+        <!-- GRUPO MELI -->
+        <record id="group_meli_users" model="res.groups">
+            <field name="name">Mercado Libre</field>
+            <field name="comment">Enable access to mercadolibre</field>
+         </record>
+    </data>
+</openerp>

@@ -29,8 +29,9 @@
         'stock'
     ],
     'data': [
+        'security/security_groups.xml',
         'views/product_view.xml',
-        'wizard/process_excel_wizard.xml'
+        'wizard/process_excel_wizard.xml',
     ],
     'test': [
     ],
