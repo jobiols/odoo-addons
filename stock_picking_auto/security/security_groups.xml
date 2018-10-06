@@ -1,21 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<openerp>
+<odoo>
     <data>
-
-        <!-- Agregamos el grupo cajero para que haga la transferencia automatica -->
-
-        <record id="module_stock_picking_auto" model="ir.module.category">
-            <field name="name">Stock Picking Auto</field>
-            <field name="sequence" eval="20" />
-        </record>
-
         <record id="group_stock_picking_auto_cashier" model="res.groups">
-            <field name="name">Automatic</field>
-            <field name="category_id" ref="module_stock_picking_auto"/>
-            <field name="comment">This group allows selecting in configuration if the user will have the
-ability to make an automatic stock transfer when validating a sales order</field>
+            <field name="name">Automatic stock picking</field>
+            <field name="comment">This group allows selecting in configuration
+                if the user will have the ability to make an automatic stock
+                transfer when validating a sales order</field>
         </record>
-
     </data>
-
-</openerp>
+</odoo>
