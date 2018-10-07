@@ -4,7 +4,6 @@ Actualizacion manual de precios
 
 Uso:
 
-
 Este modulo actualiza precios en forma manual para ello hay que crear una
 planilla de excel con los siguientes columnas.
 

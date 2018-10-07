@@ -29,4 +29,3 @@ class TestProductUploadPrices(common.TransactionCase):
 
     def test_01_(self):
         self.assertEqual(1, 1)
-

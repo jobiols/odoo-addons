@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 # Part of Odoo. See LICENSE file for full copyright and licensing details.
-from openerp import api, fields, models, _
+from openerp import api, models, _
 
 
 class SaleOrder(models.Model):
@@ -9,11 +9,10 @@ class SaleOrder(models.Model):
     @api.multi
     def apply_discount(self):
         for line in self:
-
             ctx = dict(
                 self._context,
                 sale_order_id=line.id
-                )
+            )
 
             return {
                 'name': _('Apply discount to all SO lines'),

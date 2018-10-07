@@ -54,9 +54,6 @@ class InvoiceReport(models.AbstractModel):
         """ Obtener todas las facturas validadas por la cajera de esta caja
             que son al cliente, y que estan en el periodo.
         """
-        user_obj = self.env['res.users']
-        user = user_obj.search([('cash_id', '=', data['cash_id'])])
-
         domain = [
             ('date', '>=', data['date_from']),
             ('date', '<=', data['date_to']),

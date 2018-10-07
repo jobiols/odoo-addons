@@ -29,7 +29,7 @@ class InvoiceReport(models.TransientModel):
             'form': {
                 'date_from': self.date_from,
                 'date_to': self.date_to,
-                'date_range': False,  # (self.date_from != self.date_to) and self.expand_moves,
+                'date_range': False,
                 'title': 'Reporte de facturacion',
                 'cash_id': self.cash_id.id,
                 'cash': self.cash_id.name

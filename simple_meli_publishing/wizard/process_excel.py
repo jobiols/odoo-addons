@@ -34,7 +34,7 @@ class SimpleMeliPublishing(models.TransientModel):
         default="load"
     )
     errors = fields.Html(
-        default='_(<h1>We found the following errors</h1>)',
+        default=_('<h1>We found the following errors</h1>'),
         readonly=True
     )
 
@@ -70,9 +70,11 @@ class SimpleMeliPublishing(models.TransientModel):
         for reg in self:
             for row in range(FIRST_ROW, sheet.max_row):
                 meli_code = sheet.cell(column=PUB_CODE_COL, row=row).value
-                sku = sheet.cell(column=SKU_COL, row=row).value
                 prod = product_obj.search([('meli_code', '=', meli_code)])
                 if prod:
+                    sheet.cell(column=SKU_COL,
+                               row=row,
+                               value=prod.default_code)
                     sheet.cell(column=PRICE_COL,
                                row=row,
                                value=prod.final_price)
