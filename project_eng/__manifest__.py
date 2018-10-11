@@ -31,7 +31,8 @@
         'sale'
     ],
     'data': [
-        'views/project_view.xml'
+        'views/project_view.xml',
+        'views/sale_views.xml'
     ],
     'test': [
     ],

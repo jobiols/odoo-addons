@@ -16,3 +16,13 @@ class PurchaseOrder(models.Model):
         help="The analytic account related to a purchase order.",
         copy=False
     )
+
+
+class PurchaseOrderLine(models.Model):
+    _inherit = 'purchase.order.line'
+
+    account_analytic_id = fields.Many2one(
+        'account.analytic.account',
+        related='order_id.analytic_account_id',
+        store=True
+    )
