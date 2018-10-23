@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+    <data>
+        <!-- agregar vendor bulonfer -->
+        <record id="partner_einhell" model="res.partner">
+            <field name="name">Einhell SA</field>
+            <field name="ref">EINHELL</field>
+            <field name="supplier" eval="1"/>
+        </record>
+
+        <record id="partner_decker" model="res.partner">
+            <field name="name">Black &amp; Decker SA</field>
+            <field name="ref">B&amp;D</field>
+            <field name="supplier" eval="1"/>
+        </record>
+
+    </data>
+</openerp>

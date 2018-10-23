@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_import_worksheet_form" model="ir.ui.view">
+        <field name="name">Import Worksheet</field>
+        <field name="model">product_upload.import_worksheet</field>
+        <field name="arch" type="xml">
+            <form string="Import Worksheet">
+                <group colspan="4">
+                    <field name="data" filename="name"/>
+                    <field name="name" colspan="2"/>
+                </group>
+
+                <footer>
+                    <button name="import_file" string="Import Worksheet" type="object"
+                            class="oe_highlight"/>
+                    or
+                    <button string="_Cancel" class="oe_link" special="cancel"/>
+                </footer>
+            </form>
+        </field>
+    </record>
+
+</odoo>
