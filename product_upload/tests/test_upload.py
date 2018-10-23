@@ -30,6 +30,7 @@ DECKER_0 = [{
     'sale_tax': 0.155,
     'barcode': 885911484848L,
     'meli': u'MELICODE123',
+    'parent': False,
 }]
 
 EINHELL_0 = [{
@@ -42,6 +43,7 @@ EINHELL_0 = [{
     'sale_tax': 0.21,
     'barcode': False,
     'meli': False,
+    'parent': '4502015',
 }]
 
 
@@ -80,6 +82,7 @@ class TestProductUploadProduct(common.TransactionCase):
         self.assertEqual(data[0]['sale_tax'], DECKER_0[0]['sale_tax'])
         self.assertEqual(data[0]['barcode'], DECKER_0[0]['barcode'])
         self.assertEqual(data[0]['meli'], DECKER_0[0]['meli'])
+        self.assertEqual(data[0]['parent'], False)
 
     def test_02_(self):
         """ cargar una linea del segundo proveedor ----------------------------
@@ -94,6 +97,7 @@ class TestProductUploadProduct(common.TransactionCase):
         self.assertEqual(data[0]['sale_tax'], EINHELL_0[0]['sale_tax'])
         self.assertEqual(data[0]['barcode'], EINHELL_0[0]['barcode'])
         self.assertEqual(data[0]['meli'], EINHELL_0[0]['meli'])
+        self.assertEqual(data[0]['parent'], '4502015')
 
     def test_03_(self):
         """ Cargar los productos y verificar que esten bien
@@ -132,9 +136,10 @@ class TestProductUploadProduct(common.TransactionCase):
                          EINHELL_0[0]['purchase_tax'] * 100)
         self.assertEqual(einhell.barcode_ids or False, False)
         self.assertEqual(einhell.meli_code, False)
+        self.assertEqual(einhell.parent_price_product, '4502015')
 
-    def test_004_(self):
+    def test_04_(self):
         """ Archivo con multiples productos
         """
-        self.wizard_obj.process_tmp_file(self.get_filename(3))
+        self.wizard_obj.process_tmp_file(self.get_filename(0))
         self.assertEqual(self.wizard_obj.log.state, 'done')

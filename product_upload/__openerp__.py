@@ -27,7 +27,7 @@
     'author': 'jeo Software',
     'depends': [
         'stock',
-        'product_autoload'
+        'product_autoload',
     ],
     'data': [
         'security/ir.model.access.csv',
