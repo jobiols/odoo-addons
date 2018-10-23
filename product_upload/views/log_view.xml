@@ -1,0 +1,119 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+    <data>
+
+        <!-- tree view -->
+        <record model="ir.ui.view" id="log_view">
+            <field name="name">PRODUCT UPLOAD: logging tree view</field>
+            <field name="model">product_upload.log</field>
+            <field name="arch" type="xml">
+                <tree string="log" colors="red:state=='error';green:state=='done' ">
+                    <field name="updated_products"/>
+                    <field name="created_products"/>
+                    <field name="errors"/>
+                    <field name="create_uid"/>
+                    <field name="create_date"/>
+                    <field name="state"/>
+                </tree>
+            </field>
+        </record>
+
+        <!-- form view -->
+        <record model="ir.ui.view" id="log_form">
+            <field name="name">PRODUCT UPLOAD: form upload view</field>
+            <field name="model">product_upload.log</field>
+            <field name="arch" type="xml">
+                <form string="Product upload Form View">
+                    <field name="state" invisible="1"/>
+                    <header>
+                        <button class="oe_highlight" name="import_worksheet"
+                                string="Import worksheet" type="object"
+                                states="load"
+                                context="{'default_active_id': active_id}"
+                        />
+                        <button class="oe_highlight" name="process_file"
+                                string="Process worksheet" type="object"
+                                states="process"
+                        />
+                    </header>
+                    <group states="load" col="1">
+
+                        <div class="row">
+                            <div class="col-sm-4">
+                                <p>Select the product worksheet and hit Save
+                                </p>
+
+                            </div>
+                            <div class="col-sm-8">
+                                <p>To import/update products in the system
+                                    create a
+                                    worksheet with three columns:
+                                </p>
+                                <ul>
+                                    <li>Product Code</li>
+                                    <li>List price without tax</li>
+                                    <li>Cost price without tax</li>
+                                </ul>
+                                <p>
+                                    You can have several sheets in the
+                                    spreadsheet
+                                    where
+                                    each
+                                    one corresponds to a vendor.
+                                    Each sheet must have the vendor's reference
+                                    as its
+                                    name.
+                                </p>
+                                <p>
+                                    When hitting save the system checks all the
+                                    file.
+                                    If there are any error it is shown pointing
+                                    the
+                                    worksheet
+                                    ofending row.
+                                    The products must exist and the prices must
+                                    be
+                                    numbers.
+                                </p>
+                                <p>Only when there are no errors all the prices
+                                    are
+                                    updated.
+                                </p>
+
+                            </div>
+                        </div>
+
+
+                    </group>
+                    <group states="error" col="1">
+                        <group>
+                            <h1>The imported worksheet had the following
+                                errors
+                            </h1>
+                        </group>
+                        <group>
+                            <field name="error_ids" nolabel="1"/>
+                        </group>
+                    </group>
+                </form>
+            </field>
+        </record>
+
+        <!-- action -->
+        <record id="action_log" model="ir.actions.act_window">
+            <field name="name">Upload Products</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">product_upload.log</field>
+            <field name="view_mode">tree,form</field>
+            <field name="target">current</field>
+        </record>
+
+        <menuitem id="menu_log"
+                  name="Upload Products"
+                  parent="stock.menu_stock_inventory_control"
+                  groups="product_upload.group_product_upload_users"
+                  sequence="16"
+                  action="action_log"/>
+
+    </data>
+</openerp>
