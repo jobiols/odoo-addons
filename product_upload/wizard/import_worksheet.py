@@ -89,7 +89,7 @@ class ImportWorksheet(models.TransientModel):
             line.update(check('sale_tax', 6, 'float'))
             line.update(check('barcode', 7, 'integer'))
             line.update(check('meli', 8, 'str'))
-            line.update(check('stock', 9, 'integer'))
+            line.update(check('parent', 9, 'str'))
 
             ret.append(line)
         return ret
@@ -154,6 +154,8 @@ class ImportWorksheet(models.TransientModel):
                 data['name'] = row['name']
             if row['meli']:
                 data['meli_code'] = row['meli']
+            if row['parent']:
+                data['parent_price_product'] = row['parent']
 
             if not prod:
                 data['default_code'] = row['default_code']
