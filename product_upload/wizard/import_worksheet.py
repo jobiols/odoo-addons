@@ -157,6 +157,11 @@ class ImportWorksheet(models.TransientModel):
             if row['parent']:
                 data['parent_price_product'] = row['parent']
 
+            data['type'] = 'product'
+            data['invoice_policy'] = 'order'
+            data['purchase_method'] = 'purchase'
+            data['sale_delay'] = 0
+
             if not prod:
                 data['default_code'] = row['default_code']
                 prod = product_obj.create(data)
