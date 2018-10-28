@@ -4,10 +4,14 @@ from openerp import api, models, fields, _
 from openerp.exceptions import UserError
 import base64
 import tempfile
-import openpyxl
 import logging
 
 _logger = logging.getLogger(__name__)
+
+try:
+    import openpyxl
+except (ImportError, IOError) as err:
+    _logger.debug(err)
 
 
 class ImportWorksheet(models.TransientModel):

@@ -34,6 +34,7 @@
         'wizard/import_worksheet_view.xml',
         'security/security_groups.xml',
         'views/log_view.xml',
+        'views/error_view.xml',
     ],
     'test': [
     ],

@@ -34,7 +34,7 @@ class SimpleMeliPublishing(models.TransientModel):
         default="load"
     )
     errors = fields.Html(
-        default=_('<h1>We found the following errors</h1>'),
+        default='<h1>We found the following errors</h1>',
         readonly=True
     )
 
