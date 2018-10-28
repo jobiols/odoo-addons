@@ -2,3 +2,4 @@ adhoc-odoo-support https://github.com/jobiols/adhoc-odoo-support.git 9.0
 adhoc-product https://github.com/jobiols/adhoc-product.git 9.0
 odoo-argentina https://github.com/jobiols/odoo-argentina.git 9.0
 adhoc-argentina-reporting https://github.com/ingadhoc/argentina-reporting 9.0
+jobiols-cl-iomaq https://github.com/jobiols/cl-iomaq.git 9.0
