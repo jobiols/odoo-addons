@@ -5,7 +5,6 @@ from openerp.exceptions import UserError
 import base64
 import tempfile
 import openpyxl
-import datetime
 import logging
 
 _logger = logging.getLogger(__name__)
@@ -61,7 +60,7 @@ class ImportWorksheet(models.TransientModel):
                 try:
                     value = int(value)
                 except Exception as ex:
-                    self.add_error('')
+                    self.add_error(ex.message)
                 finally:
                     return {name: value}
 
