@@ -28,6 +28,7 @@
     'depends': [
         'stock',
         'product_autoload',
+        'product_currency',
     ],
     'data': [
         'security/ir.model.access.csv',
