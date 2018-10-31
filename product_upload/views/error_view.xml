@@ -4,7 +4,7 @@
         <!-- tree view -->
         <record model="ir.ui.view" id="error_view">
             <field name="name">PRODUCT UPLOAD: error list view</field>
-            <field name="model">log</field>
+            <field name="model">product_upload.log</field>
             <field name="arch" type="xml">
                 <tree string="error">
                     <field name="create_uid"/>
