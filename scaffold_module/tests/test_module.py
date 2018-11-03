@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-# Part of Odoo. See LICENSE file for full copyright and licensing details.
+# For copyright and license notices, see __manifest__.py file in module root
 
 #    Forma de correr el test
 #    -----------------------
