@@ -15,6 +15,11 @@ PROJECT NAME
 .. image:: https://travis-ci.org/jobiols/cl-vhing.svg?branch=11.0
     :target: https://travis-ci.org/jobiols/cl-vhing
 
+.. image:: https://api.codeclimate.com/v1/badges/3a3a1f98794659f59527/maintainability
+   :target: https://codeclimate.com/github/jobiols/cl-vhing/maintainability
+   :alt: Maintainability
+
+
 This module is a blah blah blah
 
 Installation
