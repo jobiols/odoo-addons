@@ -27,6 +27,7 @@
     'website': 'http://github.com/jobiols/odoo-addons',
     'license': 'AGPL-3',
     'depends': [
+        'account'
     ],
     'data': [
     ],

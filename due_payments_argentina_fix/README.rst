@@ -8,9 +8,10 @@
    :target: https://www.gnu.org/licenses/agpl
    :alt: License: AGPL-3
 
-============
-PROJECT NAME
-============
+
+Correccion reporte de pagos pendientes
+======================================
+
 
 .. image:: https://travis-ci.org/jobiols/cl-vhing.svg?branch=11.0
     :target: https://travis-ci.org/jobiols/cl-vhing
@@ -21,7 +22,7 @@ PROJECT NAME
 
 Este modulo es un fix para la localizacion argentina, corrije el reporte de
 pagos pendientes que esta en la ficha del cliente.
-En la columna Numero de referncia pone el numero de factura AFIP en lugar de
+En la columna Numero de referencia pone el numero de factura AFIP en lugar de
 la referncia interna de odoo que obviamente el cliente no conoce.
 
 Installation
