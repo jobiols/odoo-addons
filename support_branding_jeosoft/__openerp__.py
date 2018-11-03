@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 ##############################################################################
 #
-#    Copyright (C) 2015  JEOSOFT  (http://www.jeosoft.com.ar)
+#    Copyright (C) 2018  JEOSOFT  (http://www.jeosoft.com.ar)
 #    All Rights Reserved.
 #
 #    This program is free software: you can redistribute it and/or modify
@@ -47,6 +47,7 @@
         'res_config_settings_enterprise_remove',
         'server_mode',          # server_mode = "test" en desarrollo
         'database_tools',
+        'due_payments_argentina_fix'  # pone el nro de factura AFIP
 
     ],
     'data': [
