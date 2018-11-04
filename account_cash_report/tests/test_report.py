@@ -18,5 +18,15 @@
 #
 #   oe -Q account_cash_report -c iomaq -d iomaq_test_account_cash_report
 #
+from openerp.tests import common
 
 
+class TestXxxxx(common.TransactionCase):
+    """ Cada metodo de test corre en su propia transacción y se hace rollback
+        despues de cada uno.
+    """
+    def setUp(self):
+        super(TestXxxxx, self).setUp()
+
+    def test_01_(self):
+        self.assertEqual(1, 1)
