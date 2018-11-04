@@ -18,3 +18,15 @@
 #
 #   oe -Q [nombre modulo] -c [nombre cliente] -d [nombre database]
 #
+from openerp.tests import common
+
+
+class TestXxxxx(common.TransactionCase):
+    """ Cada metodo de test corre en su propia transacción y se hace rollback
+        despues de cada uno.
+    """
+    def setUp(self):
+        super(TestXxxxx, self).setUp()
+
+    def test_01_(self):
+        self.assertEqual(1, 1)
