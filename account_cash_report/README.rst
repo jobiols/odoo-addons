@@ -1,4 +1,11 @@
-=============================
+================
+Reportes de caja
+================
+
+Este modulo agrega dos reportes para manejar el cierre de las cajas, el
+**Reporte diario de facturacion** y el **Reporte diario para cierre de cajas**
+que se explican a continuacion
+
 Reporte diario de facturacion
 =============================
 
