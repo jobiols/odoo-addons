@@ -4,10 +4,10 @@
 #
 msgid ""
 msgstr ""
-"Project-Id-Version: Odoo Server 9.0c-20180504\n"
+"Project-Id-Version: Odoo Server 9.0c-20180827\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2018-08-18 01:58+0000\n"
-"PO-Revision-Date: 2018-08-18 01:58+0000\n"
+"POT-Creation-Date: 2018-11-05 01:37+0000\n"
+"PO-Revision-Date: 2018-11-05 01:37+0000\n"
 "Last-Translator: <>\n"
 "Language-Team: \n"
 "MIME-Version: 1.0\n"
@@ -18,7 +18,7 @@ msgstr ""
 #. module: account_cash_report
 #: model:ir.ui.view,arch_db:account_cash_report.invoice_report
 msgid "<span class=\"text-left\">Total Incoming</span>"
-msgstr "<span class=\"text-left\">Total ingresado</span>"
+msgstr "<span class=\"text-left\">Total cobrado</span>"
 
 #. module: account_cash_report
 #: model:ir.ui.view,arch_db:account_cash_report.invoice_report
@@ -98,7 +98,7 @@ msgstr "Reporte de caja"
 #: model:ir.actions.act_window,name:account_cash_report.action_cashier_report_menu
 #: model:ir.model,name:account_cash_report.model_account_cash_report_cashier_report
 msgid "Cashier Report"
-msgstr "Reporte de Caja"
+msgstr "Reporte de Cajera"
 
 #. module: account_cash_report
 #: model:ir.model.fields,field_description:account_cash_report.field_account_cash_report_cashier_report_company_id
@@ -183,12 +183,8 @@ msgstr "Nro de Factura"
 #: model:ir.actions.act_window,name:account_cash_report.action_invoice_report_menu
 #: model:ir.actions.report.xml,name:account_cash_report.action_invoice_cashier_report
 #: model:ir.model,name:account_cash_report.model_account_cash_report_invoice_report
-msgid "Invoice Report"
-msgstr "Reporte de Facturacion"
-
-#. module: account_cash_report
 #: model:ir.ui.menu,name:account_cash_report.menu_invoice_item_report
-msgid "Invoice report"
+msgid "Invoice Report"
 msgstr "Reporte de Facturacion"
 
 #. module: account_cash_report
@@ -207,7 +203,7 @@ msgstr "Diario"
 #: model:ir.model.fields,field_description:account_cash_report.field_account_cash_report_cashier_report_journal_ids
 #: model:ir.model.fields,field_description:account_cash_report.field_account_cash_report_invoice_report_journal_ids
 msgid "Journals"
-msgstr "Diarios"
+msgstr "Medios de pago"
 
 #. module: account_cash_report
 #: model:ir.model.fields,field_description:account_cash_report.field_account_cash_report_cash___last_update
@@ -243,10 +239,20 @@ msgid "Name of this Cash"
 msgstr "Nombre de esta caja"
 
 #. module: account_cash_report
+#: model:ir.ui.view,arch_db:account_cash_report.invoice_report
+msgid "Paid"
+msgstr "Pagado"
+
+#. module: account_cash_report
 #: model:ir.ui.view,arch_db:account_cash_report.cashier_report
 #: model:ir.ui.view,arch_db:account_cash_report.invoice_report
 msgid "Partner"
 msgstr "Empresa"
+
+#. module: account_cash_report
+#: model:ir.ui.view,arch_db:account_cash_report.invoice_report
+msgid "Payment Method"
+msgstr "Medio de pago"
 
 #. module: account_cash_report
 #: model:ir.model.fields,help:account_cash_report.field_account_journal_initial_balance

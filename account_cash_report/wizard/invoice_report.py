@@ -22,6 +22,9 @@ class InvoiceReport(models.TransientModel):
     date_to = fields.Date(
         default=lambda *a: time.strftime('%Y-%m-%d')
     )
+    cash_income = fields.Float(
+
+    )
 
     def _print_report(self, data):
         # no tenemos en cuenta lo que viene en data, le ponemos los datos aca.

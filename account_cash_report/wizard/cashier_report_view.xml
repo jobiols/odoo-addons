@@ -39,6 +39,7 @@
                     </group>
                     <group>
                         <field name="cash_id"/>
+                        <field name="cash_income"/>
                     </group>
                 </group>
                 <footer>
