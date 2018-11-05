@@ -94,7 +94,6 @@ periodo analizado.
 NOTA: En caso de dudas ver el reporte de cajas con apertura para determinar que
 movimientos componen el total de cada medio de pago.
 
-===================================
 Reporte diario para cierre de cajas
 ===================================
 

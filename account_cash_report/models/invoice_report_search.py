@@ -185,7 +185,14 @@ class InvoiceReport(models.AbstractModel):
         return res
 
     @staticmethod
-    def get_receipts():
+    def get_receipts(data):
+        """ Obtener los recibos generados en esta caja
+
+        """
+
+
+
+
         return [{
             'number': '001-00000054',
             'total': 123.23,
@@ -199,12 +206,12 @@ class InvoiceReport(models.AbstractModel):
     def get_cash(data, invoices):
         """ Obtener el total de efectivo y fallo de caja
         """
-        res = 0
+        total_cash = 0
         for inv in invoices:
             if EFECTIVO in inv['journal']:
-                res += inv['total']
+                total_cash += inv['total']
 
-        return res, data['cash_income'], 44
+        return total_cash, data['cash_income'] - total_cash
 
     @api.multi
     def render_html(self, data):
@@ -216,10 +223,11 @@ class InvoiceReport(models.AbstractModel):
         total_res = self.get_total_res(invoices)
         journals, total_journal = self._get_journals(
             data['form'], journal_ids, total_res)
-        receipts = self.get_receipts()
+        receipts = self.get_receipts(data['form'])
         total_invoiced = self.get_total_inv(invoices)
         total_income = 4564
         total_cash, cash_failure = self.get_cash(data['form'], invoices)
+
 
         docargs = {
             'doc_model': self.model,

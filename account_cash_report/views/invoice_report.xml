@@ -35,7 +35,7 @@
                         </div>
 
                         <br/>
-                        <h3>Invoices</h3>
+                        <h3>Period Invoices</h3>
 
                         <!-- reporte de facturacion -->
                         <table class="table table-condensed">
@@ -102,71 +102,73 @@
                             </tbody>
                         </table>
 
-                        <br/>
-                        <h3>Receipts</h3>
+                        <t t-if="receipt">
+                            <br/>
+                            <h3>Period receipts validated for this cashier</h3>
 
-                        <!-- reporte de recibos -->
-                        <table class="table table-condensed">
-                            <thead>
-                                <tr>
-                                    <th class="text-left">Receipt No.</th>
-                                    <th class="text-right">Income</th>
-                                    <th class="text-left">Payment Method</th>
-                                    <th class="text-left">Invoice No.</th>
-                                    <th class="text-left">Invoice Date</th>
-                                    <th class="text-left">Partner</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <t t-foreach="receipts" t-as="receipt">
+                            <!-- reporte de recibos -->
+                            <table class="table table-condensed">
+                                <thead>
                                     <tr>
-                                        <td style="white-space: nowrap;">
-                                            <span t-esc="receipt['number']"/>
+                                        <th class="text-left">Receipt No.</th>
+                                        <th class="text-right">Income</th>
+                                        <th class="text-left">Payment Method</th>
+                                        <th class="text-left">Invoice No.</th>
+                                        <th class="text-left">Invoice Date</th>
+                                        <th class="text-left">Partner</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <t t-foreach="receipts" t-as="receipt">
+                                        <tr>
+                                            <td style="white-space: nowrap;">
+                                                <span t-esc="receipt['number']"/>
+                                            </td>
+                                            <td class="text-right"
+                                                style="white-space: text-nowrap;">
+                                                <t t-if="receipt['total']">
+                                                    <span t-att-style="style"
+                                                          t-esc="receipt['total']"
+                                                          t-esc-options='{"widget": "monetary",
+                                                      "display_currency": "res_company.currency_id"}'/>
+                                                </t>
+                                            </td>
+                                            <td>
+                                                <span t-esc="receipt['journal']"/>
+                                            </td>
+                                            <td style="white-space: nowrap;">
+                                                <span t-esc="receipt['invoice_no']"/>
+                                            </td>
+                                            <td>
+                                                <span t-esc="receipt['date']"/>
+                                            </td>
+                                            <td>
+                                                <span t-esc="receipt['partner']"/>
+                                            </td>
+                                        </tr>
+                                    </t>
+                                    <tr style="font-weight: bold;">
+                                        <td>
+                                            <span class="text-left">Total Income
+                                            </span>
                                         </td>
                                         <td class="text-right"
                                             style="white-space: text-nowrap;">
-                                            <t t-if="receipt['total']">
-                                                <span t-att-style="style"
-                                                      t-esc="receipt['total']"
-                                                      t-esc-options='{"widget": "monetary",
-                                                  "display_currency": "res_company.currency_id"}'/>
-                                            </t>
+                                            <span t-att-style="style"
+                                                  t-esc="total_income"
+                                                  t-esc-options='{"widget": "monetary",
+                                                      "display_currency": "res_company.currency_id"}'/>
                                         </td>
-                                        <td>
-                                            <span t-esc="receipt['journal']"/>
-                                        </td>
-                                        <td style="white-space: nowrap;">
-                                            <span t-esc="receipt['invoice_no']"/>
-                                        </td>
-                                        <td>
-                                            <span t-esc="receipt['date']"/>
-                                        </td>
-                                        <td>
-                                            <span t-esc="receipt['partner']"/>
-                                        </td>
+                                        <td/>
+                                        <td/>
+                                        <td/>
                                     </tr>
-                                </t>
-                                <tr style="font-weight: bold;">
-                                    <td>
-                                        <span class="text-left">Total Income
-                                        </span>
-                                    </td>
-                                    <td class="text-right"
-                                        style="white-space: text-nowrap;">
-                                        <span t-att-style="style"
-                                              t-esc="total_income"
-                                              t-esc-options='{"widget": "monetary",
-                                                  "display_currency": "res_company.currency_id"}'/>
-                                    </td>
-                                    <td/>
-                                    <td/>
-                                    <td/>
-                                </tr>
-                            </tbody>
-                        </table>
+                                </tbody>
+                            </table>
+                        </t>
 
                         <br/>
-                        <h3>Payment methods</h3>
+                        <h3>Payment methods used</h3>
 
                         <!-- reporte de medios de pago -->
                         <table class="table table-condensed">
@@ -219,7 +221,9 @@
                         </table>
 
                         <br/>
-                        <h3>Summary</h3>
+                        <h3>Summary for the period <span t-esc="data['date_from']"/>
+                            <t t-if="data['date_range']"> - <span t-esc="data['date_to']"/></t>
+                        </h3>
 
                         <!-- resumen total -->
                         <table border="1" class="table table-bordered">
