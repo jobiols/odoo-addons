@@ -78,7 +78,8 @@ class InvoiceReport(models.AbstractModel):
     def _get_invoices(self, data):
         """ Obtener todas las facturas / notas validadas que son out_
             (al cliente), y que estan en el periodo.
-            No importa quien las valido.
+             No importa quien las creo o quien las valido, tener en cuenta
+             que si hay varias cajeras todas tendran las mismas facturas.
         """
         domain = [
             ('date', '>=', data['date_from']),
@@ -184,23 +185,53 @@ class InvoiceReport(models.AbstractModel):
             res += inv['total']
         return res
 
-    @staticmethod
-    def get_receipts(data):
-        """ Obtener los recibos generados en esta caja
-
+    def get_receipts(self, data):
+        """ Obtener los recibos generados en esta caja, y creados por esta
+            cajera para este periodo.
         """
+        ret = []
+        total_income = 0
 
+        # estos son los recibos que la cajera cobro en el periodo
+        receipt_obj = self.env['account.payment.group']
+        cashier_uid = data['cashier_uid']
+        receipts = receipt_obj.search(
+            [('create_uid', '=', cashier_uid),
+             ('payment_date', '>=', data['date_from']),
+             ('payment_date', '<=', data['date_to'])])
 
+        for receipt in receipts:
+            ret.append({
+                'number': receipt.name,
+                'total': receipt.payments_amount,
+                'journal': '',
+                'invoice_no': receipt.matched_move_line_ids[0].move_id.display_name,
+                'date': receipt.payment_date,
+                'partner': receipt.partner_id.name,
+            })
+            total_income += receipt.payments_amount
 
+            for invoice in receipt.matched_move_line_ids[1:]:
+                ret.append({
+                    'number': '',
+                    'total': 0,
+                    'journal': '',
+                    'invoice_no': invoice.move_id.display_name,
+                    'date': '',
+                    'partner': '',
+                })
 
-        return [{
-            'number': '001-00000054',
-            'total': 123.23,
-            'journal': 'Mercadopago Ventas',
-            'invoice_no': 'FA-B 0001-00000548',
-            'date': '2018-06-08',
-            'partner': 'Daniel Diaz',
-        }]
+            for payment_method in receipt.payment_ids:
+                ret.append({
+                    'number': '',
+                    'total': payment_method.amount,
+                    'journal': payment_method.journal_id.name,
+                    'invoice_no': '',
+                    'date': '',
+                    'partner': '',
+                })
+
+        return ret, total_income
 
     @staticmethod
     def get_cash(data, invoices):
@@ -221,13 +252,11 @@ class InvoiceReport(models.AbstractModel):
 
         invoices, journal_ids = self._get_invoices(data['form'])
         total_res = self.get_total_res(invoices)
-        journals, total_journal = self._get_journals(
-            data['form'], journal_ids, total_res)
-        receipts = self.get_receipts(data['form'])
+        journals, total_journal = self._get_journals(data['form'],
+                                                     journal_ids, total_res)
+        receipts, total_income = self.get_receipts(data['form'])
         total_invoiced = self.get_total_inv(invoices)
-        total_income = 4564
         total_cash, cash_failure = self.get_cash(data['form'], invoices)
-
 
         docargs = {
             'doc_model': self.model,
