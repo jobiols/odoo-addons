@@ -29,6 +29,7 @@
         'stock',
         'product_autoload',
         'product_currency',
+        'simple_meli_publishing'
     ],
     'data': [
         'security/ir.model.access.csv',

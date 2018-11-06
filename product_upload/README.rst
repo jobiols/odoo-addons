@@ -64,7 +64,7 @@ Si la referencia interna existe en la base de datos se actualizan los datos, si 
 - Precio de costo sin iva
 - Precio de venta sin iva
 
-**Campos requeridos para creacion**
+**Campos minimos requeridos para creacion de productos**
 
 - Referencia interna
 - Moneda

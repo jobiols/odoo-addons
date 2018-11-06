@@ -31,8 +31,11 @@ class ImportWorksheet(models.TransientModel):
         """
 
         def check(name, col, data_type):
-            """ chequear los datos
+            """ chequear los datos y generar errores si estan mal
             """
+
+            # TODO Mejorar manejo de errores
+
             if col > sheet.max_column:
                 return {}
 
@@ -72,6 +75,17 @@ class ImportWorksheet(models.TransientModel):
                 value = True if value else False
                 return {name: value}
 
+            if data_type == 'default_code':
+                if not value:
+                    return {name: value}
+
+                product_obj = self.env['product.template']
+                product = product_obj.search([('default_code', '=', value)])
+                if not product:
+                    self.add_error('Product %s not found parent col' % value)
+
+                return {name: value}
+
         if sheet.max_column < 4:
             self.add_error(_('Too few columns in sheet %s.') % sheet.title)
             return
@@ -92,8 +106,10 @@ class ImportWorksheet(models.TransientModel):
             line.update(check('sale_tax', 6, 'float'))
             line.update(check('barcode', 7, 'integer'))
             line.update(check('meli', 8, 'str'))
-            line.update(check('parent', 9, 'str'))
-
+            aa = check('parent', 9, 'default_code')
+            # TODO Arreglar esto
+            if aa is not None:
+                line.update(aa)
             ret.append(line)
         return ret
 
