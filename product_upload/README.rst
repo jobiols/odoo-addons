@@ -28,7 +28,7 @@ Installation
 ============
 
  openpyxl required,
- install with: pip install openpyxl
+ install with: **pip install openpyxl**
 
 Configuration
 =============

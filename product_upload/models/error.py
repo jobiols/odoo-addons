@@ -11,5 +11,5 @@ class Error(models.Model):
     )
 
     name = fields.Char(
-
+        string="Error description"
     )

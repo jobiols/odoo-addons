@@ -33,7 +33,6 @@ class ImportWorksheet(models.TransientModel):
         def check(name, col, data_type):
             """ chequear los datos y generar errores si estan mal
             """
-
             # TODO Mejorar manejo de errores
 
             if col > sheet.max_column:
@@ -113,39 +112,9 @@ class ImportWorksheet(models.TransientModel):
             ret.append(line)
         return ret
 
-    def check_data(self, data, vendor):
-        """ Check data structure for errors, DEPRECATED
-        """
-        product_obj = self.env['product.product']
-        for row in data:
-            # check product exists
-            domain = [('default_code', '=', row['default_code'])]
-            if not product_obj.search(domain):
-                raise UserError(
-                    _(u'ERROR in line %s, from vendor %s, product '
-                      u'"%s" not found') %
-                    (row['row'], vendor, row['default_code']))
-            try:
-                # check list price is a number
-                float(row['list_price'])
-            except (ValueError, TypeError):
-                raise UserError(
-                    _(u'Error in line %s, from vendor %s list price "%s" '
-                      u'is not a number') %
-                    (row['row'], vendor, row['list_price']))
-            try:
-                # check standard price is a number
-                float(row['standard_price'])
-            except (ValueError, TypeError):
-                raise UserError(
-                    _(u'Error in line %s, from vendor %s, standard price '
-                      u'"%s" is not a number') %
-                    (row['row'], vendor, row['standard_price']))
-
     def process_data(self, data, vendor):
         """ Process data structure creating / updating products
         """
-
         def choose_tax(tax_sale):
             for tax in tax_sale:
                 if tax.amount != 0:
@@ -168,7 +137,7 @@ class ImportWorksheet(models.TransientModel):
 
             if self.env.user.currency_id.name != row['currency']:
                 pc = currency_obj.search([('name', '=', row['currency'])])
-                data['force_currency_id'] = pc
+                data['force_currency_id'] = pc.id
             if row['name']:
                 data['name'] = row['name']
             if row['meli']:
@@ -184,9 +153,11 @@ class ImportWorksheet(models.TransientModel):
             if not prod:
                 data['default_code'] = row['default_code']
                 prod = product_obj.create(data)
+                self.add_create()
                 _logger.info('create product %s' % prod.default_code)
             else:
                 prod.write(data)
+                self.add_update()
                 _logger.info('update product %s' % prod.default_code)
 
             if row['barcode']:
@@ -194,24 +165,24 @@ class ImportWorksheet(models.TransientModel):
 
             if row['purchase_tax']:
                 # actualiza iva compras
-                tax_purchase = tax_obj.search(
+                tax_purchase_id = tax_obj.search(
                     [('amount', '=', row['purchase_tax'] * 100),
                      ('tax_group_id.tax', '=', 'vat'),
                      ('type_tax_use', '=', 'purchase')])
                 # analizando el iva
-                tax = choose_tax(tax_purchase)
+                tax = choose_tax(tax_purchase_id)
 
                 # esto reemplaza todos los registros por el tax que es un id
                 prod.supplier_taxes_id = [(6, 0, [tax])]
 
             if row['sale_tax']:
                 # actualiza IVA ventas
-                tax_sale = tax_obj.search(
+                tax_sale_id = tax_obj.search(
                     [('amount', '=', row['sale_tax'] * 100),
                      ('tax_group_id.tax', '=', 'vat'),
                      ('type_tax_use', '=', 'sale')])
                 # analizando el iva
-                tax = choose_tax(tax_sale)
+                tax = choose_tax(tax_sale_id)
 
                 # esto reemplaza todos los registros por el tax que es un id
                 prod.taxes_id = [(6, 0, [tax])]
@@ -225,7 +196,7 @@ class ImportWorksheet(models.TransientModel):
             y la deja en un archivo temporario
         """
         for rec in self:
-            # get log record
+            # obtener el record log
             log_obj = self.env['product_upload.log']
             current_id = self.env.context.get('default_active_id', False)
             self.log = log_obj.search([('id', '=', current_id)])
@@ -273,3 +244,13 @@ class ImportWorksheet(models.TransientModel):
             'name': text,
             'log_id': self.log.id
         })
+
+    def add_create(self):
+        """ Increment Created
+        """
+        self.log.created_products += 1
+
+    def add_update(self):
+        """ Increment Created
+        """
+        self.log.updated_products += 1
