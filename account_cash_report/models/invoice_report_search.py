@@ -120,46 +120,33 @@ class InvoiceReport(models.AbstractModel):
 
         return ret
 
-    def _get_journals(self, data, journals, total_res):
-        """ obtiene los medios de pago y el total acumulado en cada uno en
-            el periodo considerado
-        """
+    def _get_journals(self, data, total_res, receipts):
 
-        ret = []
-        total = 0
-        move_lines_obj = self.env['account.move.line']
-        for journal in journals:
-            # cuenta por defecto de este diario
-            account_id = journal.default_debit_account_id
+        ret = {}
+        for receipt in receipts:
+            if receipt['journal'] != '':
+                ret[receipt['journal']] = receipt['total'] + ret.get(
+                    receipt['journal'], 0)
 
-            mlines = move_lines_obj.search([
-                ('account_id', '=', account_id.id),
-                ('date', '>=', data['date_from']),
-                ('date', '<=', data['date_to']),
-                ('journal_id', '=', journal.id)
-            ])
-
-            accum_balance = 0
-            for line in mlines:
-                accum_balance += line.balance
-
-            # acumular el journal solo si tiene saldo
-            if accum_balance:
-                ret.append({
-                    'journal': journal.name,
-                    'total': accum_balance
-                })
-                total += accum_balance
+        journals = []
+        for journ in ret:
+            journals.append({
+                'journal': journ,
+                'total': ret[journ]
+            })
 
         # acumular cuenta corriente si hay saldo residual
         if total_res:
-            ret.append({
+            journals.append({
                 'journal': CUENTA_CORRIENTE,
                 'total': total_res
             })
-            total += total_res
 
-        return ret, total
+        total = 0
+        for kk in journals:
+            total += kk['total']
+
+        return journals, total
 
     @staticmethod
     def get_total_residual(invoices):
@@ -201,7 +188,8 @@ class InvoiceReport(models.AbstractModel):
                 'number': receipt.name,
                 'total': receipt.payments_amount,
                 'journal': '',
-                'invoice_no': receipt.matched_move_line_ids[0].move_id.display_name,
+                'invoice_no': receipt.matched_move_line_ids[
+                    0].move_id.display_name,
                 'date': receipt.payment_date,
                 'partner': receipt.partner_id.name,
             })
@@ -228,17 +216,14 @@ class InvoiceReport(models.AbstractModel):
                     'partner': '',
                 })
 
-        journal_obj = self.env['account.journal']
-        journal_ids = journal_obj.search([('id', 'in', list(payment_methods))])
-
-        return ret, total_income, journal_ids
+        return ret, total_income
 
     @staticmethod
-    def get_cash(data, invoices):
+    def get_cash(data, receipts):
         """ Obtener el total de efectivo y fallo de caja
         """
         total_cash = 0
-        for inv in invoices:
+        for inv in receipts:
             if EFECTIVO in inv['journal']:
                 total_cash += inv['total']
 
@@ -256,13 +241,12 @@ class InvoiceReport(models.AbstractModel):
         # suma el total residual (cuenta corriente)
         total_res = self.get_total_residual(invoices)
 
-        receipts, total_income, journal_ids = self.get_receipts(data['form'])
+        receipts, total_income = self.get_receipts(data['form'])
 
-        # medios de pago y el total
-        journals, total_journal = self._get_journals(data['form'],
-                                                     journal_ids, total_res)
+        journals, total_journal = self._get_journals(data['form'], total_res,
+                                                     receipts)
         total_invoiced = self.get_total_inv(invoices)
-        total_cash, cash_failure = self.get_cash(data['form'], invoices)
+        total_cash, cash_failure = self.get_cash(data['form'], receipts)
 
         docargs = {
             'doc_model': self.model,
