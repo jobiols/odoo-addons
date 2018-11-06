@@ -37,7 +37,7 @@ class InvoiceReport(models.TransientModel):
                 'date_to': self.date_to,
                 'date_range': self.date_from != self.date_to,
                 'cash_income': self.cash_income,
-                'title': _('Invoice report'),
+                'title': _('Invoice Report'),
                 'cash_id': self.cash_id.id,
                 'cashier_uid': cashier_id.id,
                 'cash': self.cash_id.name,

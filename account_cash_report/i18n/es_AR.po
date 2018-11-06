@@ -6,8 +6,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Odoo Server 9.0c-20180827\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2018-11-05 01:37+0000\n"
-"PO-Revision-Date: 2018-11-05 01:37+0000\n"
+"POT-Creation-Date: 2018-11-06 02:01+0000\n"
+"PO-Revision-Date: 2018-11-06 02:01+0000\n"
 "Last-Translator: <>\n"
 "Language-Team: \n"
 "MIME-Version: 1.0\n"
@@ -17,8 +17,13 @@ msgstr ""
 
 #. module: account_cash_report
 #: model:ir.ui.view,arch_db:account_cash_report.invoice_report
+msgid "<span class=\"text-left\">Total Income</span>"
+msgstr "<span class=\"text-left\">Ingresos totales</span>"
+
+#. module: account_cash_report
+#: model:ir.ui.view,arch_db:account_cash_report.invoice_report
 msgid "<span class=\"text-left\">Total Incoming</span>"
-msgstr "<span class=\"text-left\">Total cobrado</span>"
+msgstr "<span class=\"text-left\">Total ingresado</span>"
 
 #. module: account_cash_report
 #: model:ir.ui.view,arch_db:account_cash_report.invoice_report
@@ -62,6 +67,21 @@ msgid "Balance"
 msgstr "Saldo"
 
 #. module: account_cash_report
+#: model:ir.ui.view,arch_db:account_cash_report.invoice_report
+msgid "Boss Signature"
+msgstr "Firma Responsable"
+
+#. module: account_cash_report
+#: model:ir.ui.view,arch_db:account_cash_report.invoice_report
+msgid "CASH"
+msgstr "EFECTIVO"
+
+#. module: account_cash_report
+#: model:ir.ui.view,arch_db:account_cash_report.invoice_report
+msgid "CASH FAILURE"
+msgstr "FALLO DE CAJA"
+
+#. module: account_cash_report
 #: model:ir.ui.view,arch_db:account_cash_report.cashier_invoice_report_view
 #: model:ir.ui.view,arch_db:account_cash_report.cashier_report_view
 msgid "Cancel"
@@ -87,7 +107,12 @@ msgstr "Vista formulario de la caja"
 #. module: account_cash_report
 #: model:ir.actions.report.xml,name:account_cash_report.action_cashier_report
 msgid "Cash Report"
-msgstr "Reporte de caja"
+msgstr "Reporte de Caja"
+
+#. module: account_cash_report
+#: model:ir.model.fields,field_description:account_cash_report.field_account_cash_report_invoice_report_cash_income
+msgid "Cash income"
+msgstr "Ingresos en efectivo"
 
 #. module: account_cash_report
 #: model:ir.ui.menu,name:account_cash_report.menu_cash_item_report
@@ -98,7 +123,12 @@ msgstr "Reporte de caja"
 #: model:ir.actions.act_window,name:account_cash_report.action_cashier_report_menu
 #: model:ir.model,name:account_cash_report.model_account_cash_report_cashier_report
 msgid "Cashier Report"
-msgstr "Reporte de Cajera"
+msgstr "Reporte de Caja"
+
+#. module: account_cash_report
+#: model:ir.ui.view,arch_db:account_cash_report.invoice_report
+msgid "Cashier Signature"
+msgstr "Firma Cajera"
 
 #. module: account_cash_report
 #: model:ir.model.fields,field_description:account_cash_report.field_account_cash_report_cashier_report_company_id
@@ -170,9 +200,29 @@ msgid "ID"
 msgstr "ID"
 
 #. module: account_cash_report
+#: model:ir.ui.view,arch_db:account_cash_report.invoice_report
+msgid "INCOMING"
+msgstr "INGRESOS"
+
+#. module: account_cash_report
+#: model:ir.ui.view,arch_db:account_cash_report.invoice_report
+msgid "INVOICED"
+msgstr "FACTURADO"
+
+#. module: account_cash_report
+#: model:ir.ui.view,arch_db:account_cash_report.invoice_report
+msgid "Income"
+msgstr "Ingreso"
+
+#. module: account_cash_report
 #: model:ir.model.fields,field_description:account_cash_report.field_account_journal_initial_balance
 msgid "Initial balance"
 msgstr "Balance Inicial"
+
+#. module: account_cash_report
+#: model:ir.ui.view,arch_db:account_cash_report.invoice_report
+msgid "Invoice Date"
+msgstr "Fecha de factura"
 
 #. module: account_cash_report
 #: model:ir.ui.view,arch_db:account_cash_report.invoice_report
@@ -180,10 +230,12 @@ msgid "Invoice No."
 msgstr "Nro de Factura"
 
 #. module: account_cash_report
+#: code:addons/account_cash_report/wizard/invoice_report.py:40
 #: model:ir.actions.act_window,name:account_cash_report.action_invoice_report_menu
 #: model:ir.actions.report.xml,name:account_cash_report.action_invoice_cashier_report
 #: model:ir.model,name:account_cash_report.model_account_cash_report_invoice_report
 #: model:ir.ui.menu,name:account_cash_report.menu_invoice_item_report
+#, python-format
 msgid "Invoice Report"
 msgstr "Reporte de Facturacion"
 
@@ -194,9 +246,8 @@ msgstr "Factura/Rec."
 
 #. module: account_cash_report
 #: model:ir.model,name:account_cash_report.model_account_journal
-#: model:ir.ui.view,arch_db:account_cash_report.invoice_report
 msgid "Journal"
-msgstr "Diario"
+msgstr "Medio de pago"
 
 #. module: account_cash_report
 #: model:ir.model.fields,field_description:account_cash_report.field_account_cash_report_cash_journal_ids
@@ -251,8 +302,18 @@ msgstr "Empresa"
 
 #. module: account_cash_report
 #: model:ir.ui.view,arch_db:account_cash_report.invoice_report
+msgid "Payment Date"
+msgstr "Fecha de Pago"
+
+#. module: account_cash_report
+#: model:ir.ui.view,arch_db:account_cash_report.invoice_report
 msgid "Payment Method"
 msgstr "Medio de pago"
+
+#. module: account_cash_report
+#: model:ir.ui.view,arch_db:account_cash_report.invoice_report
+msgid "Payment methods used"
+msgstr "Medios de pago usados"
 
 #. module: account_cash_report
 #: model:ir.model.fields,help:account_cash_report.field_account_journal_initial_balance
@@ -260,10 +321,25 @@ msgid "Perform an initial balance on the Cash Report"
 msgstr "Hacer el balance inicial en este reporte de Caja"
 
 #. module: account_cash_report
+#: model:ir.ui.view,arch_db:account_cash_report.invoice_report
+msgid "Period Invoices"
+msgstr "Facturas del periodo"
+
+#. module: account_cash_report
+#: model:ir.ui.view,arch_db:account_cash_report.invoice_report
+msgid "Period receipts validated for this cashier"
+msgstr "Recibos del periodo creados por esta caja"
+
+#. module: account_cash_report
 #: model:ir.ui.view,arch_db:account_cash_report.cashier_invoice_report_view
 #: model:ir.ui.view,arch_db:account_cash_report.cashier_report_view
 msgid "Print"
 msgstr "Imprimir"
+
+#. module: account_cash_report
+#: model:ir.ui.view,arch_db:account_cash_report.invoice_report
+msgid "Receipt No."
+msgstr "Recibo Nro."
 
 #. module: account_cash_report
 #: model:ir.ui.view,arch_db:account_cash_report.cashier_report
@@ -293,6 +369,11 @@ msgid "Start Date"
 msgstr "Fecha de inicio"
 
 #. module: account_cash_report
+#: model:ir.ui.view,arch_db:account_cash_report.invoice_report
+msgid "Summary for the period"
+msgstr "Resumen del periodo"
+
+#. module: account_cash_report
 #: model:ir.model.fields,field_description:account_cash_report.field_account_cash_report_cashier_report_target_move
 #: model:ir.model.fields,field_description:account_cash_report.field_account_cash_report_invoice_report_target_move
 msgid "Target Moves"
@@ -302,6 +383,11 @@ msgstr "Movimientos destino"
 #: model:ir.ui.view,arch_db:account_cash_report.invoice_report
 msgid "Total"
 msgstr "Total"
+
+#. module: account_cash_report
+#: model:ir.ui.view,arch_db:account_cash_report.invoice_report
+msgid "Totals by payment method"
+msgstr "Totales por medio de pago"
 
 #. module: account_cash_report
 #: model:ir.model,name:account_cash_report.model_res_users

@@ -80,6 +80,9 @@ class InvoiceReport(models.AbstractModel):
             (al cliente), y que estan en el periodo.
              No importa quien las creo o quien las valido, tener en cuenta
              que si hay varias cajeras todas tendran las mismas facturas.
+
+             Devuelve Lista con las facturas para el reporte y un recordset
+             con los journals que se usarion en las facturas.
         """
         domain = [
             ('date', '>=', data['date_from']),
@@ -87,7 +90,6 @@ class InvoiceReport(models.AbstractModel):
             ('type', 'in', ['out_invoice', 'out_refund'])
         ]
 
-        journals = set()
         invoice_obj = self.env['account.invoice']
         ret = []
         for invoice in invoice_obj.search(domain):
@@ -116,14 +118,7 @@ class InvoiceReport(models.AbstractModel):
                 }
                 ret.append(inv)
 
-            journal_to_add_ids = self.journal_names2journals(journal_data)
-
-            # agrego los ids a un set para evitar duplicados
-            for journal in journal_to_add_ids:
-                journals.add(journal.id)
-
-        journal_obj = self.env['account.journal']
-        return ret, journal_obj.search([('id', 'in', list(journals))])
+        return ret
 
     def _get_journals(self, data, journals, total_res):
         """ obtiene los medios de pago y el total acumulado en cada uno en
@@ -167,7 +162,7 @@ class InvoiceReport(models.AbstractModel):
         return ret, total
 
     @staticmethod
-    def get_total_res(invoices):
+    def get_total_residual(invoices):
         """ Obtener el residual, o sea el total en cuenta corriente
         """
         res = 0
@@ -191,6 +186,7 @@ class InvoiceReport(models.AbstractModel):
         """
         ret = []
         total_income = 0
+        payment_methods = set()
 
         # estos son los recibos que la cajera cobro en el periodo
         receipt_obj = self.env['account.payment.group']
@@ -222,6 +218,7 @@ class InvoiceReport(models.AbstractModel):
                 })
 
             for payment_method in receipt.payment_ids:
+                payment_methods.add(payment_method.journal_id.id)
                 ret.append({
                     'number': '',
                     'total': payment_method.amount,
@@ -231,7 +228,10 @@ class InvoiceReport(models.AbstractModel):
                     'partner': '',
                 })
 
-        return ret, total_income
+        journal_obj = self.env['account.journal']
+        journal_ids = journal_obj.search([('id', 'in', list(payment_methods))])
+
+        return ret, total_income, journal_ids
 
     @staticmethod
     def get_cash(data, invoices):
@@ -250,11 +250,17 @@ class InvoiceReport(models.AbstractModel):
         docs = self.env[self.model].browse(
             self.env.context.get('active_ids', []))
 
-        invoices, journal_ids = self._get_invoices(data['form'])
-        total_res = self.get_total_res(invoices)
+        # lista con las facturas y los journals relacionados
+        invoices = self._get_invoices(data['form'])
+
+        # suma el total residual (cuenta corriente)
+        total_res = self.get_total_residual(invoices)
+
+        receipts, total_income, journal_ids = self.get_receipts(data['form'])
+
+        # medios de pago y el total
         journals, total_journal = self._get_journals(data['form'],
                                                      journal_ids, total_res)
-        receipts, total_income = self.get_receipts(data['form'])
         total_invoiced = self.get_total_inv(invoices)
         total_cash, cash_failure = self.get_cash(data['form'], invoices)
 

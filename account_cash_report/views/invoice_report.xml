@@ -84,9 +84,7 @@
                                 </t>
                                 <tr style="font-weight: bold;">
                                     <td>
-                                        <span class="text-left">Total
-                                            Invoiced
-                                        </span>
+                                        <span class="text-left">Total Invoiced</span>
                                     </td>
                                     <td class="text-right"
                                         style="white-space: text-nowrap;">
@@ -101,7 +99,6 @@
                                 </tr>
                             </tbody>
                         </table>
-
 
                         <br/>
                         <h3>Period receipts validated for this cashier</h3>
@@ -149,8 +146,7 @@
                                 </t>
                                 <tr style="font-weight: bold;">
                                     <td>
-                                        <span class="text-left">Total Income
-                                        </span>
+                                        <span class="text-left">Total Income</span>
                                     </td>
                                     <td class="text-right"
                                         style="white-space: text-nowrap;">
@@ -166,7 +162,6 @@
                             </tbody>
                         </table>
 
-
                         <br/>
                         <h3>Payment methods used</h3>
 
@@ -177,9 +172,7 @@
                             <col width="30%"/>
                             <thead>
                                 <tr>
-                                    <th class="text-left">Totals by payment
-                                        method
-                                    </th>
+                                    <th class="text-left">Totals by payment method</th>
                                     <th class="text-right">Balance</th>
                                     <th/>
                                 </tr>
@@ -202,9 +195,7 @@
                                 </t>
                                 <tr style="font-weight: bold;">
                                     <td>
-                                        <span class="text-left">Total
-                                            Incoming
-                                        </span>
+                                        <span class="text-left">Total Incoming</span>
                                     </td>
                                     <td class="text-right"
                                         style="white-space: nowrap;">
