@@ -12,7 +12,6 @@
 Correccion reporte de pagos pendientes
 ======================================
 
-
 Este modulo es un fix para la localizacion argentina, corrije el reporte de
 pagos pendientes que esta en la ficha del cliente.
 En la columna Numero de referencia pone el numero de factura AFIP en lugar de

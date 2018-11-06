@@ -5,6 +5,7 @@ from openerp import api, models
 from datetime import datetime, timedelta
 
 CUENTA_CORRIENTE = 'Cuenta Corriente'
+EFECTIVO = 'Efectivo'
 
 
 class InvoiceReport(models.AbstractModel):
@@ -29,30 +30,59 @@ class InvoiceReport(models.AbstractModel):
         return ret
 
     @staticmethod
-    def _get_journal_names(invoice):
-        """ obtener una lista de medios de pago con los que se pago esta
-            factura
+    def _get_journal_data(invoice):
+        """ obtener una lista de diccionarios con los medios de pago con los
+            que se pago esta factura
+            cada diccionario tiene {journal_name, amount, date}
         """
+        # tomo la lista de pagos del widget de la factura, y corrijo la
+        # palabra false por False, esto pareceria javascript
         payments = invoice.payments_widget.replace('false', 'False')
+        # le hago un eval para pasar ese texto a un diccionario
         payments = eval(payments)
         if payments:
+            # aqui obtengo una lista de diccionarios c/u es un pago
             payments = payments['content']
-
             journals = []
             for payment in payments:
-                if payment['journal_name'] not in journals:
-                    journals.append(payment['journal_name'])
+                jrnl = {
+                    'journal_name': payment['journal_name'],
+                    'date': payment['date'],
+                    'amount': payment['amount']
+                }
+                # lo agrego sin repetir
+                if jrnl not in journals:
+                    journals.append(jrnl)
 
             if invoice.state == 'open':
-                journals.append(CUENTA_CORRIENTE)
+                journals.append({
+                    'journal_name': CUENTA_CORRIENTE,
+                    'date': payment['date'],
+                    'amount': invoice.residual
+                })
 
-            return ', '.join(journals)
+            return journals
 
-        return CUENTA_CORRIENTE
+        return [{'journal_name': CUENTA_CORRIENTE}]
+
+    def journal_names2journals(self, journal_names):
+        """ Transformar la lista en un recordset, evitando CUENTA_CORRIENTE
+        """
+        journals = []
+        for j in journal_names:
+            if j['journal_name'] != CUENTA_CORRIENTE:
+                journals.append(j['journal_name'])
+        journal_obj = self.env['account.journal']
+        return journal_obj.search([('name', 'in', journals)])
 
     def _get_invoices(self, data):
-        """ Obtener todas las facturas validadas por la cajera de esta caja
-            que son al cliente, y que estan en el periodo.
+        """ Obtener todas las facturas / notas validadas que son out_
+            (al cliente), y que estan en el periodo.
+             No importa quien las creo o quien las valido, tener en cuenta
+             que si hay varias cajeras todas tendran las mismas facturas.
+
+             Devuelve Lista con las facturas para el reporte y un recordset
+             con los journals que se usarion en las facturas.
         """
         domain = [
             ('date', '>=', data['date_from']),
@@ -62,78 +92,161 @@ class InvoiceReport(models.AbstractModel):
 
         invoice_obj = self.env['account.invoice']
         ret = []
-        total = total_residual = 0
         for invoice in invoice_obj.search(domain):
-            journal_names = self._get_journal_names(invoice)
+            # obtener un set con los medios de pago que pagaron la fac
+            journal_data = self._get_journal_data(invoice)
+
             inv = {
                 'number': invoice.display_name,
                 'total': invoice.amount_total_signed,
-                'journal': journal_names,
+                'journal': journal_data[0].get('journal_name', ''),
+                'date': journal_data[0].get('date', ''),
+                'paid': journal_data[0].get('amount', 0),
                 'partner': invoice.partner_id.name,
                 'salesperson': invoice.user_id.name
             }
-            total += invoice.amount_total_signed
-            total_residual += invoice.residual
             ret.append(inv)
+            for jrnl in journal_data[1:]:
+                inv = {
+                    'number': '',
+                    'total': 0,
+                    'journal': jrnl.get('journal_name', ''),
+                    'date': jrnl.get('date', ''),
+                    'paid': jrnl.get('amount', 0),
+                    'partner': '',
+                    'salesperson': ''
+                }
+                ret.append(inv)
 
-        return ret, total, total_residual
+        return ret
 
-    def _get_journals(self, data, journals, total_res):
-        """ obtiene los medios de pago y el total acumulado en cada uno en el
-            periodo considerado
-        """
+    def _get_journals(self, data, total_res, receipts):
 
-        ret = []
-        total = 0
-        move_lines_obj = self.env['account.move.line']
-        for journal in journals:
-            # cuenta por defecto de este diario
-            account_id = journal.default_debit_account_id
+        ret = {}
+        for receipt in receipts:
+            if receipt['journal'] != '':
+                ret[receipt['journal']] = receipt['total'] + ret.get(
+                    receipt['journal'], 0)
 
-            mlines = move_lines_obj.search([
-                ('account_id', '=', account_id.id),
-                ('date', '>=', data['date_from']),
-                ('date', '<=', data['date_to']),
-                ('journal_id', '=', journal.id)
-            ])
-
-            accum_balance = 0
-            for line in mlines:
-                accum_balance += line.balance
-
-            # acumular el journal solo si tiene saldo
-            if accum_balance:
-                ret.append({
-                    'journal': journal.name,
-                    'total': accum_balance
-                })
-                total += accum_balance
+        journals = []
+        for journ in ret:
+            journals.append({
+                'journal': journ,
+                'total': ret[journ]
+            })
 
         # acumular cuenta corriente si hay saldo residual
         if total_res:
-            ret.append({
+            journals.append({
                 'journal': CUENTA_CORRIENTE,
                 'total': total_res
             })
-            total += total_res
 
-        return ret, total
+        total = 0
+        for kk in journals:
+            total += kk['total']
+
+        return journals, total
+
+    @staticmethod
+    def get_total_residual(invoices):
+        """ Obtener el residual, o sea el total en cuenta corriente
+        """
+        res = 0
+        for inv in invoices:
+            if inv['journal'] == CUENTA_CORRIENTE:
+                res += inv['paid']
+        return res
+
+    @staticmethod
+    def get_total_inv(invoices):
+        """ Obtener el total facturado
+        """
+        res = 0
+        for inv in invoices:
+            res += inv['total']
+        return res
+
+    def get_receipts(self, data):
+        """ Obtener los recibos generados en esta caja, y creados por esta
+            cajera para este periodo.
+        """
+        ret = []
+        total_income = 0
+        payment_methods = set()
+
+        # estos son los recibos que la cajera cobro en el periodo
+        receipt_obj = self.env['account.payment.group']
+        cashier_uid = data['cashier_uid']
+        receipts = receipt_obj.search(
+            [('create_uid', '=', cashier_uid),
+             ('payment_date', '>=', data['date_from']),
+             ('payment_date', '<=', data['date_to'])])
+
+        for receipt in receipts:
+            ret.append({
+                'number': receipt.name,
+                'total': receipt.payments_amount,
+                'journal': '',
+                'invoice_no': receipt.matched_move_line_ids[
+                    0].move_id.display_name,
+                'date': receipt.payment_date,
+                'partner': receipt.partner_id.name,
+            })
+            total_income += receipt.payments_amount
+
+            for invoice in receipt.matched_move_line_ids[1:]:
+                ret.append({
+                    'number': '',
+                    'total': 0,
+                    'journal': '',
+                    'invoice_no': invoice.move_id.display_name,
+                    'date': '',
+                    'partner': '',
+                })
+
+            for payment_method in receipt.payment_ids:
+                payment_methods.add(payment_method.journal_id.id)
+                ret.append({
+                    'number': '',
+                    'total': payment_method.amount,
+                    'journal': payment_method.journal_id.name,
+                    'invoice_no': '',
+                    'date': '',
+                    'partner': '',
+                })
+
+        return ret, total_income
+
+    @staticmethod
+    def get_cash(data, receipts):
+        """ Obtener el total de efectivo y fallo de caja
+        """
+        total_cash = 0
+        for inv in receipts:
+            if EFECTIVO in inv['journal']:
+                total_cash += inv['total']
+
+        return total_cash, data['cash_income'] - total_cash
 
     @api.multi
     def render_html(self, data):
-
         self.model = self.env.context.get('active_model')
         docs = self.env[self.model].browse(
             self.env.context.get('active_ids', []))
 
-        # buscar los journals que nay que reportar
-        domain = [('cash_id', '=', data['form']['cash_id'])]
-        journals = self.env['account.journal'].search(domain)
+        # lista con las facturas y los journals relacionados
+        invoices = self._get_invoices(data['form'])
 
-        invoices, total_inv, total_res = self._get_invoices(data['form'])
-        journals, total_journal = self._get_journals(data['form'],
-                                                     journals,
-                                                     total_res)
+        # suma el total residual (cuenta corriente)
+        total_res = self.get_total_residual(invoices)
+
+        receipts, total_income = self.get_receipts(data['form'])
+
+        journals, total_journal = self._get_journals(data['form'], total_res,
+                                                     receipts)
+        total_invoiced = self.get_total_inv(invoices)
+        total_cash, cash_failure = self.get_cash(data['form'], receipts)
 
         docargs = {
             'doc_model': self.model,
@@ -141,8 +254,12 @@ class InvoiceReport(models.AbstractModel):
             'docs': docs,
             'time': time,
             'invoices': invoices,
-            'total_invoiced': total_inv,
             'journals': journals,
+            'receipts': receipts,
+            'total_invoiced': total_invoiced,
+            'total_income': total_income,
+            'total_cash': total_cash,
+            'cash_failure': cash_failure,
             'total_journal': total_journal
         }
 

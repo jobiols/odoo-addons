@@ -45,7 +45,6 @@ class CashierReport(models.AbstractModel):
                 },
         }
         """
-        # import wdb; wdb.set_trace()
 
         ret = []
         move_lines_obj = self.env['account.move.line']
