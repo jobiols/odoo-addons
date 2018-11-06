@@ -20,7 +20,7 @@ Installation
 Configuration
 =============
 
- The user must have Inventory Manager rights.
+The user must have Inventory Manager rights.
 
 Usage
 =====
