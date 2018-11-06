@@ -1,10 +1,23 @@
-.. image:: https://img.shields.io/badge/licence-AGPL--3-blue.svg
-   :target: http://www.gnu.org/licenses/agpl-3.0-standalone.html
+.. |company| replace:: jeo Soft
+
+.. |company_logo| image:: https://gist.github.com/jobiols/74e6d9b7c6291f00ef50dba8e68123a6/raw/fa43efd45f08a2455dd91db94c4a58fd5bd3d660/logo-jeo-150x68.jpg
+   :alt: jeo Soft
+   :target: https://www.jeosoft.com.ar
+
+.. image:: https://img.shields.io/badge/license-AGPL--3-blue.png
+   :target: https://www.gnu.org/licenses/agpl
    :alt: License: AGPL-3
 
 ===============================================
 Carga / Actualizacion de productos por planilla
 ===============================================
+
+.. image:: https://travis-ci.org/jobiols/cl-vhing.svg?branch=11.0
+    :target: https://travis-ci.org/jobiols/cl-vhing
+
+.. image:: https://api.codeclimate.com/v1/badges/3a3a1f98794659f59527/maintainability
+   :target: https://codeclimate.com/github/jobiols/cl-vhing/maintainability
+   :alt: Maintainability
 
 Este modulo crea/actualiza productos desde una planilla excel. Cada hoja de la
 planilla agrupa productos de un determinado proveedor y la referencia del
@@ -20,7 +33,7 @@ Installation
 Configuration
 =============
 
- The user must have Inventory Manager rights.
+The user must have Inventory Manager rights.
 
 Usage
 =====
@@ -32,31 +45,31 @@ Crear y subir una planilla con los productos a Crear / Actualizar
 Columnas de la planilla:
 
 - **Referencia Interna**
-- **Precio de costo sin iva**
 - **Moneda** es la moneda en la que se interpreta el costo (ARS,USD, etc...), si no esta activada la opcion multimoneda esta columna se ignora.
-- **Margen** es el margen en porcentaje entre costo y precio de venta, el precio de venta se calculara como costo * (1+margen) por ejemplo 30%
+- **Precio de costo sin iva**
+- **Precio de venta sin iva**
 - **Descripcion** Es la descripcion del producto
-- **Codigo de barras**
-- **Codigo de publicacion mercadolibre** Codigo alfanumerico para la publicacion
-- **Publicado en mercadoshops** 1=Si 0=No
 - **IVA Compras** Porcentaje de iva para las compras ejemplo 21%
 - **IVA Ventas** Porcentaje de iva par las ventas ejemplo 10.5%
+- **Codigo de barras**
+- **Codigo de publicacion mercadolibre** Codigo alfanumerico para la publicacion
+- **Parent** Codigo de producto del que copiara el precio
 
 Si la referencia interna existe en la base de datos se actualizan los datos, si no existe se crean
 
 **Campos requeridos para actualizacion**
 
 - Referencia interna
-- Precio de costo sin iva
 - Moneda
-- Margen
+- Precio de costo sin iva
+- Precio de venta sin iva
 
 **Campos requeridos para creacion**
 
 - Referencia interna
-- Precio de costo sin iva
 - Moneda
-- Margen
+- Precio de costo sin iva
+- Precio de venta sin iva
 - Descripcion
 - IVA Compras
 - IVA Ventas
