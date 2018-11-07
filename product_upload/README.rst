@@ -12,13 +12,6 @@
 Carga / Actualizacion de productos por planilla
 ===============================================
 
-.. image:: https://travis-ci.org/jobiols/cl-vhing.svg?branch=11.0
-    :target: https://travis-ci.org/jobiols/cl-vhing
-
-.. image:: https://api.codeclimate.com/v1/badges/3a3a1f98794659f59527/maintainability
-   :target: https://codeclimate.com/github/jobiols/cl-vhing/maintainability
-   :alt: Maintainability
-
 Este modulo crea/actualiza productos desde una planilla excel. Cada hoja de la
 planilla agrupa productos de un determinado proveedor y la referencia del
 proveedor (que se encuentra en la ficha del proveedor bajo su nombre) debe ser

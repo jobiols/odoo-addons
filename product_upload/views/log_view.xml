@@ -83,7 +83,6 @@
                                     <li>Product description</li>
                                     <li>Purchase TAX</li>
                                     <li>Sales TAX</li>
-                                    <li>Sales TAX</li>
                                     <li>Barcode</li>
                                     <li>Mercadolibre code</li>
                                     <li>Parent product code</li>
@@ -103,7 +102,8 @@
                                     as its name.
                                 </p>
                                 <p>
-
+                                    Parent product code means the product from
+                                    where price is copied.
                                 </p>
                             </div>
                         </div>
@@ -148,8 +148,8 @@
         </record>
 
         <menuitem id="menu_log"
-                  name="Upload Products"
-                  parent="stock.menu_stock_inventory_control"
+                  name="Massive Upload"
+                  parent="stock.menu_product_in_config_stock"
                   groups="product_upload.group_product_upload_users"
                   sequence="16"
                   action="action_log"/>
