@@ -26,6 +26,7 @@ class Log(models.Model):
          ('done', 'Done')],
         default="load"
     )
+    _order = 'id desc'
 
     @api.multi
     def name_get(self):
