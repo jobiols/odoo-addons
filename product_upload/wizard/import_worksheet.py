@@ -156,6 +156,7 @@ class ImportWorksheet(models.TransientModel):
                 self.add_create()
                 _logger.info('create product %s' % prod.default_code)
             else:
+                prod.ensure_one()
                 prod.write(data)
                 self.add_update()
                 _logger.info('update product %s' % prod.default_code)
