@@ -223,6 +223,7 @@
                                     <th class="text-left">INVOICED</th>
                                     <th class="text-right">INCOMING</th>
                                     <th class="text-right">CASH</th>
+                                    <th class="text-right">RESIDUAL</th>
                                     <th class="text-right">CASH FAILURE</th>
                                 </tr>
                             </thead>
@@ -245,6 +246,13 @@
                                     style="white-space: nowrap;">
                                     <span t-att-style="style"
                                           t-esc="total_cash"
+                                          t-esc-options='{"widget": "monetary",
+                                          "display_currency": "res_company.currency_id"}'/>
+                                </td>
+                                <td class="text-right"
+                                    style="white-space: nowrap;">
+                                    <span t-att-style="style"
+                                          t-esc="total_residual"
                                           t-esc-options='{"widget": "monetary",
                                           "display_currency": "res_company.currency_id"}'/>
                                 </td>

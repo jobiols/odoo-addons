@@ -103,7 +103,8 @@ class InvoiceReport(models.AbstractModel):
                 'date': journal_data[0].get('date', ''),
                 'paid': journal_data[0].get('amount', 0),
                 'partner': invoice.partner_id.name,
-                'salesperson': invoice.user_id.name
+                'salesperson': invoice.user_id.name,
+                'residual': invoice.residual
             }
             ret.append(inv)
             for jrnl in journal_data[1:]:
@@ -155,7 +156,7 @@ class InvoiceReport(models.AbstractModel):
         res = 0
         for inv in invoices:
             if inv['journal'] == CUENTA_CORRIENTE:
-                res += inv['paid']
+                res += inv['residual']
         return res
 
     @staticmethod
@@ -259,6 +260,7 @@ class InvoiceReport(models.AbstractModel):
             'total_invoiced': total_invoiced,
             'total_income': total_income,
             'total_cash': total_cash,
+            'total_residual': total_res,
             'cash_failure': cash_failure,
             'total_journal': total_journal
         }
