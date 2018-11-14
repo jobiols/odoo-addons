@@ -20,19 +20,6 @@ import openpyxl
 #   oe -Q product_upload -c iomaq -d iomaq_test_product_upload
 #
 
-DECKER_0 = [{
-    'default_code': 'D25811K-AR-DECKER',
-    'currency': u'ARS',
-    'cost': 9490.76,
-    'price': 10000.0,
-    'name': u'17 MM HEX DEDICATED CHIPPING HAMMER',
-    'purchase_tax': 0.155,
-    'sale_tax': 0.155,
-    'barcode': 885911484848L,
-    'meli': u'MELICODE123',
-    'parent': False,
-}]
-
 EINHELL_0 = [{
     'default_code': '4502015-EINHELL',
     'currency': u'ARS',
@@ -58,6 +45,7 @@ class TestProductUploadProduct(common.TransactionCase):
 
         log_obj = self.env['product_upload.log']
         self.wizard_obj.log = log_obj.create({})
+        self.prod_obj = self.env['product.template']
 
     @staticmethod
     def get_filename(nro):
@@ -72,32 +60,32 @@ class TestProductUploadProduct(common.TransactionCase):
     def test_01_(self):
         """ cargar una linea del primer proveedor -----------------------------
         """
-        data = self.wizard_obj.read_data(self.get_ws(0)['B&D'])
-        self.assertEqual(data[0]['default_code'], DECKER_0[0]['default_code'])
-        self.assertEqual(data[0]['currency'], DECKER_0[0]['currency'])
-        self.assertEqual(data[0]['cost'], DECKER_0[0]['cost'])
-        self.assertEqual(data[0]['price'], DECKER_0[0]['price'])
-        self.assertEqual(data[0]['name'], DECKER_0[0]['name'])
-        self.assertEqual(data[0]['purchase_tax'], DECKER_0[0]['purchase_tax'])
-        self.assertEqual(data[0]['sale_tax'], DECKER_0[0]['sale_tax'])
-        self.assertEqual(data[0]['barcode'], DECKER_0[0]['barcode'])
-        self.assertEqual(data[0]['meli'], DECKER_0[0]['meli'])
-        self.assertEqual(data[0]['parent'], False)
+        data = self.wizard_obj.read_data(self.get_ws(0)['B&D'])[0]
+        self.assertEqual(data['default_code'], u'D25811K-AR-DECKER')
+        self.assertEqual(data['currency'], u'ARS')
+        self.assertEqual(data['cost'], 9490.76)
+        self.assertEqual(data['price'], 10000.0)
+        self.assertEqual(data['name'], u'17 MM HEX DEDICATED CHIPPING HAMMER')
+        self.assertEqual(data['purchase_tax'], 0.155)
+        self.assertEqual(data['sale_tax'], 0.155)
+        self.assertEqual(data['barcode'], u'885911484848')
+        self.assertEqual(data['meli'], u'MELICODE123')
+        self.assertEqual(data['parent'], None)
 
     def test_02_(self):
         """ cargar una linea del segundo proveedor ----------------------------
         """
-        data = self.wizard_obj.read_data(self.get_ws(0)['EINHELL'])
-        self.assertEqual(data[0]['default_code'], EINHELL_0[0]['default_code'])
-        self.assertEqual(data[0]['currency'], EINHELL_0[0]['currency'])
-        self.assertEqual(data[0]['cost'], EINHELL_0[0]['cost'])
-        self.assertEqual(data[0]['price'], EINHELL_0[0]['price'])
-        self.assertEqual(data[0]['name'], EINHELL_0[0]['name'])
-        self.assertEqual(data[0]['purchase_tax'], EINHELL_0[0]['purchase_tax'])
-        self.assertEqual(data[0]['sale_tax'], EINHELL_0[0]['sale_tax'])
-        self.assertEqual(data[0]['barcode'], EINHELL_0[0]['barcode'])
-        self.assertEqual(data[0]['meli'], EINHELL_0[0]['meli'])
-        self.assertEqual(data[0]['parent'], 'B3423')
+        data = self.wizard_obj.read_data(self.get_ws(0)['EINHELL'])[0]
+        self.assertEqual(data['default_code'], u'4502015-EINHELL')
+        self.assertEqual(data['currency'], u'ARS')
+        self.assertEqual(data['cost'], 9490.76)
+        self.assertEqual(data['price'], 10000.0)
+        self.assertEqual(data['name'], u'Accesorio - Discos para TE-XC 110')
+        self.assertEqual(data['purchase_tax'], 0.21)
+        self.assertEqual(data['sale_tax'], 0.21)
+        self.assertEqual(data['barcode'], None)
+        self.assertEqual(data['meli'], None)
+        self.assertEqual(data['parent'], 'B3423')
 
     def test_03_(self):
         """ Cargar los productos y verificar que esten bien
@@ -106,40 +94,50 @@ class TestProductUploadProduct(common.TransactionCase):
         self.assertEqual(self.wizard_obj.log.state, 'done')
 
         prod_obj = self.env['product.template']
-
-        domain = [('default_code', '=', DECKER_0[0]['default_code'])]
+        domain = [('default_code', '=', u'D25811K-AR-DECKER')]
         decker = prod_obj.search(domain)
-        self.assertEqual(decker.default_code, DECKER_0[0]['default_code'])
+        self.assertEqual(decker.default_code, u'D25811K-AR-DECKER')
         self.assertEqual(decker.force_currency_id.name, False)
-        self.assertEqual(decker.standard_price, DECKER_0[0]['cost'])
-        self.assertEqual(decker.list_price, DECKER_0[0]['price'])
-        self.assertEqual(decker.name, DECKER_0[0]['name'])
-        self.assertEqual(decker.taxes_id[0].amount,
-                         DECKER_0[0]['sale_tax'] * 100)
-        self.assertEqual(decker.supplier_taxes_id[0].amount,
-                         DECKER_0[0]['purchase_tax'] * 100)
-
-        self.assertEqual(decker.barcode_ids[0].name,
-                         str(DECKER_0[0]['barcode']))
-        self.assertEqual(decker.meli_code, DECKER_0[0]['meli'])
+        self.assertEqual(decker.standard_price, 9490.76)
+        self.assertEqual(decker.list_price, 10000.0)
+        self.assertEqual(decker.name, u'17 MM HEX DEDICATED CHIPPING HAMMER')
+        self.assertEqual(decker.taxes_id[0].amount, 15.5)
+        self.assertEqual(decker.supplier_taxes_id[0].amount, 15.5)
+        self.assertEqual(decker.barcode_ids[0].name, u'885911484848')
+        self.assertEqual(decker.meli_code, u'MELICODE123')
 
         domain = [('default_code', '=', EINHELL_0[0]['default_code'])]
         einhell = prod_obj.search(domain)
-        self.assertEqual(einhell.default_code, EINHELL_0[0]['default_code'])
+        self.assertEqual(einhell.default_code, u'4502015-EINHELL')
         self.assertEqual(einhell.force_currency_id.name, False)
-        self.assertEqual(einhell.standard_price, EINHELL_0[0]['cost'])
-        self.assertEqual(einhell.list_price, EINHELL_0[0]['price'])
-        self.assertEqual(einhell.name, EINHELL_0[0]['name'])
-        self.assertEqual(einhell.taxes_id[0].amount,
-                         EINHELL_0[0]['sale_tax'] * 100)
-        self.assertEqual(einhell.supplier_taxes_id[0].amount,
-                         EINHELL_0[0]['purchase_tax'] * 100)
+        self.assertEqual(einhell.standard_price, 9490.76)
+        self.assertEqual(einhell.list_price, 10000.0)
+        self.assertEqual(einhell.name, u'Accesorio - Discos para TE-XC 110')
+        self.assertEqual(einhell.taxes_id[0].amount, 21)
+        self.assertEqual(einhell.supplier_taxes_id[0].amount, 21)
         self.assertEqual(einhell.barcode_ids or False, False)
         self.assertEqual(einhell.meli_code, False)
         self.assertEqual(einhell.parent_price_product, 'B3423')
 
     def test_04_(self):
-        """ Archivo con multiples productos
+        """ terminar el proceso con done
         """
         self.wizard_obj.process_tmp_file(self.get_filename(0))
         self.assertEqual(self.wizard_obj.log.state, 'done')
+
+    def test_05_(self):
+        """ planilla con none en default code, no carga la linea
+        """
+        self.wizard_obj.process_tmp_file(self.get_filename(1))
+        self.assertEqual(self.wizard_obj.log.state, 'done')
+
+    def test_06_(self):
+        """ Error por falta de campos requeridos
+        """
+        self.wizard_obj.process_tmp_file(self.get_filename(2))
+        domain = [('default_code', '=', '1077-EINHELL')]
+        einhell = self.prod_obj.search(domain)
+        self.assertEqual(einhell.default_code, u'1077-EINHELL')
+
+        self.wizard_obj.process_tmp_file(self.get_filename(2))
+        self.assertEqual(self.wizard_obj.log.state, 'error')

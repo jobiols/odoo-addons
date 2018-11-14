@@ -11,6 +11,9 @@ class Log(models.Model):
     )
     created_products = fields.Integer(
     )
+    vendors = fields.Char(
+
+    )
     errors = fields.Integer(
     )
     error_ids = fields.One2many(

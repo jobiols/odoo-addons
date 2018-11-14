@@ -13,6 +13,28 @@ try:
 except (ImportError, IOError) as err:
     _logger.debug(err)
 
+# info de como es la tabla, es una lista de tuplas y cada tupla tiene
+# Nombre del campo, Requerido para Crear, Requerido para Actualizar y tipo
+INFO = [
+    {'name': 'default_code', 'create_req': True, 'update_req': True,
+     'type': 'str'},
+    {'name': 'currency', 'create_req': True, 'update_req': True,
+     'type': 'str'},
+    {'name': 'cost', 'create_req': True, 'update_req': True, 'type': 'number'},
+    {'name': 'price', 'create_req': True, 'update_req': True,
+     'type': 'number'},
+    {'name': 'name', 'create_req': True, 'update_req': False, 'type': 'str'},
+    {'name': 'purchase_tax', 'create_req': True, 'update_req': False,
+     'type': 'number'},
+    {'name': 'sale_tax', 'create_req': True, 'update_req': False,
+     'type': 'number'},
+    {'name': 'barcode', 'create_req': False, 'update_req': False,
+     'type': 'str'},
+    {'name': 'meli', 'create_req': False, 'update_req': False, 'type': 'str'},
+    {'name': 'parent', 'create_req': False, 'update_req': False,
+     'type': 'default_code'}
+]
+
 
 class ImportWorksheet(models.TransientModel):
     _name = "product_upload.import_worksheet"
@@ -30,87 +52,86 @@ class ImportWorksheet(models.TransientModel):
         """ Read the spreadsheet into a data structure
         """
 
-        def check(name, col, data_type):
+        def check(info, col, create):
             """ chequear los datos y generar errores si estan mal
             """
-            # TODO Mejorar manejo de errores
-
             if col > sheet.max_column:
-                return {}
+                self.add_error(_('out of bound col variable'))
 
-            err = _('row %d of sheet %s')
+            err = _('in row %d field %s of sheet %s')
 
             value = row[col].value
-            if value is None:
-                return {name: False}
 
-            if data_type == 'str':
-                try:
-                    value = str(value)
-                except Exception as ex:
-                    text = _('Not a string') + ' ' + err % row[
-                        col].row, sheet.title
+            type = info['type']
+            name = info['name']
+            req = info['create_req'] if create else info['update_req']
+
+            if type == 'str':
+                if not (isinstance(value, str) or
+                            isinstance(value, unicode) or
+                            (value is None and not req)):
+
+                    text = _('Not a string') + \
+                           ' ' + err % (row[col].row, name,  sheet.title)
                     self.add_error(text)
-                finally:
-                    return {name: value}
-
-            if data_type == 'float':
-                try:
-                    value = float(value)
-                except Exception as ex:
-                    self.add_error('')
-                finally:
-                    return {name: value}
-
-            if data_type == 'integer':
-                try:
-                    value = int(value)
-                except Exception as ex:
-                    self.add_error(ex.message)
-                finally:
-                    return {name: value}
-
-            if data_type == 'boolean':
-                value = True if value else False
                 return {name: value}
 
-            if data_type == 'default_code':
-                if not value:
-                    return {name: value}
+            if type == 'number':
+                if not (isinstance(value, float) or
+                            isinstance(value, int) or
+                            isinstance(value, long) or
+                                (value is None) and not req):
+                    text = _('Not a number') + \
+                           ' ' + err % (row[col].row, name, sheet.title)
+                    self.add_error(text)
+                return {name: value}
+
+            if type == 'default_code':
+                if not (isinstance(value, str) or
+                            isinstance(value, unicode) or
+                                (value is None) and not req):
+                    text = _('Not a string') + \
+                           ' ' + err % (row[col].row, name, sheet.title)
+                    self.add_error(text)
 
                 product_obj = self.env['product.template']
                 product = product_obj.search([('default_code', '=', value)])
                 if not product:
-                    self.add_error('Product %s not found parent col' % value)
-
+                    text = _('Product $s from parent col not found') + \
+                           ' ' + err % (
+                        product.default_code, row[col].row, sheet.title)
+                    self.add_error(text)
                 return {name: value}
+
+            self.add_error(_('internal error !!'))
 
         if sheet.max_column < 4:
             self.add_error(_('Too few columns in sheet %s.') % sheet.title)
             return
 
         ret = []
-        row_number = 0
         for row in sheet.iter_rows(min_row=2, min_col=1,
                                    max_row=sheet.max_row,
                                    max_col=sheet.max_column):
-            row_number += 1
             line = {}
-            line.update(check('default_code', 0, 'str'))
-            line.update(check('currency', 1, 'str'))
-            line.update(check('cost', 2, 'float'))
-            line.update(check('price', 3, 'float'))
-            line.update(check('name', 4, 'str'))
-            line.update(check('purchase_tax', 5, 'float'))
-            line.update(check('sale_tax', 6, 'float'))
-            line.update(check('barcode', 7, 'integer'))
-            line.update(check('meli', 8, 'str'))
-            aa = check('parent', 9, 'default_code')
-            # TODO Arreglar esto
-            if aa is not None:
-                line.update(aa)
-            ret.append(line)
+
+            if row[0].value is not None:
+                # si hay que crear el producto devuelve True
+                create = self.check_create(row[0].value)
+                for idx, info in enumerate(INFO):
+                    value = check(info, idx, create)
+                    line.update(value)
+
+                # si no hay errores agrego la linea
+                if not self.log.errors:
+                    ret.append(line)
+
         return ret
+
+    def check_create(self, default_code):
+        prod_obj = self.env['product.template']
+        prod = prod_obj.search([('default_code', '=', default_code)])
+        return True if prod else False
 
     def process_data(self, data, vendor):
         """ Process data structure creating / updating products
@@ -231,7 +252,12 @@ class ImportWorksheet(models.TransientModel):
                 self.add_error(_('Vendor ref %s not found.') % vendor)
                 break
 
+            self.add_vendor(vendor)
             data = self.read_data(wb[vendor])
+
+            if self.log.errors:
+                break
+
             if data:
                 self.process_data(data, vendor)
                 self.log.state = 'done'
@@ -255,3 +281,11 @@ class ImportWorksheet(models.TransientModel):
         """ Increment Created
         """
         self.log.updated_products += 1
+
+    def add_vendor(self, vendor):
+        """ Add a vendor to a list
+        """
+        if not self.log.vendors:
+            self.log.vendors = vendor
+        else:
+            self.log.vendors += ', ' + vendor

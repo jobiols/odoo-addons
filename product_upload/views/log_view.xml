@@ -11,6 +11,7 @@
                       colors="red:state=='error';green:state=='done' ">
                     <field name="updated_products"/>
                     <field name="created_products"/>
+                    <field name="vendors"/>
                     <field name="errors"/>
                     <field name="create_uid"/>
                     <field name="create_date"/>
