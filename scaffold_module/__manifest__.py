@@ -32,6 +32,9 @@
         'security/ir.model.access.csv',
         'security/res_groups.xml'
     ],
+    'demo': [
+        'data/data.xml'
+    ],
     'installable': True,
     'application': False,
 }
