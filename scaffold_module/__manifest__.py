@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 ##############################################################################
 #
 #    Copyright (C) 2018  jeo Software  (http://www.jeosoft.com.ar)
@@ -30,6 +29,8 @@
     'depends': [
     ],
     'data': [
+        'security/ir.model.access.csv',
+        'security/res_groups.xml'
     ],
     'installable': True,
     'application': False,
