@@ -29,7 +29,7 @@ addons:
 
 env:
   global:
-  - VERSION="9.0" TESTS="0" LINT_CHECK="0"
+  - VERSION="11.0" TESTS="0" LINT_CHECK="0"
 
   matrix:
   - LINT_CHECK="1"
