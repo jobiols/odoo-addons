@@ -10,6 +10,22 @@ cache:
 python:
   - "3.5"
 
+addons:
+  apt:
+    packages:
+      - expect-dev  # provides unbuffer utility
+      - python-lxml  # because pip installation is slow
+      - python-simplejson
+      - python-serial
+      - python-yaml
+      - libcups2-dev # for aeroo
+      # FE
+      - python-dev
+      - swig
+      - libffi-dev
+      - libssl-dev
+      - python-m2crypto
+      - python-httplib2
 
 env:
   global:
@@ -19,8 +35,6 @@ env:
   - LINT_CHECK="1"
   - TESTS="1" ODOO_REPO="odoo/odoo"
 
-virtualenv:
-  system_site_packages: true
 
 install:
   - pip install -r requirements.txt
