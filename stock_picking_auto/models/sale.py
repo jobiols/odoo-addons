@@ -10,6 +10,34 @@ class SaleOrder(models.Model):
     _inherit = "sale.order"
 
     @api.multi
+    def action_cancel(self):
+        usr = self.env['res.users'].search([('id', '=', self._uid)])
+        group_id = 'stock_picking_auto.group_stock_picking_auto_cashier'
+        auto = usr.has_group(group_id)
+        super(SaleOrder, self).action_cancel()
+
+        if auto:
+            # tiene auto, verificamos que haya 2 pickings y en done
+            picking_obj = self.env['stock.picking']
+            for so in self:
+                state = 'done'
+                pickings = so.picking_ids
+                for pick in pickings:
+                    if pick.state != 'done':
+                        state = 'draft'
+
+                # si hay 1 es que no lo revirtio
+                if so.delivery_count < 2 or state == 'draft':
+                    raise UserError("No se puede cancelar esta orden de venta "
+                                    "porque ya fueron transferidos los "
+                                    "productos, por favor revierta la entrega "
+                                    "y reintente.\n"
+                                    "Si considera que esto es un error y ya "
+                                    "esta revertida haga que un usuario sin "
+                                    "permiso de transferencia automatica "
+                                    "cancele la orden de venta.")
+
+    @api.multi
     def action_confirm_send(self):
         super(SaleOrder, self).action_confirm()
 
