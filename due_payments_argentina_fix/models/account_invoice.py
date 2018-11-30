@@ -2,17 +2,8 @@
 # For copyright and license notices, see __manifest__.py file in module root
 
 import json
-from lxml import etree
-from datetime import datetime
-from dateutil.relativedelta import relativedelta
-
 from openerp import api, fields, models, _
 from openerp.tools import float_is_zero, float_compare
-from openerp.tools.misc import formatLang
-
-from openerp.exceptions import UserError, RedirectWarning, ValidationError
-
-import openerp.addons.decimal_precision as dp
 import logging
 
 _logger = logging.getLogger(__name__)
