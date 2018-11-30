@@ -17,6 +17,15 @@ pagos pendientes que esta en la ficha del cliente.
 En la columna Numero de referencia pone el numero de factura AFIP en lugar de
 la referncia interna de odoo que obviamente el cliente no conoce.
 
+Correccion de widgets de conciliacion
+=====================================
+
+En los widgets de conciliacion que aparecen en las facturas se muestran los
+documentos segun los nombres tradicionales de odoo, este modulo cambia esos
+nombres por los de la localizacion argentina por ejemplo FA-A 0001-00000248
+o RE-X 0001-00000548 para un mejor entendimiento de se esta conciliando.
+
+
 Installation
 ============
 
