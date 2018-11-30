@@ -1,5 +1,4 @@
 # -*- coding: utf-8 -*-
 # For copyright and license notices, see __manifest__.py file in module root
 
-from . import report
-from . import models
+from . import account_invoice
