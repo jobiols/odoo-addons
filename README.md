@@ -1,8 +1,2 @@
-[![Build Status](https://travis-ci.org/jobiols/odoo-addons.svg?branch=8.0)](https://travis-ci.org/jobiols/odoo-addons)
-[![Coverage Status](https://coveralls.io/repos/github/jobiols/odoo-addons/badge.svg?branch=8.0)](https://coveralls.io/github/jobiols/odoo-addons?branch=8.0)
-[![Maintainability](https://api.codeclimate.com/v1/badges/6f78baa05ebd3529c669/maintainability)](https://codeclimate.com/github/jobiols/odoo-addons/maintainability)
-
-
-# jeo Software
-
-modulos odoo v8.0
+MODULOS ODOO v8 [![Build Status](https://travis-ci.org/jobiols/odoo-addons.svg?branch=8.0)](https://travis-ci.org/jobiols/odoo-addons) [![CodeFactor](https://www.codefactor.io/repository/github/jobiols/odoo-addons/badge/8.0)](https://www.codefactor.io/repository/github/jobiols/odoo-addons/overview/8.0) 
+---------------
