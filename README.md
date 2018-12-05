@@ -1,2 +1,2 @@
-MODULOS ODOO v9 [![Build Status](https://travis-ci.org/jobiols/odoo-addons.svg?branch=9.0)](https://travis-ci.org/jobiols/odoo-addons) [![CodeFactor](https://www.codefactor.io/repository/github/jobiols/odoo-addons/badge)](https://www.codefactor.io/repository/github/jobiols/odoo-addons)
----------------
+MODULOS ODOO v9.0 [![Build Status](https://travis-ci.org/jobiols/odoo-addons.svg?branch=9.0)](https://travis-ci.org/jobiols/odoo-addons) [![CodeFactor](https://www.codefactor.io/repository/github/jobiols/odoo-addons/badge)](https://www.codefactor.io/repository/github/jobiols/odoo-addons) [![codecov](https://codecov.io/gh/jobiols/odoo-addons/branch/9.0/graph/badge.svg)](https://codecov.io/gh/jobiols/odoo-addons)
+-----------------
