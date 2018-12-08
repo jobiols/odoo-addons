@@ -67,29 +67,25 @@ class ImportWorksheet(models.TransientModel):
             req = info['create_req'] if create else info['update_req']
 
             if type == 'str':
-                if not (isinstance(value, str) or
-                            isinstance(value, unicode) or
-                            (value is None and not req)):
+                if not (isinstance(value, (str, unicode)) or
+                        (value is None and not req)):
 
                     text = _('Not a string') + \
-                           ' ' + err % (row[col].row, name,  sheet.title)
+                           ' ' + err % (row[col].row, name, sheet.title)
                     self.add_error(text)
                 return {name: value}
 
             if type == 'number':
-                if not (isinstance(value, float) or
-                            isinstance(value, int) or
-                            isinstance(value, long) or
-                                (value is None) and not req):
+                if not (isinstance(value, (float, int, long)) or
+                        (value is None) and not req):
                     text = _('Not a number') + \
                            ' ' + err % (row[col].row, name, sheet.title)
                     self.add_error(text)
                 return {name: value}
 
             if type == 'default_code':
-                if not (isinstance(value, str) or
-                            isinstance(value, unicode) or
-                                (value is None) and not req):
+                if not (isinstance(value, (str, unicode)) or
+                            (value is None) and not req):
                     text = _('Not a string') + \
                            ' ' + err % (row[col].row, name, sheet.title)
                     self.add_error(text)
