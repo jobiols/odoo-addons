@@ -34,4 +34,3 @@ class pos_session(models.Model):
     def wkf_action_close(self):
         self.test_uno()
         return super(pos_session,self).wkf_action_close()
-
