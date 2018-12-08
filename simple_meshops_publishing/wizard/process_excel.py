@@ -61,10 +61,10 @@ class SimpleMeShopsPublishing(models.TransientModel):
     def process_spreadsheet(self):
         # mover la planilla a un temporario
         (fileno, fp_name) = tempfile.mkstemp('.xlsx', 'openerp_')
-        file = os.path.dirname(os.path.realpath(__file__))
-        file = file.replace('wizard', 'data/meshop_prices.xlsx')
+        filename = os.path.dirname(os.path.realpath(__file__))
+        filename = filename.replace('wizard', 'data/meshop_prices.xlsx')
 
-        with open(file, "r") as worksheet:
+        with open(filename, "r") as worksheet:
             data = worksheet.read()
         with open(fp_name, "w") as worksheet:
             worksheet.write(data)
