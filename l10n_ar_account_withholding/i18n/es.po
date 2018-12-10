@@ -1,0 +1,329 @@
+# Translation of Odoo Server.
+# This file contains the translation of the following modules:
+# * l10n_ar_account_withholding
+# 
+# Translators:
+# Juan José Scarafía <scarafia.juanjose@gmail.com>, 2016
+# emiquinodoz <eq@ingadhoc.com>, 2017
+msgid ""
+msgstr ""
+"Project-Id-Version: Odoo Server 9.0c\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2017-08-18 14:37+0000\n"
+"PO-Revision-Date: 2017-08-18 14:37+0000\n"
+"Last-Translator: emiquinodoz <eq@ingadhoc.com>, 2017\n"
+"Language-Team: Spanish (https://www.transifex.com/adhoc/teams/46451/es/)\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: \n"
+"Language: es\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+
+#. module: l10n_ar_account_withholding
+#: model:ir.model.fields,field_description:l10n_ar_account_withholding.field_afip_tabla_ganancias_alicuotasymontos_porcentaje_inscripto
+msgid "% Inscripto"
+msgstr "% Inscripto"
+
+#. module: l10n_ar_account_withholding
+#: model:ir.model.fields,field_description:l10n_ar_account_withholding.field_afip_tabla_ganancias_alicuotasymontos_porcentaje_no_inscripto
+msgid "% No Inscripto"
+msgstr "% No Inscripto"
+
+#. module: l10n_ar_account_withholding
+#: model:ir.actions.act_window,name:l10n_ar_account_withholding.act_afip_tabla_ganancias_alicuotasymontos
+#: model:ir.actions.act_window,name:l10n_ar_account_withholding.act_afip_tabla_ganancias_escala
+#: model:ir.ui.view,arch_db:l10n_ar_account_withholding.view_afip_tabla_ganancias_alicuotasymontos_tree
+#: model:ir.ui.view,arch_db:l10n_ar_account_withholding.view_afip_tabla_ganancias_escala_tree
+msgid "AFIP tax"
+msgstr "Impuesto AFIP"
+
+#. module: l10n_ar_account_withholding
+#: model:ir.ui.view,arch_db:l10n_ar_account_withholding.view_company_inherit_form
+msgid "ARBA WS"
+msgstr "ARBA WS"
+
+#. module: l10n_ar_account_withholding
+#: selection:res.partner,drei:0
+msgid "Activo"
+msgstr "Activo"
+
+#. module: l10n_ar_account_withholding
+#: model:ir.model.fields,field_description:l10n_ar_account_withholding.field_res_partner_arba_alicuot_alicuota_percepcion
+msgid "Alicuota percepcion"
+msgstr "Alicuota percepcion"
+
+#. module: l10n_ar_account_withholding
+#: model:ir.model.fields,field_description:l10n_ar_account_withholding.field_res_partner_arba_alicuot_alicuota_retencion
+msgid "Alicuota retencion"
+msgstr "Alicuota retencion"
+
+#. module: l10n_ar_account_withholding
+#: model:ir.model.fields,field_description:l10n_ar_account_withholding.field_res_partner_arba_alicuot_ids
+msgid "Alicuotas de ARBA"
+msgstr "Alicuotas de ARBA"
+
+#. module: l10n_ar_account_withholding
+#: model:ir.ui.menu,name:l10n_ar_account_withholding.menu_action_afip_tabla_ganancias_alicuotasymontos
+msgid "Alicuotas y Montos Ganancias"
+msgstr "Alicuotas y Montos Ganancias"
+
+#. module: l10n_ar_account_withholding
+#: model:ir.model.fields,field_description:l10n_ar_account_withholding.field_afip_tabla_ganancias_alicuotasymontos_anexo_referencia
+msgid "Anexo referencia"
+msgstr "Anexo referencia"
+
+#. module: l10n_ar_account_withholding
+#: model:ir.model.fields,field_description:l10n_ar_account_withholding.field_res_company_arba_cit
+msgid "CIT ARBA"
+msgstr "CIT ARBA"
+
+#. module: l10n_ar_account_withholding
+#: model:ir.actions.report.xml,name:l10n_ar_account_withholding.action_aeroo_certificado_de_retencion_report
+msgid "Certificado de Retención"
+msgstr "Certificado de Retención"
+
+#. module: l10n_ar_account_withholding
+#: model:ir.model.fields,help:l10n_ar_account_withholding.field_res_company_arba_cit
+msgid "Clave de Identificación Tributaria de ARBA"
+msgstr "Clave de Identificación Tributaria de ARBA"
+
+#. module: l10n_ar_account_withholding
+#: model:ir.model.fields,field_description:l10n_ar_account_withholding.field_afip_tabla_ganancias_alicuotasymontos_codigo_de_regimen
+msgid "Codigo de regimen"
+msgstr "Codigo de regimen"
+
+#. module: l10n_ar_account_withholding
+#: model:ir.model.fields,help:l10n_ar_account_withholding.field_afip_tabla_ganancias_alicuotasymontos_codigo_de_regimen
+msgid "Codigo de regimen de inscripcion en impuesto a las ganancias."
+msgstr "Codigo de regimen de inscripcion en impuesto a las ganancias."
+
+#. module: l10n_ar_account_withholding
+#: model:ir.model.fields,field_description:l10n_ar_account_withholding.field_res_partner_arba_alicuot_codigo_hash
+msgid "Codigo hash"
+msgstr "Codigo hash"
+
+#. module: l10n_ar_account_withholding
+#: model:ir.model,name:l10n_ar_account_withholding.model_res_company
+msgid "Companies"
+msgstr "Compañías"
+
+#. module: l10n_ar_account_withholding
+#: model:ir.model.fields,field_description:l10n_ar_account_withholding.field_res_partner_arba_alicuot_company_id
+msgid "Company id"
+msgstr "Id Compañía"
+
+#. module: l10n_ar_account_withholding
+#: model:ir.model.fields,field_description:l10n_ar_account_withholding.field_account_payment_group_company_regimenes_ganancias_ids
+msgid "Company regimenes ganancias ids"
+msgstr "ids de regimenes de ganancias de Empresas"
+
+#. module: l10n_ar_account_withholding
+#: model:ir.model.fields,field_description:l10n_ar_account_withholding.field_afip_tabla_ganancias_alicuotasymontos_concepto_referencia
+msgid "Concepto referencia"
+msgstr "Concepto referencia"
+
+#. module: l10n_ar_account_withholding
+#: model:ir.model.fields,field_description:l10n_ar_account_withholding.field_afip_tabla_ganancias_alicuotasymontos_create_uid
+#: model:ir.model.fields,field_description:l10n_ar_account_withholding.field_afip_tabla_ganancias_escala_create_uid
+#: model:ir.model.fields,field_description:l10n_ar_account_withholding.field_res_partner_arba_alicuot_create_uid
+msgid "Created by"
+msgstr "Creado por"
+
+#. module: l10n_ar_account_withholding
+#: model:ir.model.fields,field_description:l10n_ar_account_withholding.field_afip_tabla_ganancias_alicuotasymontos_create_date
+#: model:ir.model.fields,field_description:l10n_ar_account_withholding.field_afip_tabla_ganancias_escala_create_date
+#: model:ir.model.fields,field_description:l10n_ar_account_withholding.field_res_partner_arba_alicuot_create_date
+msgid "Created on"
+msgstr "Creado en"
+
+#. module: l10n_ar_account_withholding
+#: model:ir.model.fields,field_description:l10n_ar_account_withholding.field_res_partner_drei
+msgid "DREI"
+msgstr "DREI"
+
+#. module: l10n_ar_account_withholding
+#: model:ir.model.fields,field_description:l10n_ar_account_withholding.field_afip_tabla_ganancias_alicuotasymontos_display_name
+#: model:ir.model.fields,field_description:l10n_ar_account_withholding.field_afip_tabla_ganancias_escala_display_name
+#: model:ir.model.fields,field_description:l10n_ar_account_withholding.field_res_partner_arba_alicuot_display_name
+msgid "Display Name"
+msgstr "Display Name"
+
+#. module: l10n_ar_account_withholding
+#: model:ir.model.fields,help:l10n_ar_account_withholding.field_afip_tabla_ganancias_alicuotasymontos_porcentaje_inscripto
+msgid "Elija -1 si se debe calcular s/escala"
+msgstr "Elija -1 si se debe calcular s/escala"
+
+#. module: l10n_ar_account_withholding
+#: model:ir.ui.menu,name:l10n_ar_account_withholding.menu_action_afip_tabla_ganancias_escala
+msgid "Escalas Ganancias"
+msgstr "Escalas Ganancias"
+
+#. module: l10n_ar_account_withholding
+#: model:ir.model.fields,field_description:l10n_ar_account_withholding.field_res_partner_arba_alicuot_from_date
+msgid "From date"
+msgstr "Desde fecha"
+
+#. module: l10n_ar_account_withholding
+#: model:ir.model.fields,field_description:l10n_ar_account_withholding.field_res_partner_arba_alicuot_grupo_percepcion
+msgid "Grupo percepcion"
+msgstr "Grupo percepcion"
+
+#. module: l10n_ar_account_withholding
+#: model:ir.model.fields,field_description:l10n_ar_account_withholding.field_res_partner_arba_alicuot_grupo_retencion
+msgid "Grupo retencion"
+msgstr "Grupo retencion"
+
+#. module: l10n_ar_account_withholding
+#: model:ir.model.fields,field_description:l10n_ar_account_withholding.field_afip_tabla_ganancias_alicuotasymontos_id
+#: model:ir.model.fields,field_description:l10n_ar_account_withholding.field_afip_tabla_ganancias_escala_id
+#: model:ir.model.fields,field_description:l10n_ar_account_withholding.field_res_partner_arba_alicuot_id
+msgid "ID"
+msgstr "ID"
+
+#. module: l10n_ar_account_withholding
+#: selection:account.payment.group,retencion_ganancias:0
+msgid "Imposibilidad de Retención"
+msgstr "Imposibilidad de Retención"
+
+#. module: l10n_ar_account_withholding
+#: model:ir.model,name:l10n_ar_account_withholding.model_account_invoice
+msgid "Invoice"
+msgstr "Factura"
+
+#. module: l10n_ar_account_withholding
+#: model:ir.model,name:l10n_ar_account_withholding.model_account_invoice_line
+msgid "Invoice Line"
+msgstr "Línea de Factura"
+
+#. module: l10n_ar_account_withholding
+#: model:ir.model.fields,field_description:l10n_ar_account_withholding.field_afip_tabla_ganancias_alicuotasymontos___last_update
+#: model:ir.model.fields,field_description:l10n_ar_account_withholding.field_afip_tabla_ganancias_escala___last_update
+#: model:ir.model.fields,field_description:l10n_ar_account_withholding.field_res_partner_arba_alicuot___last_update
+msgid "Last Modified on"
+msgstr "Última Modificación en"
+
+#. module: l10n_ar_account_withholding
+#: model:ir.model.fields,field_description:l10n_ar_account_withholding.field_afip_tabla_ganancias_alicuotasymontos_write_uid
+#: model:ir.model.fields,field_description:l10n_ar_account_withholding.field_afip_tabla_ganancias_escala_write_uid
+#: model:ir.model.fields,field_description:l10n_ar_account_withholding.field_res_partner_arba_alicuot_write_uid
+msgid "Last Updated by"
+msgstr "Ultima actualización por"
+
+#. module: l10n_ar_account_withholding
+#: model:ir.model.fields,field_description:l10n_ar_account_withholding.field_afip_tabla_ganancias_alicuotasymontos_write_date
+#: model:ir.model.fields,field_description:l10n_ar_account_withholding.field_afip_tabla_ganancias_escala_write_date
+#: model:ir.model.fields,field_description:l10n_ar_account_withholding.field_res_partner_arba_alicuot_write_date
+msgid "Last Updated on"
+msgstr "Última actualización en"
+
+#. module: l10n_ar_account_withholding
+#: model:ir.model.fields,field_description:l10n_ar_account_withholding.field_afip_tabla_ganancias_escala_importe_desde
+msgid "Mas de $"
+msgstr "Mas de $"
+
+#. module: l10n_ar_account_withholding
+#: model:ir.model.fields,field_description:l10n_ar_account_withholding.field_afip_tabla_ganancias_alicuotasymontos_montos_no_sujetos_a_retencion
+msgid "Montos no sujetos a retencion"
+msgstr "Montos no sujetos a retencion"
+
+#. module: l10n_ar_account_withholding
+#: model:ir.model.fields,field_description:l10n_ar_account_withholding.field_afip_tabla_ganancias_escala_porcentaje
+msgid "Más el %"
+msgstr "Más el %"
+
+#. module: l10n_ar_account_withholding
+#: selection:res.partner,drei:0
+msgid "No Activo"
+msgstr "No Activo"
+
+#. module: l10n_ar_account_withholding
+#: selection:account.payment.group,retencion_ganancias:0
+msgid "No Aplica"
+msgstr "No Aplica"
+
+#. module: l10n_ar_account_withholding
+#: selection:account.payment.group,retencion_ganancias:0
+msgid "Nro Regimen"
+msgstr "Nro Regimen"
+
+#. module: l10n_ar_account_withholding
+#: model:ir.model.fields,field_description:l10n_ar_account_withholding.field_res_partner_arba_alicuot_numero_comprobante
+msgid "Numero comprobante"
+msgstr "Numero comprobante"
+
+#. module: l10n_ar_account_withholding
+#: model:ir.model,name:l10n_ar_account_withholding.model_res_partner
+msgid "Partner"
+msgstr "Empresa"
+
+#. module: l10n_ar_account_withholding
+#: model:ir.model.fields,field_description:l10n_ar_account_withholding.field_res_partner_arba_alicuot_partner_id
+msgid "Partner id"
+msgstr "Id Empresa"
+
+#. module: l10n_ar_account_withholding
+#: model:ir.model,name:l10n_ar_account_withholding.model_account_payment_group
+msgid "Payment Group"
+msgstr "Grupo de Pagos"
+
+#. module: l10n_ar_account_withholding
+#: model:ir.ui.view,arch_db:l10n_ar_account_withholding.view_account_payment_from_group_tree
+#: model:ir.ui.view,arch_db:l10n_ar_account_withholding.view_account_payment_tree
+msgid "Print withholding voucher"
+msgstr "Imprimir Comprobante de retención"
+
+#. module: l10n_ar_account_withholding
+#: model:ir.model.fields,field_description:l10n_ar_account_withholding.field_account_payment_group_regimen_ganancias_id
+msgid "Regimen Ganancias"
+msgstr "Régimen ganancias"
+
+#. module: l10n_ar_account_withholding
+#: model:ir.model.fields,field_description:l10n_ar_account_withholding.field_res_partner_default_regimen_ganancias_id
+msgid "Regimen Ganancias por Defecto"
+msgstr "Régimen Ganancias por Defecto"
+
+#. module: l10n_ar_account_withholding
+#: model:ir.model.fields,field_description:l10n_ar_account_withholding.field_res_company_regimenes_ganancias_ids
+msgid "Regimenes Ganancia"
+msgstr "Regímenes Ganancias"
+
+#. module: l10n_ar_account_withholding
+#: model:ir.model.fields,field_description:l10n_ar_account_withholding.field_account_payment_group_retencion_ganancias
+msgid "Retención Ganancias"
+msgstr "Retención Ganancias"
+
+#. module: l10n_ar_account_withholding
+#: model:ir.model.fields,field_description:l10n_ar_account_withholding.field_afip_tabla_ganancias_escala_importe_excedente
+msgid "S/ Exced. de $"
+msgstr "S/ Exced. de $"
+
+#. module: l10n_ar_account_withholding
+#: model:ir.model,name:l10n_ar_account_withholding.model_account_tax
+msgid "Tax"
+msgstr "Impuesto"
+
+#. module: l10n_ar_account_withholding
+#: model:ir.model.fields,field_description:l10n_ar_account_withholding.field_res_partner_arba_alicuot_to_date
+msgid "To date"
+msgstr "A fecha"
+
+#. module: l10n_ar_account_withholding
+#: code:addons/l10n_ar_account_withholding/models/res_company.py:80
+#, python-format
+msgid "You must configure ARBA CIT on company %s"
+msgstr "Debe configurar el CIT de ARA en la compañía %s"
+
+#. module: l10n_ar_account_withholding
+#: model:ir.model,name:l10n_ar_account_withholding.model_afip_tabla_ganancias_alicuotasymontos
+msgid "afip.tabla_ganancias.alicuotasymontos"
+msgstr "afip.tabla_ganancias.alicuotasymontos"
+
+#. module: l10n_ar_account_withholding
+#: model:ir.model,name:l10n_ar_account_withholding.model_afip_tabla_ganancias_escala
+msgid "afip.tabla_ganancias.escala"
+msgstr "afip.tabla_ganancias.escala"
+
+#. module: l10n_ar_account_withholding
+#: model:ir.model,name:l10n_ar_account_withholding.model_res_partner_arba_alicuot
+msgid "res.partner.arba_alicuot"
+msgstr "res.partner.arba_alicuot"
