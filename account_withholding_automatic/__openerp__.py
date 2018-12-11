@@ -19,42 +19,26 @@
 #
 ##############################################################################
 {
-    'author': 'jeo Software,ADHOC SA,Odoo Community Association (OCA)',
-    'website': 'www.jeosoft.com.ar',
+    'author': 'ADHOC SA',
+    'website': 'www.adhoc.com.ar',
     'license': 'AGPL-3',
     'category': 'Accounting & Finance',
     'data': [
-        'reports/certificado_de_retencion_report.xml',
-        'views/account_payment_group_view.xml',
-        'views/res_company_view.xml',
-        'views/afip_tabla_ganancias_escala_view.xml',
-        'views/afip_tabla_ganancias_alicuotasymontos_view.xml',
-        'views/account_payment_view.xml',
-        'views/res_partner_view.xml',
-        'security/ir.model.access.csv',
-        'security/security.xml',
-        'data/tabla_ganancias_data.xml',
         'views/account_tax_view.xml',
+        'views/account_payment_group_view.xml',
+        'views/account_payment_view.xml',
+        'views/res_company_view.xml',
+        'security/ir.model.access.csv',
     ],
     'demo': [
-        'demo/ir_parameter.xml',
-        # 'demo/demo.xml',
+        'demo/withholding_demo.xml',
     ],
     'depends': [
-        'account_withholding_automatic',
-        'l10n_ar_account',
-        # para ganancias
-        # deberiamos requerir l10n_ar_aeroo_base pero preferimos no hacerlo
-        # para no sumar dependencinas. Se deberia requerir porque el reporte
-        # usa las lineas
-        # 'l10n_ar_aeroo_base',
-        'report_aeroo',
+        'account_payment_group',
+        'account_withholding',
     ],
-    'external_dependencies': {
-        'python': ['pyafipws'],
-    },
     'installable': True,
-    'name': 'Automatic Argentinian Withholdings on Sales & Payments',
+    'name': 'Automatic Withholdings on Payments',
     'test': [],
-    'version': '9.0.2.0.0',
+    'version': '9.0.1.2.0',
 }

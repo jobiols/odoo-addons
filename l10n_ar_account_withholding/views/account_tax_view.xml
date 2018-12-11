@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <!-- permitir trabajar con codigo python en percepciones -->
+        <record id="view_tax_form" model="ir.ui.view">
+            <field name="name">L10N AR ACCOUNT WITHHOLDING permitir python en ventas</field>
+            <field name="inherit_id" ref="account_withholding_automatic.view_tax_form"/>
+            <field name="model">account.tax</field>
+            <field name="arch" type="xml">
+                <xpath expr="//group" position="attributes">
+                    <attribute name="invisible"></attribute>
+                </xpath>
+            </field>
+        </record>
+    </data>
+</odoo>
