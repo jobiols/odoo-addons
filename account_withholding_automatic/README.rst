@@ -2,9 +2,9 @@
    :target: http://www.gnu.org/licenses/agpl-3.0-standalone.html
    :alt: License: AGPL-3
 
-==================================
-Automatic Withholdings on Payments
-==================================
+================================================
+Automatic Argentinian Retenciones y Percepciones
+================================================
 
 This module extends the functionality of ... to support ...
 and allow you to ...

@@ -19,8 +19,9 @@
 #
 ##############################################################################
 {
-    'author': 'ADHOC SA',
-    'website': 'www.adhoc.com.ar',
+    'author': 'jeo Software,ADHOC SA',
+    'website': 'www.jeosoft.com.ar',
+    'version': '9.0.1.2.0',
     'license': 'AGPL-3',
     'category': 'Accounting & Finance',
     'data': [
@@ -40,5 +41,4 @@
     'installable': True,
     'name': 'Automatic Withholdings on Payments',
     'test': [],
-    'version': '9.0.1.2.0',
 }

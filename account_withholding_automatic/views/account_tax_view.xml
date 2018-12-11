@@ -9,7 +9,7 @@
             <field name="arch" type="xml">
                 <!-- TODO mejorar esta vista -->
                 <xpath expr="//page" position="inside">
-                    <group attrs="{'invisible': [('type_tax_use', '!=', 'supplier')]}">
+                    <group attrs="{'invisible': [('type_tax_use', '!=', 'supplier'),('type_tax_use', '!=', 'sale')]}">
                         <group name="withholdings">
                             <label for="withholding_type"/>
                             <div>

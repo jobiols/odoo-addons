@@ -22,6 +22,7 @@
     'author': 'jeo Software,ADHOC SA,Odoo Community Association (OCA)',
     'website': 'www.jeosoft.com.ar',
     'license': 'AGPL-3',
+    'version': '9.0.2.0.0',
     'category': 'Accounting & Finance',
     'data': [
         'reports/certificado_de_retencion_report.xml',
@@ -34,7 +35,7 @@
         'security/ir.model.access.csv',
         'security/security.xml',
         'data/tabla_ganancias_data.xml',
-        'views/account_tax_view.xml',
+        'views/account_invoice.xml',
     ],
     'demo': [
         'demo/ir_parameter.xml',
@@ -56,5 +57,4 @@
     'installable': True,
     'name': 'Automatic Argentinian Withholdings on Sales & Payments',
     'test': [],
-    'version': '9.0.2.0.0',
 }
