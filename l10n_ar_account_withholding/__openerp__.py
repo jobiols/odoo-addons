@@ -19,6 +19,7 @@
 #
 ##############################################################################
 {
+    'name': 'Automatic Argentinian Withholdings on Sales & Payments',
     'author': 'jeo Software,ADHOC SA,Odoo Community Association (OCA)',
     'website': 'www.jeosoft.com.ar',
     'license': 'AGPL-3',
@@ -55,6 +56,5 @@
         'python': ['pyafipws'],
     },
     'installable': True,
-    'name': 'Automatic Argentinian Withholdings on Sales & Payments',
     'test': [],
 }

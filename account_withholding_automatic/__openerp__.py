@@ -19,6 +19,7 @@
 #
 ##############################################################################
 {
+    'name': 'Automatic Withholdings on Sales & Payments',
     'author': 'jeo Software,ADHOC SA',
     'website': 'www.jeosoft.com.ar',
     'version': '9.0.1.2.0',
@@ -39,6 +40,5 @@
         'account_withholding',
     ],
     'installable': True,
-    'name': 'Automatic Withholdings on Payments',
     'test': [],
 }
