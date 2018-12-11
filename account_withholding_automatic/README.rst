@@ -7,7 +7,7 @@ Automatic Argentinian Retenciones y Percepciones
 ================================================
 
 This module extends the functionality of ... to support ...
-and allow you to ...
+and allow you to ..
 
 Installation
 ============
