@@ -20,7 +20,7 @@
 ##############################################################################
 {
     'name': 'Support branding JEOSOFT',
-    'version': '9.0.1.0.0',
+    'version': '9.0.1.0.1',
     'category': 'Support',
     'sequence': 14,
     'summary': '',
@@ -48,6 +48,7 @@
         'server_mode',          # server_mode = "test" en desarrollo
         'database_tools',
         'due_payments_argentina_fix'  # pone el nro de factura AFIP
+        'account_statement_move_import', # agrega el boton importar apuntes
 
     ],
     'data': [
