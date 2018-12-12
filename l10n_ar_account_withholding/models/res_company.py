@@ -110,7 +110,7 @@ class ResCompany(models.Model):
 
         _logger.info(
             'Getting ARBA data for cuit %s from date %s to date %s' % (
-                from_date, to_date, cuit))
+                cuit, from_date, to_date))
         ws = self.arba_connect()
         ws.ConsultarContribuyentes(
             from_date,

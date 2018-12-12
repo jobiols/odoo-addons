@@ -2,9 +2,9 @@
    :target: http://www.gnu.org/licenses/agpl-3.0-standalone.html
    :alt: License: AGPL-3
 
-================================================
-Automatic Argentinian Retenciones y Percepciones
-================================================
+=================================================
+Retenciones y Percepciones automaticas Argentinas
+=================================================
 
 Tablas modificadas según: http://www.afip.gob.ar/noticias/20160526GananciasRegRetencionModificacion.asp
 

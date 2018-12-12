@@ -36,7 +36,6 @@
         'security/ir.model.access.csv',
         'security/security.xml',
         'data/tabla_ganancias_data.xml',
-        'views/account_invoice.xml',
     ],
     'demo': [
         'demo/ir_parameter.xml',
