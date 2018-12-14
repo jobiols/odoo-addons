@@ -39,8 +39,8 @@ install:
   - git clone --depth=1 https://github.com/OCA/maintainer-quality-tools.git ${HOME}/maintainer-quality-tools
   - export PATH=${HOME}/maintainer-quality-tools/travis:${PATH}
   - travis_install_nightly
-  - git clone --depth=1 https://github.com/reingart/pyfiscalprinter.git pyfiscal
-  - python pyfiscal/setup.py install
+  - git clone --depth=1 https://github.com/reingart/pyfiscalprinter.git ${HOME}/pyfiscal
+  - python ${HOME}/pyfiscal/setup.py install
 
 
 script:

@@ -6,7 +6,7 @@ import logging
 _logger = logging.getLogger(__name__)
 
 
-class pos_session(models.Model):
+class PosSession(models.Model):
     _inherit = 'pos.session'
 
     is_fiscal = fields.Boolean(
@@ -33,4 +33,4 @@ class pos_session(models.Model):
 
     def wkf_action_close(self):
         self.test_uno()
-        return super(pos_session,self).wkf_action_close()
+        return super(PosSession, self).wkf_action_close()
