@@ -21,7 +21,7 @@
 {
     'name': 'Support branding JEOSOFT',
     'version': '9.0.1.0.0',
-    'category': 'Support',
+    'category': 'Tools',
     'sequence': 14,
     'summary': '',
     'author':  'jeo Soft',
