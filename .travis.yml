@@ -40,7 +40,7 @@ install:
   - export PATH=${HOME}/maintainer-quality-tools/travis:${PATH}
   - travis_install_nightly
   - git clone --depth=1 https://github.com/reingart/pyfiscalprinter.git pyfiscal
-  - python pyfiscal.py install
+  - python pyfiscal/setup.py install
 
 
 script:
