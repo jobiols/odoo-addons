@@ -19,20 +19,17 @@
 ##############################################################################
 
 {
-    'name': 'SIRCAR',
-    'version': '8.0.1.0',
-    'category': 'Base',
+    'name': 'Exportacion de percepciones y retenciones',
+    'version': '9.0.0.0.0',
+    'website': 'http://jeosoft.com.ar',
     'author': 'jeo Software',
+    'category': 'Accounting',
     'depends': [
-        'l10n_ar_invoice',
         'l10n_ar_account_vat_ledger'
     ],
     "data": [
         'views/account_sircar_report_view.xml',
     ],
-    'website': 'http://jeosoft.com.ar',
     'auto_install': False,
     'installable': True,
 }
-
-# vim:expandtab:smartindent:tabstop=4:softtabstop=4:shiftwidth=4:
