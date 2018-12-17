@@ -6,14 +6,19 @@ class AccountInvoice(models.Model):
     _inherit = "account.invoice"
 
     @api.multi
-    def action_date_assign(self):
-        """ sobreescribe el primer metodo del workflow invoice_open """
-        self.compute_perceptions()
-        return super(AccountInvoice, self).action_date_assign()
+    def write(self, vals):
+        self.compute_perceptions(vals)
+        return super(AccountInvoice, self).write(vals)
 
-    def compute_perceptions(self):
-        """ agrega el impuesto de percepcion si la alicuota != 0 """
+    def compute_perceptions(self, vals):
+        """ Calcular percepciones.
+            agrega el impuesto de percepcion si la alicuota != 0
+            solo para facturas de venta.
+        """
         invoice_id = self.ensure_one()
+        # si es una factura de compra no hay que hacerle percepciones
+        if invoice_id.type == 'in_invoice':
+            return
 
         # si la fecha es false poner la fecha de hoy
         if invoice_id.date_invoice:
@@ -35,31 +40,44 @@ class AccountInvoice(models.Model):
             return
 
         tax_obj = self.env['account.tax']
+        invoice_tax_obj = self.env['account.invoice.tax']
 
         # obtener los impuestos de percepcion FUERZO SOLO EL DE IIBB
         tax_ids = tax_obj.search([('type_tax_use', '=', 'sale'),
-                                 ('tax_group_id.type', '=', 'perception'),
+                                  ('tax_group_id.type', '=', 'perception'),
                                   ('name', 'like', '%IIBB%')])
+
+        # Ver si ya tiene alguna una percepcion, si es asi hay que borrarla
+        # porque pueden haber modificado la factura y debe ser recalculada.
+        # salvo que sea manual, entonces no la tocamos.
+        invoice_tax_obj.search(
+            [('invoice_id', '=', invoice_id.id),
+             ('manual', '=', False),
+             ('tax_id.tax_group_id.type', '=', 'perception')]).unlink()
 
         base = invoice_id.amount_untaxed
 
+        # Si la base supera el minimo no imponible no agregar impuesto
+        if base < tax_ids.withholding_non_taxable_minimum:
+            return
+
         for tax_id in tax_ids:
-            res = tax_id.with_context(ctx).compute_all(base)
+            res = tax_id.with_context(ctx).compute_all(
+                base, partner=invoice_id.partner_id)
             tax = res['taxes'][0]
             val = {
-                'base': base,
                 'invoice_id': invoice_id.id,
                 'name': tax_id.name,
                 'tax_id': tax_id.id,
                 'amount': base * perception,
-                'manual': True,
+                'manual': False,
                 'sequence': 99,
                 'account_analytic_id': False,
-                'account_id': invoice_id.type in ('out_invoice', 'in_invoice') and (
-                    tax['account_id'] or False) or (
-                    tax['refund_account_id'] or False),
+                'account_id': invoice_id.type in (
+                    'out_invoice', 'in_invoice') and (
+                                  tax['account_id'] or False) or (
+                                  tax['refund_account_id'] or False),
             }
-
             self.env['account.invoice.tax'].create(val)
 
     @api.multi
