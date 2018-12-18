@@ -3,15 +3,18 @@
     <data>
         <!--  agregar una oreja ARBA y el boton correspondiente -->
 
-        <record id='account_vat_ledger_form' model='ir.ui.view' >
+        <record id='account_vat_ledger_form' model='ir.ui.view'>
             <field name="model">account.vat.ledger</field>
-            <field name="inherit_id" ref="l10n_ar_account_vat_ledger.account_vat_ledger_form"/>
-            <field name="name">ACCOUNT WITHHOLDING EXPORT computar y bajar archivos</field>
+            <field name="inherit_id"
+                   ref="l10n_ar_account_vat_ledger.account_vat_ledger_form"/>
+            <field name="name">ACCOUNT PERCEPTIONS/WITHHOLDING EXPORT computar y bajar
+                archivos
+            </field>
             <field name='arch' type='xml'>
                 <field name="type" invisible="0"/>
                 <xpath expr="//page[@name='notes']" position="after">
                     <page name="ARBA" string="ARBA">
-                        <button name="compute_retention_data"
+                        <button name="compute_withholding_data"
                                 type="object"
                                 string="Computar Retenciones"
                                 attrs="{'invisible':[('type','!=','purchase'),
@@ -23,16 +26,27 @@
                                 attrs="{'invisible':[('type','!=','sale'),
                                                      ('state','=','draft')]}"
                         />
-<!--
                         <group col="4">
-                            <field name="sircar_filename" invisible="1"/>
-                            <field name="sircar_file" filename="sircar_filename"/>
-                        </group>
+                            <field name="perceptions_filename" invisible="1"/>
+                            <field name="withholdings_filename" invisible="1"/>
 
-                        <group col="1">
-                            <field name="REGINFO_SIRCAR"/>
+                            <field name="perceptions_file"
+                                   filename="perceptions_filename"
+                                   attrs="{'invisible':[('type','!=','sale'),
+                                                     ('state','=','draft')]}"/>
+                            <field name="withholdings_file"
+                                   filename="withholdings_filename"
+                                   attrs="{'invisible':[('type','!=','purchase'),
+                                                     ('state','=','draft')]}"/>
                         </group>
--->
+                        <group col="1">
+                            <field name="REGINFO_PERCEPTIONS"
+                                   attrs="{'invisible':[('type','!=','sale'),
+                                                     ('state','=','draft')]}"/>
+                            <field name="REGINFO_WITHHOLDINGS"
+                                   attrs="{'invisible':[('type','!=','purchase'),
+                                                     ('state','=','draft')]}"/>
+                        </group>
                     </page>
                 </xpath>
             </field>
