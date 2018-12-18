@@ -14,6 +14,7 @@ class AccountInvoice(models.Model):
         default=False,
         readonly=True,
         store=True,
+        help='Marca la factura si tiene percepciones'
     )
 
     @api.multi

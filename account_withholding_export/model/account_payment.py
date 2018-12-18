@@ -11,6 +11,7 @@ class AccountPayment(models.Model):
         default=False,
         readonly=True,
         store=True,
+        help='Marca el pago si tiene retenciones'
     )
 
     @api.multi

@@ -25,10 +25,12 @@
     'author': 'jeo Software',
     'category': 'Accounting',
     'depends': [
-        'l10n_ar_account_vat_ledger'
+        'l10n_ar_account_vat_ledger',
+        'l10n_ar_account_withholding',
     ],
     "data": [
-        'views/account_sircar_report_view.xml',
+        'views/account_report_view.xml',
+        'views/account_tax_view.xml',
     ],
     'auto_install': False,
     'installable': True,
