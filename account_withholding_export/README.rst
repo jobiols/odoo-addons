@@ -23,13 +23,14 @@ https://www.arba.gov.ar/Archivos/Publicaciones/dise%C3%B1o_de_registros_bancos.p
 
 INSTALACION
 -----------
-Se requieren dependencias que estan en el repo jobiols/odoo-addons
-Para que funcione hay que instalar el módulo jobiols/l10n_ar_account_withholding
-y se requiere que se cargue el código CIT de Arba (es un password) que está en
-la pestaña ARBA WS de mi compañía.
+
+Solo instalar el modulo
 
 CONFIGURACION
 -------------
+
+Se requiere que se cargue el código CIT de Arba (es un password) que está en
+la pestaña ARBA WS de mi compañía.
 
 **Percepciones**
 
