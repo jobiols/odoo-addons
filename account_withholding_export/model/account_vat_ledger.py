@@ -3,7 +3,7 @@
 # For copyright and license notices, see __openerp__.py file in module root
 # directory
 ##############################################################################
-from openerp import models, fields, api, _
+from openerp import models, fields, api
 import base64
 from datetime import datetime
 
@@ -90,18 +90,17 @@ class AccountVaLedger(models.Model):
             row += [date]
 
             # Campo 03 -- Tipo de comprobante
-            document_type = inv.journal_document_type_id.document_type_id.internal_type
-            if document_type == 'invoice':
+            document_type = inv.journal_document_type_id.document_type_id
+            if document_type.internal_type == 'invoice':
                 type = 'F'
-            if document_type == 'credit_note':
+            if document_type.internal_type == 'credit_note':
                 type = 'C'
-            if document_type == 'debit_note':
+            if document_type.internal_type == 'debit_note':
                 type = 'D'
             row += [type]
 
             # Campo 04 -- Letra comprobante
-            row += [
-                inv.journal_document_type_id.document_type_id.document_letter_id.name]
+            row += [document_type.document_letter_id.name]
 
             # Campo 05 -- Numero Sucursal
             # row += [tax.sequence[:4]]
