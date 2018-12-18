@@ -1,4 +1,4 @@
-# -*- encoding: utf-8 -*-
+# -*- coding: utf-8 -*-
 ##############################################################################
 #    Copyright (C) 2016  jeo Software  (http://www.jeosoft.com.ar)
 #    All Rights Reserved.
@@ -19,7 +19,7 @@
 ##############################################################################
 
 {
-    'name': 'Exportacion de percepciones y retenciones',
+    'name': 'Percepciones y retenciones automáticas',
     'version': '9.0.0.0.0',
     'website': 'http://jeosoft.com.ar',
     'author': 'jeo Software',

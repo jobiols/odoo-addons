@@ -8,8 +8,8 @@
    :target: https://www.gnu.org/licenses/agpl
    :alt: License: AGPL-3
 
-EXPORTACION DE PERCEPCIONES Y RETENCIONES
------------------------------------------
+PERCEPCIONES Y RETENCIONES AUTOMATICAS ARBA
+-------------------------------------------
 
 Este modulo implementa retenciones y percepciones automaticas de ARBA y permite
 exportar los archivos con los siguientes formatos:
@@ -38,7 +38,7 @@ Crear o actualizar el impuesto
 
 **Nombre** Percepciones IIBB Arba aplicada
 **Tipo de cálculo** codigo python
-   result = price_unit * partner.get_arba_alicuota_percepcion()
+result = price_unit * partner.get_arba_alicuota_percepcion()
 **Importe Base**: Importe sin impuestos
 **Etiqueta en facturas**: Perc IIBB ARBA
 **Ámbito del impuesto**: Ventas

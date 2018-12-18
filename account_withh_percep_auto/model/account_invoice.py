@@ -3,7 +3,7 @@
 # For copyright and license notices, see __openerp__.py file in module root
 # directory
 ##############################################################################
-from openerp import models, fields, api, _
+from openerp import models, fields, api
 
 
 class AccountInvoice(models.Model):
@@ -22,7 +22,7 @@ class AccountInvoice(models.Model):
     def _compute_perception(self):
         for inv in self:
             for tax in inv.tax_line_ids.filtered(
-              lambda r: r.tax_id.tax_group_id.type == 'perception'):
+                lambda r: r.tax_id.tax_group_id.type == 'perception'):
                 inv.export_perception = True
 
     @api.multi
