@@ -30,7 +30,7 @@
     ],
     "data": [
         'views/account_report_view.xml',
-        'views/account_tax_view.xml',
+        #'views/account_tax_view.xml',
     ],
     'auto_install': False,
     'installable': True,
