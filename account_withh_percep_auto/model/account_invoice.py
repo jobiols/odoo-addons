@@ -22,7 +22,7 @@ class AccountInvoice(models.Model):
     def _compute_perception(self):
         for inv in self:
             for tax in inv.tax_line_ids.filtered(
-                lambda r: r.tax_id.tax_group_id.type == 'perception'):
+              lambda r: r.tax_id.tax_group_id.type == 'perception'):
                 inv.export_perception = True
 
     @api.multi
@@ -95,45 +95,7 @@ class AccountInvoice(models.Model):
                 'account_analytic_id': False,
                 'account_id': invoice_id.type in (
                     'out_invoice', 'in_invoice') and (
-                                  tax['account_id'] or False) or (
-                                  tax['refund_account_id'] or False),
+                    tax['account_id'] or False) or (
+                    tax['refund_account_id'] or False),
             }
-            a = self.env['account.invoice.tax'].create(val)
-            a.tax_id.compute_all(base, partner=invoice_id.partner_id)
-
-    """
-    def get_taxes_values(self):
-        import wdb;wdb.set_trace()
-        tax_grouped = super(AccountInvoice,self).get_taxes_values()
-
-        invoice_id = self.ensure_one()
-        tax_obj = self.env['account.tax']
-        # obtener los impuestos de percepcion FUERZO SOLO EL DE IIBB
-        tax_ids = tax_obj.search([('type_tax_use', '=', 'sale'),
-                                  ('tax_group_id.type', '=', 'perception'),
-                                  ('name', 'like', '%IIBB%')])
-
-        taxes = tax_ids.compute_all(invoice_id.amount_untaxed, partner=invoice_id.partner_id)['taxes']
-        for tax in taxes:
-            val = {
-                'invoice_id': invoice_id.id,
-                'name': tax['name'],
-                'tax_id': tax['id'],
-                'amount': 2,
-                'manual': False,
-                'sequence': 99,
-                'account_analytic_id': False,
-                'account_id': invoice_id.type in (
-                    'out_invoice', 'in_invoice') and (
-                                  tax['account_id'] or False) or (
-                                  tax['refund_account_id'] or False),
-            }
-            key = str(tax['id']) + str(self.id) + str(tax.get('analytic'))
-            if key not in tax_grouped:
-                tax_grouped[key] = val
-            else:
-                tax_grouped[key]['amount'] += val['amount']
-                tax_grouped[key]['base'] += val['base']
-
-        return tax_grouped
-        """
+            self.env['account.invoice.tax'].create(val)
