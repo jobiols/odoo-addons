@@ -29,7 +29,9 @@
         'l10n_ar_account_withholding',
     ],
     "data": [
+        'reports/certificado_de_retencion_report.xml',
         'views/account_report_view.xml',
+
         #'views/account_tax_view.xml',
     ],
     'auto_install': False,
