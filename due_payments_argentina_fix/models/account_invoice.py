@@ -2,8 +2,8 @@
 # For copyright and license notices, see __manifest__.py file in module root
 
 import json
-from openerp import api, fields, models, _
-from openerp.tools import float_is_zero, float_compare
+from openerp import api, models, _
+from openerp.tools import float_is_zero
 import logging
 
 _logger = logging.getLogger(__name__)
