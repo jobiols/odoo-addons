@@ -18,7 +18,6 @@ class SaleOrder(models.Model):
 
         if auto:
             # tiene auto, verificamos que haya 2 pickings y en done
-            picking_obj = self.env['stock.picking']
             for so in self:
                 state = 'done'
                 pickings = so.picking_ids

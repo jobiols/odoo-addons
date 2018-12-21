@@ -22,15 +22,17 @@ class AccountInvoice(models.Model):
     def _compute_perception(self):
         for inv in self:
             for tax in inv.tax_line_ids.filtered(
-              lambda r: r.tax_id.tax_group_id.type == 'perception'):
+                lambda r: r.tax_id.tax_group_id.type == 'perception'):
                 inv.export_perception = True
 
     @api.multi
     def write(self, vals):
-        self.compute_perceptions(vals)
-        return super(AccountInvoice, self).write(vals)
+        # primero salvamos la factura, despues recalculamos las percepciones
+        ret = super(AccountInvoice, self).write(vals)
+        self.compute_perceptions()
+        return ret
 
-    def compute_perceptions(self, vals):
+    def compute_perceptions(self):
         """ Calcular percepciones.
             agrega el impuesto de percepcion si la alicuota != 0
             solo para facturas de venta.

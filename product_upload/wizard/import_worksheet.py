@@ -68,7 +68,7 @@ class ImportWorksheet(models.TransientModel):
 
             if data_type == 'str':
                 if not (isinstance(value, (str, unicode)) or
-                        (value is None and not req)):
+                            (value is None and not req)):
 
                     text = _('Not a string') + \
                            ' ' + err % (row[col].row, name, sheet.title)
@@ -77,7 +77,7 @@ class ImportWorksheet(models.TransientModel):
 
             if data_type == 'number':
                 if not (isinstance(value, (float, int, long)) or
-                        (value is None) and not req):
+                                (value is None) and not req):
                     text = _('Not a number') + \
                            ' ' + err % (row[col].row, name, sheet.title)
                     self.add_error(text)
@@ -85,7 +85,7 @@ class ImportWorksheet(models.TransientModel):
 
             if data_type == 'default_code':
                 if not (isinstance(value, (str, unicode)) or
-                            (value is None) and not req):
+                                (value is None) and not req):
                     text = _('Not a string') + \
                            ' ' + err % (row[col].row, name, sheet.title)
                     self.add_error(text)
