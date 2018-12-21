@@ -36,7 +36,7 @@ msgstr "Precio de costo sin IVA"
 #. module: product_upload
 #: model:res.groups,name:product_upload.group_product_create_users
 msgid "Create products manually"
-msgstr "Create products manually"
+msgstr "Crear productos manualmente"
 
 #. module: product_upload
 #: model:ir.model.fields,field_description:product_upload.field_product_upload_error_create_uid
