@@ -93,7 +93,7 @@ class ImportWorksheet(models.TransientModel):
                 product_obj = self.env['product.template']
                 product = product_obj.search([('default_code', '=', value)])
                 if not product:
-                    text = _('Product $s from parent col not found') + \
+                    text = _('Product %s from parent col not found') + \
                            ' ' + err % (
                         product.default_code, row[col].row, sheet.title)
                     self.add_error(text)
