@@ -6,8 +6,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Odoo Server 9.0c-20180827\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2018-11-07 21:03+0000\n"
-"PO-Revision-Date: 2018-11-07 21:03+0000\n"
+"POT-Creation-Date: 2018-12-21 22:14+0000\n"
+"PO-Revision-Date: 2018-12-21 22:14+0000\n"
 "Last-Translator: <>\n"
 "Language-Team: \n"
 "MIME-Version: 1.0\n"
@@ -20,7 +20,8 @@ msgstr ""
 msgid "At the end of the process, a page will\n"
 "                                        appear indicating sucess or a list of\n"
 "                                        all errors"
-msgstr "Al final del proceso aparecerá una página indicando que terminó bien, o mostrará una lista con todos los errores"
+msgstr "Al final del proceso aparecerá una página indicando que terminó bien, "
+       "o mostrará una lista con todos los errores"
 
 #. module: product_upload
 #: model:ir.ui.view,arch_db:product_upload.log_form
@@ -31,6 +32,11 @@ msgstr "Código de barras"
 #: model:ir.ui.view,arch_db:product_upload.log_form
 msgid "Cost price without tax"
 msgstr "Precio de costo sin IVA"
+
+#. module: product_upload
+#: model:res.groups,name:product_upload.group_product_create_users
+msgid "Create products manually"
+msgstr "Create products manually"
 
 #. module: product_upload
 #: model:ir.model.fields,field_description:product_upload.field_product_upload_error_create_uid
@@ -74,6 +80,11 @@ msgid "Enable access to upload products from excel"
 msgstr "Habilitar acceso para subir porductos desde planilla excel"
 
 #. module: product_upload
+#: model:res.groups,comment:product_upload.group_product_create_users
+msgid "Enable manual product creation"
+msgstr "Habilitar creacion manual de productos"
+
+#. module: product_upload
 #: selection:product_upload.log,state:0
 msgid "Error"
 msgstr "Error"
@@ -92,7 +103,7 @@ msgstr "Errores"
 #. module: product_upload
 #: model:ir.model,name:product_upload.model_product_upload_error
 msgid "Errors from product uploads"
-msgstr "Errores de la carga de productos"
+msgstr "Errores en la carga de productos"
 
 #. module: product_upload
 #: model:ir.model.fields,field_description:product_upload.field_product_upload_import_worksheet_data
@@ -178,7 +189,7 @@ msgstr "Log id"
 #. module: product_upload
 #: model:ir.model,name:product_upload.model_product_upload_log
 msgid "Log of product uploads"
-msgstr "Histórico de carga de productos"
+msgstr "Histórico de la carga de productos"
 
 #. module: product_upload
 #: model:ir.ui.menu,name:product_upload.menu_log
@@ -201,7 +212,14 @@ msgid "NOTE:"
 msgstr "NOTA:"
 
 #. module: product_upload
-#: code:addons/product_upload/wizard/import_worksheet.py:51
+#: code:addons/product_upload/wizard/import_worksheet.py:81
+#, python-format
+msgid "Not a number"
+msgstr "No es un número"
+
+#. module: product_upload
+#: code:addons/product_upload/wizard/import_worksheet.py:73
+#: code:addons/product_upload/wizard/import_worksheet.py:89
 #, python-format
 msgid "Not a string"
 msgstr "No es una cadena"
@@ -216,11 +234,10 @@ msgid "Not all columns are required to import\n"
 "                                    <br/>\n"
 "                                    However if you only want to update prices\n"
 "                                    only the first four are required"
-msgstr "No todas las columas se requieren para importar productos. <br/>"
-    "Si se quiere crear productos nuevos, entonces son requeridas las "
-    "primeras siete columnas.<br/>"
-    "Sin embargo si lo que se quiere es actualizar precios, solo las "
-    "primeras cuatro son requeridas"
+msgstr "No todas las columas se requieren para importar productos. <br/>Si se "
+        "quiere crear productos nuevos, entonces son requeridas las primeras "
+        "siete columnas.<br/>Sin embargo si lo que se quiere es actualizar "
+        "precios, solo las primeras cuatro son requeridas"
 
 #. module: product_upload
 #: model:ir.ui.view,arch_db:product_upload.log_form
@@ -231,8 +248,7 @@ msgstr "Código de producto del padre"
 #: model:ir.ui.view,arch_db:product_upload.log_form
 msgid "Parent product code means the product from\n"
 "                                    where price is copied."
-msgstr "Producto padre significa el producto de donde se copiara el precio "
-    " de lista"
+msgstr "Producto padre significa el producto de donde se copiara el precio  de lista"
 
 #. module: product_upload
 #: selection:product_upload.log,state:0
@@ -245,9 +261,15 @@ msgid "Process worksheet"
 msgstr "Planilla de proceso"
 
 #. module: product_upload
+#: code:addons/product_upload/wizard/import_worksheet.py:96
+#, python-format
+msgid "Product %s from parent col not found"
+msgstr "El producto %s de la columna padre no se encuentra"
+
+#. module: product_upload
 #: model:ir.ui.view,arch_db:product_upload.log_form
 msgid "Product Code"
-msgstr "Código de producto"
+msgstr "Codigo de producto"
 
 #. module: product_upload
 #: model:ir.ui.view,arch_db:product_upload.log_form
@@ -294,16 +316,17 @@ msgstr "La primera fila se considera de titulos, y no será leida"
 #: model:ir.ui.view,arch_db:product_upload.log_form
 msgid "The imported worksheet had the following\n"
 "                                errors"
-msgstr "Se encontraron los siguientes errores"
+msgstr "Se encontraron los siguientes errores en la planilla importada"
 
 #. module: product_upload
 #: model:ir.ui.view,arch_db:product_upload.log_form
 msgid "To import products you must create a\n"
 "                                    spreadsheet with the following columns."
-msgstr "Para importar productos se debe crear una panilla de cálculo en formato xlsx con las siguientes columnas."
+msgstr "Para importar productos se debe crear una panilla de cálculo en "
+       "formato xlsx con las siguientes columnas."
 
 #. module: product_upload
-#: code:addons/product_upload/wizard/import_worksheet.py:89
+#: code:addons/product_upload/wizard/import_worksheet.py:105
 #, python-format
 msgid "Too few columns in sheet %s."
 msgstr "Faltan columnas en la planilla %s."
@@ -317,19 +340,24 @@ msgstr "Productos actualizados"
 #: model:ir.actions.act_window,name:product_upload.action_log
 #: model:res.groups,name:product_upload.group_product_upload_users
 msgid "Upload Products"
-msgstr "Carga Masiva de productos"
+msgstr "Productos cargados"
 
 #. module: product_upload
-#: code:addons/product_upload/models/log.py:34
+#: code:addons/product_upload/models/log.py:38
 #, python-format
 msgid "Uploaded for {} on {}"
 msgstr "Cargado por {} el {}"
 
 #. module: product_upload
-#: code:addons/product_upload/wizard/import_worksheet.py:230
+#: code:addons/product_upload/wizard/import_worksheet.py:248
 #, python-format
 msgid "Vendor ref %s not found."
 msgstr "El proveedor con referencia %s no se encuentra en el sistema."
+
+#. module: product_upload
+#: model:ir.model.fields,field_description:product_upload.field_product_upload_log_vendors
+msgid "Vendors"
+msgstr "Proveedores"
 
 #. module: product_upload
 #: model:ir.ui.view,arch_db:product_upload.log_form
@@ -339,13 +367,32 @@ msgid "You can have several sheets in the\n"
 "                                    Each sheet must have the vendor's reference\n"
 "                                    as its name."
 msgstr "Se pueden tener varias hojas en la planilla donde cada una "
-    "corresponde a un proveedor. Cada hoja debe tener como nombre la "
-    "referencia del proveedor."
+       "corresponde a un proveedor. Cada hoja debe tener como nombre la "
+       "referencia del proveedor."
+
+#. module: product_upload
+#: code:addons/product_upload/models/product_template.py:19
+#, python-format
+msgid "You do not have permission to create products, if you really need to create a product, please contact a user who has permissions."
+msgstr "No tiene permiso para crear productos, si realmente necesita crear un "
+       "producto por favor contacte a un usuario que tenga el permiso."
 
 #. module: product_upload
 #: model:ir.ui.view,arch_db:product_upload.view_import_worksheet_form
 msgid "_Cancel"
 msgstr "_Cancelar"
+
+#. module: product_upload
+#: code:addons/product_upload/wizard/import_worksheet.py:61
+#, python-format
+msgid "in row %d field %s of sheet %s"
+msgstr "en la fila %d campo %s de la planilla %s"
+
+#. module: product_upload
+#: code:addons/product_upload/wizard/import_worksheet.py:102
+#, python-format
+msgid "internal error !!"
+msgstr "error interno !!"
 
 #. module: product_upload
 #: model:ir.ui.view,arch_db:product_upload.log_view
@@ -358,6 +405,12 @@ msgid "or"
 msgstr "o"
 
 #. module: product_upload
+#: code:addons/product_upload/wizard/import_worksheet.py:59
+#, python-format
+msgid "out of bound col variable"
+msgstr "variable columna fuera de rango"
+
+#. module: product_upload
 #: model:ir.ui.view,arch_db:product_upload.log_form
 msgid "process screen"
 msgstr "pantalla de proceso"
@@ -367,8 +420,3 @@ msgstr "pantalla de proceso"
 msgid "product_upload.import_worksheet"
 msgstr "product_upload.import_worksheet"
 
-#. module: product_upload
-#: code:addons/product_upload/wizard/import_worksheet.py:41
-#, python-format
-msgid "row %d of sheet %s"
-msgstr "fila %d de la planilla %s"

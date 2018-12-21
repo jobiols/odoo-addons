@@ -6,5 +6,11 @@
             <field name="name">Upload Products</field>
             <field name="comment">Enable access to upload products from excel</field>
          </record>
+
+        <!-- GRUPO PRODUCT_CREATE -->
+        <record id="group_product_create_users" model="res.groups">
+            <field name="name">Create products manually</field>
+            <field name="comment">Enable manual product creation</field>
+         </record>
     </data>
 </openerp>
