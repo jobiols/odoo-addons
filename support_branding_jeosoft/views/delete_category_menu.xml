@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- eliminar el molesto Aplicaciones / Categorias -->
+    <delete model="ir.ui.menu" search="[('name','=','Categories')]"/>
+</odoo>

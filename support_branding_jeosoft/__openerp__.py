@@ -20,7 +20,7 @@
 ##############################################################################
 {
     'name': 'Support branding JEOSOFT',
-    'version': '9.0.1.0.1',
+    'version': '9.0.1.0.2',
     'category': 'Support',
     'sequence': 14,
     'summary': '',
@@ -53,6 +53,7 @@
     ],
     'data': [
         'views/ir_config_parameter.xml',
+        'views/delete_category_menu.xml'
     ],
     'demo': [
     ],
