@@ -1,7 +1,6 @@
 # -*- coding: utf-8 -*-
 # Part of Odoo. See LICENSE file for full copyright and licensing details.
 from openerp import api, models, fields, _
-from openerp.exceptions import UserError
 import base64
 import tempfile
 import logging
@@ -40,12 +39,12 @@ class ImportWorksheet(models.TransientModel):
     _name = "product_upload.import_worksheet"
 
     data = fields.Binary(
-        'File',
-        required=True
+            'File',
+            required=True
     )
     name = fields.Char(
-        'Filename',
-        readonly=True
+            'Filename',
+            readonly=True
     )
 
     def read_data(self, sheet):
@@ -68,7 +67,7 @@ class ImportWorksheet(models.TransientModel):
 
             if data_type == 'str':
                 if not (isinstance(value, (str, unicode)) or
-                            (value is None and not req)):
+                        (value is None and not req)):
 
                     text = _('Not a string') + \
                            ' ' + err % (row[col].row, name, sheet.title)
@@ -77,7 +76,7 @@ class ImportWorksheet(models.TransientModel):
 
             if data_type == 'number':
                 if not (isinstance(value, (float, int, long)) or
-                                (value is None) and not req):
+                        (value is None) and not req):
                     text = _('Not a number') + \
                            ' ' + err % (row[col].row, name, sheet.title)
                     self.add_error(text)
@@ -85,7 +84,7 @@ class ImportWorksheet(models.TransientModel):
 
             if data_type == 'default_code':
                 if not (isinstance(value, (str, unicode)) or
-                                (value is None) and not req):
+                        (value is None) and not req):
                     text = _('Not a string') + \
                            ' ' + err % (row[col].row, name, sheet.title)
                     self.add_error(text)
@@ -132,6 +131,7 @@ class ImportWorksheet(models.TransientModel):
     def process_data(self, data, vendor):
         """ Process data structure creating / updating products
         """
+
         def choose_tax(tax_sale):
             for tax in tax_sale:
                 if tax.amount != 0:
@@ -184,9 +184,9 @@ class ImportWorksheet(models.TransientModel):
             if row['purchase_tax']:
                 # actualiza iva compras
                 tax_purchase_id = tax_obj.search(
-                    [('amount', '=', row['purchase_tax'] * 100),
-                     ('tax_group_id.tax', '=', 'vat'),
-                     ('type_tax_use', '=', 'purchase')])
+                        [('amount', '=', row['purchase_tax'] * 100),
+                         ('tax_group_id.tax', '=', 'vat'),
+                         ('type_tax_use', '=', 'purchase')])
                 # analizando el iva
                 tax = choose_tax(tax_purchase_id)
 
@@ -196,9 +196,9 @@ class ImportWorksheet(models.TransientModel):
             if row['sale_tax']:
                 # actualiza IVA ventas
                 tax_sale_id = tax_obj.search(
-                    [('amount', '=', row['sale_tax'] * 100),
-                     ('tax_group_id.tax', '=', 'vat'),
-                     ('type_tax_use', '=', 'sale')])
+                        [('amount', '=', row['sale_tax'] * 100),
+                         ('tax_group_id.tax', '=', 'vat'),
+                         ('type_tax_use', '=', 'sale')])
                 # analizando el iva
                 tax = choose_tax(tax_sale_id)
 
