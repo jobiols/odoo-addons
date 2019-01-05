@@ -34,30 +34,50 @@ la pestaña ARBA WS de mi compañía.
 
 **Percepciones**
 
-Crear o actualizar el impuesto
+Crear o actualizar el impuesto, ir a:
 
-**Nombre** Percepciones IIBB Arba aplicada
-**Tipo de cálculo** codigo python
-result = price_unit * partner.get_arba_alicuota_percepcion()
-**Importe Base**: Importe sin impuestos
-**Etiqueta en facturas**: Perc IIBB ARBA
-**Ámbito del impuesto**: Ventas
-**Grupo de impuestos**: Percepción IIBB
+Configuracion / Contabilidad / Impuestos
+
+- **Nombre** Percepciones IIBB Arba aplicada
+- **Tipo de cálculo** fijo
+- result = price_unit * partner.get_arba_alicuota_percepcion()
+- **Importe Base**: Importe sin impuestos
+- **Etiqueta en facturas**: Perc IIBB ARBA
+- **Ámbito del impuesto**: Ventas
+- **Grupo de impuestos**: Percepción IIBB
+
+- **Cuenta de impuestos (ambas)** Crear o usar una cuenta Percepcion IIBB aplicada
 
 **Retenciones**
 
-Cuando se hace el pago lo primero es seleccionar que se va a pagar para tener
-el total de deuda y luego botón calcular retenciones.
+Crear o actualizar el impuesto ir a:
 
-**Crear o actualizar el impuesto**
+Configuracion / Contabilidad / Impuestos / Impuestos de Retencion
 
 **Nombre**: Retención IIBB Arba Aplicada
 **tipo**: WS Arba
 **importe base**: Importe sin impuestos.
-
-Ponerle una secuencia al impuesto con formato 0001-00000001
+**Secuencia del impuesto** Ponerle una secuencia al impuesto con formato 0001-00000001
 **Prefijo**: 0001-
 **Mida de secuencia**: 8
+**Pagos acumulados** dejar en blanco
+**Adelantos sujetos a retencion** tildar
+
+**Cuenta de impuestos (ambas)** Crear o usar una cuenta Retencion IIBB aplicada
+
+USO
+===
+
+Cuando se hace una Factura, al validar el sistema agrega automaticamente la
+percepcion.
+
+Cuando se hace un pago lo primero es seleccionar que se va a pagar para tener
+el total de deuda y luego botón calcular retenciones, eso calcula las retenciones
+sobre lo que se pretende pagar, aparece un nuevo medio de pago que es la retencion
+con una boton para imprimir el comprobante.
+
+Para bajar los archivos de retenciones y percepciones, crear un libro de iva
+aparecera una nueva oreja ARBA al lado de CITI.
 
 Bug Tracker
 ===========
