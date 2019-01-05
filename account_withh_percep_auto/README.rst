@@ -54,16 +54,16 @@ Crear o actualizar el impuesto ir a:
 
 Configuracion / Contabilidad / Impuestos / Impuestos de Retencion
 
-**Nombre**: Retención IIBB Arba Aplicada
-**tipo**: WS Arba
-**importe base**: Importe sin impuestos.
-**Secuencia del impuesto** Ponerle una secuencia al impuesto con formato 0001-00000001
-**Prefijo**: 0001-
-**Mida de secuencia**: 8
-**Pagos acumulados** dejar en blanco
-**Adelantos sujetos a retencion** tildar
+- **Nombre**: Retención IIBB Arba Aplicada
+- **tipo**: WS Arba
+- **importe base**: Importe sin impuestos.
+- **Secuencia del impuesto** Ponerle una secuencia al impuesto con formato 0001-00000001
+- **Prefijo**: 0001-
+- **Mida de secuencia**: 8
+- **Pagos acumulados** dejar en blanco
+- **Adelantos sujetos a retencion** tildar
 
-**Cuenta de impuestos (ambas)** Crear o usar una cuenta Retencion IIBB aplicada
+- **Cuenta de impuestos (ambas)** Crear o usar una cuenta Retencion IIBB aplicada
 
 USO
 ===
@@ -90,12 +90,10 @@ help us smashing it by providing a detailed and welcomed feedback.
 Credits
 =======
 
-Contributors
-------------
 ADHOC
 
 Maintainer
-----------
+==========
 
 |company_logo|
 
