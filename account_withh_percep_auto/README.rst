@@ -39,9 +39,7 @@ Crear o actualizar el impuesto, ir a:
 Configuracion / Contabilidad / Impuestos
 
 - **Nombre** Percepciones IIBB Arba aplicada
-- **Tipo de cálculo** fijo
-- result = price_unit * partner.get_arba_alicuota_percepcion()
-- **Importe Base**: Importe sin impuestos
+- **Tipo de cálculo** fijo 0.0000
 - **Etiqueta en facturas**: Perc IIBB ARBA
 - **Ámbito del impuesto**: Ventas
 - **Grupo de impuestos**: Percepción IIBB
