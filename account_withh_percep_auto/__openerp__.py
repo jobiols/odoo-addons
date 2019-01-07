@@ -31,6 +31,7 @@
     "data": [
         'reports/certificado_de_retencion_report.xml',
         'views/account_report_view.xml',
+        'views/account_invoice_view.xml'
     ],
     'auto_install': False,
     'installable': True,

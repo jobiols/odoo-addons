@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- agregar tilde para forzar no percepcion en compras -->
+
+    <record id='invoice_supplier_form' model='ir.ui.view'>
+        <field name="model">account.invoice</field>
+        <field name="inherit_id" ref="account.invoice_supplier_form"/>
+        <field name="name">ACCOUNT PERCEPTIONS/WITHHOLDING forzar no percepcion</field>
+        <field name='arch' type='xml'>
+            <xpath expr="//field[@name='date']" position="after">
+                <field name="force_no_perception"/>
+            </xpath>
+        </field>
+    </record>
+
+</odoo>
