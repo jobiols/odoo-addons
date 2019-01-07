@@ -27,7 +27,7 @@ class AccountInvoice(models.Model):
     def _compute_perception(self):
         for inv in self:
             for tax in inv.tax_line_ids.filtered(
-                lambda r: r.tax_id.tax_group_id.type == 'perception'):  #noqa
+                lambda r: r.tax_id.tax_group_id.type == 'perception'):  # noqa
                 inv.export_perception = True
 
     @api.multi
