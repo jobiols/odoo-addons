@@ -10,16 +10,16 @@ class AccountInvoice(models.Model):
     _inherit = "account.invoice"
 
     export_perception = fields.Boolean(
-            compute='_compute_perception',
-            default=False,
-            readonly=True,
-            store=True,
-            help='Marca si la factura tiene percepciones'
+        compute='_compute_perception',
+        default=False,
+        readonly=True,
+        store=True,
+        help='Marca si la factura tiene percepciones'
     )
     force_no_perception = fields.Boolean(
-            default=False,
-            help='Si se tilda no hace la percepcion',
-            string='Forzar no percepcion'
+        default=False,
+        help='Si se tilda no hace la percepcion',
+        string='Forzar no percepcion'
     )
 
     @api.multi
@@ -27,7 +27,7 @@ class AccountInvoice(models.Model):
     def _compute_perception(self):
         for inv in self:
             for tax in inv.tax_line_ids.filtered(
-                    lambda r: r.tax_id.tax_group_id.type == 'perception'):
+                lambda r: r.tax_id.tax_group_id.type == 'perception'):
                 inv.export_perception = True
 
     @api.multi
@@ -47,7 +47,7 @@ class AccountInvoice(models.Model):
         # calcular percepciones solo si es factura de ventas y si no le han
         # forzado no percibir
         if invoice_id.type in ['in_invoice', 'in_refund'] or \
-                invoice_id.force_no_perception:
+            invoice_id.force_no_perception:
             return
 
         # si la fecha es false poner la fecha de hoy
@@ -81,9 +81,9 @@ class AccountInvoice(models.Model):
         # porque pueden haber modificado la factura y debe ser recalculada.
         # salvo que sea manual, entonces no la tocamos.
         invoice_tax_obj.search(
-                [('invoice_id', '=', invoice_id.id),
-                 ('manual', '=', False),
-                 ('tax_id.tax_group_id.type', '=', 'perception')]).unlink()
+            [('invoice_id', '=', invoice_id.id),
+             ('manual', '=', False),
+             ('tax_id.tax_group_id.type', '=', 'perception')]).unlink()
 
         base = invoice_id.amount_untaxed
 
@@ -93,7 +93,7 @@ class AccountInvoice(models.Model):
 
         for tax_id in tax_ids:
             res = tax_id.with_context(ctx).compute_all(
-                    base, partner=invoice_id.partner_id)
+                base, partner=invoice_id.partner_id)
             tax = res['taxes'][0]
             val = {
                 'invoice_id': invoice_id.id,

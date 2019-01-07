@@ -12,26 +12,26 @@ class AccountVaLedger(models.Model):
     _inherit = 'account.vat.ledger'
 
     perceptions_file = fields.Binary(
-            compute='_compute_perception_files',
-            readonly=True
+        compute='_compute_perception_files',
+        readonly=True
     )
     perceptions_filename = fields.Char(
-            compute='_compute_perception_files',
-            readonly=True,
+        compute='_compute_perception_files',
+        readonly=True,
     )
     REGINFO_PERCEPTIONS = fields.Text(
-            readonly=True,
+        readonly=True,
     )
     withholdings_file = fields.Binary(
-            compute='_compute_withholding_files',
-            readonly=True
+        compute='_compute_withholding_files',
+        readonly=True
     )
     withholdings_filename = fields.Char(
-            compute='_compute_withholding_files',
-            readonly=True,
+        compute='_compute_withholding_files',
+        readonly=True,
     )
     REGINFO_WITHHOLDINGS = fields.Text(
-            readonly=True,
+        readonly=True,
     )
 
     @api.multi
@@ -113,7 +113,7 @@ class AccountVaLedger(models.Model):
             # Campo 07 -- Monto imponible
             # TODO Esto habria que sacarlo del tax
             tax = inv.tax_line_ids.filtered(
-                    lambda r: r.tax_id.tax_group_id.type == 'perception')
+                lambda r: r.tax_id.tax_group_id.type == 'perception')
             amount = '{:012.2f}'.format(inv.amount_untaxed)
             row += [amount]
 
@@ -145,7 +145,7 @@ class AccountVaLedger(models.Model):
         self.perceptions_filename = '{}-perception.txt'.format(period)
         if self.REGINFO_PERCEPTIONS:
             self.perceptions_file = base64.encodestring(
-                    self.REGINFO_PERCEPTIONS.encode('ISO-8859-1'))
+                self.REGINFO_PERCEPTIONS.encode('ISO-8859-1'))
 
     @api.depends('date_from', 'date_to', 'REGINFO_WITHHOLDINGS')
     def _compute_withholding_files(self):
@@ -153,4 +153,4 @@ class AccountVaLedger(models.Model):
         self.withholdings_filename = '{}-withholding.txt'.format(period)
         if self.REGINFO_WITHHOLDINGS:
             self.withholdings_file = base64.encodestring(
-                    self.REGINFO_WITHHOLDINGS.encode('ISO-8859-1'))
+                self.REGINFO_WITHHOLDINGS.encode('ISO-8859-1'))
