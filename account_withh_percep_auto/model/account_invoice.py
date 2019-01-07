@@ -27,7 +27,7 @@ class AccountInvoice(models.Model):
     def _compute_perception(self):
         for inv in self:
             for tax in inv.tax_line_ids.filtered(
-                lambda r: r.tax_id.tax_group_id.type == 'perception'):
+                lambda r: r.tax_id.tax_group_id.type == 'perception'):  #noqa
                 inv.export_perception = True
 
     @api.multi
@@ -47,7 +47,7 @@ class AccountInvoice(models.Model):
         # calcular percepciones solo si es factura de ventas y si no le han
         # forzado no percibir
         if invoice_id.type in ['in_invoice', 'in_refund'] or \
-            invoice_id.force_no_perception:
+            invoice_id.force_no_perception:  # noqa
             return
 
         # si la fecha es false poner la fecha de hoy
@@ -107,5 +107,5 @@ class AccountInvoice(models.Model):
                     'out_invoice', 'in_invoice') and (
                                   tax['account_id'] or False) or (
                                   tax['refund_account_id'] or False),
-            }
+            }   # noqa
             self.env['account.invoice.tax'].create(val)
