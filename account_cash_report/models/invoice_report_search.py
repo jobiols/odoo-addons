@@ -93,9 +93,10 @@ class InvoiceReport(models.AbstractModel):
         invoice_obj = self.env['account.invoice']
         ret = []
         for invoice in invoice_obj.search(domain):
-            # obtener un set con los medios de pago que pagaron la fac
+            # obtener una lista con los medios de pago que pagaron la fac
             journal_data = self._get_journal_data(invoice)
 
+            # aca va la factura con el primer medio de pago
             inv = {
                 'number': invoice.display_name,
                 'total': invoice.amount_total_signed,
@@ -107,6 +108,7 @@ class InvoiceReport(models.AbstractModel):
                 'residual': invoice.residual
             }
             ret.append(inv)
+            # aca van los demas medios de pago
             for jrnl in journal_data[1:]:
                 inv = {
                     'number': '',
@@ -115,7 +117,8 @@ class InvoiceReport(models.AbstractModel):
                     'date': jrnl.get('date', ''),
                     'paid': jrnl.get('amount', 0),
                     'partner': '',
-                    'salesperson': ''
+                    'salesperson': '',
+                    'residual': 0
                 }
                 ret.append(inv)
 
