@@ -9,7 +9,7 @@ que se explican a continuacion
 Reporte diario de facturacion
 =============================
 
-Este reporte se encuentra en Contabilidad / Cajas / Reporte de facturacion
+Este reporte se encuentra en Facturacion / Cajas / Reporte de facturacion
 
 El reporte de facturacion esta personalizado para cada caja, y muestra todas
 las que fueron validadas en el periodo y el total acumulado en cada medio
