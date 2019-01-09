@@ -185,7 +185,8 @@ class InvoiceReport(models.AbstractModel):
         receipts = receipt_obj.search(
             [('create_uid', '=', cashier_uid),
              ('payment_date', '>=', data['date_from']),
-             ('payment_date', '<=', data['date_to'])])
+             ('payment_date', '<=', data['date_to']),
+             ('state', '=', 'posted')])
 
         for receipt in receipts:
             ret.append({

@@ -70,7 +70,6 @@ procesado en cada uno, mas un medio de pago ficticio llamado Cuenta corriente
 que no esta cancelando facturas sino que se calcula como la suma de los saldos
 no cancelados de todas las facturas listadas.
 
-
 Debajo de los diarios se encuentra un totalizador que suma el total de cada
 medio de pago mas el de las cuentas corrientes.
 
