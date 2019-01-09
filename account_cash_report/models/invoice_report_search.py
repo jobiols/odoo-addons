@@ -189,12 +189,17 @@ class InvoiceReport(models.AbstractModel):
              ('state', '=', 'posted')])
 
         for receipt in receipts:
+            # por si hay un pago sin factura asociada
+            if receipt.matched_move_line_ids:
+                invoice_no = receipt.matched_move_line_ids[
+                    0].move_id.display_name
+            else:
+                invoice_no = False
             ret.append({
                 'number': receipt.name,
                 'total': receipt.payments_amount,
                 'journal': '',
-                'invoice_no': receipt.matched_move_line_ids[
-                    0].move_id.display_name,
+                'invoice_no': invoice_no,
                 'date': receipt.payment_date,
                 'partner': receipt.partner_id.name,
             })
