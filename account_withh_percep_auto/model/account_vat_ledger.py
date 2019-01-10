@@ -137,7 +137,8 @@ class AccountVaLedger(models.Model):
         return self.env['account.payment'].search([
             ('export_withholding', '=', True),
             ('payment_date', '>=', self.date_from),
-            ('payment_date', '<=', self.date_to)])
+            ('payment_date', '<=', self.date_to),
+            ('state', '=', 'posted')])
 
     @api.depends('date_from', 'date_to', 'REGINFO_PERCEPTIONS')
     def _compute_perception_files(self):
