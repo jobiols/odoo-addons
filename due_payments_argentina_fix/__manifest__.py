@@ -19,7 +19,7 @@
 ##############################################################################
 {
     'name': 'Correccion reporte de pagos pendientes',
-    'version': '11.0.0.0.0',
+    'version': '11.0.0.0.1',
     'category': 'Tools',
     'summary': "Corrije el reporte poniendo el numero de factura AFIP",
     'author': "jeo Software",
