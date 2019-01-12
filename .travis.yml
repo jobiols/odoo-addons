@@ -16,20 +16,20 @@ git:
 addons:
   apt:
     packages:
-      - expect-dev  # provides unbuffer utility
-      - python-lxml  # because pip installation is slow
-      - python-simplejson
-      - python-serial
-      - python-yaml
-      - libcups2-dev # for aeroo
+#      - expect-dev  # provides unbuffer utility
+#      - python-lxml  # because pip installation is slow
+#      - python-simplejson
+#      - python-serial
+#      - python-yaml
+#      - libcups2-dev # for aeroo
 
-      - python-dev
-      - swig
-      - libffi-dev
-      - libssl-dev
-      - python-m2crypto
-      - python-httplib2
-#      - pyhon3-dev # for cups
+#      - python-dev
+#      - swig
+#      - libffi-dev
+#      - libssl-dev
+#      - python-m2crypto
+#      - python-httplib2
+      - pyhon3-dev
 
 env:
   global:
