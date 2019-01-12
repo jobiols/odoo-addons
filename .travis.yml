@@ -1,3 +1,4 @@
+dist: "trusty"
 language: python
 sudo: false
 
@@ -29,6 +30,7 @@ addons:
       - libssl-dev
       - python-m2crypto
       - python-httplib2
+      - python3-dev
 
 env:
   global:
