@@ -29,6 +29,7 @@ addons:
       - libssl-dev
       - python-m2crypto
       - python-httplib2
+      - phonenumbers
 
 env:
   global:
