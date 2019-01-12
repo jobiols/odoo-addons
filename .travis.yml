@@ -22,14 +22,14 @@ addons:
       - python-serial
       - python-yaml
       - libcups2-dev # for aeroo
-      # FE
+
       - python-dev
       - swig
       - libffi-dev
       - libssl-dev
       - python-m2crypto
       - python-httplib2
-      - pyhon3-dev # for cups
+#      - pyhon3-dev # for cups
 
 env:
   global:
