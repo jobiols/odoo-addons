@@ -22,6 +22,7 @@ addons:
       - python-serial
       - python-yaml
       - libcups2-dev # for aeroo
+      - pyhon3-dev # for cups
       # FE
       - python-dev
       - swig
