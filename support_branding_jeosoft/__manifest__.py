@@ -35,7 +35,8 @@
         'mail',
 
         # para la localizacion argentina
-        'l10n_ar_account',
+        'l10n_ar_base',  # esto se instala solo
+        'l10n_ar_account',  # esto se instala solo
         'l10n_ar_afipws_fe',        # Factura Electrónica Argentina
         'l10n_ar_aeroo_einvoice',   # impresion de factura electronica aeroo
         'l10n_ar_account_vat_ledger_citi',
@@ -43,11 +44,12 @@
         'l10n_ar_aeroo_payment_group',  #
 
         # modulos adicionales utilitarios
-        'disable_odoo_online',
-        'res_config_settings_enterprise_remove',
+        'disable_odoo_online',  # Elimina menu de odoo online
+        'res_config_settings_enterprise_remove',  # Elimina menus enterprise
+        'auto_backup',  # poner el backup en: /var/odoo/backups/
+        'backend_theme',
         'server_mode',          # server_mode = "test" en desarrollo
-        'database_tools',
-
+        'due_payments_argentina_fix'  # corrige nombres de documentos
     ],
     'data': [
         'views/ir_config_parameter.xml',
@@ -57,6 +59,6 @@
     'test': [
     ],
     'installable': False,
-    'auto_install': True,
+    'auto_install': False,
     'application': False,
 }
