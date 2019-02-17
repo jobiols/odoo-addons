@@ -47,6 +47,13 @@ class TestProductUploadProduct(common.TransactionCase):
         self.wizard_obj.log = log_obj.create({})
         self.prod_obj = self.env['product.template']
 
+        # Agregar al admin al grupo de crear productos para que funcione
+        # el test.
+        create_prod_group = self.env['res.groups'].search(
+            [('name', '=', 'Create products manually')])
+        admin = self.env['res.users'].search([('id', '=', 1)])
+        create_prod_group.users += admin
+
     @staticmethod
     def get_filename(nro):
         path = os.path.dirname(os.path.realpath(__file__))
