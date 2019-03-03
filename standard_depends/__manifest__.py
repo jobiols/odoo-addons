@@ -41,6 +41,7 @@
         'mail_activity_board_ux',  # quitar actividades del chatter
         'partner_ref_unique',  # evita duplicados en referencia
         'partner_vat_unique',  # evita duplicados en CUIT
+        'invoice_lines_analysis_fix',  # corrige bug en pivot
 
         # utilitarios
         'auto_backup',  # poner el backup en: /var/odoo/backups/
