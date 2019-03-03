@@ -12,13 +12,6 @@
 STANDARD DEPENDS
 ================
 
-.. image:: https://travis-ci.org/jobiols/cl-vhing.svg?branch=11.0
-    :target: https://travis-ci.org/jobiols/cl-vhing
-
-.. image:: https://api.codeclimate.com/v1/badges/3a3a1f98794659f59527/maintainability
-   :target: https://codeclimate.com/github/jobiols/cl-vhing/maintainability
-   :alt: Maintainability
-
 
 Este modulo instala las dependencias standard para localizacion argentina ADHOC
 Debe ponerse en las dependencias del modulo default de cada cliente.
