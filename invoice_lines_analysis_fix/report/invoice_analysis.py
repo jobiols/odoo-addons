@@ -1,8 +1,7 @@
-# -*- coding: utf-8 -*-
 # For copyright and license notices, see __manifest__.py file in module root
 
 
-from odoo import fields, models, api
+from odoo import models, api
 from odoo import tools
 
 
@@ -22,7 +21,8 @@ class AccountInvoiceLineReport(models.Model):
         "account_invoice_line"."price_unit" AS "price_unit",
         "account_invoice_line"."discount" AS "discount",
         "account_invoice_line"."account_analytic_id" AS "account_analytic_id",
-        "account_invoice_line"."price_subtotal_signed" AS "price_subtotal_signed",
+        "account_invoice_line"."price_subtotal_signed"
+            AS "price_subtotal_signed",
 
         -- este es el fix que hacemos
         case when "account_invoice"."type" in ('in_refund','out_refund') then
