@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <record model="ir.ui.view" id="view_account_config_settings">
+        <field name="name">l10n_ar.view.account.config.form.inherit</field>
+        <field name="inherit_id"
+               ref="l10n_ar_account.view_account_config_settings"/>
+        <field name="model">account.config.settings</field>
+        <field name="arch" type="xml">
+            <group name="argentina_config" position="after">
+                <h>ARBA</h>
+            </group>
+        </field>
+    </record>
+
+</odoo>
