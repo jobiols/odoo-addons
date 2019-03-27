@@ -18,7 +18,7 @@ INFO = [
     {'name': 'default_code', 'create_req': True, 'update_req': True,
      'type': 'str'},
     {'name': 'currency', 'create_req': True, 'update_req': True,
-     'type': 'str'},
+     'type': 'currency'},
     {'name': 'cost', 'create_req': True, 'update_req': True, 'type': 'number'},
     {'name': 'price', 'create_req': True, 'update_req': True,
      'type': 'number'},
@@ -50,7 +50,6 @@ class ImportWorksheet(models.TransientModel):
     def read_data(self, sheet):
         """ Read the spreadsheet into a data structure
         """
-
         def check(info, col, create):
             """ chequear los datos y generar errores si estan mal
             """
@@ -64,6 +63,13 @@ class ImportWorksheet(models.TransientModel):
             data_type = info['type']
             name = info['name']
             req = info['create_req'] if create else info['update_req']
+
+            if data_type == 'currency':
+                if not (value == 'USD' or value == 'ARS'):
+                    text = _('Invalid Currency must be ARS or USD') + \
+                           ' ' + err % (row[col].row, name, sheet.title)
+                    self.add_error(text)
+                return {name: value}
 
             if data_type == 'str':
                 if not (isinstance(value, (str, unicode)) or
@@ -205,7 +211,8 @@ class ImportWorksheet(models.TransientModel):
                 # esto reemplaza todos los registros por el tax que es un id
                 prod.taxes_id = [(6, 0, [tax])]
 
-            prod.set_prices(row['cost'], vendor, price=row['price'])
+            prod.set_prices(row['cost'], vendor, price=row['price'],
+                            manual=True)
             prod.set_invoice_cost()
 
     @api.multi
