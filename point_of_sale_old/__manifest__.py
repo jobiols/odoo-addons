@@ -44,7 +44,7 @@
     'demo': [
         'data/point_of_sale_demo.xml',
     ],
-    'installable': True,
+    'installable': False,
     'application': True,
     'qweb': ['static/src/xml/pos.xml'],
     'website': 'https://www.odoo.com/page/point-of-sale',
