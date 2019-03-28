@@ -5,7 +5,7 @@
         <template id="assets_backend" name="POINT OF SALE FIX" inherit_id="web.assets_backend">
             <xpath expr="." position="inside">
 		        <!--These links will be called when loading your Odoo -->
-                <script type="text/javascript" src="/point_of_sale_fix/static/src/js/devices.js"></script>
+                <script type="text/javascript" src="/point_of_sale_fix/static/src/js/devices_fix.js"></script>
             </xpath>
         </template>
     </data>

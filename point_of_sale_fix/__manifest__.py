@@ -30,8 +30,8 @@
         'point_of_sale'
     ],
     'data': [
-       # 'views/static_resources.xml',
+       'views/static_resources.xml',
     ],
-    'installable': True,
+    'installable': False,
     'application': False,
 }

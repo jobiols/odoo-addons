@@ -3,10 +3,10 @@
 
 {
     'name': 'Point of Sale',
-    'version': '1.0.2',
+    'version': '1.0.3',
     'category': 'Point Of Sale',
     'sequence': 20,
-    'summary': 'Touchscreen Interface for Shops fixed',
+    'summary': 'Touchscreen Interface for Shops Fixed',
     'description': "",
     'depends': ['stock_account', 'barcodes', 'web_editor'],
     'data': [
@@ -44,7 +44,7 @@
     'demo': [
         'data/point_of_sale_demo.xml',
     ],
-    'installable': False,
+    'installable': True,
     'application': True,
     'qweb': ['static/src/xml/pos.xml'],
     'website': 'https://www.odoo.com/page/point-of-sale',
