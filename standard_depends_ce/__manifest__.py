@@ -43,9 +43,13 @@
         'partner_vat_unique',  # evita duplicados en CUIT
         'invoice_lines_analysis_fix',  # corrige bug en pivot
 
-        # utilitarios
+        # modulos adicionales utilitarios CE
+        'disable_odoo_online',  # Elimina menu de odoo online
+        'res_config_settings_enterprise_remove',  # Elimina menus enterprise
         'auto_backup',  # poner el backup en: /var/odoo/backups/
-        'due_payments_argentina_fix'  # corrige los numeros de factura
+        'backend_theme',
+        'server_mode',          # server_mode = "test" en desarrollo
+        'due_payments_argentina_fix'  # corrige nombres de documentos
     ],
     'data': [],
     'demo': [],
