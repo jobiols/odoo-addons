@@ -19,15 +19,15 @@
 ##############################################################################
 
 {
-    'name': 'Standard Dependencies',
-    'version': '11.0.0.0.0',
+    'name': 'Standard Dependencies ce',
+    'version': '11.0.0.1.0',
     'category': 'Tools',
     'summary': "Add standard dependecies for Argentinian localization",
     'author': "jeo Software",
     'website': 'http://github.com/jobiols/module-repo',
     'license': 'AGPL-3',
     'depends': [
-        # para la localizacion argentina
+        # para la localizacion argentina version comunitaria
         'l10n_ar_base',  # esto se instala solo
         'l10n_ar_account',  # esto se instala solo
         'l10n_ar_afipws_fe',  # Factura Electrónica Argentina

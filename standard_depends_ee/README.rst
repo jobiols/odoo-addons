@@ -8,13 +8,14 @@
    :target: https://www.gnu.org/licenses/agpl
    :alt: License: AGPL-3
 
-================
-STANDARD DEPENDS
-================
+===================
+STANDARD DEPENDS EE
+===================
 
 
 Este modulo instala las dependencias standard para localizacion argentina ADHOC
-Debe ponerse en las dependencias del modulo default de cada cliente.
+Version Enterprise Debe ponerse en las dependencias del modulo default de cada
+cliente.
 
 Installation
 ============
