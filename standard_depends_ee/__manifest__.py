@@ -27,7 +27,6 @@
     'website': 'http://github.com/jobiols/module-repo',
     'license': 'AGPL-3',
     'depends': [
-        'account_accountant',  # contabilidad completa
         # para la localizacion argentina version Enterprise
         'l10n_ar_base',  # esto se instala solo
         'l10n_ar_account',  # esto se instala solo
