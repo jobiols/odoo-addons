@@ -45,7 +45,8 @@
 
         # utilitarios
         'auto_backup',  # poner el backup en: /var/odoo/backups/
-        'due_payments_argentina_fix'  # corrige los numeros de factura
+        'due_payments_argentina_fix',  # corrige los numeros de factura
+        'product_unique'  # impide duplicar el codigo de producto
     ],
     'data': [],
     'demo': [],
