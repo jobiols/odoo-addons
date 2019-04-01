@@ -38,18 +38,19 @@
         'l10n_ar_account_withholding',  # Retenciones
         'account_ux',  # hace pilas de cosas ver en el modulo
         'base_ux',  # mejoras de base
-        'mail_activity_board_ux',  # quitar actividades del chatter
-        'partner_ref_unique',  # evita duplicados en referencia
-        'partner_vat_unique',  # evita duplicados en CUIT
-        'invoice_lines_analysis_fix',  # corrige bug en pivot
+        'due_payments_argentina_fix'  # corrige nombres de documentos
 
         # modulos adicionales utilitarios CE
+        'invoice_lines_analysis_fix',  # corrige bug en pivot
         'disable_odoo_online',  # Elimina menu de odoo online
         'res_config_settings_enterprise_remove',  # Elimina menus enterprise
         'auto_backup',  # poner el backup en: /var/odoo/backups/
         'backend_theme',
         'server_mode',          # server_mode = "test" en desarrollo
-        'due_payments_argentina_fix'  # corrige nombres de documentos
+        'partner_ref_unique',  # evita duplicados en referencia
+        'partner_vat_unique',  # evita duplicados en CUIT
+        'mail_activity_board_ux',  # quitar actividades del chatter
+        'product_unique',  # no se pueden duplicar codigos de producto
     ],
     'data': [],
     'demo': [],

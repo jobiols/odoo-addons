@@ -38,14 +38,15 @@
         'l10n_ar_account_withholding',  # Retenciones
         'account_ux',  # hace pilas de cosas ver en el modulo
         'base_ux',  # mejoras de base
+        'due_payments_argentina_fix'  # corrige los numeros de factura
+
+        # utilitarios
+        'auto_backup',  # poner el backup en: /var/odoo/backups/
         'mail_activity_board_ux',  # quitar actividades del chatter
         'partner_ref_unique',  # evita duplicados en referencia
         'partner_vat_unique',  # evita duplicados en CUIT
         'invoice_lines_analysis_fix',  # corrige bug en pivot
-
-        # utilitarios
-        'auto_backup',  # poner el backup en: /var/odoo/backups/
-        'due_payments_argentina_fix'  # corrige los numeros de factura
+        'product_unique',  # no se pueden duplicar codigos de producto
     ],
     'data': [],
     'demo': [],
