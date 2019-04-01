@@ -38,7 +38,7 @@
         'l10n_ar_account_withholding',  # Retenciones
         'account_ux',  # hace pilas de cosas ver en el modulo
         'base_ux',  # mejoras de base
-        'due_payments_argentina_fix'  # corrige nombres de documentos
+        'due_payments_argentina_fix',  # corrige nombres de documentos
 
         # modulos adicionales utilitarios CE
         'invoice_lines_analysis_fix',  # corrige bug en pivot
