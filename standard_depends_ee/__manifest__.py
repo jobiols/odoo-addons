@@ -38,7 +38,7 @@
         'l10n_ar_account_withholding',  # Retenciones
         'account_ux',  # hace pilas de cosas ver en el modulo
         'base_ux',  # mejoras de base
-        'due_payments_argentina_fix'  # corrige los numeros de factura
+        'due_payments_argentina_fix',  # corrige los numeros de factura
 
         # utilitarios
         'auto_backup',  # poner el backup en: /var/odoo/backups/
