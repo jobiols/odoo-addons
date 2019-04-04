@@ -32,7 +32,6 @@
     'data': [
     ],
     'demo': [
-        'data/data.xml'
     ],
     'installable': True,
     'application': False,
