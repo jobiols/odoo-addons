@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+    <data>
+        <!-- GRUPO PRODUCT_CREATE -->
+        <record id="group_validate_picking" model="res.groups">
+            <field name="name">Enable validate picking</field>
+            <field name="comment">If you do not have this, the validate button is invisible.</field>
+         </record>
+    </data>
+</openerp>
