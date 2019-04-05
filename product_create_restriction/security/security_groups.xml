@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+    <data>
+        <!-- GRUPO PRODUCT_CREATE -->
+        <record id="group_product_create_users" model="res.groups">
+            <field name="name">Enable product creation</field>
+            <field name="comment">If you do not have this, when creating a product, a popup will appear warning that you do not have permission to create products.</field>
+         </record>
+    </data>
+</openerp>
