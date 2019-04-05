@@ -15,8 +15,8 @@
 #
 ##############################################################################
 {
-    'name': 'Exportacion SICORE',
-    'version': '11.0.1.0.0',
+    'name': 'Exportacion ARBA',
+    'version': '11.0.0.0.0',
     'author':  'Moldeo Interactive, jeo Soft',
     'category': 'Accounting',
     'sequence': 14,
@@ -31,11 +31,11 @@
     ],
     'data': [
         'security/ir.model.access.csv',
-        'account_view.xml'
+        'views/account_view.xml'
     ],
     'test': [
     ],
-    'installable': False,
+    'installable': True,
     'auto_install': False,
     'application': False,
 }
