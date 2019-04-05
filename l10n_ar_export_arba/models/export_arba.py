@@ -27,16 +27,20 @@ class AccountExportArba(models.Model):
         help='año del periodo',
         string='Año'
     )
+    month = fields.Integer(
+        default=datetime.now().month,
+        help='mes del periodo',
+        string='Mes'
+    )
+    period = fields.Char(
+        compute="_compute_period",
+        string='Periodo'
+    )
     quincena = fields.Selection(
         [('0', 'Mensual'),
          ('1', 'Primera'),
          ('2', 'Segunda')],
         default=0
-    )
-    month = fields.Integer(
-        default=datetime.now().month,
-        help='mes del periodo',
-        string='Mes'
     )
     doc_type = fields.Selection(
         [
@@ -70,6 +74,12 @@ class AccountExportArba(models.Model):
         readonly=True
     )
 
+    @api.onchange('year', 'month')
+    @api.multi
+    def _compute_period(self):
+        for reg in self:
+            reg.period = '{}/{}'.format(reg.year, reg.month)
+
     @api.onchange('year', 'month', 'quincena', 'doc_type')
     @api.multi
     def _compute_dates(self):
@@ -99,30 +109,34 @@ class AccountExportArba(models.Model):
     @api.multi
     @api.depends('export_arba_data')
     def _compute_files(self):
+        for rec in self:
 
-        self.ensure_one()
-        # segun vimos aca la afip espera "ISO-8859-1" en vez de utf-8
-        # http://www.planillasutiles.com.ar/2015/08/
-        # como-descargar-los-archivos-de.html
-        # filename AR-30708346655-2019010-7-LOTE1.txt
-        #             |  cuit   | |fech|x y
-        # x quincena
-        # y ret / perc
-        # quincena = 1 primera, 2 segunda 0 mensual
+            # segun vimos aca la afip espera "ISO-8859-1" en vez de utf-8
+            # http://www.planillasutiles.com.ar/2015/08/
+            # como-descargar-los-archivos-de.html
+            # filename AR-30708346655-2019010-7-LOTE1.txt
+            #             |  cuit   | |fech|x y
+            # x quincena
+            # y ret / perc
+            # quincena = 1 primera, 2 segunda 0 mensual
 
-        cuit = self.env.user.company_id.main_id_number
-        if self.date_from and self.date_to:
-            date = self.date_from[:4] + self.date_from[5:7]
-        else:
-            date = '000000'
-        doc_type = WITHHOLDING
-        quincena = self.quincena
+            cuit = rec.env.user.company_id.main_id_number
+            if rec.date_from and rec.date_to:
+                date = rec.date_from[:4] + rec.date_from[5:7]
+            else:
+                date = '000000'
+            doc_type = WITHHOLDING
+            quincena = rec.quincena
 
-        filename = 'AR-%s-%s%s-%s-LOTE1.txt' % (cuit, date, quincena, doc_type)
-        self.export_arba_filename = filename
-        if self.export_arba_data:
-            self.export_arba_file = base64.encodestring(
-                self.export_arba_data.encode('ISO-8859-1'))
+            import wdb;wdb.set_trace()
+
+
+            filename = 'AR-%s-%s%s-%s-LOTE1.txt' % (
+                cuit, date, quincena, doc_type)
+            rec.export_arba_filename = filename
+            if rec.export_arba_data:
+                rec.export_arba_file = base64.encodebytes(
+                    rec.export_arba_data.encode('ISO-8859-1'))
 
     def get_withholding_payments(self):
         """ Obtiene los pagos a proveedor que son retenciones y que
@@ -135,9 +149,35 @@ class AccountExportArba(models.Model):
             ('journal_id.inbound_payment_method_ids.code', '=', 'withholding')]
         )
 
+    def get_perception_invoices(self):
+        """ Obtiene las facturas de cliente que tienen percepciones y que
+            estan en el periodo seleccionado.
+        """
+
+        # busco el id de la etiqueta que marca los impuestos de IIBB
+        name = 'Ret/Perc IIBB Aplicada'
+        account_tag_obj = self.env['account.account.tag']
+        percIIBB = account_tag_obj.search([('name', '=', name)]).id
+
+        invoice_obj = self.env['account.invoice']
+        invoices = invoice_obj.search([
+            ('date_invoice', '>=', self.date_from),
+            ('date_invoice', '<=', self.date_to),
+            ('state', 'in', ['open', 'paid']),
+            ('type', 'in', ['out_invoice', 'out_refund'])
+        ])
+        ret = invoice_obj
+
+        for inv in invoices:
+            if any([tax for tax in inv.tax_line_ids
+                    if percIIBB in tax.tax_id.tag_ids.ids]):
+                ret += inv
+        return ret
+
     @api.multi
     def compute_arba_data(self):
 
+        line = ''
         for rec in self:
             if rec.doc_type == WITHHOLDING:
 
@@ -172,9 +212,11 @@ class AccountExportArba(models.Model):
                     data.append(line)
             else:
                 #  Percepciones
+                # traer todas las facturas con percepciones en el periodo
                 invoices = rec.get_perception_invoices()
                 data = []
                 for invoice in invoices:
+
                     # puede haber varios impuestos de percepcion en la factura
                     perception_taxes = invoice.tax_line_ids.filtered(
                         lambda r: r.tax_id.tax_group_id.type == 'perception')
@@ -192,29 +234,34 @@ class AccountExportArba(models.Model):
                         line += date
 
                         # Campo 3 -- Tipo de comprobante
-                        line += invoice.display_name
+                        # F=Factura R=Recibo C=Nota Crédito, D=Nota Debito
+                        # V=Nota de Venta.
+                        type = invoice.document_type_id.internal_type
+                        if type == 'invoice':
+                            line += 'F'
+                        if type == 'credit_note':
+                            line += 'C'
+                        if type == 'debit_note':
+                            line += 'D'
 
                         # Campo 4 -- Letra comprobante
-                        line += invoice.display_name
+                        line += invoice.journal_document_type_id.document_type_id.document_letter_id.name
 
                         # Campo 5 -- Numero Surursal
-                        line += invoice.display_name
+                        line += invoice.document_number[:4]
 
                         # Campo 6 -- Numero Emision
-                        line += invoice.display_name
+                        line += invoice.document_number[5:]
 
                         # Campo 7 -- Monto imponible
-                        if invoice.type == 'in_refund':
-                            amount = tax.amount
-                        line += invoice.total_unsigned
+                        # ver si es invoice o refund
+                        invoice = invoice.type == 'in_invoice'
+                        base = tax.base if invoice else -tax.base
+                        line += '{:.2f}'.format(base).zfill(12)
 
                         # Campo 6 -- Importe de percepcion
-                        if invoice.type == 'in_refund':
-                            amount = tax.amount * (-1)
-                        else:
-                            amount = tax.amount
-
-                        line = '{:.2f}'.format(amount)
+                        amount = tax.amount if invoice else -tax.amount
+                        line += '{:.2f}'.format(amount).zfill(11)
 
                 data.append(line)
 

@@ -44,8 +44,8 @@
                     <field name="date_from"/>
                     <field name="date_to"/>
                     <field name="doc_type"/>
-                    <field name="year"/>
-                    <field name="month"/>
+                    <field name="period"/>
+                    <field name="quincena"/>
                 </tree>
             </field>
         </record>
