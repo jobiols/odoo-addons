@@ -1,13 +1,13 @@
 # Translation of Odoo Server.
 # This file contains the translation of the following modules:
-#	* product_create_restriction
+#	* picking_validate_restriction
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: Odoo Server 11.0+e-20190201\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2019-04-05 22:08+0000\n"
-"PO-Revision-Date: 2019-04-05 22:08+0000\n"
+"POT-Creation-Date: 2019-04-05 22:55+0000\n"
+"PO-Revision-Date: 2019-04-05 22:55+0000\n"
 "Last-Translator: <>\n"
 "Language-Team: \n"
 "MIME-Version: 1.0\n"
@@ -15,23 +15,12 @@ msgstr ""
 "Content-Transfer-Encoding: \n"
 "Plural-Forms: \n"
 
-#. module: product_create_restriction
-#: model:res.groups,name:product_create_restriction.group_product_create_users
-msgid "Enable product creation"
-msgstr "Habilitar creacion de productos"
+#. module: picking_validate_restriction
+#: model:res.groups,name:picking_validate_restriction.group_validate_picking
+msgid "Enable validate picking"
+msgstr "Habilitar validacion de entregas"
 
-#. module: product_create_restriction
-#: model:res.groups,comment:product_create_restriction.group_product_create_users
-msgid "If you do not have this, when creating a product, a popup will appear warning that you do not have permission to create products."
-msgstr "Si no tiene este permiso, al crear un producto aparecera un popup indicando que no lo puede hacer."
-
-#. module: product_create_restriction
-#: model:ir.model,name:product_create_restriction.model_product_template
-msgid "Product Template"
-msgstr "Plantilla de producto"
-
-#. module: product_create_restriction
-#: code:addons/product_create_restriction/models/product_template.py:19
-#, python-format
-msgid "You do not have permission to create products, if you really need to create a product, please contact a user who has permissions."
-msgstr "Usted no tiene permiso para crear productos, si realmente necesita crear un producto, por favor contacte a un usuario que tenga permiso."
+#. module: picking_validate_restriction
+#: model:res.groups,comment:picking_validate_restriction.group_validate_picking
+msgid "If you do not have this, the validate button is invisible."
+msgstr "Si no tiene este permiso el boton validar de la orden de entrega estara invisible."
