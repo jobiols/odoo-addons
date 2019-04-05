@@ -51,12 +51,12 @@ class AccountExportArba(models.Model):
         default="6"
     )
     date_from = fields.Date(
-        'Fecha inicio',
+        'Desde',
         readonly=True,
         compute="_compute_dates"
     )
     date_to = fields.Date(
-        'Fecha fin',
+        'Hasta',
         readonly=True,
         compute="_compute_dates"
     )
@@ -126,10 +126,7 @@ class AccountExportArba(models.Model):
             else:
                 date = '000000'
             doc_type = WITHHOLDING
-            quincena = rec.quincena
-
-            import wdb;wdb.set_trace()
-
+            quincena = rec.quincena if rec.quincena is not False else 0
 
             filename = 'AR-%s-%s%s-%s-LOTE1.txt' % (
                 cuit, date, quincena, doc_type)

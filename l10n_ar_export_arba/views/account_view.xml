@@ -8,7 +8,7 @@
             <field name="arch" type="xml">
                 <form>
                     <header>
-                        <button name="compute_arba_data" string="Generar ARBA"
+                        <button name="compute_arba_data" string="Regenerar ARBA"
                                 type="object"/>
                     </header>
                     <sheet>
@@ -21,8 +21,14 @@
                             <group>
                                 <field name="year"/>
                                 <field name="month"/>
-                                <field name="date_from"/>
-                                <field name="date_to"/>
+                                <group colspan="4">
+                                <span>
+                                    <br/>
+                                    <p>Periodo</p>
+                                    <field name="date_from"/> <p>--</p>
+                                    <field name="date_to"/>
+                                </span>
+                                </group>
                             </group>
                         </group>
 

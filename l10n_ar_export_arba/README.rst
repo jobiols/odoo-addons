@@ -12,7 +12,7 @@
 Exportacion de datos ARBA
 =========================
 
-Este modulo permite exportar las retenciones y percepciones automaticas realizadas
+Este modulo permite exportar las retenciones y percepciones automaticas realizadas.
 
 Installation
 ============
