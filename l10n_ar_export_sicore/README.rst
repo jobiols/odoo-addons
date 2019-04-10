@@ -8,9 +8,9 @@
    :target: https://www.gnu.org/licenses/agpl
    :alt: License: AGPL-3
 
-=========================
+===========================
 Exportacion de datos sicore
-=========================
+===========================
 
 Este modulo permite exportar las retenciones y percepciones automaticas realizadas.
 
