@@ -206,14 +206,16 @@ class AccountExportArba(models.Model):
                     line += date
 
                     # Campo 03 -- Numero de sucursal
-                    line += payment.withholding_number[:4]
+                    value = payment.withholding_number[:4]
+                    line += value.zfill(4)
 
                     # Campo 04 -- Numero de emision
-                    line += payment.withholding_number[5:]
+                    value = payment.withholding_number[5:]
+                    line += value.zfill(8)
 
                     # Campo 05 -- Importe de Retencion
                     amount = '{:.2f}'.format(payment.amount)
-                    line += amount
+                    line += amount.zfill(11)
 
                     # Campo 06 -- Tipo de operacion
                     line += 'A'
@@ -257,10 +259,12 @@ class AccountExportArba(models.Model):
                         line += invoice.journal_document_type_id.document_type_id.document_letter_id.name
 
                         # Campo 5 -- Numero Surursal
-                        line += invoice.document_number[:4]
+                        value = invoice.document_number[:4]
+                        line += value.zfill(4)
 
                         # Campo 6 -- Numero Emision
-                        line += invoice.document_number[5:]
+                        value = invoice.document_number[5:]
+                        line += value.zfill(8)
 
                         # Campo 7 -- Monto imponible
                         # ver si es invoice o refund
