@@ -75,7 +75,7 @@ class ImportWorksheet(models.TransientModel):
                 if not (isinstance(value, (str, unicode)) or
                         (value is None and not req)):
 
-                    text = _('Not a string') + \
+                    text = _('Cell must contain text') + \
                            ' ' + err % (row[col].row, name, sheet.title)
                     self.add_error(text)
                 return {name: value}
@@ -83,15 +83,16 @@ class ImportWorksheet(models.TransientModel):
             if data_type == 'number':
                 if not (isinstance(value, (float, int, long)) or
                         (value is None) and not req):
-                    text = _('Not a number') + \
-                           ' ' + err % (row[col].row, name, sheet.title)
+                    row_ = row[col].row if row[col].value is not None else 0
+                    text = _('Cell must contain a number') + \
+                           ' ' + err % (row_, name, sheet.title)
                     self.add_error(text)
                 return {name: value}
 
             if data_type == 'default_code':
                 if not (isinstance(value, (str, unicode)) or
                         (value is None) and not req):
-                    text = _('Not a string') + \
+                    text = _('Cell must contain text') + \
                            ' ' + err % (row[col].row, name, sheet.title)
                     self.add_error(text)
 
@@ -106,8 +107,8 @@ class ImportWorksheet(models.TransientModel):
 
             self.add_error(_('internal error !!'))
 
-        if sheet.max_column < 4:
-            self.add_error(_('Too few columns in sheet %s.') % sheet.title)
+        if sheet.max_column < 10:
+            self.add_error(_('Checkout the header in the sheet %s it seems some columns are missing.') % sheet.title)
             return
 
         ret = []
