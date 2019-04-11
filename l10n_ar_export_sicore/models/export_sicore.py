@@ -18,7 +18,7 @@ WITHHOLDING = '6'
 PERCEPTION = '7'
 
 
-class AccountExportArba(models.Model):
+class AccountExportSicore(models.Model):
     _name = 'account.export.sicore'
     _description = 'account.export.sicore'
 
@@ -60,15 +60,15 @@ class AccountExportArba(models.Model):
         readonly=True,
         compute="_compute_dates"
     )
-    export_arba_data = fields.Text(
+    export_sicore_data = fields.Text(
         'Contenido archivo'
     )
-    export_arba_file = fields.Binary(
+    export_sicore_file = fields.Binary(
         'Descargar Archivo',
         compute="_compute_files",
         readonly=True
     )
-    export_arba_filename = fields.Char(
+    export_sicore_filename = fields.Char(
         'Archivo sicore',
         compute="_compute_files",
         readonly=True
@@ -107,7 +107,7 @@ class AccountExportArba(models.Model):
             rec.date_to = dte.strftime('%Y-%m-%d')
 
     @api.multi
-    @api.depends('export_arba_data')
+    @api.depends('export_sicore_data')
     def _compute_files(self):
         for rec in self:
 
@@ -130,10 +130,10 @@ class AccountExportArba(models.Model):
 
             filename = 'AR-%s-%s%s-%s-LOTE1.txt' % (
                 cuit, date, quincena, doc_type)
-            rec.export_arba_filename = filename
-            if rec.export_arba_data:
-                rec.export_arba_file = base64.encodebytes(
-                    rec.export_arba_data.encode('ISO-8859-1'))
+            rec.export_sicore_filename = filename
+            if rec.export_sicore_data:
+                rec.export_sicore_file = base64.encodebytes(
+                    rec.export_sicore_data.encode('ISO-8859-1'))
 
     def get_withholding_payments(self):
         """ Obtiene los pagos a proveedor que son retenciones y que
@@ -172,7 +172,7 @@ class AccountExportArba(models.Model):
         return ret
 
     @api.multi
-    def compute_arba_data(self):
+    def compute_sicore_data(self):
 
         line = ''
         for rec in self:
@@ -262,4 +262,4 @@ class AccountExportArba(models.Model):
 
                 data.append(line)
 
-            rec.export_arba_data = '\n'.join(data)
+            rec.export_sicore_data = '\n'.join(data)
