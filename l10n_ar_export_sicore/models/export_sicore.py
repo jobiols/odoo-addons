@@ -23,12 +23,12 @@ class AccountExportSicore(models.Model):
     _description = 'account.export.sicore'
 
     year = fields.Integer(
-        default=datetime.now().year,
+        default=lambda self: self._default_year(),
         help='año del periodo',
         string='Año'
     )
     month = fields.Integer(
-        default=datetime.now().month,
+        default=lambda self: self._default_month(),
         help='mes del periodo',
         string='Mes'
     )
@@ -73,6 +73,18 @@ class AccountExportSicore(models.Model):
         compute="_compute_files",
         readonly=True
     )
+
+    @staticmethod
+    def _last_month():
+        today = date.today()
+        first = today.replace(day=1)
+        return first - timedelta(days=1)
+
+    def _default_year(self):
+        return self._last_month().year
+
+    def _default_month(self):
+        return self._last_month().month
 
     @api.onchange('year', 'month')
     @api.multi
