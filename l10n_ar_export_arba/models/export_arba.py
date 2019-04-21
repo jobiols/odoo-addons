@@ -245,12 +245,12 @@ class AccountExportArba(models.Model):
                         # Campo 3 -- Tipo de comprobante
                         # F=Factura R=Recibo C=Nota Crédito, D=Nota Debito
                         # V=Nota de Venta.
-                        type = invoice.document_type_id.internal_type
-                        if type == 'invoice':
+                        type_ = invoice.document_type_id.internal_type
+                        if type_ == 'invoice':
                             line += 'F'
-                        if type == 'credit_note':
+                        if type_ == 'credit_note':
                             line += 'C'
-                        if type == 'debit_note':
+                        if type_ == 'debit_note':
                             line += 'D'
 
                         # Campo 4 -- Letra comprobante
