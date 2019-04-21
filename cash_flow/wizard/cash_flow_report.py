@@ -1,9 +1,46 @@
 # For copyright and license notices, see __manifest__.py file in module root
 
 # from openerp import api,  fields, models, _
-from openerp import models
+from openerp import models, fields, api
+from datetime import datetime
 
 
 class CashFlowReport(models.TransientModel):
     _name = "cash_flow_report"
     _description = "Cash Flow management and report"
+
+    def _get_default_receivable_ids(self):
+        return self.env['account.account'].search([('user_type_id', '=', 1)])
+
+    def _get_default_payable_ids(self):
+        return self.env['account.account'].search([('user_type_id', '=', 2)])
+
+    def _get_default_cash_ids(self):
+        return self.env['account.account'].search([('user_type_id', '=', 3)])
+
+    date_from = fields.Date(
+        required=True,
+        default=datetime.today().strftime('%Y-%m-%d')
+    )
+    date_to = fields.Date(
+        required=True,
+        default=datetime.today().strftime('%Y-%m-%d')
+    )
+    account_receivable_ids = fields.Many2many(
+        required=True,
+        comodel_name='account.account',
+        default=_get_default_receivable_ids
+    )
+    account_payable_ids = fields.Many2many(
+        required=True,
+        comodel_name='account.account',
+        default=_get_default_payable_ids
+    )
+    account_cash_ids = fields.Many2many(
+        required=True,
+        comodel_name='account.account',
+        default=_get_default_cash_ids
+    )
+
+    def print_report(self):
+        pass

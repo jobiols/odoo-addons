@@ -7,8 +7,28 @@
             <field name="model">cash_flow_report</field>
             <field name="arch" type="xml">
                 <form string="Report Options">
-
-                    <p>aaaaaaaaaaaa</p>
+                    <group>
+                        <group>
+                            <field name="date_from"/>
+                        </group>
+                        <group>
+                            <field name="date_to"/>
+                        </group>
+                    </group>
+                    <notebook>
+                        <page string="Receivable">
+                            <field name="account_receivable_ids"
+                                   domain="[('user_type_id','=',1)]"/>
+                        </page>
+                        <page string="Payable">
+                            <field name="account_payable_ids"
+                                   domain="[('user_type_id','=',2)]"/>
+                        </page>
+                        <page string="Bank and Cash">
+                            <field name="account_cash_ids"
+                                   domain="[('user_type_id','=',3)]"/>
+                        </page>
+                    </notebook>
 
                     <!--
                     <group col="4">
@@ -48,23 +68,23 @@
                             <field name="journal_ids"/>
                         </page>
                     </notebook>
+                    -->
                     <footer>
-                        <button name="check_report" string="Imprimir"
+                        <button name="print_report" string="Print"
                                 type="object" default_focus="1"
                                 class="oe_highlight"/>
                         or
-                        <button string="Cancelar" class="oe_link"
+                        <button string="Cancel" class="oe_link"
                                 special="cancel"/>
                     </footer>
 
-                    -->
+
                 </form>
             </field>
         </record>
 
-
         <record id="action_cash_flow" model="ir.actions.act_window">
-            <field name="name">Cash Flow report</field>
+            <field name="name">Cash Flow Report</field>
             <field name="type">ir.actions.act_window</field>
             <field name="res_model">cash_flow_report</field>
             <field name="view_type">form</field>
@@ -74,7 +94,7 @@
         </record>
 
         <menuitem id="menu_cash_report"
-                  name="Reporte de flujo de efectivo"
+                  name="Cash Flow Report"
                   groups="account.group_account_manager"
                   action="action_cash_flow"
                   parent="account.account_reports_legal_statements_menu"/>
