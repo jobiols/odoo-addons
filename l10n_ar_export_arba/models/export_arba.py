@@ -255,7 +255,8 @@ class AccountExportArba(models.Model):
                             line += 'D'
 
                         # Campo 4 -- Letra comprobante
-                        line += invoice.journal_document_type_id.document_type_id.document_letter_id.name
+                        _tmp = invoice.journal_document_type_id
+                        line += _tmp.document_type_id.document_letter_id.name
 
                         # Campo 5 -- Numero Surursal
                         value = invoice.document_number[:4]
