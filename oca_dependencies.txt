@@ -1,1 +1,2 @@
 odoo-argentina https://github.com/jobiols/adhoc-odoo-argentina.git 11.0
+argentina-reporting https://github.com/jobiols/adhoc-argentina-reporting.git 11.0
