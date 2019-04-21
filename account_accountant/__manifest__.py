@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 ##############################################################################
 #
 #    Cubic ERP, Enterprise and Government Management Software
@@ -24,16 +23,9 @@
     'version': '1.0',
     'category': 'Accounting',
     'sequence': 35,
-    'author': 'Cubic ERP, Odoo',
+    'author': 'Jeo Software, Cubic ERP, Odoo',
     'license': 'AGPL-3',
     'summary': 'Financial and Analytic Accounting',
-    'description': """
-Accounting Access Rights
-========================
-It gives the Administrator user access to all accounting features such as journal items and the chart of accounts.
-
-It assigns manager and user access rights to the Administrator for the accounting application and only user rights to the Demo user.
-""",
     'website': 'https://www.cubicerp.com',
     'depends': ['account_invoicing'],
     'data': [

@@ -1,12 +1,9 @@
 # -*- coding: utf-8 -*-
 # License AGPL-3.0 or later (https://www.gnu.org/licenses/agpl.html).
 
-from odoo import api, fields, models, _
-from odoo.exceptions import UserError, ValidationError
-from datetime import datetime, date, timedelta
-from dateutil import relativedelta
+from odoo import api, fields, models
+from datetime import date, timedelta, datetime
 import base64
-from datetime import datetime
 import calendar
 
 # Diseno de registro de exportacion segun documento de sicore

@@ -1,18 +1,17 @@
 # -*- coding: utf-8 -*-
 # License AGPL-3.0 or later (https://www.gnu.org/licenses/agpl.html).
 
-from odoo import api, fields, models, _
-from odoo.exceptions import UserError, ValidationError
-from datetime import datetime, date, timedelta
-from dateutil import relativedelta
+from odoo import api, fields, models
+from datetime import date, timedelta
 import base64
 from datetime import datetime
 import calendar
 
 # Diseno de registro de exportacion segun documento de ARBA
-# https://www.arba.gov.ar/Archivos/Publicaciones/dise%C3%B1o_de_registros_bancos.pdf
+# www.arba.gov.ar/Archivos/Publicaciones/dise%C3%B1o_de_registros_bancos.pdf
 # 1.1. Percepciones ( excepto actividad 29, 7 quincenal y 17 de Bancos)
-# 1.7. Retenciones ( excepto actividad 26, 6 de Bancos y 17 de Bancos y No Bancos)
+# 1.7. Retenciones ( excepto actividad 26, 6 de Bancos y 17 de Bancos y No
+# Bancos)
 
 WITHHOLDING = '6'
 PERCEPTION = '7'

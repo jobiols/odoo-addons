@@ -30,12 +30,12 @@
         'account'
     ],
     'data': [
-        #'security/ir.model.access.csv',
-        #'security/res_groups.xml'
+        # 'security/ir.model.access.csv',
+        # 'security/res_groups.xml'
         'wizard/cash_flow_view.xml'
     ],
     'demo': [
-        #'data/data.xml'
+        # 'data/data.xml'
     ],
     'installable': True,
     'application': False,
