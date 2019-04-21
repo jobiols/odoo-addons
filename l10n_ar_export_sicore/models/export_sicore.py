@@ -8,7 +8,6 @@ import calendar
 # Diseno de registro de exportacion segun documento de sicore
 # https://www.afip.gob.ar/iva/documentos/IVAEspecificacion.pdf
 
-
 WITHHOLDING = '6'
 PERCEPTION = '7'
 

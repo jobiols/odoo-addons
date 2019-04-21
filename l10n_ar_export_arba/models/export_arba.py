@@ -220,7 +220,7 @@ class AccountExportArba(models.Model):
 
                     data.append(line)
             else:
-                #  Percepciones
+                # Percepciones
                 # traer todas las facturas con percepciones en el periodo
                 invoices = rec.get_perception_invoices()
                 data = []
