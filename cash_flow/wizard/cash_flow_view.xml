@@ -64,7 +64,7 @@
 
 
         <record id="action_cash_flow" model="ir.actions.act_window">
-            <field name="name">Reporte diario de Cajas</field>
+            <field name="name">Cash Flow report</field>
             <field name="type">ir.actions.act_window</field>
             <field name="res_model">cash_flow_report</field>
             <field name="view_type">form</field>
@@ -75,13 +75,9 @@
 
         <menuitem id="menu_cash_report"
                   name="Reporte de flujo de efectivo"
+                  groups="account.group_account_manager"
                   action="action_cash_flow"
                   parent="account.account_reports_legal_statements_menu"/>
-        <!--
-                           groups="vertical_ceramicas.group_reves_sales_users"
-
-         -->
-
 
     </data>
 </openerp>

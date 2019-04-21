@@ -2,4 +2,4 @@ odoo-argentina https://github.com/jobiols/adhoc-odoo-argentina.git 11.0
 argentina-reporting https://github.com/jobiols/adhoc-argentina-reporting.git 11.0
 server-brand https://github.com/jobiols/oca-server-brand.git 11.0
 backend-theme https://github.com/jobiols/rafi16jan-backend-theme.git 11.0
-
+product https://github.com/jobiols/adhoc-product.git 11.0
