@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<openerp>
+    <data>
+        <report id="action_cash_flow"
+                string="Reporte de cash flow"
+                model="cash_flow_report"
+                report_type="qweb-pdf"
+                name="cash_flow.cash_status_template"
+                file="cash_flow.cash_status_template"
+                menu="False"
+                auto="False"
+        />
+    </data>
+</openerp>
+
