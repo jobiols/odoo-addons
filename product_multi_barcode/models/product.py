@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 # © 2012-2014 Guewen Baconnier (Camptocamp SA)
 # © 2015 Roberto Lizana (Trey)
 # © 2016 Pedro M. Baeza
