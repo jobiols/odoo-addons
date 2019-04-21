@@ -1,0 +1,1 @@
+odoo-argentina https://github.com/jobiols/adhoc-odoo-argentina.git 11.0
