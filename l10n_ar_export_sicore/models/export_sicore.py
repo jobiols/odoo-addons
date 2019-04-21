@@ -10,9 +10,8 @@ from datetime import datetime
 import calendar
 
 # Diseno de registro de exportacion segun documento de sicore
-# https://www.sicore.gov.ar/Archivos/Publicaciones/dise%C3%B1o_de_registros_bancos.pdf
-# 1.1. Percepciones ( excepto actividad 29, 7 quincenal y 17 de Bancos)
-# 1.7. Retenciones ( excepto actividad 26, 6 de Bancos y 17 de Bancos y No Bancos)
+# https://www.afip.gob.ar/iva/documentos/IVAEspecificacion.pdf
+
 
 WITHHOLDING = '6'
 PERCEPTION = '7'
@@ -122,26 +121,16 @@ class AccountExportSicore(models.Model):
     @api.depends('export_sicore_data')
     def _compute_files(self):
         for rec in self:
-
             # segun vimos aca la afip espera "ISO-8859-1" en vez de utf-8
-            # http://www.planillasutiles.com.ar/2015/08/
-            # como-descargar-los-archivos-de.html
-            # filename AR-30708346655-2019010-7-LOTE1.txt
-            #             |  cuit   | |fech|x y
-            # x quincena
-            # y ret / perc
-            # quincena = 1 primera, 2 segunda 0 mensual
+            # filename sicore-30708346655-201901.txt
 
             cuit = rec.env.user.company_id.main_id_number
             if rec.date_from and rec.date_to:
                 date = rec.date_from[:4] + rec.date_from[5:7]
             else:
                 date = '000000'
-            doc_type = WITHHOLDING
-            quincena = rec.quincena if rec.quincena is not False else 0
 
-            filename = 'AR-%s-%s%s-%s-LOTE1.txt' % (
-                cuit, date, quincena, doc_type)
+            filename = 'sicore-%s-%s.txt' % (cuit, date)
             rec.export_sicore_filename = filename
             if rec.export_sicore_data:
                 rec.export_sicore_file = base64.encodebytes(
@@ -163,10 +152,10 @@ class AccountExportSicore(models.Model):
             estan en el periodo seleccionado.
         """
 
-        # busco el id de la etiqueta que marca los impuestos de IIBB
-        name = 'Ret/Perc IIBB Aplicada'
+        # busco el id de la etiqueta que marca los impuestos de Ganancias
+        name = 'Ret/Perc SICORE Aplicada'
         account_tag_obj = self.env['account.account.tag']
-        percIIBB = account_tag_obj.search([('name', '=', name)]).id
+        percSICORE = account_tag_obj.search([('name', '=', name)]).id
 
         invoice_obj = self.env['account.invoice']
         invoices = invoice_obj.search([
@@ -179,7 +168,7 @@ class AccountExportSicore(models.Model):
 
         for inv in invoices:
             if any([tax for tax in inv.tax_line_ids
-                    if percIIBB in tax.tax_id.tag_ids.ids]):
+                    if percSICORE in tax.tax_id.tag_ids.ids]):
                 ret += inv
         return ret
 
@@ -195,28 +184,25 @@ class AccountExportSicore(models.Model):
                 data = []
                 for payment in payments:
 
-                    # Campo 01 -- Cuit contribuyente retenido
-                    cuit = payment.payment_group_id.partner_id.main_id_number
-                    cuit = '%s-%s-%s' % (cuit[0:2], cuit[2:10], cuit[10:])
-                    line = cuit
+                    # Campo 01 -- Regimen
+                    regimen = '1'
+                    line = regimen.zfill(3)
 
-                    # Campo 02 -- Fecha de la retencion
+                    # Campo 02 -- Cuit Agente
+                    cuit = payment.payment_group_id.partner_id.main_id_number
+                    line += cuit
+
+                    # Campo 03 -- Fecha Retencion
                     date = datetime.strptime(payment.payment_date, '%Y-%m-%d')
                     date = date.strftime('%d/%m/%Y')
                     line += date
 
-                    # Campo 03 -- Numero de sucursal
-                    line += payment.withholding_number[:4]
+                    # Campo 04 -- Numero comprobante
+                    line += payment.withholding_number[0:16].zfill(16)
 
-                    # Campo 04 -- Numero de emision
-                    line += payment.withholding_number[5:]
-
-                    # Campo 05 -- Importe de Retencion
+                    # Campo 05 -- Importe retencion
                     amount = '{:.2f}'.format(payment.amount)
-                    line += amount
-
-                    # Campo 06 -- Tipo de operacion
-                    line += 'A'
+                    line += amount.zfill(16)
 
                     data.append(line)
             else:
@@ -231,44 +217,26 @@ class AccountExportSicore(models.Model):
                         lambda r: r.tax_id.tax_group_id.type == 'perception')
 
                     for tax in perception_taxes:
-                        # Campo 1 -- Cuit contribuyente percibido
+                        # Campo 1 -- Regimen
+                        regimen = '1'
+                        line = regimen.zfill(3)
+
+                        # Campo 2 Cuit Agente
                         cuit = invoice.partner_id.main_id_number
-                        cuit = '%s-%s-%s' % (cuit[0:2], cuit[2:10], cuit[10:])
                         line = cuit
 
-                        # Campo 2 -- Fecha de la percepcion
+                        # Campo 3 -- Fecha de la percepcion
                         date = datetime.strptime(invoice.date_invoice,
                                                  '%Y-%m-%d')
                         date = date.strftime('%d/%m/%Y')
                         line += date
 
-                        # Campo 3 -- Tipo de comprobante
-                        # F=Factura R=Recibo C=Nota Crédito, D=Nota Debito
-                        # V=Nota de Venta.
-                        type = invoice.document_type_id.internal_type
-                        if type == 'invoice':
-                            line += 'F'
-                        if type == 'credit_note':
-                            line += 'C'
-                        if type == 'debit_note':
-                            line += 'D'
+                        # Campo 4 -- Numero comprobante
+                        line += invoice.document_number[0:16].zfill(16)
 
-                        # Campo 4 -- Letra comprobante
-                        line += invoice.journal_document_type_id.document_type_id.document_letter_id.name
-
-                        # Campo 5 -- Numero Surursal
-                        line += invoice.document_number[:4]
-
-                        # Campo 6 -- Numero Emision
-                        line += invoice.document_number[5:]
-
-                        # Campo 7 -- Monto imponible
+                        # Campo 5 -- Importe de percepcion
                         # ver si es invoice o refund
                         invoice = invoice.type == 'in_invoice'
-                        base = tax.base if invoice else -tax.base
-                        line += '{:.2f}'.format(base).zfill(12)
-
-                        # Campo 6 -- Importe de percepcion
                         amount = tax.amount if invoice else -tax.amount
                         line += '{:.2f}'.format(amount).zfill(11)
 
