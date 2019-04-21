@@ -2,7 +2,8 @@
 
 # from openerp import api,  fields, models, _
 from openerp import models, fields, api
-from datetime import datetime
+from datetime import date, timedelta
+
 
 
 class CashFlowReport(models.TransientModel):
@@ -20,11 +21,11 @@ class CashFlowReport(models.TransientModel):
 
     date_from = fields.Date(
         required=True,
-        default=datetime.today().strftime('%Y-%m-%d')
+        default=date.today().strftime('%Y-%m-%d')
     )
     date_to = fields.Date(
         required=True,
-        default=datetime.today().strftime('%Y-%m-%d')
+        default=(date.today()+timedelta(days=30)).strftime('%Y-%m-%d')
     )
     account_receivable_ids = fields.Many2many(
         required=True,
