@@ -27,12 +27,13 @@
     'website': 'http://github.com/ntsystemwork/addons',
     'license': 'AGPL-3',
     'depends': [
-        'account'
+        'account',
     ],
     'data': [
         # 'security/ir.model.access.csv',
-        # 'security/res_groups.xml'
-        'wizard/cash_flow_view.xml'
+        'wizard/cash_flow_view.xml',
+        'views/report.xml',
+        'views/template.xml'
     ],
     'demo': [
         # 'data/data.xml'

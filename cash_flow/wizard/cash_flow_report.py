@@ -5,7 +5,6 @@ from openerp import models, fields, api
 from datetime import date, timedelta
 
 
-
 class CashFlowReport(models.TransientModel):
     _name = "cash_flow_report"
     _description = "Cash Flow management and report"
@@ -25,7 +24,7 @@ class CashFlowReport(models.TransientModel):
     )
     date_to = fields.Date(
         required=True,
-        default=(date.today()+timedelta(days=30)).strftime('%Y-%m-%d')
+        default=(date.today() + timedelta(days=30)).strftime('%Y-%m-%d')
     )
     account_receivable_ids = fields.Many2many(
         required=True,
@@ -44,4 +43,21 @@ class CashFlowReport(models.TransientModel):
     )
 
     def print_report(self):
-        pass
+        """ Imprimir el reporte
+        """
+        self.ensure_one()
+
+        data = {
+            'ids': self.ids,
+            'model': self._name,
+            'form': {
+                'date_from': self.date_from,
+                'date_to': self.date_to,
+                'account_receivable_ids': self.account_receivable_ids,
+                'account_payable_ids': self.account_payable_ids,
+                'account_cash_ids': self.account_cash_ids,
+            }
+        }
+
+        _action = 'cash_flow.action_cash_flow'
+        return self.env.ref(_action).report_action(self)
