@@ -17,21 +17,18 @@
                     </group>
                     <notebook>
                         <page string="Receivable">
-                            <field name="account_receivable_ids"
-                                   domain="[('user_type_id','=',1)]"/>
+                            <field name="account_receivable_ids"/>
                         </page>
                         <page string="Payable">
-                            <field name="account_payable_ids"
-                                   domain="[('user_type_id','=',2)]"/>
+                            <field name="account_payable_ids"/>
                         </page>
                         <page string="Bank and Cash">
-                            <field name="account_cash_ids"
-                                   domain="[('user_type_id','=',3)]"/>
+                            <field name="account_cash_ids"/>
                         </page>
                     </notebook>
 
                     <footer>
-                        <button name="print_report" string="Print"
+                        <button name="check_report" string="Print"
                                 type="object" default_focus="1"
                                 class="oe_highlight"/>
                         or
