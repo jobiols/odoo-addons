@@ -32,8 +32,7 @@
     'data': [
         # 'security/ir.model.access.csv',
         'wizard/cash_flow_view.xml',
-        'views/report.xml',
-        'views/template.xml'
+        'reports/cash_flow_report.xml',
     ],
     'demo': [
         # 'data/data.xml'

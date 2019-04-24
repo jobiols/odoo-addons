@@ -59,5 +59,5 @@ class CashFlowReport(models.TransientModel):
             }
         }
 
-        _action = 'cash_flow.action_cash_flow'
+        _action = 'cash_flow.action_cash_flow_report'
         return self.env.ref(_action).report_action(self)

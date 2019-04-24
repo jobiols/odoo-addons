@@ -44,7 +44,7 @@
             </field>
         </record>
 
-        <record id="action_cash_flow" model="ir.actions.act_window">
+        <record id="action_cash_flow_report" model="ir.actions.act_window">
             <field name="name">Cash Flow Report</field>
             <field name="type">ir.actions.act_window</field>
             <field name="res_model">cash_flow_report</field>
@@ -57,7 +57,7 @@
         <menuitem id="menu_cash_report"
                   name="Cash Flow Report"
                   groups="account.group_account_manager"
-                  action="action_cash_flow"
+                  action="action_cash_flow_report"
                   parent="account.account_reports_legal_statements_menu"/>
 
     </data>
