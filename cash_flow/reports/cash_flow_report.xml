@@ -28,7 +28,8 @@
                         <t t-foreach="docs" t-as="o">
                             <tr>
                                 <td>
-                                    <span t-esc="o['date']"/>
+                                    <span t-esc="o['date']"
+                                          t-esc-options='{"widget": "date"}'/>
                                 </td>
                                 <td class="text-right"
                                     style="white-space: text-nowrap;">
