@@ -15,18 +15,22 @@
                             <field name="date_to"/>
                         </group>
                     </group>
+<!--
                     <notebook>
                         <page string="Receivable">
-                            <field name="account_receivable_ids"/>
+                            <field name="account_receivable_ids"
+                                   domain="[('user_type_id','=',1)]"/>
                         </page>
                         <page string="Payable">
-                            <field name="account_payable_ids"/>
+                            <field name="account_payable_ids"
+                                   domain="[('user_type_id','=',2)]"/>
                         </page>
                         <page string="Bank and Cash">
-                            <field name="account_cash_ids"/>
+                            <field name="account_cash_ids"
+                                   domain="[('user_type_id','=',3)]"/>
                         </page>
                     </notebook>
-
+-->
                     <footer>
                         <button name="check_report" string="Print"
                                 type="object" default_focus="1"
