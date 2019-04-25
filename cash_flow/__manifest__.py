@@ -30,8 +30,8 @@
         'account',
     ],
     'data': [
-        # 'security/ir.model.access.csv',
         'wizard/cash_flow_view.xml',
+        'wizard/edit_payment_term_view.xml',
         'reports/cash_flow_report.xml',
     ],
     'demo': [
