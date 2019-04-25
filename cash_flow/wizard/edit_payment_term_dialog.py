@@ -4,9 +4,9 @@ from openerp import models, fields, api
 from datetime import date, timedelta
 
 
-class EditPaymentTerm(models.TransientModel):
-    _name = "edit.payment.term"
-    _description = "Edit Payment Term"
+class EditPaymentTermDialog(models.TransientModel):
+    _name = "edit.payment.term.dialog"
+    _description = "Edit Payment Term Dialog"
 
     def edit_payment_term(self):
         pass
