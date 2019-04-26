@@ -6,8 +6,8 @@
         <field name="arch" type="xml">
             <form string="None">
                 <group>
-                    <field name="element_ids" nolabel="1" editable="false">
-                        <tree >
+                    <field name="element_ids" nolabel="1">
+                        <tree>
                             <field name="payment_term_id"/>
                             <field name="date_invoice"/>
                             <field name="date_due"/>
@@ -26,14 +26,17 @@
         </field>
     </record>
 
-    <record id="action_edit_payment_term" model="ir.actions.act_window">
-        <field name="name">Edit Payment Term</field>
-        <field name="type">ir.actions.act_window</field>
-        <field name="res_model">edit.payment.term</field>
-        <field name="view_type">form</field>
-        <field name="view_mode">form</field>
-        <field name="view_id" ref="edit_payment_term_view"/>
-        <field name="target">new</field>
+    <record id="edit_payment_term_element_view" model="ir.ui.view">
+        <field name="name">Edit Payment Term Element</field>
+        <field name="model">edit.payment.term.element</field>
+        <field name="arch" type="xml">
+            <form string="None">
+                <group>
+                    <field name="payment_term_id"/>
+                    <field name="date_invoice"/>
+                    <field name="date_due"/>
+                </group>
+            </form>
+        </field>
     </record>
-
 </odoo>

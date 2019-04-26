@@ -18,11 +18,21 @@ class EditPaymentTermDialog(models.TransientModel):
     @api.multi
     def edit_payment_term(self):
         self.ensure_one()
-        action = self.env.ref('cash_flow.action_edit_payment_term')
+
+        # Obtener las facturas a procesar y pasarlas por contexto al wizard
+        inv_obj = self.env['account.invoice']
+        domain = []
+        if self.date_from:
+            domain.append(('date_invoice', '>=', self.date_from))
+        if self.date_to:
+            domain.append(('date_invoice', '<=', self.date_to))
+        invoice_ids = inv_obj.search(domain)
+
         return {
-            'type': action.type,
-            'res_model': action.res_model,
-            'view_type': action.view_type,
-            'view_mode': action.view_mode,
-            'target': action.target,
+            'type': 'ir.actions.act_window',
+            'res_model': 'edit.payment.term',
+            'view_type': 'form',
+            'view_mode': 'form',
+            'target': 'new',
+            'context': {'invoice_ids': invoice_ids.ids}
         }
