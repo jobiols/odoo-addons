@@ -86,7 +86,5 @@ class EditPaymentTermElement(models.TransientModel):
         self.ensure_one()
         invoice_id = self.invoice_id
 
-        import wdb;
-        wdb.set_trace()
         # modificar el payment term de la factura
         invoice_id.payment_term_id = new_payment_term_id
