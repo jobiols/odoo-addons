@@ -32,6 +32,7 @@
     'data': [
         'wizard/cash_flow_view.xml',
         'wizard/edit_payment_term_dialog_view.xml',
+        'wizard/edit_payment_term_view.xml',
         'reports/cash_flow_report.xml',
     ],
     'demo': [
