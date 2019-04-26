@@ -7,7 +7,7 @@
             <form string="None">
                 <group>
                     <field name="element_ids" nolabel="1">
-                        <tree>
+                        <tree create="false" delete="false">
                             <field name="payment_term_id"/>
                             <field name="date_invoice"/>
                             <field name="date_due"/>
