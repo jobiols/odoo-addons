@@ -32,7 +32,8 @@ class CashFlowReport(models.TransientModel):
     )
 
     def _print_report(self, data):
-        data['form']['account_receivable_ids'] = self.account_receivable_ids.ids
+        data['form'][
+            'account_receivable_ids'] = self.account_receivable_ids.ids
         data['form']['account_payable_ids'] = self.account_payable_ids.ids
         data['form']['account_cash_ids'] = self.account_cash_ids.ids
 

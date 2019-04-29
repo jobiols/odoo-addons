@@ -20,9 +20,17 @@ class EditPaymentTerm(models.TransientModel):
     def create_element(self, invoice_id):
         """ Crear un element desde la factura
         """
+        aml_obj = self.env['account.move.line']
+        # Obtenemos las lineas de asiento de la factura que tienen la
+        # cuenta Deudores por ventas (2) o proveedores (1)
+        amls = aml_obj.search([('invoice_id', '=', invoice_id.id),
+                               '|', ('account_id', '=', 2),
+                               ('account_id', '=', 55)])
+
         element_obj = self.env['edit.payment.term.element']
         return element_obj.create(
-            {'invoice_id': invoice_id.id}
+            {'invoice_id': invoice_id.id,
+             'line_ids': [(6, 0, amls.ids)]}
         )
 
     def _get_default_elements(self):
@@ -85,8 +93,24 @@ class EditPaymentTermElement(models.TransientModel):
         related='invoice_id.payment_term_id',
         readonly=True
     )
-    line_ids = fields.One2many(
+    line_ids = fields.Many2many(
         'account.move.line',
-        related='invoice_id.move_id.line_ids',
-
     )
+
+    def write(self, values):
+        super(EditPaymentTermElement, self).write(values)
+
+        # obtener la fecha del ultimo pago para ponerla en la factura
+        # hay que buscar en las move lines porque la fecha modificada puede
+        # no ser la ultima. Y en la factura va la fecha del ultimo pago
+        aml_obj = self.env['account.move.line']
+        amls = aml_obj.search([('invoice_id', '=', self.invoice_id.id),
+                               '|', ('account_id', '=', 2),
+                               ('account_id', '=', 55)],
+                              limit=1,
+                              order='date_maturity desc')
+
+        # cambiar la fecha de vencimiento de la factura.
+        invoice_obj = self.env['account.invoice']
+        invoice = invoice_obj.search([('id', '=', self.invoice_id.id)])
+        invoice.date_due = amls.date_maturity

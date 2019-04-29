@@ -6,8 +6,13 @@
         <field name="arch" type="xml">
             <form string="None">
                 <group>
-                    <field name="date_from"/>
-                    <field name="date_to"/>
+                    <group>
+                        <field name="date_from"/>
+                        <field name="date_to"/>
+                    </group>
+                    <group>
+                        <field name="invoice_type" widget="radio"/>
+                    </group>
                 </group>
                 <footer>
                     <button name="edit_payment_term" string="Edit Payment Term"

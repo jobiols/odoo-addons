@@ -9,10 +9,14 @@ class EditPaymentTermDialog(models.TransientModel):
     _description = "Edit Payment Term Dialog"
 
     date_from = fields.Date(
-
     )
     date_to = fields.Date(
-
+    )
+    invoice_type = fields.Selection([
+        ('out_invoice', 'Customer Invoice'),
+        ('in_invoice', 'Vendor Bill'),
+        ('all', 'All')],
+        default='all'
     )
 
     @api.multi
@@ -26,6 +30,9 @@ class EditPaymentTermDialog(models.TransientModel):
             domain.append(('date_invoice', '>=', self.date_from))
         if self.date_to:
             domain.append(('date_invoice', '<=', self.date_to))
+        if self.invoice_type != 'all':
+            domain.append(('type', '=', self.invoice_type))
+
         invoice_ids = inv_obj.search(domain)
 
         return {
