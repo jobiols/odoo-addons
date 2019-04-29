@@ -6,8 +6,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Odoo Server 11.0+e-20190201\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2019-04-29 23:15+0000\n"
-"PO-Revision-Date: 2019-04-29 23:15+0000\n"
+"POT-Creation-Date: 2019-04-29 23:30+0000\n"
+"PO-Revision-Date: 2019-04-29 23:30+0000\n"
 "Last-Translator: <>\n"
 "Language-Team: \n"
 "MIME-Version: 1.0\n"
@@ -53,11 +53,13 @@ msgstr "Cuentas de efectivo"
 
 #. module: cash_flow
 #: model:ir.model.fields,field_description:cash_flow.field_cash_flow_report_account_payable_ids
+#: model:ir.ui.view,arch_db:cash_flow.cash_flow_report_template
 msgid "Account Payable"
 msgstr "Cuentas a pagar"
 
 #. module: cash_flow
 #: model:ir.model.fields,field_description:cash_flow.field_cash_flow_report_account_receivable_ids
+#: model:ir.ui.view,arch_db:cash_flow.cash_flow_report_template
 msgid "Account Receivable"
 msgstr "Cuentas a cobrar"
 
@@ -73,8 +75,8 @@ msgstr "Saldo"
 
 #. module: cash_flow
 #: model:ir.ui.view,arch_db:cash_flow.cash_flow_report_template
-msgid "Bancos y Efectivo"
-msgstr "Bancos y Efectivo"
+msgid "Bank and Cash"
+msgstr "Banco y Caja"
 
 #. module: cash_flow
 #: model:ir.ui.view,arch_db:cash_flow.cash_report_view
@@ -111,16 +113,6 @@ msgstr "Creado por"
 #: model:ir.model.fields,field_description:cash_flow.field_edit_payment_term_element_create_date
 msgid "Created on"
 msgstr "Creado en"
-
-#. module: cash_flow
-#: model:ir.ui.view,arch_db:cash_flow.cash_flow_report_template
-msgid "Cuentas a cobrar"
-msgstr "Cuentas a cobrar"
-
-#. module: cash_flow
-#: model:ir.ui.view,arch_db:cash_flow.cash_flow_report_template
-msgid "Cuentas por pagar"
-msgstr "Cuentas por pagar"
 
 #. module: cash_flow
 #: model:ir.model.fields,field_description:cash_flow.field_edit_payment_term_element_currency_id

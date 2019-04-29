@@ -4,6 +4,10 @@
 from openerp import models, fields, api
 from datetime import datetime, timedelta
 
+RECEIVABLE_ID = 1
+PAYABLE_ID = 2
+CASH_ID = 3
+
 
 class CashFlowReport1(models.AbstractModel):
     _name = "report.cash_flow.cash_flow_report_template"
@@ -38,13 +42,13 @@ class CashFlowReport1(models.AbstractModel):
         date_from = data['form']['date_from']
         date_to = data['form']['date_to']
 
-        domain = [('user_type_id', '=', 1)]
+        domain = [('user_type_id', '=', RECEIVABLE_ID)]
         receivable_ids = self.env['account.account'].search(domain)
 
-        domain = [('user_type_id', '=', 2)]
+        domain = [('user_type_id', '=', PAYABLE_ID)]
         payable_ids = self.env['account.account'].search(domain)
 
-        domain = [('user_type_id', '=', 3)]
+        domain = [('user_type_id', '=', CASH_ID)]
         cash_ids = self.env['account.account'].search(domain)
 
         docs = []

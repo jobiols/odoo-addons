@@ -20,9 +20,9 @@
                     <table class="table table-condensed">
                         <tr>
                             <th>Fecha</th>
-                            <th class="text-right">Cuentas a cobrar</th>
-                            <th class="text-right">Bancos y Efectivo</th>
-                            <th class="text-right">Cuentas por pagar</th>
+                            <th class="text-right">Account Receivable</th>
+                            <th class="text-right">Bank and Cash</th>
+                            <th class="text-right">Account Payable</th>
                             <th class="text-right">Total</th>
                         </tr>
                         <t t-foreach="docs" t-as="o">
