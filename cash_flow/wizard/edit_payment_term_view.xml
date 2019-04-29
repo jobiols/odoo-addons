@@ -45,13 +45,14 @@
                     <field name="date_due"/>
                 </group>
                 <group>
-                    <field name="line_ids" nolabel="1"/>
+                    <field name="line_ids" nolabel="1" domain="[('account_id','=',2)]">
                     <tree create="false" delete="false">
-                        <field name="name"/>
+                        <field name="name" string="nombreeee"/>
                         <field name="debit"/>
                         <field name="credit"/>
                         <field name="date_maturity"/>
                     </tree>
+                    </field>
                 </group>
             </form>
         </field>

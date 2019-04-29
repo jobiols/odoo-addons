@@ -87,5 +87,6 @@ class EditPaymentTermElement(models.TransientModel):
     )
     line_ids = fields.One2many(
         'account.move.line',
-        related='invoice_id.move_id.line_ids'
+        related='invoice_id.move_id.line_ids',
+
     )
