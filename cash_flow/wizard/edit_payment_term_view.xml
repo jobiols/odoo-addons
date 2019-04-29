@@ -45,11 +45,12 @@
                     <field name="date_due"/>
                 </group>
                 <group>
-                    <field name="line_ids" nolabel="1" domain="[('account_id','=',2)]">
-                    <tree create="false" delete="false">
-                        <field name="name" string="nombreeee"/>
-                        <field name="debit"/>
-                        <field name="credit"/>
+                    <field name="line_ids" nolabel="1" domain="[('account_id.id','=',2)]">
+                    <tree create="false" delete="false" editable="top">
+                        <field name="account_id" invisible="1"/>
+                        <field name="name" readonly="1"/>
+                        <field name="debit" readonly="1"/>
+                        <field name="credit" readonly="1"/>
                         <field name="date_maturity"/>
                     </tree>
                     </field>
