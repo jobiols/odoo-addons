@@ -6,7 +6,7 @@ from odoo.exceptions import UserError, ValidationError
 import logging
 
 logger = logging.getLogger(__name__)
-LINES_TO_PROCESS = 10
+LINES_TO_PROCESS = 200
 
 
 class PosSessionToClose(models.Model):

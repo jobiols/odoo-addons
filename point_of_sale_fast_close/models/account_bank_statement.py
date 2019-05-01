@@ -1,15 +1,11 @@
 # -*- coding: utf-8 -*-
 # For copyright and license notices, see __manifest__.py file in module root
 from odoo import api, fields, models, _
-from odoo.osv import expression
-from odoo.tools import float_is_zero, pycompat
-from odoo.tools import float_compare, float_round, float_repr
-from odoo.tools.misc import formatLang, format_date
 from odoo.exceptions import UserError, ValidationError
 
 import time
-import math
-LINES_TO_PROCESS = 10
+LINES_TO_PROCESS = 200
+
 
 class AccountBankStatement(models.Model):
     _inherit = "account.bank.statement"
@@ -63,7 +59,7 @@ class AccountBankStatement(models.Model):
                 statement.message_post(body=_(
                     'Statement %s confirmed, journal items were created.') % (
                                                 statement.name,))
-        # termina cerrar el proceso
+        # termina, cerrar el proceso
         if pstc.step == 0:
             print('cerrando el proceso, es el ultimo paso')
             statements.link_bank_to_partner()
