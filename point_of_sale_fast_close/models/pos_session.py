@@ -6,6 +6,7 @@ from odoo.exceptions import UserError, ValidationError
 import logging
 
 logger = logging.getLogger(__name__)
+LINES_TO_PROCESS = 10
 
 
 class PosSessionToClose(models.Model):
@@ -26,6 +27,7 @@ class PosSessionToClose(models.Model):
     orders_to_reconcile = fields.Many2many(
         'pos.order'
     )
+
 
 class PosSession(models.Model):
     _inherit = 'pos.session'
@@ -74,7 +76,6 @@ class PosSession(models.Model):
             Cada elemento representa una sesion a cerrar, y tiene phase indica
             que cosa estamos haciendo y step que incrementa cada vez que pasa
             hasta que termina.
-
         """
 
         sq_obj = self.env['pos.session.to.close']
@@ -108,7 +109,6 @@ class PosSession(models.Model):
     def _confirm_orders_stepped(self, pstc):
         """ hace lo mismo que _confirm_orders pero por pasos
         """
-        import wdb;wdb.set_trace()
         for session in self:
             company_id = session.config_id.journal_id.company_id.id
 
@@ -116,8 +116,8 @@ class PosSession(models.Model):
             orders = session.order_ids.filtered(
                 lambda order: order.state == 'paid')
 
-            # quedarse con las primeras tres
-            orders = orders[:3]
+            # quedarse con las primeras
+            orders = orders[:LINES_TO_PROCESS]
             if orders:
                 pstc.step += 1  # siguiente step
                 print('pasar a siguiente step', pstc.step, orders)
@@ -140,8 +140,8 @@ class PosSession(models.Model):
             # obtener las ordenes para cerrar
             orders_to_close = session.order_ids.filtered(
                 lambda o: o.state not in ['done', 'invoiced'])
-            # quedarse con las primeras 3
-            orders_to_close = orders_to_close[:3]
+            # quedarse con las primeras
+            orders_to_close = orders_to_close[:LINES_TO_PROCESS]
             for order in orders_to_close:
                 order.action_pos_order_done()
 
@@ -149,7 +149,7 @@ class PosSession(models.Model):
             # las ordenes que fueron procesadas para no reprocesarlas
             orders_to_reconcile = session.order_ids._filtered_for_reconciliation()
             orders_to_reconcile = orders_to_reconcile - pstc.orders_to_reconcile
-            orders_to_reconcile = orders_to_reconcile[:3]
+            orders_to_reconcile = orders_to_reconcile[:LINES_TO_PROCESS]
             pstc.orders_to_reconcile += orders_to_reconcile
             if orders_to_reconcile:
                 orders_to_reconcile.sudo()._reconcile_payments()

@@ -9,7 +9,7 @@ from odoo.exceptions import UserError, ValidationError
 
 import time
 import math
-
+LINES_TO_PROCESS = 10
 
 class AccountBankStatement(models.Model):
     _inherit = "account.bank.statement"
@@ -32,8 +32,8 @@ class AccountBankStatement(models.Model):
             lines = statement.line_ids.filtered(
                 lambda r: r.journal_entry_ids.ids == [])
 
-            # de estas lineas traer las primeras 100
-            lines = lines[:3]
+            # de estas lineas traer las primeras
+            lines = lines[:LINES_TO_PROCESS]
             print('traerse ', lines.ids, 'lineas para procesar')
             if lines:
                 pstc.step += 1  # siguiente step
