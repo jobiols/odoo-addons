@@ -1,0 +1,64 @@
+<?xml version="1.0"?>
+<odoo>
+    <record id="edit_payment_term_view" model="ir.ui.view">
+        <field name="name">Edit Payment Term</field>
+        <field name="model">edit.payment.term</field>
+        <field name="arch" type="xml">
+            <form string="None">
+                <group>
+                    <field name="element_ids" nolabel="1">
+                        <tree create="false" delete="false">
+                            <field name="currency_id" invisible="1"/>
+                            <field name="display_name"/>
+                            <field name="date_invoice"/>
+                            <field name="partner_id"/>
+                            <field name="residual"/>
+                            <field name="payment_term_id"/>
+                            <field name="date_due"/>
+                        </tree>
+                    </field>
+                </group>
+                <footer>
+                    <button string="Close" class="oe_link"
+                            special="cancel"/>
+                </footer>
+            </form>
+        </field>
+    </record>
+
+    <record id="edit_payment_term_element_view" model="ir.ui.view">
+        <field name="name">Edit Payment Term Element</field>
+        <field name="model">edit.payment.term.element</field>
+        <field name="arch" type="xml">
+            <form string="None">
+                <group>
+                    <h1>
+                        <field name="display_name" nolabel="1"/>
+                    </h1>
+                </group>
+                <group>
+                    <field name="currency_id" invisible="1"/>
+                    <group>
+                        <field name="date_invoice"/>
+                        <field name="partner_id"/>
+                    </group>
+                    <group>
+                        <field name="residual"/>
+                        <field name="payment_term_id"/>
+                    </group>
+                </group>
+                <group>
+                    <field name="line_ids" nolabel="1">
+                        <tree create="false" delete="false" editable="top">
+                            <field name="account_id" invisible="1"/>
+                            <field name="name" readonly="1"/>
+                            <field name="debit" readonly="1"/>
+                            <field name="credit" readonly="1"/>
+                            <field name="date_maturity"/>
+                        </tree>
+                    </field>
+                </group>
+            </form>
+        </field>
+    </record>
+</odoo>

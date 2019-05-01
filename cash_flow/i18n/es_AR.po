@@ -1,0 +1,307 @@
+# Translation of Odoo Server.
+# This file contains the translation of the following modules:
+#	* cash_flow
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: Odoo Server 11.0+e-20190201\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2019-04-29 23:30+0000\n"
+"PO-Revision-Date: 2019-04-29 23:30+0000\n"
+"Last-Translator: <>\n"
+"Language-Team: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: \n"
+"Plural-Forms: \n"
+
+#. module: cash_flow
+#: model:ir.model,name:cash_flow.model_edit_payment_term
+msgid "\n"
+"    Este objeto aloja los edit.payment.term.element, Cada uno de estos\n"
+"    contiene los datos necesarios para modificar las fechas de vencimiento de\n"
+"    una factura.\n"
+"    Las facturas a editar se seleccionan en el edit.payment.term.dialog\n"
+"    "
+msgstr "\n"
+"    Este objeto aloja los edit.payment.term.element, Cada uno de estos\n"
+"    contiene los datos necesarios para modificar las fechas de vencimiento de\n"
+"    una factura.\n"
+"    Las facturas a editar se seleccionan en el edit.payment.term.dialog\n"
+"    "
+
+#. module: cash_flow
+#: model:ir.model,name:cash_flow.model_edit_payment_term_element
+msgid "\n"
+"    Este objeto tiene todos los datos necesarios para editar las fechas de\n"
+"    vencimiento de una factura\n"
+"    "
+msgstr "\n"
+"    Este objeto tiene todos los datos necesarios para editar las fechas de\n"
+"    vencimiento de una factura\n"
+"    "
+
+#. module: cash_flow
+#: model:ir.ui.view,arch_db:cash_flow.cash_flow_report_template
+msgid ": Cash Flow"
+msgstr ": Flujo de caja"
+
+#. module: cash_flow
+#: model:ir.model.fields,field_description:cash_flow.field_cash_flow_report_account_cash_ids
+msgid "Account Cash"
+msgstr "Cuentas de efectivo"
+
+#. module: cash_flow
+#: model:ir.model.fields,field_description:cash_flow.field_cash_flow_report_account_payable_ids
+#: model:ir.ui.view,arch_db:cash_flow.cash_flow_report_template
+msgid "Account Payable"
+msgstr "Cuentas a pagar"
+
+#. module: cash_flow
+#: model:ir.model.fields,field_description:cash_flow.field_cash_flow_report_account_receivable_ids
+#: model:ir.ui.view,arch_db:cash_flow.cash_flow_report_template
+msgid "Account Receivable"
+msgstr "Cuentas a cobrar"
+
+#. module: cash_flow
+#: selection:edit.payment.term.dialog,invoice_type:0
+msgid "All"
+msgstr "Todas"
+
+#. module: cash_flow
+#: model:ir.model.fields,field_description:cash_flow.field_edit_payment_term_element_residual
+msgid "Amount Due"
+msgstr "Saldo"
+
+#. module: cash_flow
+#: model:ir.ui.view,arch_db:cash_flow.cash_flow_report_template
+msgid "Bank and Cash"
+msgstr "Banco y Caja"
+
+#. module: cash_flow
+#: model:ir.ui.view,arch_db:cash_flow.cash_report_view
+#: model:ir.ui.view,arch_db:cash_flow.edit_payment_term_dialog_view
+msgid "Cancel"
+msgstr "Cancelar"
+
+#. module: cash_flow
+#: model:ir.actions.report,name:cash_flow.action_cash_flow_report
+#: model:ir.ui.menu,name:cash_flow.menu_cash_report
+msgid "Cash Flow Report"
+msgstr "Reporte de flujo de caja"
+
+#. module: cash_flow
+#: model:ir.model,name:cash_flow.model_cash_flow_report
+msgid "Cash Flow management and report"
+msgstr "Administracion y reporte de Flujo de Caja"
+
+#. module: cash_flow
+#: model:ir.ui.view,arch_db:cash_flow.edit_payment_term_view
+msgid "Close"
+msgstr "Cerrar"
+
+#. module: cash_flow
+#: model:ir.model.fields,field_description:cash_flow.field_edit_payment_term_create_uid
+#: model:ir.model.fields,field_description:cash_flow.field_edit_payment_term_dialog_create_uid
+#: model:ir.model.fields,field_description:cash_flow.field_edit_payment_term_element_create_uid
+msgid "Created by"
+msgstr "Creado por"
+
+#. module: cash_flow
+#: model:ir.model.fields,field_description:cash_flow.field_edit_payment_term_create_date
+#: model:ir.model.fields,field_description:cash_flow.field_edit_payment_term_dialog_create_date
+#: model:ir.model.fields,field_description:cash_flow.field_edit_payment_term_element_create_date
+msgid "Created on"
+msgstr "Creado en"
+
+#. module: cash_flow
+#: model:ir.model.fields,field_description:cash_flow.field_edit_payment_term_element_currency_id
+msgid "Currency"
+msgstr "Moneda"
+
+#. module: cash_flow
+#: selection:edit.payment.term.dialog,invoice_type:0
+msgid "Customer Invoice"
+msgstr "Facturas de cliente"
+
+#. module: cash_flow
+#: model:ir.model.fields,field_description:cash_flow.field_edit_payment_term_dialog_date_from
+msgid "Date From"
+msgstr "Desde"
+
+#. module: cash_flow
+#: model:ir.model.fields,field_description:cash_flow.field_edit_payment_term_dialog_date_to
+msgid "Date To"
+msgstr "Hasta"
+
+#. module: cash_flow
+#: model:ir.model.fields,field_description:cash_flow.field_cash_flow_report_display_name
+#: model:ir.model.fields,field_description:cash_flow.field_edit_payment_term_dialog_display_name
+#: model:ir.model.fields,field_description:cash_flow.field_edit_payment_term_display_name
+#: model:ir.model.fields,field_description:cash_flow.field_edit_payment_term_element_display_name
+#: model:ir.model.fields,field_description:cash_flow.field_report_cash_flow_cash_flow_report_template_display_name
+msgid "Display Name"
+msgstr "Numero de factura"
+
+#. module: cash_flow
+#: model:ir.model.fields,field_description:cash_flow.field_edit_payment_term_element_date_due
+msgid "Due Date"
+msgstr "Fecha de vencimiento"
+
+#. module: cash_flow
+#: model:ir.ui.view,arch_db:cash_flow.edit_payment_term_dialog_view
+msgid "Edit Payment Term"
+msgstr "Editar terminos de pago"
+
+#. module: cash_flow
+#: model:ir.actions.act_window,name:cash_flow.action_edit_payment_term_dialog
+#: model:ir.model,name:cash_flow.model_edit_payment_term_dialog
+msgid "Edit Payment Term Dialog"
+msgstr "Dialogo de edicion de terminos de pago"
+
+#. module: cash_flow
+#: model:ir.ui.menu,name:cash_flow.menu_edit_payment_term_payables
+#: model:ir.ui.menu,name:cash_flow.menu_edit_payment_term_receivables
+msgid "Edit payment terms"
+msgstr "Editar terminos de pago"
+
+#. module: cash_flow
+#: model:ir.model.fields,field_description:cash_flow.field_edit_payment_term_element_ids
+msgid "Element"
+msgstr "Editar fechas de vencimiento"
+
+#. module: cash_flow
+#: model:ir.model.fields,field_description:cash_flow.field_cash_flow_report_date_to
+msgid "End Date"
+msgstr "Fecha de finalización"
+
+#. module: cash_flow
+#: model:ir.ui.view,arch_db:cash_flow.cash_flow_report_template
+msgid "Fecha"
+msgstr "Fecha"
+
+#. module: cash_flow
+#: model:ir.model.fields,field_description:cash_flow.field_edit_payment_term_dialog_id
+#: model:ir.model.fields,field_description:cash_flow.field_edit_payment_term_element_id
+#: model:ir.model.fields,field_description:cash_flow.field_edit_payment_term_id
+#: model:ir.model.fields,field_description:cash_flow.field_report_cash_flow_cash_flow_report_template_id
+msgid "ID"
+msgstr "ID (identificación)"
+
+#. module: cash_flow
+#: model:ir.model.fields,help:cash_flow.field_edit_payment_term_element_payment_term_id
+msgid "If you use payment terms, the due date will be computed automatically at the generation of accounting entries. If you keep the payment terms and the due date empty, it means direct payment. The payment terms may compute several due dates, for example 50% now, 50% in one month."
+msgstr "Si utiliza los plazos de pago, la fecha de vencimiento será calculada automáticamente en la generación de los asientos contables. Si se mantiene el plazo de pago y la fecha de vencimiento vacía, significa que es un pago directo. El plazo de pago podrá calcular varias fechas de vencimiento, por ejemplo, 50% ahora, 50% en un mes."
+
+#. module: cash_flow
+#: model:ir.model.fields,help:cash_flow.field_edit_payment_term_element_date_due
+msgid "If you use payment terms, the due date will be computed automatically at the generation of accounting entries. The Payment terms may compute several due dates, for example 50% now and 50% in one month, but if you want to force a due date, make sure that the payment term is not set on the invoice. If you keep the Payment terms and the due date empty, it means direct payment."
+msgstr "Si usa plazos de pago, la fecha de vencimiento se calculará automáticamente con la generación de los asientos contables. El plazo de pago puede calcular varias fechas de vencimiento, por ejemplo 50% ahora y 50% en un mes, pero si quiere forzar una fecha de vencimiento, asegúrese que el plazo de pago no se establece en la factura. Si deja vacío el plazo de pago y la fecha de vencimiento, significa pago directo."
+
+#. module: cash_flow
+#: model:ir.model,name:cash_flow.model_account_invoice
+#: model:ir.model.fields,field_description:cash_flow.field_edit_payment_term_element_invoice_id
+msgid "Invoice"
+msgstr "Factura"
+
+#. module: cash_flow
+#: model:ir.model.fields,field_description:cash_flow.field_edit_payment_term_element_date_invoice
+msgid "Invoice Date"
+msgstr "Fecha de la factura"
+
+#. module: cash_flow
+#: model:ir.model.fields,field_description:cash_flow.field_edit_payment_term_dialog_invoice_type
+msgid "Invoice Type"
+msgstr "Tipo de factura"
+
+#. module: cash_flow
+#: model:ir.model.fields,help:cash_flow.field_edit_payment_term_element_date_invoice
+msgid "Keep empty to use the current date"
+msgstr "Dejarlo vacío para utilizar la fecha actual."
+
+#. module: cash_flow
+#: model:ir.model.fields,field_description:cash_flow.field_cash_flow_report___last_update
+#: model:ir.model.fields,field_description:cash_flow.field_edit_payment_term___last_update
+#: model:ir.model.fields,field_description:cash_flow.field_edit_payment_term_dialog___last_update
+#: model:ir.model.fields,field_description:cash_flow.field_edit_payment_term_element___last_update
+#: model:ir.model.fields,field_description:cash_flow.field_report_cash_flow_cash_flow_report_template___last_update
+msgid "Last Modified on"
+msgstr "Última modificación en"
+
+#. module: cash_flow
+#: model:ir.model.fields,field_description:cash_flow.field_edit_payment_term_dialog_write_uid
+#: model:ir.model.fields,field_description:cash_flow.field_edit_payment_term_element_write_uid
+#: model:ir.model.fields,field_description:cash_flow.field_edit_payment_term_write_uid
+msgid "Last Updated by"
+msgstr "Última actualización de"
+
+#. module: cash_flow
+#: model:ir.model.fields,field_description:cash_flow.field_edit_payment_term_dialog_write_date
+#: model:ir.model.fields,field_description:cash_flow.field_edit_payment_term_element_write_date
+#: model:ir.model.fields,field_description:cash_flow.field_edit_payment_term_write_date
+msgid "Last Updated on"
+msgstr "Última actualización en"
+
+#. module: cash_flow
+#: model:ir.model.fields,field_description:cash_flow.field_edit_payment_term_element_line_ids
+msgid "Line"
+msgstr "Linea"
+
+#. module: cash_flow
+#: model:ir.ui.view,arch_db:cash_flow.edit_payment_term_dialog_view
+#: model:ir.ui.view,arch_db:cash_flow.edit_payment_term_element_view
+#: model:ir.ui.view,arch_db:cash_flow.edit_payment_term_view
+msgid "None"
+msgstr "Nada"
+
+#. module: cash_flow
+#: model:ir.model.fields,field_description:cash_flow.field_edit_payment_term_element_partner_id
+msgid "Partner"
+msgstr "Empresa"
+
+#. module: cash_flow
+#: model:ir.model.fields,field_description:cash_flow.field_edit_payment_term_element_payment_term_id
+msgid "Payment Terms"
+msgstr "Plazos de pago"
+
+#. module: cash_flow
+#: model:ir.ui.view,arch_db:cash_flow.cash_report_view
+msgid "Print"
+msgstr "Imprimir"
+
+#. module: cash_flow
+#: model:ir.model.fields,help:cash_flow.field_edit_payment_term_element_residual
+msgid "Remaining amount due."
+msgstr "Importe restante adeudado."
+
+#. module: cash_flow
+#: model:ir.ui.view,arch_db:cash_flow.cash_report_view
+msgid "Report Options"
+msgstr "Opciones del informe"
+
+#. module: cash_flow
+#: model:ir.model.fields,field_description:cash_flow.field_cash_flow_report_date_from
+msgid "Start Date"
+msgstr "Fecha de Inicio"
+
+#. module: cash_flow
+#: model:ir.ui.view,arch_db:cash_flow.cash_flow_report_template
+msgid "Total"
+msgstr "Total"
+
+#. module: cash_flow
+#: selection:edit.payment.term.dialog,invoice_type:0
+msgid "Vendor Bill"
+msgstr "Facturas de proveedor"
+
+#. module: cash_flow
+#: model:ir.ui.view,arch_db:cash_flow.cash_report_view
+#: model:ir.ui.view,arch_db:cash_flow.edit_payment_term_dialog_view
+msgid "or"
+msgstr "o"
+
+#. module: cash_flow
+#: model:ir.model,name:cash_flow.model_report_cash_flow_cash_flow_report_template
+msgid "report.cash_flow.cash_flow_report_template"
+msgstr "report.cash_flow.cash_flow_report_template"
+

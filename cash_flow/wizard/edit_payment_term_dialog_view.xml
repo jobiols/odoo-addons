@@ -1,0 +1,51 @@
+<?xml version="1.0"?>
+<odoo>
+    <record id="edit_payment_term_dialog_view" model="ir.ui.view">
+        <field name="name">Edit Payment Term Dialog</field>
+        <field name="model">edit.payment.term.dialog</field>
+        <field name="arch" type="xml">
+            <form string="None">
+                <group>
+                    <group>
+                        <field name="date_from"/>
+                        <field name="date_to"/>
+                    </group>
+                    <group>
+                        <field name="invoice_type" widget="radio"/>
+                    </group>
+                </group>
+                <footer>
+                    <button name="edit_payment_term" string="Edit Payment Term"
+                            type="object" default_focus="1"
+                            class="oe_highlight"/>
+                    or
+                    <button string="Cancel" class="oe_link"
+                            special="cancel"/>
+                </footer>
+            </form>
+        </field>
+    </record>
+
+    <record id="action_edit_payment_term_dialog" model="ir.actions.act_window">
+        <field name="name">Edit Payment Term Dialog</field>
+        <field name="type">ir.actions.act_window</field>
+        <field name="res_model">edit.payment.term.dialog</field>
+        <field name="view_type">form</field>
+        <field name="view_mode">form</field>
+        <field name="view_id" ref="edit_payment_term_dialog_view"/>
+        <field name="target">new</field>
+    </record>
+
+    <menuitem id="menu_edit_payment_term_receivables"
+              name="Edit payment terms"
+              groups="account.group_account_manager"
+              action="action_edit_payment_term_dialog"
+              parent="account.menu_finance_receivables_documents"/>
+
+    <menuitem id="menu_edit_payment_term_payables"
+              name="Edit payment terms"
+              groups="account.group_account_manager"
+              action="action_edit_payment_term_dialog"
+              parent="account.menu_finance_payables_documents"/>
+
+</odoo>
