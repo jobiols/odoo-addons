@@ -30,7 +30,7 @@ class AccountBankStatement(models.Model):
             # seleccionar las line_ids que no tengan st_line.journal_entry_ids
             # son las que no se procesaron en pasos anteriores
             lines = statement.line_ids.filtered(
-                lambda r:r.journal_entry_ids.ids == [])
+                lambda r: r.journal_entry_ids.ids == [])
 
             # de estas lineas traer las primeras 100
             lines = lines[:3]

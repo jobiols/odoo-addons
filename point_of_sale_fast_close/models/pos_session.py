@@ -20,7 +20,9 @@ class PosSessionToClose(models.Model):
     phase = fields.Char(
         default='bank'
     )
-
+    move = fields.Many2one(
+        'account.move'
+    )
 
 class PosSession(models.Model):
     _inherit = 'pos.session'
@@ -39,7 +41,7 @@ class PosSession(models.Model):
             if session.config_id.cash_control:
                 super(PosSession, self).action_pos_session_closing_control()
 
-        # chequear que el POS tenga un Sale Journal
+            # chequear que el POS tenga un Sale Journal
             company_id = session.config_id.journal_id.company_id.id
             journal_id = self.env['ir.config_parameter'].sudo().get_param(
                 'pos.closing.journal_id_%s' % company_id,
@@ -95,43 +97,55 @@ class PosSession(models.Model):
                 print('ejecutando fase ordenes')
                 pstc.session_id.with_context(ctx)._confirm_orders_stepped(pstc)
 
+            # nada mas que hacer, eliminar de la cola.
+            if pstc.phase == 'end':
+                print('FIN eliminar elemento de la cola')
+                pstc.unlink()
+
     def _confirm_orders_stepped(self, pstc):
         """ hace lo mismo que _confirm_orders pero por pasos
         """
-        import wdb;wdb.set_trace()
-
         for session in self:
             company_id = session.config_id.journal_id.company_id.id
 
-            # traerse las ordenes en estado pago (y algo mas)
+            # traerse las ordenes en estado pago, las procesadas estan en done
             orders = session.order_ids.filtered(
                 lambda order: order.state == 'paid')
 
             # quedarse con las primeras tres
             orders = orders[:3]
+            if orders:
+                pstc.step += 1  # siguiente step
+                print('pasar a siguiente step', pstc.step, orders)
 
             journal_id = self.env['ir.config_parameter'].sudo().get_param(
                 'pos.closing.journal_id_%s' % company_id,
                 default=session.config_id.journal_id.id)
 
-            move = self.env['pos.order'].with_context(
-                force_company=company_id)._create_account_move(
-                session.start_at, session.name, int(journal_id), company_id)
+            # crear el move en el primer paso y salvarlo en pstc
+            if pstc.step == 1:
+                move = self.env['pos.order'].with_context(
+                    force_company=company_id)._create_account_move(
+                    session.start_at, session.name, int(journal_id),
+                    company_id)
+                pstc.move = move
+
             orders.with_context(
                 force_company=company_id)._create_account_move_line(session,
-                                                                    move)
-            for order in session.order_ids.filtered(
-                lambda o: o.state not in ['done', 'invoiced']):
-                if order.state not in ('paid'):
-                    raise UserError(
-                        _(
-                            "You cannot confirm all orders of this session, because they have not the 'paid' status.\n"
-                            "{reference} is in state {state}, total amount: {total}, paid: {paid}").format(
-                            reference=order.pos_reference or order.name,
-                            state=order.state,
-                            total=order.amount_total,
-                            paid=order.amount_paid,
-                        ))
+                                                                    pstc.move)
+            # obtener las ordenes para cerrar
+            orders_to_close = session.order_ids.filtered(
+                lambda o: o.state not in ['done', 'invoiced'])
+            # quedarse con las primeras 3
+            orders_to_close = orders_to_close[:3]
+            for order in orders_to_close:
                 order.action_pos_order_done()
+
             orders_to_reconcile = session.order_ids._filtered_for_reconciliation()
-            orders_to_reconcile.sudo()._reconcile_payments()
+            orders_to_reconcile = orders_to_reconcile[:3]
+            if orders_to_reconcile:
+                orders_to_reconcile.sudo()._reconcile_payments()
+
+            # cuando no hay nada mas que hacer terminar.
+            if not orders and not orders_to_close and not orders_to_reconcile:
+                pstc.phase = 'end'
