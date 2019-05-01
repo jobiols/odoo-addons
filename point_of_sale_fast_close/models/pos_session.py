@@ -23,6 +23,9 @@ class PosSessionToClose(models.Model):
     move = fields.Many2one(
         'account.move'
     )
+    orders_to_reconcile = fields.Many2many(
+        'pos.order'
+    )
 
 class PosSession(models.Model):
     _inherit = 'pos.session'
@@ -105,6 +108,7 @@ class PosSession(models.Model):
     def _confirm_orders_stepped(self, pstc):
         """ hace lo mismo que _confirm_orders pero por pasos
         """
+        import wdb;wdb.set_trace()
         for session in self:
             company_id = session.config_id.journal_id.company_id.id
 
@@ -141,8 +145,12 @@ class PosSession(models.Model):
             for order in orders_to_close:
                 order.action_pos_order_done()
 
+            # en este caso no veo que cambia al reconciliar asi que almaceno
+            # las ordenes que fueron procesadas para no reprocesarlas
             orders_to_reconcile = session.order_ids._filtered_for_reconciliation()
+            orders_to_reconcile = orders_to_reconcile - pstc.orders_to_reconcile
             orders_to_reconcile = orders_to_reconcile[:3]
+            pstc.orders_to_reconcile += orders_to_reconcile
             if orders_to_reconcile:
                 orders_to_reconcile.sudo()._reconcile_payments()
 
