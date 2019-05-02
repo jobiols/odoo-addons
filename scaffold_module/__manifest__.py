@@ -36,5 +36,6 @@
         'data/data.xml'
     ],
     'installable': False,
+    'auto_install': False,
     'application': False,
 }
