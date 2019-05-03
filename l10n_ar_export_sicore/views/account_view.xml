@@ -8,7 +8,7 @@
             <field name="arch" type="xml">
                 <form>
                     <header>
-                        <button name="compute_arba_data"
+                        <button name="compute_sicore_data"
                                 string="Regenerar sicore"
                                 type="object"/>
                     </header>
