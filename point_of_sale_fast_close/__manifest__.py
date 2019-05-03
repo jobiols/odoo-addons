@@ -19,23 +19,24 @@
 ##############################################################################
 
 {
-    'name': 'Module Name',
+    'name': 'Point of Sale Fast Close',
     'version': '11.0.0.0.0',
     'category': 'Tools',
-    'summary': "Module summary",
+    'summary': "Fix to speedup close on POS",
     'author': "jeo Software",
-    'website': 'http://github.com/jobiols/module-repo',
+    'website': 'http://github.com/jobiols/odoo-addons',
     'license': 'AGPL-3',
     'depends': [
+        'point_of_sale'
     ],
     'data': [
-        'security/ir.model.access.csv',
-        'security/res_groups.xml'
+        'data/cron_data.xml',
+        'security/ir.model.access.csv'
     ],
     'demo': [
         'data/data.xml'
     ],
-    'installable': False,
-    'auto_install': False,
+    'installable': True,
+    'auto_install': True,
     'application': False,
 }
