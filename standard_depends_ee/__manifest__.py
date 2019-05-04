@@ -19,7 +19,7 @@
 ##############################################################################
 
 {
-    'name': 'Standard Dependencies ee',
+    'name': 'Standard Dependencies EE',
     'version': '11.0.0.1.0',
     'category': 'Tools',
     'summary': "Add standard dependecies for Argentinian localization",
@@ -36,17 +36,19 @@
         'account_debt_management',  # mejoras en administracion de deudas
         'l10n_ar_aeroo_payment_group',  # Pagos
         'l10n_ar_account_withholding',  # Retenciones
-        'account_ux',  # hace pilas de cosas ver en el modulo
-        'base_ux',  # mejoras de base
-        'due_payments_argentina_fix',  # corrige los numeros de factura
+        'account_accountant',           # permisos para contabilidad
 
         # utilitarios
+        'account_ux',  # hace pilas de cosas ver en el modulo
+        'base_ux',  # mejoras de base
+        'sale_ux',  # mejoras en ventas
         'auto_backup',  # poner el backup en: /var/odoo/backups/
         'mail_activity_board_ux',  # quitar actividades del chatter
         'partner_ref_unique',  # evita duplicados en referencia
-        'partner_vat_unique',  # evita duplicados en CUIT
-        'invoice_lines_analysis_fix',  # corrige bug en pivot
+        'partner_vat_unique',  # evita duplicados numeros de referencia
         'product_unique',  # no se pueden duplicar codigos de producto
+        # fixes
+        'invoice_lines_analysis_fix',  # corrige bug en pivot
     ],
     'data': [],
     'demo': [],
