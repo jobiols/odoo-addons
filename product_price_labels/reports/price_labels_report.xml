@@ -16,12 +16,32 @@
 
                             <div style="width:110px;
                                        display:inline-block;"
-                                       align="center">
-                                <div style="border:1px solid black;
+                                 align="center">
+
+                                <t t-if="o.promotional_price">
+                                    <div style="border:1px solid black;
                                             font-size:120%;">
-                                    <span>$</span>
-                                    <span t-field="o.public_price"/>
-                                </div>
+                                        <strike>
+                                            <span>$</span>
+                                            <span t-field="o.public_price"/>
+                                        </strike>
+                                    </div>
+                                </t>
+                                <t t-if="not o.promotional_price">
+                                    <div style="border:1px solid black;
+                                            font-size:120%;">
+                                        <span>$</span>
+                                        <span t-field="o.public_price"/>
+                                    </div>
+                                </t>
+                                <t t-if="o.promotional_price">
+                                    <div style="border:1px solid black;
+                                                font-size:120%;">
+                                        <span>$</span>
+                                        <span t-field="o.promotional_price"/>
+                                    </div>
+                                </t>
+
                                 <div style="font-size:50%;">
                                     <t t-if="o.default_code">
                                         <span t-field="o.default_code"/>
