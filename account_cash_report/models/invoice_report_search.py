@@ -159,7 +159,12 @@ class InvoiceReport(models.AbstractModel):
         res = 0
         for inv in invoices:
             if inv['journal'] == CUENTA_CORRIENTE:
-                res += inv['residual']
+                if inv['number']:
+                    # si es una factura sumo el residual pero
+                    res += inv['residual']
+                else:
+                    # si es pago parcial sumo el paid
+                    res += inv['paid']
         return res
 
     @staticmethod
