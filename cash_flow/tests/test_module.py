@@ -15,5 +15,12 @@
 #
 #   Arrancar el test con:
 #
-#   oe -Q [nombre modulo] -c [nombre cliente] -d [nombre database]
+#   oe -Q cash_flow -c digital -d digital_test
 #
+from .common import CommonCase
+
+
+class TestController(CommonCase):
+
+    def test_01(self):
+        self.assertEquan(1,1)

@@ -6,7 +6,7 @@
   }, 
   "servers": [
     {
-      "url": "http://localhost:8069/base_rest_demo_api/public/ping"
+      "url": "http://localhost:8069/rest_lead_api/public/ping"
     }
   ], 
   "paths": {

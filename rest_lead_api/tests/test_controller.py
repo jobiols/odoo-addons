@@ -1,5 +1,6 @@
 # Copyright 2018 ACSONE SA/NV
 # License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl).
+#   oe -Q rest_lead_api -c click -d click_prod
 
 
 from odoo.http import controllers_per_module
@@ -47,17 +48,17 @@ class TestController(CommonCase):
     def test_controller_registry(self):
         # at the end of the start process, our tow controllers must into the
         # controller registered
-        controllers = controllers_per_module['base_rest_demo']
+        controllers = controllers_per_module['rest_lead_api']
         self.assertEqual(len(controllers), 2)
 
         self.assertIn(
-            ('odoo.addons.base_rest_demo.controllers.main.'
+            ('odoo.addons.rest_lead_api.controllers.main.'
              'BaseRestDemoPrivateApiController',
              BaseRestDemoPrivateApiController),
             controllers
         )
         self.assertIn(
-            ('odoo.addons.base_rest_demo.controllers.main.'
+            ('odoo.addons.rest_lead_api.controllers.main.'
              'BaseRestDemoPublicApiController',
              BaseRestDemoPublicApiController),
             controllers
@@ -67,9 +68,9 @@ class TestController(CommonCase):
         # check that the generic routes are defined with the right url and auth
         self._check_default_routes(
             BaseRestDemoPrivateApiController, auth="user",
-            root_path="/base_rest_demo_api/private/"
+            root_path="/rest_lead_api/private/"
         )
         self._check_default_routes(
             BaseRestDemoPublicApiController, auth="public",
-            root_path="/base_rest_demo_api/public/"
+            root_path="/rest_lead_api/public/"
         )

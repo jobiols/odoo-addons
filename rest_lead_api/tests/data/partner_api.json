@@ -6,7 +6,7 @@
   }, 
   "servers": [
     {
-      "url": "http://localhost:8069/base_rest_demo_api/private/partner"
+      "url": "http://localhost:8069/rest_lead_api/private/partner"
     }
   ], 
   "paths": {
