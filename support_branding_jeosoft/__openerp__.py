@@ -48,7 +48,7 @@
         'server_mode',          # server_mode = "test" en desarrollo
         'database_tools',
         'due_payments_argentina_fix',  # pone el nro de factura AFIP
-        'account_statement_move_import',  # agrega el boton importar apuntes
+        'account_statement_move_import',  # agrega el boton importar apuntes.
 
     ],
     'data': [
