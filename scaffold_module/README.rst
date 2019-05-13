@@ -20,7 +20,7 @@ PROJECT NAME
    :alt: Maintainability
 
 
-This module is a blah blah blah
+This module is a blah blah blah.
 
 Installation
 ============
