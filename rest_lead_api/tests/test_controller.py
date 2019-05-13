@@ -68,9 +68,9 @@ class TestController(CommonCase):
         # check that the generic routes are defined with the right url and auth
         self._check_default_routes(
             BaseRestDemoPrivateApiController, auth="user",
-            root_path="/rest_lead_api/private/"
+            root_path="/lead/v1/private/"
         )
         self._check_default_routes(
             BaseRestDemoPublicApiController, auth="public",
-            root_path="/rest_lead_api/public/"
+            root_path="/lead/v1/public/"
         )

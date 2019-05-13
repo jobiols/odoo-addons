@@ -18,7 +18,7 @@ class TestException(HttpCase, RegistryMixin):
         cls.setUpRegistry()
         host = '127.0.0.1'
         port = odoo.tools.config['http_port']
-        cls.url = 'http://%s:%d/rest_lead_api/public/exception' % (
+        cls.url = 'http://%s:%d/lead/v1/public/exception' % (
             host, port)
 
     def setUp(self):

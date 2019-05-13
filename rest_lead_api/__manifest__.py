@@ -15,6 +15,7 @@
     'depends': [
         'base_rest',
         'component',
+        'auth_api_key',
     ],
     'data': [
     ],

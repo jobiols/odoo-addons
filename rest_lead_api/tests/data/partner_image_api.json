@@ -8,7 +8,7 @@
   },
   "servers": [
     {
-      "url": "http://localhost:8069/rest_lead_api/private/partner_image"
+      "url": "http://localhost:8069/lead/v1/private/partner_image"
     }
   ],
   "paths": {

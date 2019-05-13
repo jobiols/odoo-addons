@@ -5,12 +5,12 @@ from odoo.addons.base_rest.controllers import main
 
 
 class BaseRestDemoPublicApiController(main.RestController):
-    _root_path = '/rest_lead_api/public/'
+    _root_path = '/lead/v1/public/'
     _collection_name = 'base.rest.demo.public.services'
     _default_auth = 'public'
 
 
 class BaseRestDemoPrivateApiController(main.RestController):
-    _root_path = '/rest_lead_api/private/'
+    _root_path = '/lead/v1/private/'
     _collection_name = 'base.rest.demo.private.services'
     _default_auth = 'user'
