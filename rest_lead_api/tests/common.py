@@ -26,6 +26,10 @@ class CommonCase(BaseRestCase):
         cls.public_services_env = WorkContext(
             model_name='rest.service.registration', collection=collection)
 
+        collection = _PseudoCollection('base.rest.private.services', cls.env)
+        cls.private_services_env = WorkContext(
+            model_name='rest.service.registration', collection=collection)
+
 
 def get_canonical_json(file_name):
     path = os.path.join(DATA_DIR, file_name)

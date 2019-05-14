@@ -1,61 +1,62 @@
 # Copyright 2018 ACSONE SA/NV
 # License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl).
 from odoo.addons.component.core import Component
-
+from odoo.addons.base_rest.components.service import skip_secure_response
 from odoo.addons.base_rest.components.service import to_int, to_bool
 
 
-class PartnerService(Component):
+class LeadService(Component):
     _inherit = 'base.rest.service'
-    _name = 'partner.service'
-    _usage = 'partner'
-    _collection = 'base.rest.demo.private.services'
+    _name = 'lead.service'
+    _usage = 'lead'
+    _collection = 'base.rest.private.services'
     _description = """
-        Partner Services
-        Access to the partner services is only allowed to authenticated users.
-        If you are not authenticated go to <a href='/web/login'>Login</a>
+        Lead Services
+        Access to the lead services is only allowed to authenticated users.
     """
 
+    @skip_secure_response
     def get(self, _id):
         """
-        Get partner's informations
+        Get lead's informations
         """
         return self._to_json(self._get(_id))
 
     def search(self, name):
         """
-        Searh partner by name
+        Searh lead by name
         """
-        partners = self.env['res.partner'].name_search(name)
-        partners = self.env['res.partner'].browse([i[0] for i in partners])
+        leads = self.env['crm.leads'].name_search(name)
+        leads = self.env['crm.leads'].browse([i[0] for i in leads])
         rows = []
         res = {
-            'count': len(partners),
+            'count': len(leads),
             'rows': rows
         }
-        for partner in partners:
-            rows.append(self._to_json(partner))
+        for lead in leads:
+            rows.append(self._to_json(lead))
         return res
 
     # pylint:disable=method-required-super
     def create(self, **params):
         """
-        Create a new partner
+        Create a new lead
         """
-        partner = self.env['res.partner'].create(
+        lead = self.env['crm.lead'].create(
             self._prepare_params(params))
-        return self._to_json(partner)
+        return self._to_json(lead)
 
     def update(self, _id, **params):
         """
-        Update partner informations
+        Update lead informations
         """
-        partner = self._get(_id)
-        partner.write(self._prepare_params(params))
-        return self._to_json(partner)
+        lead = self._get(_id)
+        lead.write(self._prepare_params(params))
+        return self._to_json(lead)
 
+    """
     def archive(self, _id, **params):
-        """
+        " ""
         Archive the given partner. This method is an empty method, IOW it
         don't update the partner. This method is part of the demo data to
         illustrate that historically it's not mandatory to defined a schema
@@ -65,14 +66,14 @@ class PartnerService(Component):
         :param _id:
         :param params:
         :return:
-        """
+        " ""
         return {'response': 'Method archive called with id %s' % _id}
-
+    """
     # The following method are 'private' and should be never never NEVER call
     # from the controller.
 
     def _get(self, _id):
-        return self.env['res.partner'].browse(_id)
+        return self.env['crm.lead'].browse(_id)
 
     def _prepare_params(self, params):
         for key in ['country', 'state']:
@@ -115,39 +116,10 @@ class PartnerService(Component):
     def _validator_create(self):
         res = {
             'name': {'type': 'string', 'required': True, 'empty': False},
-            'street': {'type': 'string', 'required': True, 'empty': False},
-            'street2': {'type': 'string', 'nullable': True},
-            'zip': {'type': 'string', 'required': True, 'empty': False},
-            'city': {'type': 'string', 'required': True, 'empty': False},
-            'phone': {'type': 'string', 'nullable': True, 'empty': False},
-            'state': {
-                'type': 'dict',
-                'schema': {
-                    'id': {
-                        'type': 'integer',
-                        'coerce': to_int,
-                        'nullable': True
-                    },
-                    'name': {
-                        'type': 'string',
-                    }
-                }
-            },
-            'country': {
-                'type': 'dict',
-                'schema': {
-                    'id': {
-                        'type': 'integer',
-                        'coerce': to_int,
-                        'required': True,
-                        'nullable': False
-                    },
-                    'name': {
-                        'type': 'string',
-                    }
-                },
-            },
-            'is_company': {'coerce': to_bool, 'type': 'boolean'},
+            'street': {'type': 'string', 'required': False, 'empty': True},
+            'mobile': {'type': 'string', 'required': False, 'empty': True},
+            'contact_name': {'type': 'string', 'required': False, 'empty': True},
+            'email_from': {'type': 'string', 'required': False, 'empty': True},
         }
         return res
 
@@ -167,24 +139,14 @@ class PartnerService(Component):
     def _validator_archive(self):
         return {}
 
-    def _to_json(self, partner):
+    def _to_json(self, lead):
+
         res = {
-            'id': partner.id,
-            'name': partner.name,
-            'street': partner.street,
-            'street2': partner.street2 or '',
-            'zip': partner.zip,
-            'city': partner.city,
-            'phone': partner.city,
+            'id': lead.id,
+            'name': lead.name,
+            'street': lead.street or '',
+            'mobile': lead.mobile or '',
+            'contact_name': lead.contact_name or '',
+            'email_from': lead.email_from or '',
         }
-        if partner.country_id:
-            res['country'] = {
-                'id': partner.country_id.id,
-                'name': partner.country_id.name
-            }
-        if partner.state_id:
-            res['state'] = {
-                'id': partner.state_id.id,
-                'name': partner.state_id.name
-            }
         return res

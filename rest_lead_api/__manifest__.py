@@ -15,7 +15,6 @@
     'depends': [
         'base_rest',
         'component',
-        'auth_api_key',
     ],
     'data': [
     ],
@@ -26,7 +25,7 @@
             'jsondiff'
         ],
     },
-    'installable': False,
+    'installable': True,
     'auto_install': False,
     'application': False,
 }
