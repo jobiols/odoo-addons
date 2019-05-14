@@ -11,8 +11,8 @@ class LeadService(Component):
     _usage = 'lead'
     _collection = 'base.rest.private.services'
     _description = """
-        Lead Services
-        Access to the lead services is only allowed to authenticated users.
+        Lead Services\n
+        Autenticated by api_key.
     """
 
     @skip_secure_response
@@ -48,27 +48,12 @@ class LeadService(Component):
 
     def update(self, _id, **params):
         """
-        Update lead informations
+        Update lead information
         """
         lead = self._get(_id)
         lead.write(self._prepare_params(params))
         return self._to_json(lead)
 
-    """
-    def archive(self, _id, **params):
-        " ""
-        Archive the given partner. This method is an empty method, IOW it
-        don't update the partner. This method is part of the demo data to
-        illustrate that historically it's not mandatory to defined a schema
-        describing the content of the response returned by a method.
-        This kind of definition is DEPRECATED and will no more supported in
-        the future.
-        :param _id:
-        :param params:
-        :return:
-        " ""
-        return {'response': 'Method archive called with id %s' % _id}
-    """
     # The following method are 'private' and should be never never NEVER call
     # from the controller.
 
@@ -93,12 +78,8 @@ class LeadService(Component):
 
     def _validator_search(self):
         return {
-            'name': {
-                'type': 'string',
-                'nullable': False,
-                'required': True,
-                },
-            }
+            'name': {'type': 'string', 'nullable': False, 'required': True},
+        }
 
     def _validator_return_search(self):
         return {
@@ -118,8 +99,11 @@ class LeadService(Component):
             'name': {'type': 'string', 'required': True, 'empty': False},
             'street': {'type': 'string', 'required': False, 'empty': True},
             'mobile': {'type': 'string', 'required': False, 'empty': True},
-            'contact_name': {'type': 'string', 'required': False, 'empty': True},
-            'email_from': {'type': 'string', 'required': False, 'empty': True},
+            'contact_name': {'type': 'string', 'required': True,
+                             'empty': True},
+            'email_from': {'type': 'string', 'required': True, 'empty': True},
+            'description': {'type': 'string', 'required': False,
+                            'empty': True},
         }
         return res
 
@@ -148,5 +132,6 @@ class LeadService(Component):
             'mobile': lead.mobile or '',
             'contact_name': lead.contact_name or '',
             'email_from': lead.email_from or '',
+            'description': lead.description or ''
         }
         return res
