@@ -26,8 +26,8 @@ class LeadService(Component):
         """
         Searh lead by name
         """
-        leads = self.env['crm.leads'].name_search(name)
-        leads = self.env['crm.leads'].browse([i[0] for i in leads])
+        leads = self.env['crm.lead'].name_search(name)
+        leads = self.env['crm.lead'].browse([i[0] for i in leads])
         rows = []
         res = {
             'count': len(leads),
