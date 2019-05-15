@@ -5,60 +5,34 @@ from odoo.addons.base_rest.components.service import skip_secure_response
 from odoo.addons.base_rest.components.service import to_int, to_bool
 
 
-class LeadService(Component):
+class TeamService(Component):
     _inherit = 'base.rest.service'
-    _name = 'channel.service'
-    _usage = 'channel'
+    _name = 'team.service'
+    _usage = 'team'
     _collection = 'base.rest.private.services'
     _description = """
-        Channel Services\n
-        Autenticated by api_key.
+        Team Services are Autenticated by api_key.
     """
-
-    @skip_secure_response
-    def get(self, _id):
-        """
-        Get lead's informations
-        """
-        return self._to_json(self._get(_id))
 
     def search(self, name):
         """
-        Searh lead by name
+        Get all teams that use leads, name not used
         """
-        team = self.env['crm.team'].name_search(name)
-        team = self.env['crm.team'].browse([i[0] for i in leads])
+        teams = self.env['crm.team'].search([('use_leads', '=', True)])
         rows = []
         res = {
-            'count': len(leads),
+            'count': len(teams),
             'rows': rows
         }
-        for lead in leads:
-            rows.append(self._to_json(lead))
+        for team in teams:
+            rows.append(self._to_json(team))
         return res
-
-    # pylint:disable=method-required-super
-    def create(self, **params):
-        """
-        Create a new lead
-        """
-        lead = self.env['crm.lead'].create(
-            self._prepare_params(params))
-        return self._to_json(lead)
-
-    def update(self, _id, **params):
-        """
-        Update lead information
-        """
-        lead = self._get(_id)
-        lead.write(self._prepare_params(params))
-        return self._to_json(lead)
 
     # The following method are 'private' and should be never never NEVER call
     # from the controller.
 
     def _get(self, _id):
-        return self.env['crm.lead'].browse(_id)
+        return self.env['crm.team'].browse(_id)
 
     def _prepare_params(self, params):
         for key in ['country', 'state']:
@@ -97,16 +71,10 @@ class LeadService(Component):
     def _validator_create(self):
         res = {
             'name': {'type': 'string', 'required': True, 'empty': False},
-            'street': {'type': 'string', 'required': False, 'empty': True},
-            'mobile': {'type': 'string', 'required': False, 'empty': True},
-            'contact_name': {'type': 'string', 'required': True,
-                             'empty': True},
-            'email_from': {'type': 'string', 'required': True, 'empty': True},
-            'description': {'type': 'string', 'required': False,
-                            'empty': True},
         }
         return res
 
+    """
     def _validator_return_create(self):
         return self._validator_return_get()
 
@@ -122,16 +90,11 @@ class LeadService(Component):
 
     def _validator_archive(self):
         return {}
+    """
 
-    def _to_json(self, lead):
-
+    def _to_json(self, team):
         res = {
-            'id': lead.id,
-            'name': lead.name,
-            'street': lead.street or '',
-            'mobile': lead.mobile or '',
-            'contact_name': lead.contact_name or '',
-            'email_from': lead.email_from or '',
-            'description': lead.description or ''
+            'id': team.id,
+            'name': team.name,
         }
         return res
