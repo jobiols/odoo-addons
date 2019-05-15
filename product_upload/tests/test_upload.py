@@ -148,3 +148,14 @@ class TestProductUploadProduct(common.TransactionCase):
 
         self.wizard_obj.process_tmp_file(self.get_filename(2))
         self.assertEqual(self.wizard_obj.log.state, 'error')
+
+    def test_07_(self):
+        """ Chequear trimming del codigo de producto
+        """
+        import wdb;wdb.set_trace()
+        # el producto tiene un espacio despues del codigo
+        self.wizard_obj.process_tmp_file(self.get_filename(3))
+        # lo tiene que cargar sin el espacio
+        domain = [('default_code', '=', '1077-EINHELL')]
+        einhell = self.prod_obj.search(domain)
+        self.assertEqual(einhell.default_code, u'1077-EINHELL')

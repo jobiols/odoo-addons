@@ -78,6 +78,8 @@ class ImportWorksheet(models.TransientModel):
                     text = _('Cell must contain text') + \
                            ' ' + err % (row[col].row, name, sheet.title)
                     self.add_error(text)
+                if value:
+                    value = value.strip()
                 return {name: value}
 
             if data_type == 'number':
@@ -103,6 +105,8 @@ class ImportWorksheet(models.TransientModel):
                            ' ' + err % (
                         product.default_code, row[col].row, sheet.title)
                     self.add_error(text)
+                    if value:
+                        value = value.strip()
                 return {name: value}
 
             self.add_error(_('internal error !!'))
@@ -132,7 +136,7 @@ class ImportWorksheet(models.TransientModel):
 
     def check_create(self, default_code):
         prod_obj = self.env['product.template']
-        prod = prod_obj.search([('default_code', '=', default_code)])
+        prod = prod_obj.search([('default_code', '=', default_code.strip())])
         return True if prod else False
 
     def process_data(self, data, vendor):
