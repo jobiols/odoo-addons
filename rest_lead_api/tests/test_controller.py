@@ -6,8 +6,8 @@
 from odoo.http import controllers_per_module
 
 from .common import CommonCase
-from ..controllers.main import BaseRestDemoPrivateApiController,\
-    BaseRestDemoPublicApiController
+from ..controllers.main import BaseRestPrivateApiController, \
+    BaseRestPublicApiController
 
 
 class TestController(CommonCase):
@@ -53,24 +53,20 @@ class TestController(CommonCase):
 
         self.assertIn(
             ('odoo.addons.rest_lead_api.controllers.main.'
-             'BaseRestDemoPrivateApiController',
-             BaseRestDemoPrivateApiController),
+             'BaseRestPrivateApiController',
+             BaseRestPrivateApiController),
             controllers
         )
         self.assertIn(
             ('odoo.addons.rest_lead_api.controllers.main.'
-             'BaseRestDemoPublicApiController',
-             BaseRestDemoPublicApiController),
+             'BaseRestPublicApiController',
+             BaseRestPublicApiController),
             controllers
         )
 
     def test_controller_routes(self):
         # check that the generic routes are defined with the right url and auth
         self._check_default_routes(
-            BaseRestDemoPrivateApiController, auth="user",
-            root_path="/lead/v1/private/"
-        )
-        self._check_default_routes(
-            BaseRestDemoPublicApiController, auth="public",
-            root_path="/lead/v1/public/"
+            BaseRestPrivateApiController, auth="api_key",
+            root_path="/v1/private/"
         )

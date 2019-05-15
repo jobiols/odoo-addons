@@ -11,11 +11,10 @@ class LeadService(Component):
     _usage = 'lead'
     _collection = 'base.rest.private.services'
     _description = """
-        Lead Services\n
-        Autenticated by api_key.
+        Lead Services are Autenticated by api_key.
     """
 
-    @skip_secure_response
+    # @skip_secure_response
     def get(self, _id):
         """
         Get lead's informations
@@ -42,8 +41,7 @@ class LeadService(Component):
         """
         Create a new lead
         """
-        lead = self.env['crm.lead'].create(
-            self._prepare_params(params))
+        lead = self.env['crm.lead'].create(self._prepare_params(params))
         return self._to_json(lead)
 
     def update(self, _id, **params):
@@ -104,6 +102,7 @@ class LeadService(Component):
             'email_from': {'type': 'string', 'required': True, 'empty': True},
             'description': {'type': 'string', 'required': False,
                             'empty': True},
+            'team_id': {'type': 'integer', 'required': True, 'empty': True},
         }
         return res
 
@@ -124,7 +123,6 @@ class LeadService(Component):
         return {}
 
     def _to_json(self, lead):
-
         res = {
             'id': lead.id,
             'name': lead.name,
@@ -132,6 +130,7 @@ class LeadService(Component):
             'mobile': lead.mobile or '',
             'contact_name': lead.contact_name or '',
             'email_from': lead.email_from or '',
-            'description': lead.description or ''
+            'description': lead.description or '',
+            'team_id': lead.team_id.id
         }
         return res
