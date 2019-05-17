@@ -8,13 +8,14 @@
     'version': '11.0.1.0.0',
     'category': 'Tools',
     'development_status': 'Beta',
-    'license': 'OEEL-1',
+    'license': 'AGPL-3',
     'author': 'NTSystemWork',
     "maintainers": ['lmignon'],
     'website': 'https://ntsystemwork.com',
     'depends': [
         'base_rest',
         'component',
+        'crm'
     ],
     'data': [
     ],
