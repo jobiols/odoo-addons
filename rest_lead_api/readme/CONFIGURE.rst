@@ -1,16 +1,15 @@
-The api key and the user must be provided in the configuration file under
-the section api_key_API_KEY. The key must be in the header of the REST request
-and the user must exist in odoo and have the necessary permissions for the crm model.
+The api key and the user must be provided in the configuration file.
+And this key must be in the header of the REST request the user must exist in
+odoo and have the necessary permissions for the crm model.
 
-in odoo.conf add for instance:
+In odoo.conf add for instance:
 
 .. code-block:: ini
 
-    [api_key_API_KEY]
-    key=1234567890
-    user=admin
+    rest_api_key = 1234567890
+    rest_api_user = admin
 
-in the REST request add the key in headers
+In the REST request add the key in headers.
 
 .. code-block:: bash
 

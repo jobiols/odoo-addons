@@ -18,7 +18,7 @@ class ExceptionService(Component):
     _description = """
         Exception Services
 
-        Services to test hiw exception are handled by base_erst
+        Services to test if exceptions are handled by rest_lead_api
     """
 
     def user_error(self):

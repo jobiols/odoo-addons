@@ -11,7 +11,7 @@
     "author": "jeo Software, ACSONE SA/NV,Odoo Community Association (OCA)",
     "website": "https://jeosoft.com.ar",
     "development_status": "Beta",
-    "depends": ["server_environment"],
+    "depends": [],
     "data": [],
     "demo": [],
     'installable': True,
