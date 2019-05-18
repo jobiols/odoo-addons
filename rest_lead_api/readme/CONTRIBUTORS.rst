@@ -1,1 +1,1 @@
-* Laurent Mignon <laurent.mignon@acsone.eu>
+* Jorge Obiols <jorge.obiols@gmail.com>

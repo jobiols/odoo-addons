@@ -10,7 +10,7 @@
     'development_status': 'Beta',
     'license': 'AGPL-3',
     'author': 'NTSystemWork',
-    "maintainers": ['lmignon'],
+    "maintainers": ['jobiols'],
     'website': 'https://ntsystemwork.com',
     'depends': [
         'base_rest',

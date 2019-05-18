@@ -1,2 +1,2 @@
-Demo addon to illustrate how to develop self documented REST services thanks
-to the **base_rest** addon.
+Using the REST API implemented in the OCA base_rest module, this module allows
+inserting leads from external systems to the CRM module.
