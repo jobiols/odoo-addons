@@ -1,0 +1,7 @@
+-
+  Configure argentinian localization
+-
+  !python {model: res.config.settings} : |
+    self.env['res.config.settings'].create({
+           'chart_template_id': self.env.ref('l10n_ar_chart.l10nar_ri_chart_template').id
+    }).sudo().execute()
