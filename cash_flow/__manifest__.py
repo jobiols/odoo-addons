@@ -24,10 +24,13 @@
     'category': 'Accounting',
     'summary': "Cash Flow Management",
     'author': "NTSystemWork",
-    'website': 'http://github.com/ntsystemwork/addons',
+    'development_status': 'Production',
+    'website': 'http://github.com/ntsystemwork',
     'license': 'AGPL-3',
     'depends': [
         'account',
+        'l10n_ar_chart',
+        'sale_management'
     ],
     'data': [
         'wizard/cash_flow_view.xml',
@@ -36,7 +39,9 @@
         'reports/cash_flow_report.xml',
     ],
     'demo': [
-        # 'data/data.xml'
+        'data/configuration.yml',
+        'data/journals.xml',
+#        'data/invoices.xml'
     ],
     'installable': True,
     'application': False,

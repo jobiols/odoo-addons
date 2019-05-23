@@ -1,0 +1,33 @@
+<?xml version="1.0" ?>
+<odoo>
+	<data>
+		<record id="account_journal_ventas0" model="account.journal">
+			<field name="point_of_sale_type">manual</field>
+			<field eval="1" name="active"/>
+			<field eval="1" name="at_least_one_inbound"/>
+			<field eval="[(6,0,[])]" name="type_control_ids"/>
+			<field eval="1" name="point_of_sale_number"/>
+			<field eval="1" name="at_least_one_outbound"/>
+			<field eval="0" name="update_posted"/>
+			<field eval="0" name="group_invoice_lines"/>
+			<field eval="[(6,0,[])]" name="account_control_ids"/>
+			<field eval="10" name="sequence"/>
+			<field eval="[(6,0,[ref('account.account_payment_method_manual_in')])]" name="inbound_payment_method_ids"/>
+			<field name="type">sale</field>
+			<field eval="1" name="use_documents"/>
+			<field eval="0" name="refund_sequence"/>
+			<field name="create_date">2019-05-22 23:15:20</field>
+			<field eval="1" name="show_on_dashboard"/>
+			<field model="ir.sequence" name="sequence_id" search="[('name', '=', 'Ventas 01')]"/>
+			<field name="code">VEN01</field>
+			<field name="company_id" ref="base.main_company"/>
+			<field name="write_uid" ref="base.user_root"/>
+			<field eval="[(6,0,[ref('account.account_payment_method_manual_out')])]" name="outbound_payment_method_ids"/>
+			<field name="document_sequence_type">own_sequence</field>
+			<field name="write_date">2019-05-22 23:15:20</field>
+			<field name="create_uid" ref="base.user_root"/>
+			<field name="bank_statements_source">undefined</field>
+			<field name="name">Ventas 01</field>
+		</record>
+	</data>
+</odoo>
