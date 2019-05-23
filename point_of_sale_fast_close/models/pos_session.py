@@ -92,18 +92,15 @@ class PosSession(models.Model):
 
             # ejecutar la fase banco
             if pstc.phase == 'bank':
-                print('ejecutando fase banco')
                 for st in pstc.session_id.statement_ids:
                     st.with_context(ctx).button_confirm_bank_stepped(pstc)
 
             # ejecutar la fase ordenes
             if pstc.phase == 'orders':
-                print('ejecutando fase ordenes')
                 pstc.session_id.with_context(ctx)._confirm_orders_stepped(pstc)
 
             # nada mas que hacer, eliminar de la cola.
             if pstc.phase == 'end':
-                print('FIN eliminar elemento de la cola')
                 pstc.unlink()
 
     def _confirm_orders_stepped(self, pstc):
@@ -120,7 +117,6 @@ class PosSession(models.Model):
             orders = orders[:LINES_TO_PROCESS]
             if orders:
                 pstc.step += 1  # siguiente step
-                print('pasar a siguiente step', pstc.step, orders)
 
             journal_id = self.env['ir.config_parameter'].sudo().get_param(
                 'pos.closing.journal_id_%s' % company_id,
