@@ -24,9 +24,9 @@ INFO = [
      'type': 'number'},
     {'name': 'name', 'create_req': True, 'update_req': False, 'type': 'str'},
     {'name': 'purchase_tax', 'create_req': True, 'update_req': False,
-     'type': 'number'},
+     'type': 'tax'},
     {'name': 'sale_tax', 'create_req': True, 'update_req': False,
-     'type': 'number'},
+     'type': 'tax'},
     {'name': 'barcode', 'create_req': False, 'update_req': False,
      'type': 'str'},
     {'name': 'meli', 'create_req': False, 'update_req': False, 'type': 'str'},
@@ -108,6 +108,15 @@ class ImportWorksheet(models.TransientModel):
                     if value:
                         value = value.strip()
                 return {name: value}
+
+            if data_type == 'tax':
+                if not (isinstance(value, (float)) or (value is None) and not req) or (value >= 1):
+                    row_ = row[col].row if row[col].value is not None else 0
+                    text = _('The Cell must contain IVA, a float number less than 1') + \
+                           ' ' + err % (row_, name, sheet.title)
+                    self.add_error(text)
+                return {name: value}
+
 
             self.add_error(_('internal error !!'))
 
