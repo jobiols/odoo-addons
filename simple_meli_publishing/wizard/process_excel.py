@@ -71,11 +71,6 @@ class SimpleMeliPublishing(models.TransientModel):
                 meli_code = sheet.cell(column=PUB_CODE_COL, row=row).value
                 prod = product_obj.search([('meli_code', '=', meli_code)])
                 if prod:
-                    """
-                    sheet.cell(column=SKU_COL,
-                               row=row,
-                               value=prod.default_code)
-                    """
                     sheet.cell(column=PRICE_COL,
                                row=row,
                                value=prod.final_price)
