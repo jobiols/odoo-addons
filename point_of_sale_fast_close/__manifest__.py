@@ -34,7 +34,7 @@
         'security/ir.model.access.csv'
     ],
     'demo': [
-        'data/data.xml'
+
     ],
     'installable': True,
     'auto_install': True,
