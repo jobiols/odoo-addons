@@ -73,15 +73,12 @@
                     </group>
                 </group>
             </xpath>
-            <!--
-            <xpath expr="//button[@name='create_payments']" position="attributes">
+            <xpath expr="//button[@name='create_payment']" position="attributes">
                 <attribute name="invisible">context.get('batch', False)</attribute>
             </xpath>
-
-            <xpath expr="//button[@name='create_payments']" position="after">
+            <xpath expr="//button[@name='create_payment']" position="after">
                 <button name="make_payments" string="Make Payments" type="object" class="btn-primary" invisible="not context.get('batch', False)"/>
             </xpath>
-            -->
             <xpath expr="//field[@name='amount']" position="attributes">
                 <attribute name="invisible">context.get('batch', False)</attribute>
             </xpath>
