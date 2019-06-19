@@ -104,7 +104,7 @@ class AccountRegisterPayments(models.TransientModel):
     invoice_customer_payments = fields.One2many(
         'invoice.customer.payment.line',
         'wizard_id', string='Receipts')
-    cheque_amount = fields.Float("Check Amount",
+    cheque_amount = fields.Float("Amount to pay",
                                  required=True, default=0.00)
     total_pay_amount = fields.Float("Total Invoices",
                                     compute='_compute_pay_total')
