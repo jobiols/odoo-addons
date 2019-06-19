@@ -2,7 +2,7 @@
 # <https://www.opensourceintegrators.com>
 # License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl).
 
-from odoo import api, models, _
+from openerp import api, models, _
 
 
 class AccountPayment(models.Model):
