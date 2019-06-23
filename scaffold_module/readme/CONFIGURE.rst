@@ -1,0 +1,1 @@
+Para configurar ir a Config / esto / y aquello
