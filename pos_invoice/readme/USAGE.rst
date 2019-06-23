@@ -1,0 +1,1 @@
+Generar una factura desde POS y para obtener un pdf de factura electronica.
