@@ -1,0 +1,33 @@
+<?xml version="1.0"?>
+<odoo>
+    <template id="report_saleorder_document"
+              inherit_id="sale.report_saleorder_document">
+
+        <!-- agregar header tipo de unidad -->
+        <xpath expr="//table/thead/tr/th[@class='text-right']"
+               position="before">
+            <th class="text-right">Tipo de unidad</th>
+        </xpath>
+
+        <!-- agregar dato tipo de unidad -->
+        <xpath expr="//t/tr/td[@class='text-right']" position="before">
+            <td class="text-right">
+                <span t-field="l.unit_type"/>
+            </td>
+        </xpath>
+
+        <!-- agregar responsabilidad y cuit al cliente -->
+        <xpath expr="//div[@class='col-xs-5 col-xs-offset-1']" position="replace">
+            <div class="col-xs-5 col-xs-offset-1">
+                <div t-field="doc.partner_id"
+                     t-options='{"widget": "contact", "fields": ["address", "name"], "no_marker": True}'/>
+                <p t-if="doc.partner_id.main_id_number">
+                    <span t-field="doc.partner_id.afip_responsability_type_id.name"/><br/>
+                    <t t-esc="doc.partner_id.main_id_category_id.code"/>:
+                    <span t-field="doc.partner_id.main_id_number"/>
+                </p>
+            </div>
+        </xpath>
+
+    </template>
+</odoo>

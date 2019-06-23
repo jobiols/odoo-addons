@@ -1,0 +1,15 @@
+<?xml version="1.0"?>
+<odoo>
+
+    <!-- agregar unit type a la sale.order.line -->
+    <record id="view_order_form" model="ir.ui.view">
+        <field name="name">QUOTATION REPORT IMPROVED add </field>
+        <field name="model">sale.order</field>
+        <field name="inherit_id" ref="sale.view_order_form"/>
+        <field name="arch" type="xml">
+           <xpath expr="//tree/field[@name='product_uom_qty']" position="before">
+                <field name="unit_type"/>
+           </xpath>
+        </field>
+    </record>
+</odoo>
