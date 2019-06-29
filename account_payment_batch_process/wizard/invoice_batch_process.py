@@ -210,7 +210,7 @@ class AccountRegisterPayments(models.TransientModel):
         """
         if not group_data:
             return {}
-
+        """
         val_payment_m = \
             group_data['payment_method_id'] \
             if 'payment_method_id' in group_data \
@@ -236,7 +236,27 @@ class AccountRegisterPayments(models.TransientModel):
                 'check_amount_in_words': p_data_total or '',
             }
             res.update(dict_val_rec)
+        """
+        def get_payment_data():
+            ret = {
+                'payment_type_copy': 'outbound',
+                'journal_id': self.journal_id.id,
+                'amount': group_data['total'],
+                'currency_id': self.currency_id.id,
+                'payment_date': self.payment_date,
+                'communication': group_data['memo'],
+            }
+            return ret
 
+
+        res = {
+            'payment_date': self.payment_date,
+            'communication': group_data['memo'],
+            'currency_id': self.currency_id.id,
+            'partner_id': int(group_data['partner_id']),
+            'partner_type': group_data['partner_type'],
+            'payment_ids': [(0, False, get_payment_data())]
+        }
         return res
 
     @api.multi
@@ -403,6 +423,9 @@ class AccountRegisterPayments(models.TransientModel):
         """
         Action make payments
         """
+
+        #import wdb;wdb.set_trace()
+
         # Make group data either for Customers or Vendors
         context = dict(self._context or {})
         data = {}
@@ -444,9 +467,15 @@ class AccountRegisterPayments(models.TransientModel):
         }
         context.update(dict_val)
         # Making partner wise payment
+
+        import wdb;wdb.set_trace()
+
+        group = self.env['account.payment.group']
+
+
         payment_ids = []
         for p_index in list(data):
-            val_ap = self.env['account.payment']
+            val_ap = self.env['account.payment.group']
             payment = val_ap.with_context(context).\
                 create(self.get_payment_batch_vals(group_data=data[p_index]))
             payment_ids.append(payment.id)

@@ -12,6 +12,7 @@
     "website": "https://github.com/OCA/account-payment",
     "depends": [
         "account_check_printing",
+        "account_payment_group"
     ],
     "data": [
         "wizard/invoice_batch_process_view.xml",
