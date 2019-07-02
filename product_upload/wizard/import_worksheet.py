@@ -4,6 +4,7 @@ from openerp import api, models, fields, _
 import base64
 import tempfile
 import logging
+from openerp.exceptions import UserError
 
 _logger = logging.getLogger(__name__)
 
@@ -257,8 +258,12 @@ class ImportWorksheet(models.TransientModel):
         """
 
         # leer la planilla del temporario en solo lectura
-        wb = openpyxl.load_workbook(filename=tmp_file, read_only=True,
-                                    data_only=True)
+        try:
+            wb = openpyxl.load_workbook(filename=tmp_file, read_only=True,
+                                        data_only=True)
+        except Exception, e:
+            raise UserError('El archivo importado no es una planilla'
+                            ' Microsoft Excel (.xlsx)')
 
         # cada hoja de la planilla es un vendor
         partner_obj = self.env['res.partner']
