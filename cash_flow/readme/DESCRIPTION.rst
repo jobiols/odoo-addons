@@ -1,4 +1,23 @@
-Este modulo permite consultar el flujo de caja por fecha para efecto de analisis
-de cobros y adicionalmente permite modificar la fecha de vencimiento de las
-facturas de clientes y proveedores con el motivo de evitar pagos morosos de
-clientes y proveedores.
+Este modulo permite consultar el flujo de caja y modificar las fechas de vencimiento
+de facturas para ajustarlo de acuerdo a las necesidades.
+
+Reporte de Flujo de caja
+------------------------
+
+Facturacion / Informes / Reporte de flujo de caja
+
+El reporte muestra los siguientes datos
+
+- Fecha
+- Cuentas a cobrar
+- Banco y Caja
+- Cuentas a pagar
+- Total
+
+Editar terminos de pago
+-----------------------
+
+Facturacion / Ventas / Editar terminos de pago
+
+Mediante la edicion se puede cambiar la fecha de vencimiento de facturas de
+clientes y de proveedores.

@@ -10,29 +10,53 @@ Cash Flow
 .. |badge1| image:: https://img.shields.io/badge/licence-AGPL--3-blue.png
     :target: http://www.gnu.org/licenses/agpl-3.0-standalone.html
     :alt: License: AGPL-3
-.. |badge2| image:: https://img.shields.io/badge/github-NTSystemWork%2Fcashflow-lightgray.png?logo=github
-    :target: https://github.com/NTSystemWork/cashflow/tree/11.0/cash_flow
-    :alt: NTSystemWork/cashflow
+.. |badge2| image:: https://img.shields.io/badge/github-jeosoft%2Fcash_flow-lightgray.png?logo=github
+    :target: https://github.com/jeosoft/cash_flow/tree/11.0/cash_flow
+    :alt: jeosoft/cash_flow
 
 |badge1| |badge2| 
 
-Este modulo permite consultar el flujo de caja por fecha para efecto de analisis
-de cobros y adicionalmente permite modificar la fecha de vencimiento de las
-facturas de clientes y proveedores con el motivo de evitar pagos morosos de
-clientes y proveedores.
+Este modulo permite consultar el flujo de caja y modificar las fechas de vencimiento
+de facturas para ajustarlo de acuerdo a las necesidades.
+
+Reporte de Flujo de caja
+------------------------
+
+Facturacion / Informes / Reporte de flujo de caja
+
+El reporte muestra los siguientes datos
+
+- Fecha
+- Cuentas a cobrar
+- Banco y Caja
+- Cuentas a pagar
+- Total
+
+Editar terminos de pago
+-----------------------
+
+Facturacion / Ventas / Editar terminos de pago
+
+Mediante la edicion se puede cambiar la fecha de vencimiento de facturas de
+clientes y de proveedores.
 
 **Table of contents**
 
 .. contents::
    :local:
 
+Configuration
+=============
+
+No se requiere una configuracion especial.
+
 Bug Tracker
 ===========
 
-Bugs are tracked on `GitHub Issues <https://github.com/NTSystemWork/cashflow/issues>`_.
+Bugs are tracked on `GitHub Issues <https://github.com/jeosoft/cash_flow/issues>`_.
 In case of trouble, please check there if your issue has already been reported.
 If you spotted it first, help us smashing it by providing a detailed and welcomed
-`feedback <https://github.com/NTSystemWork/cashflow/issues/new?body=module:%20cash_flow%0Aversion:%2011.0%0A%0A**Steps%20to%20reproduce**%0A-%20...%0A%0A**Current%20behavior**%0A%0A**Expected%20behavior**>`_.
+`feedback <https://github.com/jeosoft/cash_flow/issues/new?body=module:%20cash_flow%0Aversion:%2011.0%0A%0A**Steps%20to%20reproduce**%0A-%20...%0A%0A**Current%20behavior**%0A%0A**Expected%20behavior**>`_.
 
 Do not contact contributors directly about support or help with technical issues.
 
@@ -52,6 +76,6 @@ Contributors
 Maintainers
 ~~~~~~~~~~~
 
-This module is part of the `NTSystemWork/cashflow <https://github.com/NTSystemWork/cashflow/tree/11.0/cash_flow>`_ project on GitHub.
+This module is part of the `jeosoft/cash_flow <https://github.com/jeosoft/cash_flow/tree/11.0/cash_flow>`_ project on GitHub.
 
 You are welcome to contribute.
