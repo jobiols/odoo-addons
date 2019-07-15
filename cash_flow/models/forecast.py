@@ -1,6 +1,6 @@
 # For copyright and license notices, see __manifest__.py file in module root
 
-from odoo import fields, models
+from odoo import fields, models, api
 
 
 class AccountInvoice(models.Model):
@@ -11,47 +11,55 @@ class AccountInvoice(models.Model):
         states={'foreseen': [('readonly', False)]},
         index=True,
         help="Forecast date, it will be used in the cash flow",
-        copy=False,
-        track_visibility='always'
-    )
-
-    state = fields.Selection([
-        ('foreseen', 'Foreseen'),
-        ('invoiced', 'Invoiced')],
-        help='Forecast state',
-        track_visibility='always'
-    )
-
-    partner_id = fields.Many2one(
-        'res.partner',
-        string='Partner',
-        required=True,
-        readonly=True,
-        states={'foreseen': [('readonly', False)]},
-        track_visibility='always'
+        track_visibility='onchange'
     )
 
     amount = fields.Monetary(
         string='Forecasted amount',
         currency_field='currency_id',
-        store=True, readonly=True,
-        compute='_compute_amount',
+        readonly=True,
+        states={'foreseen': [('readonly', False)]},
         help="Total Forecasted amount without taxes",
-        track_visibility='always'
+        track_visibility='onchange'
     )
+    description = fields.Char(
 
+    )
     type = fields.Selection([
         ('out', 'Expenses Forecast'),
         ('in', 'Incomes Forecast')],
         help='Forecast type',
-        track_visibility='always'
+        track_visibility='onchange'
     )
 
     user_id = fields.Many2one(
         'res.users',
         string='User',
-        track_visibility='onchange',
         readonly=True,
         default=lambda self: self.env.user,
-        copy=False
+        track_visibility='onchange',
     )
+
+    state = fields.Selection(
+        [('foreseen', 'Foreseen'),
+         ('invoiced', 'Invoiced')],
+        string='Status',
+        index=True,
+        readonly=True,
+        help='Forecast state',
+        default='foreseen',
+        track_visibility='onchange',
+    )
+
+    @api.model
+    def _default_currency(self):
+        return self.env.user.company_id.currency_id
+
+    currency_id = fields.Many2one(
+        'res.currency',
+        string='Currency',
+        required=True,
+        readonly=True,
+        states={'foreseen': [('readonly', False)]},
+        default=_default_currency,
+        track_visibility='always')

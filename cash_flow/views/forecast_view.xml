@@ -1,15 +1,21 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <odoo>
     <data>
-
-        <record id="view_account_export_arba_form" model="ir.ui.view">
-            <field name="name">account.export.arba.form</field>
-            <field name="model">account.export.arba</field>
+<!--
+        <record id="view_account_forecast_form" model="ir.ui.view">
+            <field name="name">CASH FLOW Forecast form</field>
+            <field name="model">cash_flow.forecast</field>
             <field name="arch" type="xml">
                 <form>
+                    <field name="forecast_date"/>
+                    <field name="amount"/>
+                    <field name="type"/>
+                    <field name="user_id"/>
+
+
                     <header>
                         <button name="compute_arba_data"
-                                string="Regenerar ARBA"
+                                string="Forecast"
                                 type="object"/>
                     </header>
                     <sheet>
@@ -21,15 +27,17 @@
                             </group>
 
                             <group>
-                                <field name="year" />
+                                <field name="year"/>
                                 <field name="month"/>
                             </group>
 
                         </group>
 
                         <group colspan="4">
-                            <span> Dias del periodo
-                                <field name="date_from"/> <span>-</span> <field name="date_to"/>
+                            <span>Dias del periodo
+                                <field name="date_from"/>
+                                <span>-</span>
+                                <field name="date_to"/>
                             </span>
                         </group>
 
@@ -38,37 +46,38 @@
                             <field name="export_arba_data" readonly="1"/>
                         </group>
                     </sheet>
+
+
                 </form>
             </field>
         </record>
+-->
+        <record id="view_account_forecast_tree" model="ir.ui.view">
+            <field name="name">CASH FLOW Forecast tree</field>
+            <field name="model">cash_flow.forecast</field>
+            <field name="arch" type="xml">
+                <tree>
+                    <field name="forecast_date"/>
+                    <field name="amount"/>
+                    <field name="type"/>
+                    <field name="user_id"/>
+                    <field name="state"/>
+                </tree>
+            </field>
+        </record>
 
-    <record id="view_account_export_arba" model="ir.ui.view">
-        <field name="name">account.export.arba.tree</field>
-        <field name="model">account.export.arba</field>
-        <field name="arch" type="xml">
-            <tree>
-                <field name="export_arba_filename"/>
-                <field name="date_from"/>
-                <field name="date_to"/>
-                <field name="doc_type"/>
-                <field name="period"/>
-                <field name="quincena"/>
-            </tree>
-        </field>
-    </record>
+        <record id="action_account_forecast" model="ir.actions.act_window">
+            <field name="name">Forecast</field>
+            <field name="res_model">cash_flow.forecast</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">tree,form</field>
+        </record>
 
-    <record id="action_account_export_arba" model="ir.actions.act_window">
-        <field name="name">Exportaciones ARBA</field>
-        <field name="res_model">account.export.arba</field>
-        <field name="view_type">form</field>
-        <field name="view_mode">tree,form</field>
-    </record>
+        <menuitem id="menu_account_forecast"
+                  action="action_account_forecast"
+                  parent="account.menu_finance_entries_actions"
+                  sequence="6"/>
 
-    <menuitem id="menu_account_export_arba"
-              action="action_account_export_arba"
-              parent="l10n_ar_account.account_reports_ar_statements_menu"
-              sequence="6"/>
-
-</data>
-        </odoo>
+    </data>
+</odoo>
 
