@@ -20,23 +20,23 @@
 
 {
     'name': 'Disable Partner as Follower',
-    'version': '0.1',
+    'version': '11.0.0.0.1',
     'category': 'Discuss',
     'summary': 'Prevent adding partners/customers as followers',
-    'license':'AGPL-3',
-    'description': """
- This module prevents adding partners/customers as followers of the document while including them as recipient of a message send via "Send a message" feature in records.
-    """,
-    'author': 'BroadTech IT Solutions Pvt Ltd',
-    'website': 'http://www.broadtech-innovations.com/',
-    'depends': ['mail','sale'],
+    'license': 'AGPL-3',
+    'author': 'BroadTech IT Solutions Pvt Ltd, jeo Software',
+    'website': 'http://www.jeosoft.com.ar/',
+    'depends': [
+        'mail',
+        'sale'
+    ],
     'data': [
     ],
     'demo': [
     ],
-    'images': ['static/description/banner.jpg'],
-    'installable': True,
-    'application': True,
-    'qweb': [
+    'images': [
+        'static/description/banner.jpg'
     ],
+    'installable': True,
+    'application': False,
 }

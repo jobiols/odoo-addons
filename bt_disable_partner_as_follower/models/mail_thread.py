@@ -49,7 +49,7 @@ class MailThread(models.AbstractModel):
                 if False/0, mail.message model will also be set as False
             :param str body: body of the message, usually raw HTML that will
                 be sanitized
-            :param str type: see mail_message.type field
+            :param str type: see mail_message.message_type field
             :param str content_subtype:: if plaintext: convert body into html
             :param int parent_id: handle reply to a previous message by adding the
                 parent partners to the message in case of private discussion
@@ -118,13 +118,12 @@ class MailThread(models.AbstractModel):
             subtype_id = self.env['ir.model.data'].xmlid_to_res_id(subtype)
 
         # automatically subscribe recipients if asked to
-#         if self._context.get('mail_post_autofollow') and self.ids and partner_ids:
-#             partner_to_subscribe = partner_ids
-#             if self._context.get('mail_post_autofollow_partner_ids'):
-#                 partner_to_subscribe = filter(lambda item: item in self._context.get('mail_post_autofollow_partner_ids'), partner_ids)
-#             partner_to_subscribe = []
-#             print ")))))))))))partner_to_subscribe-------------------->>>",partner_to_subscribe
-#             self.message_subscribe(list(partner_to_subscribe), force=False)
+
+#        if self._context.get('mail_post_autofollow') and self.ids and partner_ids:
+#            partner_to_subscribe = partner_ids
+#            if self._context.get('mail_post_autofollow_partner_ids'):
+#                partner_to_subscribe = [p for p in partner_ids if p in self._context.get('mail_post_autofollow_partner_ids')]
+#            self.message_subscribe(list(partner_to_subscribe), force=False)
 
         # _mail_flat_thread: automatically set free messages to the first posted message
         MailMessage = self.env['mail.message']
@@ -179,13 +178,9 @@ class MailThread(models.AbstractModel):
             if not subtype_rec.internal:
                 # done with SUPERUSER_ID, because on some models users can post only with read access, not necessarily write access
                 self.sudo().write({'message_last_post': fields.Datetime.now()})
-        if new_message.author_id and model and self.ids and message_type != 'notification' and not self._context.get('mail_create_nosubscribe'):
-            self.message_subscribe([new_message.author_id.id], force=False)
+        if author_id and model and self.ids and message_type != 'notification' and not self._context.get('mail_create_nosubscribe'):
+            self.message_subscribe([author_id], force=False)
+
+        self._message_post_after_hook(new_message)
+
         return new_message
-    
-    @api.multi
-    def message_subscribe(self, partner_ids=None, channel_ids=None, subtype_ids=None, force=True):
-        if self._context.get('block_follower_mail', False):
-            return False
-        else:
-            return super(MailThread, self).message_subscribe(partner_ids, channel_ids, subtype_ids, force)
