@@ -44,6 +44,28 @@
             </field>
         </record>
 
+        <record id="view_account_forecast_search" model="ir.ui.view">
+            <field name="name">CASH FLOW search</field>
+            <field name="model">cash_flow.forecast</field>
+            <field name="arch" type="xml">
+                <search string="Forecasts filters">
+                    <filter string="Expenses" name="expenses_filter" domain="[('type','=','expenses')]"/>
+                    <filter string="Incomes" name="incomes_filter" domain="[('type','=','incomes')]"/>
+                    <separator/>
+                    <filter string="Draft" domain="[('state','=','draft')]" name='state_draft'/>
+                    <filter string="Foreseen" domain="[('state','=','foreseen')]" name='state_foreseen'/>
+                    <filter string="Invoiced" domain="[('state','=','invoiced')]" name='state_invoiced'/>
+                    <separator/>
+                    <filter string="User" domain="[]" context="{'group_by': 'user_id'}"/>
+                    <filter string="Type" domain="[]" context="{'group_by': 'type'}"/>
+                    <filter string="State" domain="[]" context="{'group_by': 'state'}"/>
+                </search>
+            </field>
+        </record>
+
+
+
+
         <!--
 
                             <header>

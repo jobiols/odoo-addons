@@ -7,6 +7,7 @@ class AccountInvoice(models.Model):
     _name = "cash_flow.forecast"
     _inherit = ['mail.thread', 'mail.activity.mixin', 'portal.mixin']
     _description = 'Forecasts'
+    _order = 'forecast_date desc'
 
     forecast_date = fields.Date(
         readonly=True,
@@ -32,8 +33,8 @@ class AccountInvoice(models.Model):
 
     )
     type = fields.Selection([
-        ('out', 'Expenses Forecast'),
-        ('in', 'Incomes Forecast')],
+        ('expenses', 'Expenses Forecast'),
+        ('incomes', 'Incomes Forecast')],
         readonly=True,
         states={'draft': [('readonly', False)],
                 'foreseen': [('readonly', False)]},
