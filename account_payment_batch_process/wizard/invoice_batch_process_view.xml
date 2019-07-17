@@ -97,6 +97,8 @@
         </field>
     </record>
 
+
+<!--
     <record id="view_account_payment_from_invoices_inherited_batch" model="ir.ui.view">
         <field name="name">account.register.payments.form.inherited.batch</field>
         <field name="model">account.register.payments</field>
@@ -107,6 +109,8 @@
             </xpath>
         </field>
     </record>
+-->
+
 
     <!-- Action for Batch Payment -->
     <record id="action_invoice_batch_process" model="ir.actions.act_window">

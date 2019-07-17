@@ -11,7 +11,6 @@
     "category": "Generic Modules/Payment",
     "website": "https://github.com/OCA/account-payment",
     "depends": [
-        "account_check_printing",
         "account_payment_group"
     ],
     "data": [

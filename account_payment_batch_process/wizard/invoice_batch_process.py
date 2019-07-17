@@ -245,9 +245,11 @@ class AccountRegisterPayments(models.TransientModel):
                 'currency_id': self.currency_id.id,
                 'payment_date': self.payment_date,
                 'communication': group_data['memo'],
+                'payment_method_id': self.payment_method_id.id,
+                'payment_type': 'outbound',
+                'partner_type': group_data['partner_type'],
             }
             return ret
-
 
         res = {
             'payment_date': self.payment_date,
@@ -424,8 +426,6 @@ class AccountRegisterPayments(models.TransientModel):
         Action make payments
         """
 
-        #import wdb;wdb.set_trace()
-
         # Make group data either for Customers or Vendors
         context = dict(self._context or {})
         data = {}
@@ -469,9 +469,6 @@ class AccountRegisterPayments(models.TransientModel):
         # Making partner wise payment
 
         import wdb;wdb.set_trace()
-
-        group = self.env['account.payment.group']
-
 
         payment_ids = []
         for p_index in list(data):
