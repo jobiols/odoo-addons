@@ -18,7 +18,6 @@ class AccountInvoice(models.Model):
         track_visibility='onchange',
         required=True
     )
-
     amount = fields.Monetary(
         string='Forecasted amount',
         currency_field='currency_id',
@@ -26,11 +25,21 @@ class AccountInvoice(models.Model):
         states={'draft': [('readonly', False)],
                 'foreseen': [('readonly', False)]},
         help="Total Forecasted amount without taxes",
-        track_visibility='onchange',
         required=True
+    )
+    expense_forecast = fields.Monetary(
+        compute="_compute_expense_forecast",
+        track_visibility='onchange',
+    )
+    revenue_forecast = fields.Monetary(
+        compute="_compute_expense_forecast",
+        track_visibility='onchange',
     )
     description = fields.Text(
 
+    )
+    tree_description = fields.Char(
+        compute="_compute_tree_description"
     )
     type = fields.Selection([
         ('expenses', 'Expenses Forecast'),
@@ -40,9 +49,8 @@ class AccountInvoice(models.Model):
                 'foreseen': [('readonly', False)]},
         help='Forecast type',
         track_visibility='onchange',
-        default='out'
+        default='expenses'
     )
-
     user_id = fields.Many2one(
         'res.users',
         string='User',
@@ -52,7 +60,6 @@ class AccountInvoice(models.Model):
         default=lambda self: self.env.user,
         track_visibility='onchange',
     )
-
     state = fields.Selection(
         [('draft', 'Draft'),
          ('foreseen', 'Foreseen'),
@@ -64,6 +71,21 @@ class AccountInvoice(models.Model):
         default='draft',
         track_visibility='onchange',
     )
+
+    def _compute_expense_forecast(self):
+        for rec in self:
+            if rec.type == 'expenses':
+                rec.expense_forecast = rec.amount
+                rec.revenue_forecast = 0
+            else:
+                rec.expense_forecast = 0
+                rec.revenue_forecast = rec.amount
+
+    def _compute_tree_description(self):
+        for rec in self:
+            if rec.description:
+                elipsis = '...' if len(rec.description) > 50 else ''
+                rec.tree_description = rec.description[:50] + elipsis
 
     @api.model
     def _default_currency(self):
@@ -78,7 +100,14 @@ class AccountInvoice(models.Model):
         default=_default_currency,
         track_visibility='always')
 
-    @api.multi
     def name_get(self):
         return [(fc.id, "%s - %s - %s" % (
             fc.forecast_date, fc.amount, fc.type)) for fc in self]
+
+    def validate(self):
+        for rec in self:
+            rec.state = 'foreseen'
+
+    def go_invoiced(self):
+        for rec in self:
+            rec.state = 'invoiced'
