@@ -66,6 +66,7 @@ class CashFlowReport1(models.AbstractModel):
         self._last_printed = (receivable, cash, payable)
         return True
 
+
     def expense_forecast(self, date):
         """ Obtener los gastos previstos hasta la fecha date inclusive
         """
