@@ -32,6 +32,6 @@
     'data': [
         'security/security_groups.xml'
     ],
-    'installable': True,
+    'installable': False,
     'application': False,
 }

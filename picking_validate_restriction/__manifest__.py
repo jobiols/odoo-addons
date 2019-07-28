@@ -33,6 +33,6 @@
         'security/security_groups.xml',
         'views/stock_view_picking.xml'
     ],
-    'installable': True,
+    'installable': False,
     'application': False,
 }

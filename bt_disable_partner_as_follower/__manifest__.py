@@ -38,6 +38,6 @@
     'images': [
         'static/description/banner.jpg'
     ],
-    'installable': True,
+    'installable': False,
     'application': False,
 }

@@ -42,6 +42,6 @@
         'data/configuration.yml',
         'data/journals.xml',
     ],
-    'installable': True,
+    'installable': False,
     'application': False,
 }
