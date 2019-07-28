@@ -8,12 +8,9 @@
     "version": "11.0.1.0.4",
     "category": "Themes/Backend",
     "website": "http://www.openworx.nl",
-	"description": """
-		Backend theme for Odoo 11.0 community edition.
-    """,
-	'images':[
+    'images': [
         'images/screen.png'
-	],
+    ],
     "author": "Openworx",
     "license": "LGPL-3",
     "installable": True,
@@ -28,4 +25,3 @@
         'views/web.xml',
     ],
 }
-
