@@ -28,7 +28,6 @@ from odoo import exceptions
 from odoo import tools
 from odoo.tools import pycompat
 
-
 _logger = logging.getLogger(__name__)
 
 
@@ -36,14 +35,11 @@ class MailThread(models.AbstractModel):
     _inherit = 'mail.thread'
     _description = 'Email Thread'
 
-
-
-
     @api.multi
     @api.returns('self', lambda value: value.id)
     def message_post(self, body='', subject=None, message_type='notification',
-                     subtype=None, parent_id=False, attachments=None,
-                     content_subtype='html', **kwargs):
+        subtype=None, parent_id=False, attachments=None,
+        content_subtype='html', **kwargs):
         """ Post a new message in an existing thread, returning the new
             mail.message ID.
             :param int thread_id: thread ID to post into, or list with one ID;
@@ -132,17 +128,17 @@ class MailThread(models.AbstractModel):
                 subtype = 'mail.%s' % subtype
             subtype_id = self.env['ir.model.data'].xmlid_to_res_id(subtype)
 
-        # automatically subscribe recipients if asked to
+            # automatically subscribe recipients if asked to
 
-#        if self._context.get('mail_post_autofollow') and \
-#            self.ids and partner_ids:
-#            partner_to_subscribe = partner_ids
-#            if self._context.get('mail_post_autofollow_partner_ids'):
-#                partner_to_subscribe = [
-#                    p for p in partner_ids if p in
-#                    self._context.get('mail_post_autofollow_partner_ids')
-#                    ]
-#            self.message_subscribe(list(partner_to_subscribe), force=False)
+        #        if self._context.get('mail_post_autofollow') and \
+        #            self.ids and partner_ids:
+        #            partner_to_subscribe = partner_ids
+        #            if self._context.get('mail_post_autofollow_partner_ids'):
+        #                partner_to_subscribe = [
+        #                    p for p in partner_ids if p in
+        #                    self._context.get('mail_post_autofollow_partner_ids')
+        #                    ]
+        #            self.message_subscribe(list(partner_to_subscribe), force=False)
 
         # _mail_flat_thread: automatically set free messages to the first
         # posted message
@@ -215,7 +211,7 @@ class MailThread(models.AbstractModel):
                 self.sudo().write({'message_last_post': fields.Datetime.now()})
         if author_id and model and self.ids and \
                 message_type != 'notification' and \
-                not self._context.get('mail_create_nosubscribe'):
+            not self._context.get('mail_create_nosubscribe'):
             self.message_subscribe([author_id], force=False)
 
         self._message_post_after_hook(new_message)
