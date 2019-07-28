@@ -1,7 +1,8 @@
 ##############################################################################
 #
 #    OpenERP, Open Source Management Solution
-#    Copyright (C) 2016-BroadTech IT Solutions (<http://www.broadtech-innovations.com/>).
+#    Copyright (C) 2016-BroadTech IT Solutions
+#   (<http://www.broadtech-innovations.com/>).
 #
 #    This program is free software: you can redistribute it and/or modify
 #    it under the terms of the GNU Affero General Public License as
@@ -51,35 +52,45 @@ class MailThread(models.AbstractModel):
                 be sanitized
             :param str type: see mail_message.message_type field
             :param str content_subtype:: if plaintext: convert body into html
-            :param int parent_id: handle reply to a previous message by adding the
-                parent partners to the message in case of private discussion
-            :param tuple(str,str) attachments or list id: list of attachment tuples in the form
-                ``(name,content)``, where content is NOT base64 encoded
-            Extra keyword arguments will be used as default column values for the
-            new mail.message record. Special cases:
-                - attachment_ids: supposed not attached to any document; attach them
-                    to the related document. Should only be set by Chatter.
+            :param int parent_id: handle reply to a previous message by adding
+                the parent partners to the message in case of private
+                discussion
+            :param tuple(str,str) attachments or list id: list of attachment
+                tuples in the form ``(name,content)``, where content is NOT
+                base64 encoded  Extra keyword arguments will be used as
+                default column values for the new mail.message record.
+                Special cases:
+                    - attachment_ids: supposed not attached to any document;
+                        attach them to the related document. Should only be
+                        set by Chatter.
             :return int: ID of newly created mail.message
         """
         if attachments is None:
             attachments = {}
         if self.ids and not self.ensure_one():
-            raise exceptions.Warning(_('Invalid record set: should be called as model (without records) or on single-record recordset'))
+            raise exceptions.Warning(_('Invalid record set: should be called '
+                                       'as model (without records) or on '
+                                       'single-record recordset'))
 
-        # if we're processing a message directly coming from the gateway, the destination model was
-        # set in the context.
+        # if we're processing a message directly coming from the gateway,
+        # the destination model was set in the context.
         model = False
         if self.ids:
             self.ensure_one()
-            model = self._context.get('thread_model', False) if self._name == 'mail.thread' else self._name
-            if model and model != self._name and hasattr(self.env[model], 'message_post'):
-                RecordModel = self.env[model].with_context(thread_model=None)  # TDE: was removing the key ?
+            _ = self._context.get('thread_model', False)
+            model = _ if self._name == 'mail.thread' else self._name
+            if model and model != self._name and hasattr(self.env[model],
+                                                         'message_post'):
+                # TDE: was removing the key ?
+                RecordModel = self.env[model].with_context(thread_model=None)
                 return RecordModel.browse(self.ids).message_post(
                     body=body, subject=subject, message_type=message_type,
-                    subtype=subtype, parent_id=parent_id, attachments=attachments,
-                    content_subtype=content_subtype, **kwargs)
+                    subtype=subtype, parent_id=parent_id,
+                    attachments=attachments, content_subtype=content_subtype,
+                    **kwargs)
 
-        # 0: Find the message's author, because we need it for private discussion
+        # 0: Find the message's author, because we need it for private
+        # discussion
         author_id = kwargs.get('author_id')
         if author_id is None:  # keep False values
             author_id = self.env['mail.message']._get_default_author().id
@@ -88,14 +99,17 @@ class MailThread(models.AbstractModel):
         if content_subtype == 'plaintext':
             body = tools.plaintext2html(body)
 
-        # 2: Private message: add recipients (recipients and author of parent message) - current author
-        #   + legacy-code management (! we manage only 4 and 6 commands)
+        # 2: Private message: add recipients (recipients and author of parent
+        # message) - current author + legacy-code management (! we manage only
+        # 4 and 6 commands)
         partner_ids = set()
         kwargs_partner_ids = kwargs.pop('partner_ids', [])
         for partner_id in kwargs_partner_ids:
-            if isinstance(partner_id, (list, tuple)) and partner_id[0] == 4 and len(partner_id) == 2:
+            if isinstance(partner_id, (list, tuple)) and \
+                    partner_id[0] == 4 and len(partner_id) == 2:
                 partner_ids.add(partner_id[1])
-            if isinstance(partner_id, (list, tuple)) and partner_id[0] == 6 and len(partner_id) == 3:
+            if isinstance(partner_id, (list, tuple)) and \
+                    partner_id[0] == 6 and len(partner_id) == 3:
                 partner_ids |= set(partner_id[2])
             elif isinstance(partner_id, pycompat.integer_types):
                 partner_ids.add(partner_id)
@@ -103,7 +117,8 @@ class MailThread(models.AbstractModel):
                 pass  # we do not manage anything else
         if parent_id and not model:
             parent_message = self.env['mail.message'].browse(parent_id)
-            private_followers = set([partner.id for partner in parent_message.partner_ids])
+            private_followers = set(
+                [partner.id for partner in parent_message.partner_ids])
             if parent_message.author_id:
                 private_followers.add(parent_message.author_id.id)
             private_followers -= set([author_id])
@@ -119,27 +134,43 @@ class MailThread(models.AbstractModel):
 
         # automatically subscribe recipients if asked to
 
-#        if self._context.get('mail_post_autofollow') and self.ids and partner_ids:
+#        if self._context.get('mail_post_autofollow') and \
+#            self.ids and partner_ids:
 #            partner_to_subscribe = partner_ids
 #            if self._context.get('mail_post_autofollow_partner_ids'):
-#                partner_to_subscribe = [p for p in partner_ids if p in self._context.get('mail_post_autofollow_partner_ids')]
+#                partner_to_subscribe = [
+#                    p for p in partner_ids if p in
+#                    self._context.get('mail_post_autofollow_partner_ids')
+#                    ]
 #            self.message_subscribe(list(partner_to_subscribe), force=False)
 
-        # _mail_flat_thread: automatically set free messages to the first posted message
+        # _mail_flat_thread: automatically set free messages to the first
+        # posted message
         MailMessage = self.env['mail.message']
         if self._mail_flat_thread and model and not parent_id and self.ids:
-            messages = MailMessage.search(['&', ('res_id', '=', self.ids[0]), ('model', '=', model), ('message_type', '=', 'email')], order="id ASC", limit=1)
+            messages = MailMessage.search(['&',
+                                           ('res_id', '=', self.ids[0]),
+                                           ('model', '=', model),
+                                           ('message_type', '=', 'email')],
+                                          order="id ASC", limit=1)
             if not messages:
-                messages = MailMessage.search(['&', ('res_id', '=', self.ids[0]), ('model', '=', model)], order="id ASC", limit=1)
+                messages = MailMessage.search(['&',
+                                               ('res_id', '=', self.ids[0]),
+                                               ('model', '=', model)],
+                                              order="id ASC", limit=1)
             parent_id = messages and messages[0].id or False
-        # we want to set a parent: force to set the parent_id to the oldest ancestor, to avoid having more than 1 level of thread
+        # we want to set a parent: force to set the parent_id to the oldest
+        # ancestor, to avoid having more than 1 level of thread
         elif parent_id:
-            messages = MailMessage.sudo().search([('id', '=', parent_id), ('parent_id', '!=', False)], limit=1)
+            messages = MailMessage.sudo().search([('id', '=', parent_id),
+                                                  ('parent_id', '!=', False)],
+                                                 limit=1)
             # avoid loops when finding ancestors
             processed_list = []
             if messages:
                 message = messages[0]
-                while (message.parent_id and message.parent_id.id not in processed_list):
+                while message.parent_id and \
+                        message.parent_id.id not in processed_list:
                     processed_list.append(message.parent_id.id)
                     message = message.parent_id
                 parent_id = message.id
@@ -158,8 +189,10 @@ class MailThread(models.AbstractModel):
         })
 
         # 3. Attachments
-        #   - HACK TDE FIXME: Chatter: attachments linked to the document (not done JS-side), load the message
-        attachment_ids = self._message_post_process_attachments(attachments, kwargs.pop('attachment_ids', []), values)
+        #   - HACK TDE FIXME: Chatter: attachments linked to the document
+        # (not done JS-side), load the message
+        attachment_ids = self._message_post_process_attachments(
+            attachments, kwargs.pop('attachment_ids', []), values)
         values['attachment_ids'] = attachment_ids
 
         # Avoid warnings about non-existing fields
@@ -174,11 +207,15 @@ class MailThread(models.AbstractModel):
         # will be removed in a later version.
         if (self._context.get('mail_save_message_last_post') and
                 model and model != 'mail.thread' and self.ids and subtype_id):
-            subtype_rec = self.env['mail.message.subtype'].sudo().browse(subtype_id)
+            subtype_obj = self.env['mail.message.subtype']
+            subtype_rec = subtype_obj.sudo().browse(subtype_id)
             if not subtype_rec.internal:
-                # done with SUPERUSER_ID, because on some models users can post only with read access, not necessarily write access
+                # done with SUPERUSER_ID, because on some models users can
+                # post only with read access, not necessarily write access
                 self.sudo().write({'message_last_post': fields.Datetime.now()})
-        if author_id and model and self.ids and message_type != 'notification' and not self._context.get('mail_create_nosubscribe'):
+        if author_id and model and self.ids and \
+                message_type != 'notification' and \
+                not self._context.get('mail_create_nosubscribe'):
             self.message_subscribe([author_id], force=False)
 
         self._message_post_after_hook(new_message)
