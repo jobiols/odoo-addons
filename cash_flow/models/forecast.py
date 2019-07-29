@@ -14,7 +14,7 @@ class AccountInvoice(models.Model):
         states={'draft': [('readonly', False)],
                 'foreseen': [('readonly', False)]},
         index=True,
-        help="Forecast date, it will be used in the cash flow",
+        help="On this date the forecast will appear in the Cash Flow Report",
         track_visibility='onchange',
         required=True
     )
@@ -24,22 +24,25 @@ class AccountInvoice(models.Model):
         readonly=True,
         states={'draft': [('readonly', False)],
                 'foreseen': [('readonly', False)]},
-        help="Total Forecasted amount without taxes",
+        help="Forecasted Amount without taxes",
         required=True
     )
     expense_forecast = fields.Monetary(
         compute="_compute_expense_forecast",
         track_visibility='onchange',
+        help="Amount of planned expenditure without taxes",
     )
     revenue_forecast = fields.Monetary(
         compute="_compute_expense_forecast",
         track_visibility='onchange',
+        help="Amount of expected income without taxes",
     )
     description = fields.Text(
 
     )
     tree_description = fields.Char(
-        compute="_compute_tree_description"
+        compute="_compute_tree_description",
+        string="Description"
     )
     type = fields.Selection([
         ('expenses', 'Expenses Forecast'),
@@ -59,7 +62,13 @@ class AccountInvoice(models.Model):
                 'foreseen': [('readonly', False)]},
         default=lambda self: self.env.user,
         track_visibility='onchange',
+        required=True
     )
+    forecast_account = fields.Many2one(
+        'account.account',
+        domain=[('deprecated', '=', False)],
+        help="This account is shown here only as a reference and the data "
+             "does not impact on accounting.")
     state = fields.Selection(
         [('draft', 'Draft'),
          ('foreseen', 'Foreseen'),
