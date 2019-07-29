@@ -47,6 +47,7 @@
         'partner_ref_unique',  # evita duplicados en referencia
         'partner_vat_unique',  # evita duplicados numeros de referencia
         'product_unique',  # no se pueden duplicar codigos de producto
+        'web_export_view',  # exportar cualquier vista en excel
         # fixes
         'invoice_lines_analysis_fix',  # corrige bug en pivot
     ],

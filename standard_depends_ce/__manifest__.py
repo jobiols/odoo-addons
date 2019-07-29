@@ -51,6 +51,7 @@
         'partner_vat_unique',  # evita duplicados numeros de referencia
         'mail_activity_board_ux',  # quitar actividades del chatter
         'product_unique',  # no se pueden duplicar codigos de producto
+        'web_export_view',  # exportar cualquier vista en excel
 
         # fixes
         'invoice_lines_analysis_fix',  # corrige bug en pivot
