@@ -66,7 +66,6 @@ class CashFlowReport1(models.AbstractModel):
         self._last_printed = (receivable, cash, payable)
         return True
 
-    @api.multi
     def get_report_values(self, docids, data=None):
         date_from = data['form']['date_from']
         date_to = data['form']['date_to']
