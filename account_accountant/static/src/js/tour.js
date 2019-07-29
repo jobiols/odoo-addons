@@ -15,7 +15,7 @@ odoo.define('account_accountant.tour', function (require) {
     }, {
         trigger: ".o_invoice_new",
         extra_trigger: '.o_account_kanban',
-        content:  _t("Let\'s start with a new customer invoice."),
+        content:  _t("Let's start with a new customer invoice."),
         position: "bottom"
     }, {
         trigger: ".breadcrumb li:not(.active):last",

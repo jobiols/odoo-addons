@@ -43,7 +43,6 @@
     'demo': [
         'data/configuration.yml',
         'data/journals.xml',
-#        'data/invoices.xml'
     ],
     'installable': True,
     'application': False,

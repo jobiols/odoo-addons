@@ -1,7 +1,6 @@
 # For copyright and license notices, see __manifest__.py file in module root
 
 from openerp import models, fields, api
-from datetime import date, timedelta
 
 
 class EditPaymentTermDialog(models.TransientModel):

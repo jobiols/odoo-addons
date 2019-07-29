@@ -21,6 +21,5 @@ from .common import CommonCase
 
 
 class TestController(CommonCase):
-
     def test_01(self):
-        self.assertEquan(1,1)
+        self.assertEquan(1, 1)

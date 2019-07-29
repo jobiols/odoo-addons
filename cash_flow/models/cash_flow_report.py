@@ -1,6 +1,6 @@
 # For copyright and license notices, see __manifest__.py file in module root
 
-from openerp import models, fields, api
+from openerp import models
 from datetime import datetime, timedelta
 
 RECEIVABLE_ID = 1
@@ -66,7 +66,6 @@ class CashFlowReport1(models.AbstractModel):
         self._last_printed = (receivable, cash, payable)
         return True
 
-
     def expense_forecast(self, date):
         """ Obtener los gastos previstos hasta la fecha date inclusive
         """
@@ -93,7 +92,6 @@ class CashFlowReport1(models.AbstractModel):
         ret = self._cr.fetchall()[0][0]
         return ret if ret else 0
 
-    @api.multi
     def get_report_values(self, docids, data=None):
         date_from = data['form']['date_from']
         date_to = data['form']['date_to']
