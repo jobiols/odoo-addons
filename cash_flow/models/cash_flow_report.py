@@ -66,6 +66,32 @@ class CashFlowReport1(models.AbstractModel):
         self._last_printed = (receivable, cash, payable)
         return True
 
+    def expense_forecast(self, date):
+        """ Obtener los gastos previstos hasta la fecha date inclusive
+        """
+        self._cr.execute("""
+            SELECT SUM(amount) FROM cash_flow_forecast
+            WHERE
+              type = 'expenses'
+              and forecast_date <= %s
+              and state = 'foreseen'
+        """, (date,))
+        ret = self._cr.fetchall()[0][0]
+        return ret if ret else 0
+
+    def revenue_forecast(self, date):
+        """ Obtener los ingresos previstos hasta la fecha date inclusive
+        """
+        self._cr.execute("""
+            SELECT SUM(amount) FROM cash_flow_forecast
+            WHERE
+              type = 'incomes'
+              and forecast_date <= %s
+              and state = 'foreseen'
+        """, (date,))
+        ret = self._cr.fetchall()[0][0]
+        return ret if ret else 0
+
     def get_report_values(self, docids, data=None):
         date_from = data['form']['date_from']
         date_to = data['form']['date_to']
@@ -102,12 +128,20 @@ class CashFlowReport1(models.AbstractModel):
             # calcular los payables hasta esta fecha de la lista
             payable = self.acc_balance(self._payable, date_from)
 
+            # calcular los gastos previstos hasta esta fecha
+            expense_forecast = self.expense_forecast(date_from)
+
+            # calcular los ingresos previstos hasta esta fecha
+            revenue_forecast = self.revenue_forecast(date_from)
+
             if self.printable(receivable, cash, payable):
                 docs.append({
                     'date': date_from,
                     'receivable': receivable,
                     'cash': cash,
                     'payable': payable,
+                    'expense-forecast': expense_forecast,
+                    'revenue-forecast': revenue_forecast,
                     'total': receivable + cash - payable},
                 )
 
