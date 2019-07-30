@@ -1,6 +1,9 @@
 # For copyright and license notices, see __manifest__.py file in module root
 from odoo import api, fields, models, _
 from odoo.exceptions import UserError, ValidationError
+import logging
+
+logger = logging.getLogger(__name__)
 
 import time
 LINES_TO_PROCESS = 200
@@ -18,6 +21,12 @@ class AccountBankStatement(models.Model):
             self._balance_check()
 
         statements = self.filtered(lambda r: r.state == 'open')
+
+        # no hay statements en estado open, terminar.
+        if not statements:
+            pstc.write({'step': 0, 'phase': 'orders'})
+            return
+
         for statement in statements:
             moves = self.env['account.move']
             # seleccionar las line_ids que no tengan st_line.journal_entry_ids
