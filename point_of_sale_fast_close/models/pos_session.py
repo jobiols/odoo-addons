@@ -78,12 +78,13 @@ class PosSession(models.Model):
         """
 
         sq_obj = self.env['pos.session.to.close']
+        remaining = sq_obj.search_count([])
         pstc = sq_obj.search([], limit=1)
 
         if pstc:
             logger.info(
-                'POS processing %s Phase %s Step %s' % (
-                    pstc.session_id.name, pstc.phase, pstc.step))
+                'POS processing %s Phase %s Step %s Remaining %s' % (
+                    pstc.session_id.name, pstc.phase, pstc.step, remaining))
 
             company_id = pstc.session_id.config_id.company_id.id
             ctx = dict(self.env.context, force_company=company_id,
@@ -105,6 +106,7 @@ class PosSession(models.Model):
     def _confirm_orders_stepped(self, pstc):
         """ hace lo mismo que _confirm_orders pero por pasos
         """
+        logger.info('POS processing orders Phase %s', pstc.phase)
         for session in self:
             company_id = session.config_id.journal_id.company_id.id
 
@@ -116,6 +118,10 @@ class PosSession(models.Model):
             orders = orders[:LINES_TO_PROCESS]
             if orders:
                 pstc.step += 1  # siguiente step
+            else:
+                if not session.order_ids._filtered_for_reconciliation():
+                    pstc.phase = 'end'
+                    return
 
             journal_id = self.env['ir.config_parameter'].sudo().get_param(
                 'pos.closing.journal_id_%s' % company_id,
@@ -138,6 +144,7 @@ class PosSession(models.Model):
             # quedarse con las primeras
             orders_to_close = orders_to_close[:LINES_TO_PROCESS]
             for order in orders_to_close:
+                logger.info('POS closing order %s' % order.name)
                 order.action_pos_order_done()
 
             # en este caso no veo que cambia al reconciliar asi que almaceno
@@ -147,6 +154,7 @@ class PosSession(models.Model):
             orders_to_reconcile = orders_to_reconcile[:LINES_TO_PROCESS]
             pstc.orders_to_reconcile += orders_to_reconcile
             if orders_to_reconcile:
+                logger.info('POS reconciling payments step %s' % pstc.step)
                 orders_to_reconcile.sudo()._reconcile_payments()
 
             # cuando no hay nada mas que hacer terminar.
