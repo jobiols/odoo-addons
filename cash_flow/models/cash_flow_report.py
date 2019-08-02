@@ -8,9 +8,9 @@ PAYABLE_ID = 2
 CASH_ID = 3
 
 
-class CashFlowReport1(models.AbstractModel):
+class CashFlowReport(models.AbstractModel):
     _name = "report.cash_flow.cash_flow_report_template"
-    _last_printed = (0.0, 0.0, 0.0)
+    _last_printed = (0.0, 0.0, 0.0, 0.0, 0.0)
     _receivable = []
     _payable = []
 
@@ -55,15 +55,16 @@ class CashFlowReport1(models.AbstractModel):
                 return ret
         return ret
 
-    def printable(self, receivable, cash, payable):
+    def printable(self, receivable, cash, payable, expense, revenue):
         """ Usado para decidir si una linea del reporte debe imprimirse, si
-            la linea contiene los tres elementos en cero no se imprime.
+            la linea contiene los cuatro elementos en cero no se imprime.
         """
-        if receivable == 0 and cash == 0 and payable == 0:
+        if receivable == 0 and cash == 0 and payable == 0 \
+            and expense == 0 and revenue == 0:
             return False
-        if (receivable, cash, payable) == self._last_printed:
+        if (receivable, cash, payable, expense, revenue) == self._last_printed:
             return False
-        self._last_printed = (receivable, cash, payable)
+        self._last_printed = (receivable, cash, payable, expense, revenue)
         return True
 
     def expense_forecast(self, date):
@@ -114,6 +115,7 @@ class CashFlowReport1(models.AbstractModel):
         docs = []
         trial_balance = self.env['report.account.report_trialbalance']
         while date_from <= date_to:
+
             # date_from es la variable del loop
             trial = trial_balance.with_context(date_to=date_from)
 
@@ -134,7 +136,8 @@ class CashFlowReport1(models.AbstractModel):
             # calcular los ingresos previstos hasta esta fecha
             revenue_forecast = self.revenue_forecast(date_from)
 
-            if self.printable(receivable, cash, payable):
+            if self.printable(receivable, cash, payable, expense_forecast,
+                              revenue_forecast):
                 docs.append({
                     'date': date_from,
                     'receivable': receivable,
@@ -142,7 +145,8 @@ class CashFlowReport1(models.AbstractModel):
                     'payable': payable,
                     'expense-forecast': expense_forecast,
                     'revenue-forecast': revenue_forecast,
-                    'total': receivable + cash - payable},
+                    'total': receivable + cash - payable + revenue_forecast
+                             - expense_forecast},
                 )
 
             date_from = self.inc_day(date_from)
