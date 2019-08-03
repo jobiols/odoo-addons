@@ -59,8 +59,8 @@ Credits
 Authors
 ~~~~~~~
 
-* BroadTech IT Solutions Pvt Ltd (original)
-* jeo Software (port to Odoo 11.0-20190619)
+* BroadTech IT Solutions Pvt Ltd
+* jeo Software
 
 Contributors
 ~~~~~~~~~~~~

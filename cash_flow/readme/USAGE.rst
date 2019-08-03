@@ -31,7 +31,6 @@ tres estados:
 
 - *Borrador*, cuando la prevision recien esta ingresada, no impacta en el reporte.
 - *Previsionado*, la prevision se refleja en el reporte cash flow
-- *Facturado*, la prevision ya no es necesaria porque el dinero ingreso a la contabilidad ya sea
-por facturas de compra, venta o movimientos de caja.
+- *Facturado*, la prevision ya no es necesaria porque el dinero ingreso a la contabilidad ya sea por facturas de compra, venta o movimientos de caja.
 
 Hay una variedad de filtros para ver las previsiones y agruparlas de distintos modos.
