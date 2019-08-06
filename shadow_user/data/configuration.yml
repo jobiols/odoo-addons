@@ -1,0 +1,13 @@
+-
+  Configure argentinian localization
+-
+  !python {model: res.config.settings} : |
+    self.env['res.config.settings'].create({
+           'chart_template_id': self.env.ref('l10n_ar_chart.l10nar_ri_chart_template').id
+    }).sudo().execute()
+-
+  Agregar el usuario Demo User al grupo Shadow User
+-
+  !python {model: res.groups, id: group_shadow_user} : |
+    user_demo = self.env.ref('base.user_demo')
+    self.users = [(6,0, user_demo.ids)]

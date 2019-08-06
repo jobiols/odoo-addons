@@ -1,0 +1,111 @@
+<?xml version="1.0"?>
+
+<odoo>
+    <data>
+        <!-- grupo de usuarios que ven solo blanco -->
+        <record id="group_shadow_user" model="res.groups">
+            <field name="name">Shadow User</field>
+            <field name="implied_ids" eval="[(4, ref('base.group_user'))]"/>
+        </record>
+
+        <!-- los usuarios de este grupo solo ven los diarios blancos -->
+        <record id="ir_rule_white_journal_group_user" model="ir.rule">
+            <field name="name">see only white journals</field>
+            <field name="model_id" ref="account.model_account_journal"/>
+            <field name="groups" eval="[(4, ref('group_shadow_user'))]"/>
+            <field name="domain_force">[('white_journal','=',True)]</field>
+            <field name="perm_create" eval="True"/>
+            <field name="perm_unlink" eval="True"/>
+            <field name="perm_read" eval="True"/>
+        </record>
+
+        <!-- los usuarios de este grupo solo ven facturas blancas -->
+        <record id="ir_rule_white_invoice_group_user" model="ir.rule">
+            <field name="name">see only white invoices</field>
+            <field name="model_id" ref="account.model_account_invoice"/>
+            <field name="groups" eval="[(4, ref('group_shadow_user'))]"/>
+            <field name="domain_force">[('journal_id.white_journal','=',True)]</field>
+            <field name="perm_create" eval="True"/>
+            <field name="perm_unlink" eval="True"/>
+            <field name="perm_read" eval="True"/>
+        </record>
+
+        <!-- los usuarios de este grupo solo ven asientos blancos -->
+        <record id="ir_rule_white_move_group_user" model="ir.rule">
+            <field name="name">see only white moves</field>
+            <field name="model_id" ref="account.model_account_move"/>
+            <field name="groups" eval="[(4, ref('group_shadow_user'))]"/>
+            <field name="domain_force">[('journal_id.white_journal','=',True)]</field>
+            <field name="perm_create" eval="True"/>
+            <field name="perm_unlink" eval="True"/>
+            <field name="perm_read" eval="True"/>
+        </record>
+
+        <!-- los usuarios de este grupo solo ven apuntes contables blancos -->
+        <record id="ir_rule_white_move_line_group_user" model="ir.rule">
+            <field name="name">see only white move lines</field>
+            <field name="model_id" ref="account.model_account_move_line"/>
+            <field name="groups" eval="[(4, ref('group_shadow_user'))]"/>
+            <field name="domain_force">[('journal_id.white_journal','=',True)]</field>
+            <field name="perm_create" eval="True"/>
+            <field name="perm_unlink" eval="True"/>
+            <field name="perm_read" eval="True"/>
+        </record>
+
+        <!-- los usuarios de este grupo solo ven Analisis de IVA (BETA) blancas -->
+        <record id="ir_rule_white_iva_analysis_group_user" model="ir.rule">
+            <field name="name">see only white IVA (BETA) analysis</field>
+            <field name="model_id" ref="l10n_ar_account.model_account_ar_vat_line"/>
+            <field name="groups" eval="[(4, ref('group_shadow_user'))]"/>
+            <field name="domain_force">[('journal_id.white_journal','=',True)]</field>
+            <field name="perm_create" eval="True"/>
+            <field name="perm_unlink" eval="True"/>
+            <field name="perm_read" eval="True"/>
+        </record>
+
+<!-- OK -->
+
+        <!-- los usuarios de este grupo solo ven analisis facturas blancas (es un pivot)
+
+         NO FUNCIONA
+
+        <record id="ir_rule_white_invoice_analysis_group_user" model="ir.rule">
+            <field name="name">see only white pivot invoice analysis</field>
+            <field name="model_id" ref="sale.model_account_invoice_report"/>
+            <field name="groups" eval="[(4, ref('group_shadow_user'))]"/>
+            <field name="domain_force">[('journal_id.white_journal','=',True)]</field>
+            <field name="perm_create" eval="True"/>
+            <field name="perm_unlink" eval="True"/>
+            <field name="perm_read" eval="True"/>
+        </record>
+-->
+
+        <!-- los usuarios de este grupo solo ven lineas de deuda blancas esto esta en
+         el partner oreja Deuda de Cliente
+
+          NO FUNCIONA
+
+        <record id="ir_rule_white_debt_line_group_user" model="ir.rule">
+            <field name="name">see only white debt lines</field>
+            <field name="model_id" ref="account_debt_management.model_account_debt_line"/>
+            <field name="groups" eval="[(4, ref('group_shadow_user'))]"/>
+            <field name="domain_force">[('white_journal','=',True)]</field>
+            <field name="perm_create" eval="True"/>
+            <field name="perm_unlink" eval="True"/>
+            <field name="perm_read" eval="True"/>
+        </record>
+-->
+
+
+
+
+
+
+
+
+
+
+
+
+    </data>
+</odoo>
