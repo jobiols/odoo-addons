@@ -1,0 +1,65 @@
+# Translation of Odoo Server.
+# This file contains the translation of the following modules:
+#	* hr_expense_imp
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: Odoo Server 11.0-20190717\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2019-08-07 00:25+0000\n"
+"PO-Revision-Date: 2019-08-07 00:25+0000\n"
+"Last-Translator: <>\n"
+"Language-Team: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: \n"
+"Plural-Forms: \n"
+
+#. module: hr_expense_imp
+#: code:addons/hr_expense_imp/models/hr_expense_sheet_register_payment.py:28
+#, python-format
+msgid "A payment of %s %s with the reference <a href='/mail/view?%s'>%s</a> related to your expense %s has been made."
+msgstr "Un pago de %s %s con referencia a <a href='/mail/view?%s'>%s</a> relacionado con su gasto %s ha sido realizado."
+
+#. module: hr_expense_imp
+#: model:ir.model,name:hr_expense_imp.model_hr_expense_sheet
+msgid "Expense Report"
+msgstr "Nota de gastos"
+
+#. module: hr_expense_imp
+#: model:ir.model,name:hr_expense_imp.model_hr_expense_sheet_register_payment_wizard
+msgid "Expense Report Register Payment wizard"
+msgstr "Asistente registro pago de nota de gastos"
+
+#. module: hr_expense_imp
+#: model:ir.model.fields,field_description:hr_expense_imp.field_hr_expense_sheet_payment_ref
+msgid "Payment Ref"
+msgstr "Referencia de pago"
+
+#. module: hr_expense_imp
+#: model:ir.ui.view,arch_db:hr_expense_imp.view_hr_expense_sheet_form
+msgid "Return to Approved"
+msgstr "Volver a Aprobado"
+
+#. module: hr_expense_imp
+#: model:ir.ui.view,arch_db:hr_expense_imp.view_hr_expense_sheet_form
+msgid "Return to Posted"
+msgstr "Volver a Contabilizado"
+
+#. module: hr_expense_imp
+#: code:addons/hr_expense_imp/models/hr_expense.py:40
+#, python-format
+msgid "This expense has move lines. You cannot return to Approved"
+msgstr "Este gasto tiene apuntes contables. No se puede volver a Aprobado"
+
+#. module: hr_expense_imp
+#: code:addons/hr_expense_imp/models/hr_expense.py:55
+#, python-format
+msgid "This expense has payments. You cannot return to Posted"
+msgstr "Este gasto tiene pagos. No se puede volver a Contabilizado"
+
+#. module: hr_expense_imp
+#: model:ir.model.fields,help:hr_expense_imp.field_hr_expense_sheet_payment_ref
+msgid "id de referencia al pago"
+msgstr "id de referencia al pago"
+
