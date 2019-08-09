@@ -80,6 +80,16 @@ class AccountInvoice(models.Model):
         default='draft',
         track_visibility='onchange',
     )
+    analytic_account_id = fields.Many2one(
+        'account.analytic.account',
+        string='Analytic Account',
+        ondelete='set null'
+    )
+    analytic_tag_id = fields.Many2one(
+        'account.analytic.tag',
+        string='Analytic Tag',
+        ondelete='set null'
+    )
 
     def _compute_expense_forecast(self):
         for rec in self:
