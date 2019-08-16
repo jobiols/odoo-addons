@@ -21,9 +21,9 @@ from odoo.addons import decimal_precision as dp
 import logging
 
 DISCOUNTS = [
-             ('10.0', '10 %'),
-             ('20.0', '20 %'),
-             ('30.0', '30 %')]
+             ('3.0', '3 %'),
+             ('5.0', '5 %'),
+             ('10.0', '10 %')]
 
 
 class AccountInvoiceLine(models.Model):
