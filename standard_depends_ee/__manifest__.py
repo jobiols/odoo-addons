@@ -41,7 +41,9 @@
         # utilitarios
         'account_ux',  # hace pilas de cosas ver en el modulo
         'base_ux',  # mejoras de base
-        # 'sale_ux',  # mejoras en ventas
+        'mass_editing',  # permite hacer edicion masiva
+
+        'sale_ux',  # mejoras en ventas
         'auto_backup',  # poner el backup en: /var/odoo/backups/
         'mail_activity_board_ux',  # quitar actividades del chatter
         'partner_ref_unique',  # evita duplicados en referencia
