@@ -7,13 +7,13 @@
         <field name="inherit_id" ref="product.product_template_form_view"/>
         <field name="arch" type="xml">
             <xpath expr="//group[@name='sale']" position="after">
-                <group string="Customers 1" name="customers"
+                <group string="Customers no variant" name="customers"
                        attrs="{'invisible': [('product_variant_count','&gt;',1)]}">
                     <field name="customer_ids"
                            context="{'default_product_tmpl_id':context.get('product_tmpl_id',active_id), 'product_template_invisible_variant': True}"
                            nolabel="1"/>
                 </group>
-                <group string="Customers 2" name="variant_customers"
+                <group string="Customers si variant" name="variant_customers"
                        attrs="{'invisible': [('product_variant_count','&lt;=',1)]}">
                     <field name="variant_customer_ids"
                            context="{'default_product_tmpl_id': context.get('product_tmpl_id', active_id)}"

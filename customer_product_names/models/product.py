@@ -35,13 +35,13 @@ class CustomerInfo(models.Model):
     product_name = fields.Char(
         'Customer Product Name',
         help="This customer's product name will be used when printing a "
-             "quotation. Keep empty to use the internal one.",
+             "quotation.",
         required=True
     )
     product_code = fields.Char(
         'Customer Product Code',
         help="This customer's product code will be used when printing a "
-             "quotation. Keep empty to use the internal one.",
+             "quotation.",
         required=True
     )
     product_uom = fields.Many2one(
