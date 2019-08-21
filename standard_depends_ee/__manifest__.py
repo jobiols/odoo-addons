@@ -42,7 +42,7 @@
         'account_ux',  # hace pilas de cosas ver en el modulo
         'base_ux',  # mejoras de base
         'mass_editing',  # permite hacer edicion masiva
-
+        'product_ux',  # mejoras en productos
         'sale_ux',  # mejoras en ventas
         'auto_backup',  # poner el backup en: /var/odoo/backups/
         'mail_activity_board_ux',  # quitar actividades del chatter
