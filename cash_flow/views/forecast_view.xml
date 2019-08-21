@@ -1,0 +1,103 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<odoo>
+    <data>
+        <record id="view_account_forecast_form" model="ir.ui.view">
+            <field name="name">CASH FLOW Forecast form</field>
+            <field name="model">cash_flow.forecast</field>
+            <field name="arch" type="xml">
+                <form>
+                    <header>
+                        <button name="validate" string="Validate" type="object"/>
+                        <button name="go_invoiced" string="Invoiced" type="object"/>
+                        <field name="state" widget="statusbar"
+                               statusbar_visible="draft,foreseen,invoiced"/>
+                    </header>
+                    <sheet>
+                        <group col="6">
+                            <field name="amount" widget="monetary"/>
+                            <field name="forecast_date" widget="date"/>
+                            <field name="user_id"/>
+                        </group>
+                        <group col="4">
+                            <field name="type" widget="radio"/>
+                            <field name="forecast_account"/>
+                        </group>
+                        <group col="4">
+                            <field name="analytic_account_id"/>
+                            <field name="analytic_tag_id"/>
+                        </group>
+                        <group>
+                            <field name="description" widget=""/>
+                        </group>
+                    </sheet>
+                    <div class="oe_chatter">
+                        <field name="message_follower_ids"
+                               widget="mail_followers"
+                               groups="base.group_user"/>
+                        <field name="activity_ids" widget="mail_activity"/>
+                        <field name="message_ids" widget="mail_thread"/>
+                    </div>
+
+                </form>
+            </field>
+        </record>
+
+        <!-- search view para previsiones -->
+        <record id="view_account_forecast_search" model="ir.ui.view">
+            <field name="name">CASH FLOW search</field>
+            <field name="model">cash_flow.forecast</field>
+            <field name="arch" type="xml">
+                <search string="Forecasts filters">
+                    <field name="description" string="description" filter_domain="[('description','ilike',self)]"/>
+                    <filter string="Expenses" name="expenses_filter" domain="[('type','=','expenses')]"/>
+                    <filter string="Incomes" name="incomes_filter" domain="[('type','=','incomes')]"/>
+                    <separator/>
+                    <filter string="Draft" domain="[('state','=','draft')]" name='state_draft'/>
+                    <filter string="Foreseen" domain="[('state','=','foreseen')]" name='state_foreseen'/>
+                    <filter string="Invoiced" domain="[('state','=','invoiced')]" name='state_invoiced'/>
+                    <separator/>
+                    <filter string="User" domain="[]" context="{'group_by': 'user_id'}"/>
+                    <filter string="Type" domain="[]" context="{'group_by': 'type'}"/>
+                    <filter string="Forecast Account" domain="[]" context="{'group_by': 'forecast_account'}"/>
+                    <filter string="Analytic Account" domain="[]" context="{'group_by': 'analytic_account_id'}"/>
+                    <filter string="Analytic Tag" domain="[]" context="{'group_by': 'analytic_tag_id'}"/>
+                    <filter string="Forecast Date" domain="[]" context="{'group_by': 'forecast_date'}"/>
+                    <filter string="State" domain="[]" context="{'group_by': 'state'}"/>
+                </search>
+            </field>
+        </record>
+
+        <!-- tree view para previsiones -->
+        <record id="view_account_forecast_tree" model="ir.ui.view">
+            <field name="name">CASH FLOW Forecast tree</field>
+            <field name="model">cash_flow.forecast</field>
+            <field name="arch" type="xml">
+                <tree>
+                    <field name="forecast_date" />
+                    <field name="expense_forecast" widget="monetary" sum="Total"/>
+                    <field name="revenue_forecast" widget="monetary" sum="Total"/>
+                    <field name="forecast_account"/>
+                    <field name="analytic_account_id"/>
+                    <field name="analytic_tag_id"/>
+                    <field name="tree_description"/>
+                    <field name="user_id"/>
+                    <field name="state"/>
+                </tree>
+            </field>
+        </record>
+
+        <record id="action_account_forecast" model="ir.actions.act_window">
+            <field name="name">Forecasts</field>
+            <field name="context">{"search_default_state_foreseen":1}</field>
+            <field name="res_model">cash_flow.forecast</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">tree,form</field>
+        </record>
+
+        <menuitem id="menu_account_forecast"
+                  action="action_account_forecast"
+                  parent="account.menu_finance_entries_actions"
+                  sequence="6"/>
+
+    </data>
+</odoo>

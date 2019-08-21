@@ -10,35 +10,48 @@ Cash Flow
 .. |badge1| image:: https://img.shields.io/badge/licence-AGPL--3-blue.png
     :target: http://www.gnu.org/licenses/agpl-3.0-standalone.html
     :alt: License: AGPL-3
-.. |badge2| image:: https://img.shields.io/badge/github-jeosoft%2Fcash_flow-lightgray.png?logo=github
-    :target: https://github.com/jeosoft/cash_flow/tree/11.0/cash_flow
-    :alt: jeosoft/cash_flow
+.. |badge2| image:: https://img.shields.io/badge/github-jobiols%2Fodoo--addons-lightgray.png?logo=github
+    :target: https://github.com/jobiols/odoo-addons/tree/11.0/cash_flow
+    :alt: jobiols/odoo-addons
 
 |badge1| |badge2| 
 
 Este modulo permite consultar el flujo de caja y modificar las fechas de vencimiento
 de facturas para ajustarlo de acuerdo a las necesidades.
+Ademas se pueden previsionar gastos e ingresos.
 
-Reporte de Flujo de caja
-------------------------
+En el formulario de Previsiones se tienen los siguientes campos
 
-Facturacion / Informes / Reporte de flujo de caja
+- Importe Previsto, valor de la prevision
+- Fecha Prevista, fecha en la que se hace la prevision
+- Usuario, usuario que genera la prevision
+- Tipo, gasto o ingreso
+- Cuenta contable, solo para informacion. Nada impacta en la contabilidad
+- Cuenta analitica
+- Etiqueta analitica
+- Descripcion
 
-El reporte muestra los siguientes datos
+Mediante los filtros de busqueda es posible:
 
-- Fecha
-- Cuentas a cobrar
-- Banco y Caja
-- Cuentas a pagar
-- Total
+- Buscar por texto libre en Descripcion
 
-Editar terminos de pago
------------------------
+Filtrar por
 
-Facturacion / Ventas / Editar terminos de pago
+- tipo: Gastos
+- tipo: Ingresos
+- estado: Borrador
+- estado: Previsionado
+- estado: Facturado
 
-Mediante la edicion se puede cambiar la fecha de vencimiento de facturas de
-clientes y de proveedores.
+Agrupar por
+
+- Usuario
+- Tipo
+- Cuenta contable
+- Estado
+- Cuenta analitica
+- Etiqueta analitica
+- Fecha de prevision
 
 **Table of contents**
 
@@ -50,13 +63,53 @@ Configuration
 
 No se requiere una configuracion especial.
 
+Usage
+=====
+
+Reporte de Flujo de caja
+~~~~~~~~~~~~~~~~~~~~~~~~
+
+Facturacion / Informes / Reporte de flujo de caja
+
+El reporte muestra los siguientes datos
+
+- Fecha
+- Cuentas a cobrar
+- Banco y Caja
+- Cuentas a pagar
+- Prevision de ingresos
+- Prevision de gastos
+- Total
+
+Editar terminos de pago
+~~~~~~~~~~~~~~~~~~~~~~~
+
+Facturacion / Ventas / Editar terminos de pago
+
+Mediante la edicion se puede cambiar la fecha de vencimiento de facturas de
+clientes y de proveedores.
+
+Agregar previsiones de ingresos y gastos
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Contabilidad / Asesor / Previsiones
+
+Se pueden agregar previsiones de ingresos y gastos. Las previsiones tienen
+tres estados:
+
+- *Borrador*, cuando la prevision recien esta ingresada, no impacta en el reporte.
+- *Previsionado*, la prevision se refleja en el reporte cash flow
+- *Facturado*, la prevision ya no es necesaria porque el dinero ingreso a la contabilidad ya sea por facturas de compra, venta o movimientos de caja.
+
+Hay una variedad de filtros para ver las previsiones y agruparlas de distintos modos.
+
 Bug Tracker
 ===========
 
-Bugs are tracked on `GitHub Issues <https://github.com/jeosoft/cash_flow/issues>`_.
+Bugs are tracked on `GitHub Issues <https://github.com/jobiols/odoo-addons/issues>`_.
 In case of trouble, please check there if your issue has already been reported.
 If you spotted it first, help us smashing it by providing a detailed and welcomed
-`feedback <https://github.com/jeosoft/cash_flow/issues/new?body=module:%20cash_flow%0Aversion:%2011.0%0A%0A**Steps%20to%20reproduce**%0A-%20...%0A%0A**Current%20behavior**%0A%0A**Expected%20behavior**>`_.
+`feedback <https://github.com/jobiols/odoo-addons/issues/new?body=module:%20cash_flow%0Aversion:%2011.0%0A%0A**Steps%20to%20reproduce**%0A-%20...%0A%0A**Current%20behavior**%0A%0A**Expected%20behavior**>`_.
 
 Do not contact contributors directly about support or help with technical issues.
 
@@ -76,6 +129,6 @@ Contributors
 Maintainers
 ~~~~~~~~~~~
 
-This module is part of the `jeosoft/cash_flow <https://github.com/jeosoft/cash_flow/tree/11.0/cash_flow>`_ project on GitHub.
+This module is part of the `jobiols/odoo-addons <https://github.com/jobiols/odoo-addons/tree/11.0/cash_flow>`_ project on GitHub.
 
 You are welcome to contribute.

@@ -1,0 +1,17 @@
+<?xml version="1.0"?>
+<odoo>
+<data>
+    <!--  agregar check para establecer que el diario es blanco -->
+    <record id="view_account_journal_form" model="ir.ui.view">
+        <field name="name">SHADOW USER: add white_journal</field>
+        <field name="model">account.journal</field>
+        <field name="inherit_id" ref="account.view_account_journal_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='group_invoice_lines']"
+                   position="after">
+                <field name="white_journal" groups="base.group_no_one,base.group_erp_manager"/>
+            </xpath>
+        </field>
+    </record>
+</data>
+</odoo>

@@ -1,23 +1,36 @@
 Este modulo permite consultar el flujo de caja y modificar las fechas de vencimiento
 de facturas para ajustarlo de acuerdo a las necesidades.
+Ademas se pueden previsionar gastos e ingresos.
 
-Reporte de Flujo de caja
-------------------------
+En el formulario de Previsiones se tienen los siguientes campos
 
-Facturacion / Informes / Reporte de flujo de caja
+- Importe Previsto, valor de la prevision
+- Fecha Prevista, fecha en la que se hace la prevision
+- Usuario, usuario que genera la prevision
+- Tipo, gasto o ingreso
+- Cuenta contable, solo para informacion. Nada impacta en la contabilidad
+- Cuenta analitica
+- Etiqueta analitica
+- Descripcion
 
-El reporte muestra los siguientes datos
+Mediante los filtros de busqueda es posible:
 
-- Fecha
-- Cuentas a cobrar
-- Banco y Caja
-- Cuentas a pagar
-- Total
+- Buscar por texto libre en Descripcion
 
-Editar terminos de pago
------------------------
+Filtrar por
 
-Facturacion / Ventas / Editar terminos de pago
+- tipo: Gastos
+- tipo: Ingresos
+- estado: Borrador
+- estado: Previsionado
+- estado: Facturado
 
-Mediante la edicion se puede cambiar la fecha de vencimiento de facturas de
-clientes y de proveedores.
+Agrupar por
+
+- Usuario
+- Tipo
+- Cuenta contable
+- Estado
+- Cuenta analitica
+- Etiqueta analitica
+- Fecha de prevision

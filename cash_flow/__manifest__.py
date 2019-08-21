@@ -37,6 +37,8 @@
         'wizard/edit_payment_term_dialog_view.xml',
         'wizard/edit_payment_term_view.xml',
         'reports/cash_flow_report.xml',
+        'views/forecast_view.xml',
+        'security/ir.model.access.csv',
     ],
     'demo': [
         'data/configuration.yml',

@@ -23,6 +23,8 @@
                             <th class="text-right">Account Receivable</th>
                             <th class="text-right">Bank and Cash</th>
                             <th class="text-right">Account Payable</th>
+                            <th class="text-right">Revenue Forecast</th>
+                            <th class="text-right">Expense Forecast</th>
                             <th class="text-right">Total</th>
                         </tr>
                         <t t-foreach="docs" t-as="o">
@@ -46,6 +48,18 @@
                                 <td class="text-right"
                                     style="white-space: text-nowrap;">
                                     <span t-esc="o['payable']"
+                                          t-esc-options='{"widget": "monetary",
+                                          "display_currency": res_company.currency_id}'/>
+                                </td>
+                                <td class="text-right"
+                                    style="white-space: text-nowrap;">
+                                    <span t-esc="o['revenue-forecast']"
+                                          t-esc-options='{"widget": "monetary",
+                                          "display_currency": res_company.currency_id}'/>
+                                </td>
+                                <td class="text-right"
+                                    style="white-space: text-nowrap;">
+                                    <span t-esc="o['expense-forecast']"
                                           t-esc-options='{"widget": "monetary",
                                           "display_currency": res_company.currency_id}'/>
                                 </td>

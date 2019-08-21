@@ -41,13 +41,15 @@
         # utilitarios
         'account_ux',  # hace pilas de cosas ver en el modulo
         'base_ux',  # mejoras de base
+        'mass_editing',  # permite hacer edicion masiva
+
         'sale_ux',  # mejoras en ventas
-        'product_ux',  # mejoras en productos
         'auto_backup',  # poner el backup en: /var/odoo/backups/
         'mail_activity_board_ux',  # quitar actividades del chatter
         'partner_ref_unique',  # evita duplicados en referencia
         'partner_vat_unique',  # evita duplicados numeros de referencia
         'product_unique',  # no se pueden duplicar codigos de producto
+        'web_export_view',  # exportar cualquier vista en excel
         # fixes
         'invoice_lines_analysis_fix',  # corrige bug en pivot
     ],

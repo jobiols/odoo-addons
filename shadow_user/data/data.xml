@@ -1,0 +1,56 @@
+<?xml version="1.0" ?>
+<odoo>
+	<data noupdate="1">
+
+		<!-- agregar el journal no fiscal -->
+		<record id="account_journal_ventasnofiscales0" model="account.journal">
+			<field name="create_uid" ref="base.user_root"/>
+			<field eval="0" name="white_journal"/>
+			<field eval="1" name="at_least_one_outbound"/>
+			<field eval="[(6,0,[ref('account.account_payment_method_manual_in')])]" name="inbound_payment_method_ids"/>
+			<field eval="[(6,0,[])]" name="account_control_ids"/>
+			<field name="bank_statements_source">undefined</field>
+			<field name="write_uid" ref="base.user_root"/>
+			<field name="name">Ventas no fiscales</field>
+			<field model="ir.sequence" name="sequence_id" search="[('name', '=', 'Ventas no fiscales')]"/>
+			<field eval="0" name="update_posted"/>
+			<field name="document_sequence_type">own_sequence</field>
+			<field eval="1" name="at_least_one_inbound"/>
+			<field eval="10" name="sequence"/>
+			<field name="code">VNF</field>
+			<field eval="0" name="group_invoice_lines"/>
+			<field eval="1" name="show_on_dashboard"/>
+			<field eval="[(6,0,[ref('account.account_payment_method_manual_out')])]" name="outbound_payment_method_ids"/>
+			<field name="type">sale</field>
+			<field eval="1" name="active"/>
+			<field eval="[(6,0,[])]" name="type_control_ids"/>
+			<field eval="0" name="refund_sequence"/>
+		</record>
+
+		<!-- agregar el journal fiscal -->
+		<record id="account_journal_ventasfiscales0" model="account.journal">
+			<field name="create_uid" ref="base.user_root"/>
+			<field eval="1" name="white_journal"/>
+			<field eval="1" name="at_least_one_outbound"/>
+			<field eval="[(6,0,[ref('account.account_payment_method_manual_in')])]" name="inbound_payment_method_ids"/>
+			<field eval="[(6,0,[])]" name="account_control_ids"/>
+			<field name="bank_statements_source">undefined</field>
+			<field name="write_uid" ref="base.user_root"/>
+			<field name="name">Ventas fiscales</field>
+			<field model="ir.sequence" name="sequence_id" search="[('name', '=', 'Ventas no fiscales')]"/>
+			<field eval="0" name="update_posted"/>
+			<field name="document_sequence_type">own_sequence</field>
+			<field eval="1" name="at_least_one_inbound"/>
+			<field eval="10" name="sequence"/>
+			<field name="code">VNF</field>
+			<field eval="0" name="group_invoice_lines"/>
+			<field eval="1" name="show_on_dashboard"/>
+			<field eval="[(6,0,[ref('account.account_payment_method_manual_out')])]" name="outbound_payment_method_ids"/>
+			<field name="type">sale</field>
+			<field eval="1" name="active"/>
+			<field eval="[(6,0,[])]" name="type_control_ids"/>
+			<field eval="0" name="refund_sequence"/>
+		</record>
+
+	</data>
+</odoo>
