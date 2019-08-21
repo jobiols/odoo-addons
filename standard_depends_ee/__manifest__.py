@@ -37,6 +37,7 @@
         'l10n_ar_aeroo_payment_group',  # Pagos
         'l10n_ar_account_withholding',  # Retenciones
         'account_accountant',           # permisos para contabilidad
+        #'base_currency_inverse_rate',  # poner el tipo de cambio en Argentino chequear que no ponga multicurrency de prepo
 
         # utilitarios
         'account_ux',  # hace pilas de cosas ver en el modulo
