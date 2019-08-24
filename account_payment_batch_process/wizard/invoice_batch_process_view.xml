@@ -114,7 +114,7 @@
 
     <!-- Action for Batch Payment -->
     <record id="action_invoice_batch_process" model="ir.actions.act_window">
-        <field name="name">Batch Payments</field>
+        <field name="name">Pagos en lote</field>
         <field name="type">ir.actions.act_window</field>
         <field name="res_model">account.register.payments</field>
         <field name="view_type">form</field>
@@ -128,7 +128,7 @@
     <!-- Multi Action menu -->
     <act_window
         id="action_invoice_invoice_batch_process"
-        name="Batch Payments"
+        name="Pagos en lote"
         res_model="account.register.payments"
         src_model="account.invoice"
         view_mode="form"

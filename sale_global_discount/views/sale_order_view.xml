@@ -4,7 +4,7 @@
 
         <!-- agregar boton aplicar descuento -->
         <record id="product_normal_form_view_multi_barcode" model="ir.ui.view">
-            <field name="name">Global Discount: add global discount</field>
+            <field name="name">SALE GLOBAL DISCOUNT: add global discount</field>
             <field name="model">sale.order</field>
             <field name="inherit_id" ref="sale.view_order_form"/>
             <field name="arch" type="xml">

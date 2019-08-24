@@ -144,6 +144,10 @@ class AccountRegisterPayments(models.TransientModel):
             raise UserError(
                 _("In order to pay multiple invoices at once, they"
                   " must use the same currency."))
+        if any(inv.partner_id.customer for inv in invoices):
+            raise UserError(
+                "Solo se pueden pagar facturas de proveedor"
+            )
 
         rec = {}
         if 'batch' in context and context.get('batch'):
@@ -238,6 +242,9 @@ class AccountRegisterPayments(models.TransientModel):
             res.update(dict_val_rec)
         """
         def get_payment_data():
+            _ = int(group_data['partner_id'])
+            partner_id = self.env['res.partner'].browse(_)
+
             ret = {
                 'payment_type_copy': 'outbound',
                 'journal_id': self.journal_id.id,
@@ -248,6 +255,8 @@ class AccountRegisterPayments(models.TransientModel):
                 'payment_method_id': self.payment_method_id.id,
                 'payment_type': 'outbound',
                 'partner_type': group_data['partner_type'],
+                'destination_account_id':
+                    partner_id.property_account_payable_id.id,
             }
             return ret
 
@@ -257,7 +266,7 @@ class AccountRegisterPayments(models.TransientModel):
             'currency_id': self.currency_id.id,
             'partner_id': int(group_data['partner_id']),
             'partner_type': group_data['partner_type'],
-            'payment_ids': [(0, False, get_payment_data())]
+            'payment_ids': [(0, False, get_payment_data())],
         }
         return res
 
@@ -468,14 +477,17 @@ class AccountRegisterPayments(models.TransientModel):
         context.update(dict_val)
         # Making partner wise payment
 
-        import wdb;wdb.set_trace()
-
         payment_ids = []
         for p_index in list(data):
             val_ap = self.env['account.payment.group']
             payment = val_ap.with_context(context).\
                 create(self.get_payment_batch_vals(group_data=data[p_index]))
             payment_ids.append(payment.id)
+
+            import wdb;wdb.set_trace()
+
+            payment.payment_ids[0].destination_account_id = \
+                self.partner_id.property_account_payable_id.id
             payment.post()
 
         view_id = self.env['ir.model.data'].get_object_reference(
@@ -515,7 +527,7 @@ class AccountRegisterPayments(models.TransientModel):
                             'journal_id': wiz.journal_id.id})
 
         return {
-            'name': _("Batch Payments"),
+            'name': "Pagos por lotes",
             'view_mode': 'form',
             'view_id': False,
             'view_type': 'form',
