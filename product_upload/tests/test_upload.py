@@ -8,7 +8,7 @@ import openpyxl
 #    -----------------------
 #
 #   Definir un subpackage tests que será inspeccionado automáticamente por
-#   modulos de test los modulos de test deben enpezar con test_ y estar
+#   modulos de test los modulos de test deben empezar con test_ y estar
 #   declarados en el __init__.py, como en cualquier package.
 #
 #   Hay que crear una base de datos no importa el nombre (por ejemplo act_test)
@@ -77,7 +77,7 @@ class TestProductUploadProduct(common.TransactionCase):
         self.assertEqual(data['sale_tax'], 0.155)
         self.assertEqual(data['barcode'], u'885911484848')
         self.assertEqual(data['meli'], u'MELICODE123')
-        self.assertEqual(data['parent'], None)
+        self.assertEqual(data.get('parent'), None)
 
     def test_02_(self):
         """ cargar una linea del segundo proveedor ----------------------------
@@ -90,12 +90,12 @@ class TestProductUploadProduct(common.TransactionCase):
         self.assertEqual(data['name'], u'Accesorio - Discos para TE-XC 110')
         self.assertEqual(data['purchase_tax'], 0.21)
         self.assertEqual(data['sale_tax'], 0.21)
-        self.assertEqual(data['barcode'], None)
-        self.assertEqual(data['meli'], None)
+        self.assertEqual(data.get('barcode'), None)
+        self.assertEqual(data.get('meli'), None)
         self.assertEqual(data['parent'], 'B3423')
 
     def test_03_(self):
-        """ Cargar los productos y verificar que esten bien
+        """ Cargar los productos y verificar que esten bien -------------------
         """
         self.wizard_obj.process_tmp_file(self.get_filename(0))
         self.assertEqual(self.wizard_obj.log.state, 'done')
@@ -127,35 +127,53 @@ class TestProductUploadProduct(common.TransactionCase):
         self.assertEqual(einhell.parent_price_product, 'B3423')
 
     def test_04_(self):
-        """ terminar el proceso con done
+        """ terminar el proceso con done --------------------------------------
         """
         self.wizard_obj.process_tmp_file(self.get_filename(0))
         self.assertEqual(self.wizard_obj.log.state, 'done')
 
     def test_05_(self):
-        """ planilla con none en default code, no carga la linea
+        """ planilla con none en default code, no carga la linea --------------
         """
         self.wizard_obj.process_tmp_file(self.get_filename(1))
         self.assertEqual(self.wizard_obj.log.state, 'done')
 
     def test_06_(self):
-        """ Error por falta de campos requeridos
+        """ Chequear falta de campos requeridos -------------------------------
         """
         self.wizard_obj.process_tmp_file(self.get_filename(2))
-        domain = [('default_code', '=', '1077-EINHELL')]
-        einhell = self.prod_obj.search(domain)
-        self.assertEqual(einhell.default_code, u'1077-EINHELL')
+        self.assertEqual(self.wizard_obj.log.errors, 1)
 
         self.wizard_obj.process_tmp_file(self.get_filename(2))
         self.assertEqual(self.wizard_obj.log.state, 'error')
 
     def test_07_(self):
-        """ Chequear trimming del codigo de producto
+        """ Chequear trimming del codigo de producto --------------------------
         """
-        import wdb;wdb.set_trace()
         # el producto tiene un espacio despues del codigo
         self.wizard_obj.process_tmp_file(self.get_filename(3))
         # lo tiene que cargar sin el espacio
         domain = [('default_code', '=', '1077-EINHELL')]
         einhell = self.prod_obj.search(domain)
         self.assertEqual(einhell.default_code, u'1077-EINHELL')
+        self.assertEqual(self.wizard_obj.log.state, 'done')
+
+    def test_08_(self):
+        """ Chequear falta iva ventas. ----------------------------------------
+        """
+        self.wizard_obj.process_tmp_file(self.get_filename(2))
+        self.assertEqual(self.wizard_obj.log.errors, 1)
+
+    def test_09_(self):
+        """ Chequear sin campos obligatorios ----------------------------------
+        """
+        # cargo einhell
+        self.wizard_obj.process_tmp_file(self.get_filename(3))
+        domain = [('default_code', '=', '1077-EINHELL')]
+        einhell = self.prod_obj.search(domain)
+        self.assertEqual(einhell.default_code, u'1077-EINHELL')
+
+        # vuelvo a cargar einhell con solo precios
+        self.wizard_obj.process_tmp_file(self.get_filename(6))
+        self.assertEqual(self.wizard_obj.log.state, 'done')
+
