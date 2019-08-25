@@ -1,17 +1,21 @@
 # -*- coding: utf-8 -*-
 # Part of Odoo. See LICENSE file for full copyright and licensing details.
-from openerp import api, models, fields, _
+from openerp import api, models, fields
 import base64
 import tempfile
 import logging
 from openerp.exceptions import UserError
 
+HEADERS = [u'Referencia', u'Moneda', u'Costo', u'Precio', u'Descripción',
+           u'IVA compras', u'IVA ventas', u'Código de barras',
+           u'Código mercadolibre', u'parent']
+
 _logger = logging.getLogger(__name__)
 
 try:
     import openpyxl
-except (ImportError, IOError) as err:
-    _logger.debug(err)
+except (ImportError, IOError) as er:
+    _logger.debug(er)
 
 # info de como es la tabla, es una lista de tuplas y cada tupla tiene
 # Nombre del campo, Requerido para Crear, Requerido para Actualizar y tipo
@@ -40,113 +44,195 @@ class ImportWorksheet(models.TransientModel):
     _name = "product_upload.import_worksheet"
 
     data = fields.Binary(
-            'File',
-            required=True
+        'File',
+        required=True
     )
     name = fields.Char(
-            'Filename',
-            readonly=True
+        'Filename',
+        readonly=True
     )
+
+    def check_validate(self, value, ok, exist, text, name):
+        """     Value  Ok  Exist
+                0      0   0       Error
+
+                0      0   1       no salvar
+                0      1   0       imposible
+                0      1   1       imposible
+
+                1      0   0       Error
+                1      0   1       Error
+
+                1      1   0       Salvar
+                1      1   1       Salvar
+
+                Salvar = Value & Ok
+                Error = ~Value & ~Ok
+                Error = ~Value & ~Exist
+                No salvar = ~Value & Exist
+        """
+        if value and ok:
+            return {name: value}
+
+        if ((not value and not ok and not exist) or
+                (value and not ok and not exist) or
+                (value and not ok and exist)):
+            self.add_error(text)
+            return {}
+
+        if not value and exist:
+            return {}
 
     def read_data(self, sheet):
         """ Read the spreadsheet into a data structure
         """
-        def check(info, col, create):
+
+        def check(info, col, row, rowix, exist):
             """ chequear los datos y generar errores si estan mal
             """
             if col > sheet.max_column:
-                self.add_error(_('out of bound col variable'))
+                self.add_error(u'La variable col esta fuera de rango')
 
-            err = _('in row %d field %s of sheet %s')
-
+            # valor de la celda
             value = row[col].value
-
-            data_type = info['type']
+            _ = (rowix, HEADERS[col], sheet.title)
+            err = u'Error en la fila %d columna "%s" de %s : ' % _
             name = info['name']
-            req = info['create_req'] if create else info['update_req']
 
-            if data_type == 'currency':
-                if not (value == 'USD' or value == 'ARS'):
-                    text = _('Invalid Currency must be ARS or USD') + \
-                           ' ' + err % (row[col].row, name, sheet.title)
-                    self.add_error(text)
-                return {name: value}
+            # DEFAULT CODE ####################################################
 
-            if data_type == 'str':
-                if not (isinstance(value, (str, unicode)) or
-                        (value is None and not req)):
-
-                    text = _('Cell must contain text') + \
-                           ' ' + err % (row[col].row, name, sheet.title)
-                    self.add_error(text)
-                if value:
+            if col == 0:
+                if isinstance(value, (str, unicode)):
                     value = value.strip()
-                return {name: value}
-
-            if data_type == 'number':
-                if not (isinstance(value, (float, int, long)) or
-                        (value is None) and not req):
-                    row_ = row[col].row if row[col].value is not None else 0
-                    text = _('Cell must contain a number') + \
-                           ' ' + err % (row_, name, sheet.title)
+                    return {name: value}
+                else:
+                    text = err + u'La celda debe contener el codigo de ' \
+                                 u'producto. Pero se lee %s ' % value
                     self.add_error(text)
-                return {name: value}
+                return {}
 
-            if data_type == 'default_code':
-                if not (isinstance(value, (str, unicode)) or
-                        (value is None) and not req):
-                    text = _('Cell must contain text') + \
-                           ' ' + err % (row[col].row, name, sheet.title)
+            # CURRENCY ########################################################
+            if col == 1:
+                ok = (value == 'USD' or value == 'ARS')
+                text = err + u'Moneda invalida, debe ser ARS o USD. ' \
+                             u'Pero se lee %s ' % value
+                return self.check_validate(value, ok, exist, text, name)
+
+            # COST / PRICE ####################################################
+
+            if col == 2 or col == 3:
+                if isinstance(value, (float, int, long)):
+                    return {name: value}
+                else:
+                    text = err + u'La celda debe contener un valor monetario' \
+                                 u'. Pero se lee %s ' % value
                     self.add_error(text)
+                return {}
 
-                product_obj = self.env['product.template']
-                product = product_obj.search([('default_code', '=', value)])
-                if not product:
-                    text = _('Product %s from parent col not found') + \
-                           ' ' + err % (
-                        product.default_code, row[col].row, sheet.title)
+            # DESCRIPCION #####################################################
+
+            if col == 4:
+                ok = isinstance(value, (str, unicode))
+                text = err + u'La celda debe contener la descripcion del ' \
+                             u'producto. Pero se lee %s ' % value
+                return self.check_validate(value, ok, exist, text, name)
+
+            # TAX #############################################################
+
+            if col == 5 or col == 6:
+                ok = isinstance(value, float) and (value < 1)
+                text = err + u'La celda debe contener IVA, se espera ' \
+                             u'un numero de punto flotante menor que ' \
+                             u'uno, o un numero con formato de ' \
+                             u'procentaje. Pero se lee %s ' % value
+                return self.check_validate(value, ok, exist, text, name)
+
+            # CODIGO DE BARRAS
+
+            if col == 7:
+                ok = isinstance(value, (str, unicode))
+                if ok:
+                    value = value.strip()
+                text = err + u"La celda debe contener el codigo de barras " \
+                             u"en formato de texto. Para lograr el formato " \
+                             u"de texto escriba un apostrofo antes del " \
+                             u"numero, de esta forma '454514815415. " \
+                             u"Actualmente se lee %s " % value
+                # ponemos exist = true porque no es un dato requerido.
+                return self.check_validate(value, ok, True, text, name)
+
+            # CODIGO DE MERCADOLIBRE
+
+            if col == 8:
+                ok = isinstance(value, (str, unicode))
+                if ok:
+                    value = value.strip()
+                text = err + u"La celda debe contener el codigo de " \
+                             u"mercadolibre en formato de texto. Sin " \
+                             u"embargo se lee %s" % value
+                # ponemos exist = true porque no es un dato requerido.
+                return self.check_validate(value, ok, True, text, name)
+
+            # PARENT
+
+            if col == 9:
+                if value and isinstance(value, (str, unicode)):
+                    product_obj = self.env['product.template']
+                    domain = [('default_code', '=', value)]
+                    product = product_obj.search(domain)
+                    if product:
+                        return {name: value}
+                    else:
+                        text = err + u'La celda debe contener un codigo de ' \
+                                     u'producto existente, el producto ' \
+                                     u'definido en esta linea tomara el ' \
+                                     u'precio de costo del producto de esta ' \
+                                     u'columna.' \
+                                     u'Sin embargo el producto %s que se ' \
+                                     u'lee en la celda no existe.' % value
+                        self.add_error(text)
+                        return {}
+                if value and not isinstance(value, (str, unicode)):
+                    text = err + u'La celda debe contener texto. ' \
+                                 u'Pero se lee %s ' % value
                     self.add_error(text)
-                    if value:
-                        value = value.strip()
-                return {name: value}
-
-            if data_type == 'tax':
-                if not (isinstance(value, (float)) or (value is None) and not req) or (value >= 1):
-                    row_ = row[col].row if row[col].value is not None else 0
-                    text = _('The Cell must contain IVA, a float number less than 1') + \
-                           ' ' + err % (row_, name, sheet.title)
-                    self.add_error(text)
-                return {name: value}
-
-
-            self.add_error(_('internal error !!'))
+                return {}
 
         if sheet.max_column < 10:
-            self.add_error(_('Checkout the header in the sheet %s it seems some columns are missing.') % sheet.title)
+            self.add_error(u'Verifique los titulos en la planilla del '
+                           u'proveedor %s parece que '
+                           u'faltan columnas' % sheet.title)
             return
 
         ret = []
-        for row in sheet.iter_rows(min_row=2, min_col=1,
-                                   max_row=sheet.max_row,
-                                   max_col=sheet.max_column):
+        # con rowix encuentro la row, no sirve hacer row[0].row porque si
+        # esta vacia me da una excepcion.
+        for rowix, row in enumerate(sheet.iter_rows(min_row=2, min_col=1,
+                                                    max_row=sheet.max_row,
+                                                    max_col=sheet.max_column)):
             line = {}
 
+            exist = self.check_product_exist(row[0].value)
             if row[0].value is not None:
-                # si hay que crear el producto devuelve True
-                create = self.check_create(row[0].value)
                 for idx, info in enumerate(INFO):
-                    value = check(info, idx, create)
+                    value = check(info, idx, row, rowix + 2, exist)
                     line.update(value)
 
                 # si no hay errores agrego la linea
                 if not self.log.errors:
                     ret.append(line)
-
         return ret
 
-    def check_create(self, default_code):
+    def check_product_exist(self, default_code):
+        # si el default code no es texto no existe el producto
+        if isinstance(default_code, (str, unicode)):
+            default_code = default_code.strip()
+        else:
+            return False
+
+        # chequear si el producto existe, con blancos stripeados
         prod_obj = self.env['product.template']
-        prod = prod_obj.search([('default_code', '=', default_code.strip())])
+        prod = prod_obj.search([('default_code', '=', default_code)])
         return True if prod else False
 
     def process_data(self, data, vendor):
@@ -173,14 +259,16 @@ class ImportWorksheet(models.TransientModel):
             prod = product_obj.search(domain)
             data = {}
 
-            if self.env.user.currency_id.name != row['currency']:
-                pc = currency_obj.search([('name', '=', row['currency'])])
-                data['force_currency_id'] = pc.id
-            if row['name']:
+            if row.get('currency'):
+                if self.env.user.currency_id.name != row['currency']:
+                    pc = currency_obj.search([('name', '=', row['currency'])])
+                    data['force_currency_id'] = pc.id
+
+            if row.get('name'):
                 data['name'] = row['name']
-            if row['meli']:
+            if row.get('meli'):
                 data['meli_code'] = row['meli']
-            if row['parent']:
+            if row.get('parent'):
                 data['parent_price_product'] = row['parent']
 
             data['type'] = 'product'
@@ -199,27 +287,27 @@ class ImportWorksheet(models.TransientModel):
                 self.add_update()
                 _logger.info('update product %s' % prod.default_code)
 
-            if row['barcode']:
+            if row.get('barcode'):
                 barcode_obj.add_barcode(prod, row['barcode'])
 
-            if row['purchase_tax']:
+            if row.get('purchase_tax'):
                 # actualiza iva compras
                 tax_purchase_id = tax_obj.search(
-                        [('amount', '=', row['purchase_tax'] * 100),
-                         ('tax_group_id.tax', '=', 'vat'),
-                         ('type_tax_use', '=', 'purchase')])
+                    [('amount', '=', row['purchase_tax'] * 100),
+                     ('tax_group_id.tax', '=', 'vat'),
+                     ('type_tax_use', '=', 'purchase')])
                 # analizando el iva
                 tax = choose_tax(tax_purchase_id)
 
                 # esto reemplaza todos los registros por el tax que es un id
                 prod.supplier_taxes_id = [(6, 0, [tax])]
 
-            if row['sale_tax']:
+            if row.get('sale_tax'):
                 # actualiza IVA ventas
                 tax_sale_id = tax_obj.search(
-                        [('amount', '=', row['sale_tax'] * 100),
-                         ('tax_group_id.tax', '=', 'vat'),
-                         ('type_tax_use', '=', 'sale')])
+                    [('amount', '=', row['sale_tax'] * 100),
+                     ('tax_group_id.tax', '=', 'vat'),
+                     ('type_tax_use', '=', 'sale')])
                 # analizando el iva
                 tax = choose_tax(tax_sale_id)
 
@@ -262,8 +350,8 @@ class ImportWorksheet(models.TransientModel):
             wb = openpyxl.load_workbook(filename=tmp_file, read_only=True,
                                         data_only=True)
         except Exception, e:
-            raise UserError('El archivo importado no es una planilla'
-                            ' Microsoft Excel (.xlsx)')
+            raise UserError(u'El archivo importado no es una planilla'
+                            u' Microsoft Excel (.xlsx)')
 
         # cada hoja de la planilla es un vendor
         partner_obj = self.env['res.partner']
@@ -271,7 +359,8 @@ class ImportWorksheet(models.TransientModel):
         for vendor in vendors:
             partner = partner_obj.search([('ref', '=', vendor)])
             if not partner:
-                self.add_error(_('Vendor ref %s not found.') % vendor)
+                self.add_error(u'No se encuentra el '
+                               u'proveedor con ref %s') % vendor
                 break
 
             self.add_vendor(vendor)
