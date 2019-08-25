@@ -311,7 +311,7 @@ class ImportWorksheet(models.TransientModel):
                 # analizando el iva
                 tax = choose_tax(tax_sale_id)
 
-                # esto reemplaza todos los registros por el tax que es un id
+                # esto reemplaza todos los registros por el tax que es un id.
                 prod.taxes_id = [(6, 0, [tax])]
 
             prod.set_prices(row['cost'], vendor, price=row['price'],
