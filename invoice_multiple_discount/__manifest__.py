@@ -27,11 +27,13 @@
     'website': 'http://github.com/jobiols/odoo-addons',
     'license': 'AGPL-3',
     'depends': [
-        'account'
+        'account',
+        'report_aeroo'
     ],
     'data': [
         'views/account_invoice.xml',
-        'views/invoice_report.xml'
+        'views/invoice_report.xml',
+        'views/partner_view.xml'
     ],
     'demo': [
     ],
