@@ -5,4 +5,3 @@ Luego cuando se le hace una factura a ese cliente se traen los descuentos a cada
 una de las lineas de factura.
 
 Los descuentos tambien aparencen en la factura electronica impresa.
-
