@@ -1,0 +1,1 @@
+Ir a *Inventario / Actualizar precios* aparecera un wizard donde se introducen los datos.
