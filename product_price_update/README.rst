@@ -28,8 +28,8 @@ Con las siguientes mejoras
 3. Se puede filtrar por multiples proveedores
 4. La actualizacion se hace por SQL y es ridiculamente rapida.
 
-Permite hacer una actualizacion masiva de precios por diversos criterios
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+Permite hacer una actualizacion masiva de precios
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 **Se selecciona un conjunto de productos**
 
@@ -37,18 +37,18 @@ Permite hacer una actualizacion masiva de precios por diversos criterios
 - Por un conjunto de proveedores
 - Por mascara de referencia interna
 
-Se determina que precio se va a actualizar
+**Se determina que precio se va a actualizar**
 
 - Actualizar precio de venta en formulario de producto
 - Actualizar precio de costo en formulario de producto
 - Actualizar precio de costo del proveedor
 
-Se determina una forma de actualizacion
+**Se determina una forma de actualizacion**
 
 - Incremento o decremento del precio por porcentaje
 - Incremento o decremento del precio en valor absoluto
 
-Se provee un boton para visualizar los productos que van a ser afectados por
+Se provee un boton **Chequear** para visualizar los productos que van a ser afectados por
 la actualizacion.
 
 NOTAS:
