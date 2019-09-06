@@ -22,6 +22,7 @@
     'name': 'Product Price Update',
     'version': '11.0.1.0.0',
     'category': 'Tools',
+    "development_status": "Production/Stable",
     'summary': "Permite actualizar precios en forma masiva",
     'author': "jeo Software, Salvador Daniel Pelayo Gomez",
     'website': 'http://github.com/jobiols/odoo-addons',
