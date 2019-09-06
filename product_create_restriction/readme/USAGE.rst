@@ -1,4 +1,4 @@
 - Poner modo debug
-- Ir a Ajustes / Usuarios y compa~nias / Grupos
+- Ir a Ajustes / Usuarios y companias / Grupos
 - Buscar el grupo "Habilitar creacion de productos"
 - Incluir en el grupo a los usuarios que pueden crear productos.

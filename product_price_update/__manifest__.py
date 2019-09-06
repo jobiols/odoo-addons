@@ -23,7 +23,7 @@
     'version': '11.0.1.0.0',
     'category': 'Tools',
     'summary': "Permite actualizar precios en forma masiva",
-    'author': "jeo Software, Salvador Daniel Pelayo Gómez",
+    'author': "jeo Software, Salvador Daniel Pelayo Gomez",
     'website': 'http://github.com/jobiols/odoo-addons',
     'license': 'AGPL-3',
     'depends': [
