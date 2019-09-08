@@ -21,6 +21,7 @@
 {
     'name': 'Point of Sale Fast Close',
     'version': '11.0.0.0.0',
+    "development_status": "Beta",
     'category': 'Tools',
     'summary': "Fix to speedup close on POS",
     'author': "jeo Software",
