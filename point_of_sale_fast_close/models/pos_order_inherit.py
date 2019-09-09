@@ -249,12 +249,12 @@ class PosOrder(models.Model):
                 credit += mv[2]['credit']
                 debit += mv[2]['debit']
             dif = credit - debit
-            if dif != 0:
+            if abs(dif) > 2e-10:
                 _logger.info('FIX DESCUADRE %s' % dif)
 
-            for mv in all_lines:
-                if mv[2]['account_id'] == 111:
-                    mv[2]['debit'] += dif
+                for mv in all_lines:
+                    if mv[2]['account_id'] == 111:
+                        mv[2]['debit'] += dif
 
             move.sudo().write({'line_ids': all_lines})
             move.sudo().post()
