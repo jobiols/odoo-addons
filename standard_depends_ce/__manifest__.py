@@ -45,7 +45,6 @@
         'disable_odoo_online',  # Elimina menu de odoo online
         'res_config_settings_enterprise_remove',  # Elimina menus enterprise
         'auto_backup',  # poner el backup en: /var/odoo/backups/
-        'backend_theme',
         'server_mode',          # server_mode = "test" en desarrollo
         'partner_ref_unique',  # evita duplicados en referencia
         'partner_vat_unique',  # evita duplicados numeros de referencia
