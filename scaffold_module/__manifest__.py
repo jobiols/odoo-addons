@@ -22,6 +22,7 @@
         "python": [],
         "bin": [],
     },
+    "excludes": [],
     "depends": [
         "base",
     ],
