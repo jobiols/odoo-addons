@@ -363,6 +363,12 @@ class ImportWorksheet(models.TransientModel):
                                u'proveedor con ref %s') % vendor
                 break
 
+            if len(partner) > 1:
+                msg = 'Hay mas de un proveedor con referencia %s \n\n' % vendor
+                for rec in partner:
+                    msg += rec.name + '\n'
+                raise UserError(msg)
+
             self.add_vendor(vendor)
             data = self.read_data(wb[vendor])
 
