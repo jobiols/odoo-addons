@@ -79,9 +79,14 @@
         <field name="target">new</field>
     </record>
 
-    <menuitem id="price_update_so_action_menu"
+    <menuitem id="price_update_so_action_menu_sale"
               action="price_update_action"
               parent="sale.product_menu_catalog"
               sequence="2"/>
+
+    <menuitem id="price_update_so_action_menu_purchase"
+              action="price_update_action"
+              parent="purchase.menu_procurement_management"
+              sequence="200"/>
 
 </odoo>
