@@ -7,6 +7,6 @@
 oca-gen-addon-readme \
 	--org-name jobiols \
 	--repo-name odoo-addons \
-	--branch 12.0 \
+	--branch 11.0 \
 	--addons-dir $PWD \
 	--gen-html
