@@ -1,2 +1,5 @@
-# For copyright and license notices, see __manifest__.py file in module root
-from . import test_module
+# -*- coding: utf-8 -*-
+# License AGPL-3.0 or later (https://www.gnu.org/licenses/agpl).
+
+from . import test_something
+from . import test_abstract_something

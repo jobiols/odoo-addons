@@ -20,7 +20,7 @@
 
 {
     'name': 'Standard Dependencies CE',
-    'version': '11.0.0.1.0',
+    'version': '12.0.0.1.0',
     'category': 'Tools',
     'summary': "Add standard dependecies for Argentinian localization",
     'author': "jeo Software",
@@ -43,21 +43,21 @@
         'account_ux',  # hace pilas de cosas ver en el modulo
         'sale_ux',  # mejoras en ventas
         'disable_odoo_online',  # Elimina menu de odoo online
-        'res_config_settings_enterprise_remove',  # Elimina menus enterprise
+        #'res_config_settings_enterprise_remove',  # Elimina menus enterprise
         'auto_backup',  # poner el backup en: /var/odoo/backups/
-        'backend_theme',
+        #'backend_theme',
         'server_mode',          # server_mode = "test" en desarrollo
         'partner_ref_unique',  # evita duplicados en referencia
         'partner_vat_unique',  # evita duplicados numeros de referencia
-        'mail_activity_board_ux',  # quitar actividades del chatter
+        #'mail_activity_board_ux',  # quitar actividades del chatter
         'product_unique',  # no se pueden duplicar codigos de producto
 
         # fixes
-        'invoice_lines_analysis_fix',  # corrige bug en pivot
+        #'invoice_lines_analysis_fix',  # corrige bug en pivot
     ],
     'data': [],
     'demo': [],
-    'installable': False,
+    'installable': True,
     'auto_install': False,
     'application': False,
 }
