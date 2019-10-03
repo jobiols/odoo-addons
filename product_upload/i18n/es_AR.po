@@ -352,7 +352,7 @@ msgstr "Productos actualizados"
 #: model:ir.actions.act_window,name:product_upload.action_log
 #: model:res.groups,name:product_upload.group_product_upload_users
 msgid "Upload Products"
-msgstr "Productos cargados"
+msgstr "Carga masiva de productos"
 
 #. module: product_upload
 #: code:addons/product_upload/models/log.py:38
