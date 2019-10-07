@@ -53,6 +53,7 @@
         'web_export_view',  # exportar cualquier vista en excel
         # fixes
         'invoice_lines_analysis_fix',  # corrige bug en pivot
+        'account_clean_cancelled_invoice_number',  # borrar nro de factura
     ],
     'data': [],
     'demo': [],
