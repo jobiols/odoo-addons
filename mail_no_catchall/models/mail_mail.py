@@ -6,7 +6,7 @@ import psycopg2
 
 from odoo import _, api, models
 from odoo import tools
-from odoo.addons.base.ir.ir_mail_server import MailDeliveryException
+from odoo.addons.base.models.ir_mail_server import MailDeliveryException
 from odoo.tools.safe_eval import safe_eval
 
 _logger = logging.getLogger(__name__)
