@@ -22,7 +22,7 @@
     'name': 'Mail No Catchall',
     'version': '11.0.0.0.0',
     'category': 'Tools',
-    'summary': "Enivar mail sin configurar una cuenta catchall",
+    'summary': "Enviar mail sin configurar una cuenta catchall",
     'author': "jeo Software",
     'website': 'http://github.com/jobiols/',
     'license': 'AGPL-3',
@@ -33,7 +33,7 @@
     ],
     'demo': [
     ],
-    'installable': False,
+    'installable': True,
     'auto_install': False,
     'application': False,
 }
