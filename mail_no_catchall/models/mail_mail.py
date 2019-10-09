@@ -20,6 +20,10 @@ class MailMail(models.Model):
         smtp_session=None):
         IrMailServer = self.env['ir.mail_server']
         for mail_id in self.ids:
+            success_pids = []
+            failure_type = None
+            processing_pid = None
+            mail = None
             try:
                 mail = self.browse(mail_id)
                 if mail.state != 'outgoing':
@@ -94,6 +98,21 @@ class MailMail(models.Model):
                                         'computed recipients.'),
                 })
                 mail_sent = False
+                # Update notification in a transient exception state to avoid concurrent
+                # update in case an email bounces while sending all emails related to current
+                # mail record.
+                notifs = self.env['mail.notification'].search([
+                    ('is_email', '=', True),
+                    ('mail_id', 'in', mail.ids),
+                    ('email_status', 'not in', ('sent', 'canceled'))
+                ])
+                if notifs:
+                    notif_msg = _('Error without exception. Probably due do concurrent access update of notification records. Please see with an administrator.')
+                    notifs.sudo().write({
+                        'email_status': 'exception',
+                        'failure_type': 'UNKNOWN',
+                        'failure_reason': notif_msg,
+                    })
 
                 # build an RFC2822 email.message.Message object and send it
                 # without queuing
@@ -116,12 +135,17 @@ class MailMail(models.Model):
                         subtype='html',
                         subtype_alternative='plain',
                         headers=headers)
+                    processing_pid = email.pop("partner_id", None)
                     try:
                         res = IrMailServer.send_email(
                             msg, mail_server_id=mail.mail_server_id.id,
                             smtp_session=smtp_session)
+                        if processing_pid:
+                            success_pids.append(processing_pid)
+                        processing_pid = None
                     except AssertionError as error:
                         if str(error) == IrMailServer.NO_VALID_RECIPIENT:
+                            failure_type = "RECIPIENT"
                             # No valid recipient found for this particular
                             # mail item -> ignore error to avoid blocking
                             # delivery to next recipients, if any. If this is
@@ -143,7 +167,7 @@ class MailMail(models.Model):
                 if mail_sent:
                     _logger.info('Mail with ID %r and Message-Id %r '
                                  'successfully sent', mail.id, mail.message_id)
-                mail._postprocess_sent_message(mail_sent=mail_sent)
+                mail._postprocess_sent_message(success_pids=success_pids, failure_type=failure_type)
             except MemoryError:
                 # prevent catching transient MemoryErrors, bubble up to
                 # notify user or abort cron job instead of marking the mail
@@ -166,7 +190,7 @@ class MailMail(models.Model):
                                   mail.id, failure_reason)
                 mail.write({'state': 'exception',
                             'failure_reason': failure_reason})
-                mail._postprocess_sent_message(mail_sent=False)
+                mail._postprocess_sent_message(success_pids=success_pids, failure_reason=failure_reason, failure_type='UNKNOWN')
                 if raise_exception:
                     if isinstance(e, AssertionError):
                         # get the args of the original error, wrap into a
