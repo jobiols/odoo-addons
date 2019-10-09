@@ -50,10 +50,12 @@ class MailMail(models.Model):
                 # partners
                 email_list = []
                 if mail.email_to:
-                    email_list.append(mail.send_get_email_dict())
+                    email_list.append(mail._send_prepare_values())
                 for partner in mail.recipient_ids:
-                    email_list.append(
-                        mail.send_get_email_dict(partner=partner))
+                    values = mail._send_prepare_values(partner=partner)
+                    values['partner_id'] = partner
+                    email_list.append(values)
+
 
                 # headers
                 headers = {}
