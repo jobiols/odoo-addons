@@ -79,8 +79,9 @@ class MailMail(models.Model):
                         # catchall_domain)
                         headers['Return-Path'] = mail.email_from
                     else:
-                        headers['Return-Path'] = '%s+%d@%s' % (
-                            bounce_alias, mail.id, catchall_domain)
+                        # headers['Return-Path'] = '%s+%d@%s' % (
+                        #     bounce_alias, mail.id, catchall_domain)
+                        headers['Return-Path'] = mail.email_from
                 if mail.headers:
                     try:
                         headers.update(safe_eval(mail.headers))
