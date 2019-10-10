@@ -55,7 +55,7 @@
         'account_clean_cancelled_invoice_number',  # borrar nro de factura
 
         # fixes
-        'invoice_lines_analysis_fix',  # corrige bug en pivot
+        #'invoice_lines_analysis_fix',  # corrige bug en pivot /// falla con la actualizacion
     ],
     'data': [],
     'demo': [],
