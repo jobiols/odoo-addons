@@ -45,7 +45,7 @@
         'mass_editing',  # permite hacer edicion masiva
         'product_ux',  # mejoras en productos
         'sale_ux',  # mejoras en ventas
-        'auto_backup',  # poner el backup en: /var/odoo/backups/
+        #'auto_backup',  # poner el backup en: /var/odoo/backups/
         'mail_activity_board_ux',  # quitar actividades del chatter
         'partner_ref_unique',  # evita duplicados en referencia
         'partner_vat_unique',  # evita duplicados numeros de referencia
