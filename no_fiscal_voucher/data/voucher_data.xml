@@ -1,0 +1,27 @@
+<?xml version="1.0"?>
+<!-- Copyright 2019 jeo Software
+     License AGPL-3.0 or later (https://www.gnu.org/licenses/agpl). -->
+
+<odoo>
+<data>
+
+<record id="no_fiscal_sequence_receipt" model="ir.sequence">
+    <field name="name">Recibo no fiscal</field>
+    <field name="implementation">no_gap</field>
+    <field name="prefix">TRUCHO-</field>
+    <field name="padding">8</field>
+    <field name="number_increment">1</field>
+</record>
+
+<record id="no_fiscal_receipt" model="account.payment.receiptbook">
+    <field name="name">Recibo no fiscal</field>
+    <field name="partner_type">customer</field>
+    <field name="sequence_type">automatic</field>
+    <field name="prefix">TRUCHO-</field>
+    <field name="document_type_id">84</field>
+    <field name="sequence_id" eval="no_fiscal_sequence_receipt"/>
+
+</record>
+
+</data>
+</odoo>
