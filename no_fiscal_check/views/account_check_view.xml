@@ -1,0 +1,44 @@
+<?xml version="1.0"?>
+<odoo>
+<data>
+
+<record id="view_account_check_tree" model="ir.ui.view">
+    <field name="name">NO FISCAL CHECK marca de no fiscal</field>
+    <field name="model">account.check</field>
+    <field name="inherit_id" ref="account_check.view_account_check_tree"/>
+    <field name="arch" type="xml">
+        <xpath expr="//field[@name='state']" position="before">
+            <field name="fiscal"/>
+        </xpath>
+    </field>
+</record>
+
+<record id="view_account_check_form" model="ir.ui.view">
+    <field name="name">NO FISCAL CHECK marca de no fiscal</field>
+    <field name="model">account.check</field>
+    <field name="inherit_id" ref="account_check.view_account_check_form"/>
+    <field name="arch" type="xml">
+        <xpath expr="//field[@name='state']" position="before">
+            <field name="fiscal"/>
+        </xpath>
+    </field>
+</record>
+
+<record id="view_checks_search" model="ir.ui.view">
+    <field name="name">NO FISCAL CHECK marca de no fiscal</field>
+    <field name="model">account.check</field>
+    <field name="inherit_id" ref="account_check.view_checks_search"/>
+    <field name="arch" type="xml">
+        <xpath expr="//filter" position="before">
+            <filter string="Fiscal" context="{'group_by':'fiscal'}"/>
+        </xpath>
+    </field>
+</record>
+
+
+
+
+
+
+</data>
+</odoo>

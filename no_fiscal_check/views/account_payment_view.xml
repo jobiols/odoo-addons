@@ -1,0 +1,20 @@
+<?xml version="1.0"?>
+<!-- Copyright 2019 jeo Software
+     License AGPL-3.0 or later (https://www.gnu.org/licenses/agpl). -->
+
+<odoo>
+<data>
+
+<record id="view_account_payment_form_inherited" model="ir.ui.view">
+    <field name="name">NO FISCAL CHECK marca de no fiscal</field>
+    <field name="model">account.payment</field>
+    <field name="inherit_id" ref="account_check.view_account_payment_form_inherited"/>
+    <field name="arch" type="xml">
+        <xpath expr="//field[@name='check_number']" position="before">
+            <field name="fiscal"/>
+        </xpath>
+    </field>
+</record>
+
+</data>
+</odoo>
