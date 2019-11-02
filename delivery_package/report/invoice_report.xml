@@ -1,0 +1,8 @@
+<?xml version="1.0"?>
+<odoo>
+<data>
+<record id="l10n_ar_aeroo_stock.action_aeroo_report_ar_stock_picking" model="ir.actions.report">
+    <field name="report_file">delivery_package/stock_picking.odt</field>
+</record>
+</data>
+</odoo>
