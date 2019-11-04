@@ -7,9 +7,9 @@ Standard Dependencies CE
    !! changes will be overwritten.                   !!
    !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 
-.. |badge1| image:: https://img.shields.io/badge/maturity-Beta-yellow.png
+.. |badge1| image:: https://img.shields.io/badge/maturity-Production%2FStable-green.png
     :target: https://odoo-community.org/page/development-status
-    :alt: Beta
+    :alt: Production/Stable
 .. |badge2| image:: https://img.shields.io/badge/licence-AGPL--3-blue.png
     :target: http://www.gnu.org/licenses/agpl-3.0-standalone.html
     :alt: License: AGPL-3
@@ -30,20 +30,15 @@ Contiene en las dependencias todos los modulos que se requieren.
 Changelog
 =========
 
-[ The change log. The goal of this file is to help readers
-  understand changes between version. The primary audience is
-  end users and integrators. Purely technical changes such as
-  code refactoring must not be mentioned here. 
-  
-  This file may contain ONE level of section titles, underlined
-  with the ~ (tilde) character. Other section markers are 
-  forbidden and will likely break the structure of the README.rst
-  or other documents where this fragment is included. ]
-
 12.0.0.0.0 (2019-09-26)
 ~~~~~~~~~~~~~~~~~~~~~~~
 
-* [ADD] Commit inicial del modulo.
+* [ADD] Commit inicial
+
+12.0.0.0.0 (2019-11-04)
+~~~~~~~~~~~~~~~~~~~~~~~
+
+* [MIG] Migracion a V12
 
 Bug Tracker
 ===========
