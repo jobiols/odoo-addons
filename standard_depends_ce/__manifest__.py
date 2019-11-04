@@ -25,7 +25,7 @@
     'summary': "Add standard dependecies for Argentinian localization",
     "development_status": "Production/Stable",
     'author': "jeo Software",
-    'website': 'http://github.com/jobiols/module-repo',
+    'website': 'http://github.com/jobiols/odoo-addons',
     'license': 'AGPL-3',
     'depends': [
         # para la localizacion argentina version comunitaria

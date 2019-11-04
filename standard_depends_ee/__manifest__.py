@@ -24,7 +24,7 @@
     'category': 'Tools',
     'summary': "Add standard dependecies for Argentinian localization",
     'author': "jeo Software",
-    'website': 'http://github.com/jobiols/module-repo',
+    'website': 'http://github.com/jobiols/odoo-addons',
     'license': 'AGPL-3',
     'depends': [
         # para la localizacion argentina version Enterprise
@@ -43,7 +43,7 @@
         'base_ux',  # mejoras de base
         # 'sale_ux',  # mejoras en ventas
         'auto_backup',  # poner el backup en: /var/odoo/backups/
-        'mail_activity_board_ux',  # quitar actividades del chatter
+        #'mail_activity_board_ux',  # quitar actividades del chatter NO ESTA MIGRADO
         'partner_ref_unique',  # evita duplicados en referencia
         'partner_vat_unique',  # evita duplicados numeros de referencia
         'product_unique',  # no se pueden duplicar codigos de producto
