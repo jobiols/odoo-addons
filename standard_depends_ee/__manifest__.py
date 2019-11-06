@@ -36,14 +36,12 @@
         'account_debt_management',  # mejoras en administracion de deudas
         'l10n_ar_aeroo_payment_group',  # Pagos
         'l10n_ar_account_withholding',  # Retenciones
-        #'account_accountant',           # permisos para contabilidad
 
         # utilitarios
         'account_ux',  # hace pilas de cosas ver en el modulo
         'base_ux',  # mejoras de base
         'sale_ux',  # mejoras en ventas
         'auto_backup',  # poner el backup en: /var/odoo/backups/
-        #'mail_activity_board_ux',  # quitar actividades del chatter NO ESTA MIGRADO
         'partner_ref_unique',  # evita duplicados en referencia
         'partner_vat_unique',  # evita duplicados numeros de referencia
         'product_unique',  # no se pueden duplicar codigos de producto
