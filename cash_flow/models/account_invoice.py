@@ -7,5 +7,5 @@ class AccountInvoice(models.Model):
     _inherit = "account.invoice"
 
     payment_term_id = fields.Many2one(
-        required=True
+        required=False
     )

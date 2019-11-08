@@ -39,6 +39,7 @@
         'reports/cash_flow_report.xml',
         'views/forecast_view.xml',
         'security/ir.model.access.csv',
+        'views/account_invoice_view.xml'
     ],
     'demo': [
         'data/configuration.yml',
