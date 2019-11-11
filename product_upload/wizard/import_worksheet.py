@@ -140,7 +140,8 @@ class ImportWorksheet(models.TransientModel):
             # TAX #############################################################
 
             if col == 5 or col == 6:
-                ok = isinstance(value, float) and (value < 1)
+                ok = isinstance(value, float) and \
+                     (value == 0.21 or value == 0.105)
                 text = err + u'La celda debe contener IVA, se espera ' \
                              u'un numero de punto flotante menor que ' \
                              u'uno, o un numero con formato de ' \
@@ -359,8 +360,8 @@ class ImportWorksheet(models.TransientModel):
         for vendor in vendors:
             partner = partner_obj.search([('ref', '=', vendor)])
             if not partner:
-                self.add_error(u'No se encuentra el '
-                               u'proveedor con ref %s') % vendor
+                self.add_error(u'No se encuentra el proveedor cuyo nombre '
+                               u'esta en la hoja de la planilla excel')
                 break
 
             if len(partner) > 1:
