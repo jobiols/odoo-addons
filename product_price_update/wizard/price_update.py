@@ -71,7 +71,10 @@ class ProductPriceUpdate(models.TransientModel):
             raise UserError('Debe seleccionar al menos una categoria.')
 
     def generate_select(self):
+        """ selecciona los id de product_template que vamos a actualizar
+        """
         select = 'SELECT pt.id FROM product_template pt \n'
+
         join = 'JOIN product_supplierinfo ps \n' \
                'ON ps.product_tmpl_id = pt.id \n'
 
@@ -87,10 +90,6 @@ class ProductPriceUpdate(models.TransientModel):
                 'pt.categ_id in (%s) ' % ','.join(ids)
             )
 
-        ##################################################
-        # Armando el select
-        ##################################################
-
         # si tengo suppliers hago el join
         if self.supplier_ids:
             select += join
@@ -104,38 +103,103 @@ class ProductPriceUpdate(models.TransientModel):
 
         return select
 
-    def generate_sql(self):
+    def get_set_parameters(self, updated_field=False):
+        if self.update_type == 'amount':
+            return '{0} = {0} + {1}'.format(
+                updated_field, self.value)
+        else:
+            return '{0} = {0} * (1 + ({1}))'.format(
+                updated_field, self.value / 100)
+
+    def _generate_sql_for_purchase(self):
+        """ Genera el sql para update_mode = purchase, en este caso el campo que
+            hay que modificar es standard_price que es un campo company_dependent
+        """
+
+        # obtiene los ids de los productos a actualizar
         select = self.generate_select()
 
-        ##################################################
-        # Armando el update
-        ##################################################
+        # convierte los product_template en product_product
+        self.env.cr.execute(
+            """
+            SELECT id FROM product_product
+            where product_tmpl_id in ({})
+            """.format(select)
+        )
+        tuples = self.env.cr.fetchall()
+        res_id = []
+
+        # convierte los product_product en 'product.product,id'
+        for prod_id in tuples:
+            res_id.append('product.product,' + str(prod_id[0]))
+
+        # obtiene los parametros del SET
+        set = self.get_set_parameters(updated_field='value_float')
+
+        sql = """
+            UPDATE ir_property
+            SET {}
+            WHERE name = 'standard_price' and
+                  res_id in {}
+                    """.format(set, tuple(res_id))
+
+        return sql
+
+    def _generate_sql_for_supplier_purchase(self):
+        """ Genera el sql para update_mode = supplier_purchase
+            modifica el precio en el supplierinfo
+        """
+        # obtiene los ids de los productos a actualizar
+        select = self.generate_select()
+
+        # obtiene los parametros del SET
+        set = self.get_set_parameters(updated_field='price')
+
+        sql = """
+        UPDATE product_supplierinfo
+          SET {}
+          WHERE id in (
+                SELECT psi.id FROM product_supplierinfo psi \n
+                JOIN product_template pt \n
+                  ON pt.id = psi.product_tmpl_id \n
+                WHERE pt.id in ({})
+                )
+        """.format(set, select)
+
+        return sql
+
+    def _generate_sql_for_sale(self):
+        """ Genera el sql para update_mode = sale
+        """
+        select = self.generate_select()
+
+        # obtiene los parametros del SET
+        set = self.get_set_parameters(updated_field='list_price')
+
+        sql = """
+              UPDATE product_template \n
+              SET {} \n
+              WHERE id in ({})
+              """.format(set, select)
+
+        return sql
+
+    def generate_sql(self):
+        """ Genera el sql para modificar el precio
+        """
 
         if self.update_mode == 'sale':
-            field = 'list_price'
-        if self.update_mode == 'purchase':
-            field = 'standard_price'
-        if self.update_mode == 'supplier_purchase':
-            field = 'price'
-
-        if self.update_type == 'amount':
-            set = 'SET {0} = {0} + {1}'.format(field, self.value)
-
-        if self.update_type == 'percent':
-            set = 'SET {0} = {0} *(1 + ({1}))'.format(field, self.value / 100)
-
-        sql = 'UPDATE product_template \n' \
-              '{} \n' \
-              'WHERE id in ({})'.format(set, select)
-        return sql
+            return self._generate_sql_for_sale()
+        elif self.update_mode == 'purchase':
+            return self._generate_sql_for_purchase()
+        else:
+            return self._generate_sql_for_supplier_purchase()
 
     def confirm(self):
         """ Procesar la actualizacion de precios
         """
         self.validate_data()
-
         sql = self.generate_sql()
-        print(sql)
         self.env.cr.execute(sql)
 
     def check_affected(self):

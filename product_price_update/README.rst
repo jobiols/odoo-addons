@@ -41,15 +41,16 @@ Permite hacer una actualizacion masiva de precios
 
 - Actualizar precio de venta en formulario de producto
 - Actualizar precio de costo en formulario de producto
-- Actualizar precio de costo del proveedor
+- Actualizar precio de costo del proveedor. En este caso lo que se actualiza es el precio que aparece en la pestana Compras en la linea correspondiente al proveedor. Este es el precio que el sistema toma al hacer una orden de compra.
 
 **Se determina una forma de actualizacion**
 
 - Incremento o decremento del precio por porcentaje
 - Incremento o decremento del precio en valor absoluto
 
-Se provee un boton **Chequear** para visualizar los productos que van a ser afectados por
-la actualizacion.
+Se provee un boton **Chequear** para visualizar los productos que van a ser
+afectados por la actualizacion. Este boton se provee a modo de verificacion
+pero no es necesario chequear antes de aplicar la actualizacion.
 
 NOTAS:
 
