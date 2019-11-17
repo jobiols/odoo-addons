@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+    <data>
+        <!-- woo categ Form View -->
+
+        <!-- woo categ Tree View -->
+
+        <record model="ir.ui.view" id="view_woo_categ_tree">
+            <field name="name">Categorias de woo</field>
+            <field name="model">curso.woo.categ</field>
+            <field name="arch" type="xml">
+                <tree string="lista categorias woo">
+                    <field name="woo_ids"/>
+                    <field name="woo_idx"/>
+                    <field name="path"/>
+                    <field name="name"/>
+                    <field name="slug"/>
+                    <field name="published"/>
+                </tree>
+            </field>
+        </record>
+
+        <!-- Woo categ Action View -->
+
+        <record model="ir.actions.act_window" id="action_woo_categ">
+            <field name="name">Categorias woo</field>
+            <field name="res_model">curso.woo.categ</field>
+            <field name="view_mode">tree,form</field>
+            <field name="view_type">form</field>
+        </record>
+
+        <!-- Lectures Menu -->
+
+        <menuitem name="Categorias"
+                  id="menu_woo_categ" parent="base.menu_curso_main"
+                  action="action_woo_categ"/>
+
+    </data>
+</openerp>

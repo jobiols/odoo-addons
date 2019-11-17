@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+    <data>
+        <report id="action_labels_report"
+                string="Reporte de etiquetas"
+                model="product.product"
+                report_type="qweb-pdf"
+                name="product_price_labels.report_price_labels"
+        />
+
+        <template id="report_price_labels">
+            <t t-call="report.html_container">
+                <t t-call="report.internal_layout">
+                    <div class="page">
+                        <t t-foreach="docs" t-as="o">
+
+                            <div style="width:110px;
+                                       display:inline-block;"
+                                 align="center">
+
+                                <t t-if="o.promotional_price">
+                                    <div style="border:1px solid black;
+                                            font-size:120%;">
+                                        <strike>
+                                            <span>$</span>
+                                            <span t-field="o.public_price"/>
+                                        </strike>
+                                    </div>
+                                </t>
+                                <t t-if="not o.promotional_price">
+                                    <div style="border:1px solid black;
+                                            font-size:120%;">
+                                        <span>$</span>
+                                        <span t-field="o.public_price"/>
+                                    </div>
+                                </t>
+                                <t t-if="o.promotional_price">
+                                    <div style="border:1px solid black;
+                                                font-size:120%;">
+                                        <span>$</span>
+                                        <span t-field="o.promotional_price"/>
+                                    </div>
+                                </t>
+
+                                <div style="font-size:50%;">
+                                    <t t-if="o.default_code">
+                                        <span t-field="o.default_code"/>
+                                    </t>
+                                    <t t-if="not o.default_code">
+                                        <span t-field="o.name"/>
+                                    </t>
+                                </div>
+                            </div>
+
+                        </t>
+                    </div>
+                </t>
+            </t>
+        </template>
+    </data>
+</openerp>
+

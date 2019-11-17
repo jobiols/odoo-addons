@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<openerp>
+    <data>
+
+        <!-- Credit Plan Tree view -->
+
+        <record model="ir.ui.view" id="view_card_commission_plan_tree">
+            <field name="name">Plan de pagos</field>
+            <field name="model">credit_plan</field>
+            <field name="arch" type="xml">
+                <tree string="Plan de pagos">
+                    <field name="installments"/>
+                    <field name="quota"/>
+                    <field name="total"/>
+                    <field name="surcharge"/>
+                </tree>
+            </field>
+        </record>
+
+    </data>
+</openerp>

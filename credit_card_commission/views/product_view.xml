@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<openerp>
+    <data>
+
+        <!-- modificamos el formulario de producto para el caso de la comision -->
+
+        <record id="product.product_form_card_commission" model="ir.ui.view">
+            <field name="name">product.product.card.commission</field>
+            <field name="model">product.product</field>
+            <field name="inherit_id" ref="product.product_normal_form_view"/>
+            <field name="priority" eval="8"/>
+            <field name="arch" type="xml">
+
+                <!--
+                                esto no anda, no puedo ocultar el campo descripción basado en
+                                el tipo de producto.
+
+                                <field name="description" position="attributes">
+                                    <attribute name="invisible">'card' in type</attribute>
+                                </field>
+
+                                <field name="description" attrs="{'invisible':[('card','in','type')]}"/>
+                -->
+
+                <field name="description" position="before">
+                    <div attrs="{'invisible':[('type','!=','card')]}">
+
+                        <h1>Tarjetas de crédito</h1>
+
+                        <group col="6">
+                            <field name="credit_card"/>
+                            <field name="coupon_value"/>
+                            <button name="button_calc_plan"
+                                    string="Calcular"
+                                    class="oe_highlight"
+                                    type="object"/>
+                        </group>
+                        <field name="plan"/>
+                    </div>
+
+                </field>
+            </field>
+        </record>
+    </data>
+</openerp>
