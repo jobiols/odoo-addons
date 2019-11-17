@@ -9,6 +9,28 @@ from openerp.exceptions import Warning
 from lxml import etree
 
 
+class ProductTemplate(models.Model):
+    _inherit = 'product.template'
+
+    ch_virtual = fields.Float(
+        compute='_compute_ch_virtual',
+        help='calcular el previsto de ch stock'
+    )
+
+    @api.multi
+    def _compute_ch_virtual(self):
+        """ Esto calcula el stock disponible en CH harcodeado el 25
+        """
+        quant_obj = self.env['stock.quant']
+        for rec in self:
+            domain = [('product_id', '=', rec.id),('location_id', '=', 25)]
+            quants = quant_obj.search(domain)
+            qty = 0
+            for q in quants:
+                qty += q.qty
+            rec.ch_virtual = qty
+
+
 class ProductProduct(models.Model):
     _inherit = 'product.product'
 
@@ -58,7 +80,6 @@ class ProductProduct(models.Model):
             pl_ids.append(pricelist.search(
                 [('id', '=', lists['pricelist_{}'.format(ix + 1)])]))
 
-
         # TODO arreglar esto, estamos forzando las listas de precio
         price = self.env['product.pricelist']
         pl_ids[0] = price.search([('id', '=', 3)])  # 3=reves 6=suelos
@@ -93,7 +114,7 @@ class ProductProduct(models.Model):
 
     @api.model
     def fields_view_get(self, view_id=None, view_type='tree', context=None,
-                        toolbar=False, submenu=False):
+        toolbar=False, submenu=False):
         """ Sobreescribimos fields_view_get para cambiar los nombres de los
             campos del tree view
         """
