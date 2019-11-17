@@ -13,9 +13,11 @@
     "application": False,
     "installable": True,
     "depends": [
-        "l10n_ar_aeroo_stock",
+        'stock',
+        'l10n_ar_aeroo_stock',
     ],
     "data": [
-        'report/invoice_report.xml'
+        'report/invoice_report.xml',
+        'views/stock_move_view.xml'
     ]
 }
