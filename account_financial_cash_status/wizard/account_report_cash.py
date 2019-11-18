@@ -8,7 +8,7 @@ import time
 
 
 class AccountCashReport(models.TransientModel):
-    _name = "cash_report"
+    _name = "cash.report"
     _description = "Accounting Cash Report"
 
     @api.model

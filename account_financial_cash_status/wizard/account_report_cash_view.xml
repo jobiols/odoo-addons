@@ -3,8 +3,8 @@
     <data>
 
         <record id="account_cash_report_view" model="ir.ui.view">
-            <field name="name">Cash Report</field>
-            <field name="model">cash_report</field>
+            <field name="name">ACCOUNT FINANCIAL CASH REPORT view</field>
+            <field name="model">cash.report</field>
             <field name="arch" type="xml">
                 <form string="Report Options">
                     <group col="4">
@@ -59,7 +59,7 @@
         <record id="action_account_cash_menu" model="ir.actions.act_window">
             <field name="name">Reporte diario de Cajas</field>
             <field name="type">ir.actions.act_window</field>
-            <field name="res_model">cash_report</field>
+            <field name="res_model">cash.report</field>
             <field name="view_type">form</field>
             <field name="view_mode">form</field>
             <field name="view_id" ref="account_cash_report_view"/>
