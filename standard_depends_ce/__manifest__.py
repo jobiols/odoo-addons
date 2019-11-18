@@ -37,6 +37,7 @@
         'l10n_ar_aeroo_payment_group',  # Pagos
         'l10n_ar_account_withholding',  # Retenciones
         'account_accountant',           # permisos para contabilidad
+        'l10n_ar_aeroo_stock',   # remito argentino
 
         # modulos adicionales utilitarios CE
         'base_ux',  # mejoras de base
