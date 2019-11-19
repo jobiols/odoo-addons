@@ -12,6 +12,7 @@
     "license": "AGPL-3",
     "application": False,
     "installable": True,
+    'customer': 'Virtual Dreams',
     "depends": [
         'stock',
         'l10n_ar_aeroo_stock',

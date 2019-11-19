@@ -13,6 +13,7 @@
     "license": "AGPL-3",
     "application": False,
     "installable": True,
+    'customer': 'Virtual Dreams',
     "depends": [
         'account_check',
     ],

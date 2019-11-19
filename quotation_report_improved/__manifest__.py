@@ -37,6 +37,6 @@
     'installable': True,
     'auto_install': False,
     'application': False,
-    'customer': 'Tarsitano',
+    'customer': 'Virtual Dreams',
     'maturity': 'Stable'
 }
