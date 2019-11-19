@@ -23,7 +23,8 @@ class ProductTemplate(models.Model):
         """
         quant_obj = self.env['stock.quant']
         for rec in self:
-            domain = [('product_id', '=', rec.id),('location_id', '=', 25)]
+            domain = [('product_id.product_tmpl_id', '=', rec.id),
+                      ('location_id', '=', 25)]
             quants = quant_obj.search(domain)
             qty = 0
             for q in quants:
