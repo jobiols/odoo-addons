@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 # For copyright and license notices, see __manifest__.py file in module root
 
 from odoo.tools import DEFAULT_SERVER_DATETIME_FORMAT

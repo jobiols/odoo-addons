@@ -23,7 +23,7 @@ class PosOrder(models.Model):
             return taxes + children
 
         # Tricky, via the workflow, we only have one id in the ids variable
-        """Create a account move line of order grouped by products or not."""
+        # ## Create an account move line of order grouped by products or not.
         IrProperty = self.env['ir.property']
         ResPartner = self.env['res.partner']
 
