@@ -6,24 +6,26 @@ Base Module Record
 
 Description
 -----------
-*This module allows you to create a new module without any development.
+* This module allows you to create a new module without any development.
 
-*It records all operations on objects during the recording session and
+* It records all operations on objects during the recording session and
 produce a .ZIP module. So you can create your own module directly from
 the OpenERP client.
 
-*This version works for creating and updating existing records. It recomputes
+* This version works for creating and updating existing records. It recomputes
 dependencies and links for all types of widgets (many2one, many2many, ...).
 It also support workflows and demo/update data.
 
-*This should help you to easily create reusable and publishable modules
+* This should help you to easily create reusable and publishable modules
 for custom configurations and demo/testing data.
 
 Usage
 =====
 How to use it:
-	Run Administration/Customization/Module Creation/Export Customizations As a Module wizard. Select datetime criteria of recording and
-	objects to be recorded and Record module.
+
+Run Administration/Customization/Module Creation/Export Customizations As a
+Module wizard. Select datetime criteria of recording and objects to be recorded
+and Record module.
 
 
 Bug Tracker
