@@ -1,4 +1,4 @@
-from odoo import fields, models, api
+from odoo import fields, models, api, _
 from odoo.exceptions import UserError
 
 
@@ -68,7 +68,7 @@ class ProductPriceUpdate(models.TransientModel):
 
         # Si tilde filtrar por categorias debo poner alguna
         if self.category_filter and not self.category_ids:
-            raise UserError('Debe seleccionar al menos una categoria.')
+            raise UserError(_('Debe seleccionar al menos una categoria.'))
 
     def generate_select(self):
         """ selecciona los id de product_template que vamos a actualizar
