@@ -22,7 +22,6 @@ Hr Expense Improvement
 This module improves the functionality of hr expense allowing to restore an
 expense from Paid to Posted and from Posted to Approved state.
 
-
 **Table of contents**
 
 .. contents::
@@ -31,7 +30,7 @@ expense from Paid to Posted and from Posted to Approved state.
 Configuration
 =============
 
-Only install the module
+Solo instalar el modulo
 
 Usage
 =====
@@ -42,7 +41,6 @@ that works only if the payments corresponding to this expense were deleted.
 If the expense is in the published state, a "Return to Approved" button appears
 but only works if the journal items corresponding to this expense were manually
 deleted.
-
 
 Bug Tracker
 ===========

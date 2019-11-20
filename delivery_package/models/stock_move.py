@@ -22,7 +22,7 @@ class StockMove(models.Model):
     _inherit = "stock.move"
 
     packages = fields.Integer(
-        'Paquete',
+        'Bulto',
         help='Cantidad de elementos en el bulto'
     )
 

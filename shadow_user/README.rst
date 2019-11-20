@@ -29,7 +29,7 @@ Este modulo permite tener permisos especiales sobre un usuario
 Configuration
 =============
 
-Solo instalar el modulo
+Solo instalar el modulo.
 
 Usage
 =====
