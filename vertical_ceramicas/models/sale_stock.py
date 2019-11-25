@@ -144,9 +144,10 @@ class sale_order_line(osv.osv):
         data = self.calc_virtual_stock(product_id)
         ret = 'EXISTENCIAS\n' if data else ''
         for loc in data:
-            ret += u'{} {} ({} - {} + {})\n'.format(loc,
-                                                data[loc]['virtual_available'],
-                                                data[loc]['qty_available'],
-                                                data[loc]['outgoing_qty'],
-                                                data[loc]['incoming_qty'])
+                ret += u'{} {} ({} - {} + {})\n'.format(loc,
+                                                    data[loc]['virtual_available'],
+                                                    data[loc]['qty_available'],
+                                                    data[loc]['outgoing_qty'],
+                                                    data[loc]['incoming_qty'])
+        ret += u'\nCH/Stock {}'.format(product_id.ch_virtual)
         return ret
