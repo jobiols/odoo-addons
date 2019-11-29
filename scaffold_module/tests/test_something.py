@@ -34,14 +34,10 @@ class SomethingCase(TransactionCase):
 
         return super(SomethingCase, self).tearDown(*args, **kwargs)
 
-    def test_something(self):
-        """First line of docstring appears in test logs.
-
-        Other lines do not.
-
-        Any method starting with ``test_`` will be tested.
+    def test_01_something(self):
+        """TEST 01 docstring appears in test logs.
         """
-        pass
+        self.assertEqual(1, 1)
 
 
 class UICase(HttpCase):
