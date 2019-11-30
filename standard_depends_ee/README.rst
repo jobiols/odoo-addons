@@ -28,19 +28,6 @@ Contiene en las dependencias todos los modulos que se requieren.
 .. contents::
    :local:
 
-Changelog
-=========
-
-12.0.0.0.0 (2019-09-26)
-~~~~~~~~~~~~~~~~~~~~~~~
-
-* [ADD] Commit inicial
-
-12.0.0.0.0 (2019-11-04)
-~~~~~~~~~~~~~~~~~~~~~~~
-
-* [MIG] Migracion a V12
-
 Bug Tracker
 ===========
 
