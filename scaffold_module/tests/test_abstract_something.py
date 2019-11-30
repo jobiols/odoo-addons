@@ -15,7 +15,7 @@
 #
 #   Arrancar el test con:
 #
-#   oe -Q [modulo-a-testear-] -c [cliente] -d [cliente]_test
+#   oe -Q [modulo-a-testear] -c [cliente] -d [cliente]_test
 #
 
 from openerp import api, models
