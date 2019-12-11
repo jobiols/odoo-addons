@@ -2,6 +2,21 @@
 <openerp>
     <data>
 
+        <!--
+        el boton de stock ahora reporta ch_virtual
+        -->
+        <record model='ir.ui.view' id='product_normal_form_view_inh'>
+            <field name='name'>VERTICAL CERAMICAS ch/stock en boton</field>
+            <field name='model'>product.product</field>
+            <field name='inherit_id' ref='product.product_normal_form_view'/>
+            <field name='type'>form</field>
+            <field name='arch' type='xml'>
+                <xpath expr="//button[@class='oe_stat_button']/div/field" position="replace">
+                    <field name="ch_virtual"/>
+                </xpath>
+            </field>
+        </record>
+
         <!-- agrega en la ficha de producto la cantidad de producto que hay en cada caja
              pudiendo seleccionar además la unidad de medida -->
 
