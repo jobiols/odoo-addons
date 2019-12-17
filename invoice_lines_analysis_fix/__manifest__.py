@@ -20,7 +20,7 @@
 
 {
     'name': 'Invoice lines analysis FIX',
-    'version': '11.0.0.0.0',
+    'version': '13.0.0.0.0',
     'category': 'Tools',
     'summary': "Module summary",
     'author': "jeo Software",

@@ -20,7 +20,7 @@
 
 {
     'name': 'Product Create Restriction',
-    'version': '11.0.0.0.0',
+    'version': '13.0.0.0.0',
     'category': 'Tools',
     'summary': "Restrict product creation to enabled users",
     'author': "jeo Software",
@@ -32,6 +32,6 @@
     'data': [
         'security/security_groups.xml'
     ],
-    'installable': True,
+    'installable': False,
     'application': False,
 }

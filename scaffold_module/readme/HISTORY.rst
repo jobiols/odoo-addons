@@ -8,7 +8,7 @@
   forbidden and will likely break the structure of the README.rst
   or other documents where this fragment is included. ]
 
-11.0.x.y.z (YYYY-MM-DD)
+13.0.x.y.z (YYYY-MM-DD)
 ~~~~~~~~~~~~~~~~~~~~~~~
 
 * [BREAKING] Breaking changes come first.
@@ -18,7 +18,7 @@
 * [FIX] Correct this.
   (`#71 <https://github.com/OCA/repo/issues/71>`_)
 
-11.0.x.y.z (YYYY-MM-DD)
+13.0.x.y.z (YYYY-MM-DD)
 ~~~~~~~~~~~~~~~~~~~~~~~
 
 * ...

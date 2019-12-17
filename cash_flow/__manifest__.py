@@ -20,7 +20,7 @@
 
 {
     'name': 'Cash Flow',
-    'version': '11.0.0.0.0',
+    'version': '13.0.0.0.0',
     'category': 'Accounting',
     'summary': "Cash Flow Management",
     'author': "NTSystemWork",
@@ -45,6 +45,6 @@
         'data/configuration.yml',
         'data/journals.xml',
     ],
-    'installable': True,
+    'installable': False,
     'application': False,
 }

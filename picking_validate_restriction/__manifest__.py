@@ -20,7 +20,7 @@
 
 {
     'name': 'Picking validate Restriction',
-    'version': '11.0.0.0.0',
+    'version': '13.0.0.0.0',
     'category': 'Tools',
     'summary': "Restrict validate picking to enabled users",
     'author': "jeo Software",
@@ -33,6 +33,6 @@
         'security/security_groups.xml',
         'views/stock_view_picking.xml'
     ],
-    'installable': True,
+    'installable': False,
     'application': False,
 }

@@ -52,7 +52,7 @@ Se preve el agregado de una vista para visualizar la cola de proceso
 Changelog
 =========
 
-11.0.0.0.0 (2019-07-18)
+13.0.0.0.0 (2019-07-18)
 ~~~~~~~~~~~~~~~~~~~~~~~
 
 * [ADD] Creacion del modulo

@@ -16,7 +16,7 @@
 ##############################################################################
 {
     'name': 'Exportacion sicore',
-    'version': '11.0.0.0.0',
+    'version': '13.0.0.0.0',
     'author':  'Moldeo Interactive, jeo Soft',
     'category': 'Accounting',
     'sequence': 14,
@@ -35,7 +35,7 @@
     ],
     'test': [
     ],
-    'installable': True,
+    'installable': False,
     'auto_install': False,
     'application': False,
 }

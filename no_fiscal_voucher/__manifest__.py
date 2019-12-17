@@ -3,7 +3,7 @@
 {
     "name": "Recibo no Fiscal",
     "summary": "Permite generar recibos con otra secuencia",
-    "version": "11.0.0.0.0",
+    "version": "13.0.0.0.0",
     "development_status": "Alpha",
     "category": "accounting",
     "website": "http://jeosoft.com.ar",

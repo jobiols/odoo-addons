@@ -20,7 +20,7 @@
 
 {
     'name': 'Multiple discounts on invoices',
-    'version': '11.0.0.0.3',
+    'version': '13.0.0.0.3',
     'category': 'Tools',
     'summary': "Add three discount columns in invoices",
     'author': "jeo Software",
@@ -37,7 +37,7 @@
     ],
     'demo': [
     ],
-    'installable': True,
+    'installable': False,
     'auto_install': False,
     'application': False,
 }

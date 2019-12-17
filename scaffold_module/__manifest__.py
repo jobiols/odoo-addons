@@ -3,7 +3,7 @@
 {
     "name": "Module name",
     "summary": "Module summary",
-    "version": "11.0.0.0.0",
+    "version": "13.0.0.0.0",
     "development_status": "Alpha|Beta|Production/Stable|Mature",
     "category": "Uncategorized",
     "website": "http://jeosoft.com.ar",

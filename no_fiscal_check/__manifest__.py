@@ -3,7 +3,7 @@
 {
     "name": "Cheques no fiscales",
     "summary": "Permite poner una marca a los cheques no fiscales para diferenciarlos",
-    "version": "11.0.0.0.0",
+    "version": "13.0.0.0.0",
     "development_status": "Alpha",
     "category": "accounting",
     "website": "http://jeosoft.com.ar",

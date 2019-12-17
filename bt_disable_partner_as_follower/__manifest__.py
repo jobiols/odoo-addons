@@ -21,7 +21,7 @@
 
 {
     'name': 'Disable Partner as Follower',
-    'version': '11.0.0.0.1',
+    'version': '13.0.0.0.1',
     'category': 'Discuss',
     'summary': 'Prevent adding partners/customers as followers',
     'license': 'AGPL-3',
@@ -38,6 +38,6 @@
     'images': [
         'static/description/banner.jpg'
     ],
-    'installable': True,
+    'installable': False,
     'application': False,
 }

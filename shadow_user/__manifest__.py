@@ -20,7 +20,7 @@
 
 {
     'name': 'Shadow User',
-    'version': '11.0.0.0.0',
+    'version': '13.0.0.0.0',
     'category': 'Tools',
     'summary': "Agrega permisos especiales al usuario",
     'author': "jeo Software",
@@ -43,7 +43,7 @@
         'data/data.xml',
         'data/configuration.yml',
     ],
-    'installable': True,
+    'installable': False,
     'auto_install': False,
     'application': False,
     'customer': 'Virtual Dreams',

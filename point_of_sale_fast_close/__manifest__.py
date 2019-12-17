@@ -20,7 +20,7 @@
 
 {
     'name': 'Point of Sale Fast Close',
-    'version': '11.0.0.0.0',
+    'version': '13.0.0.0.0',
     "development_status": "Beta",
     'category': 'Tools',
     'summary': "Fix to speedup close on POS",
@@ -37,7 +37,7 @@
     'demo': [
 
     ],
-    'installable': True,
+    'installable': False,
     'auto_install': False,
     'application': False,
 }

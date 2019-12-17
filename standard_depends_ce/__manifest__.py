@@ -20,7 +20,7 @@
 
 {
     'name': 'Standard Dependencies CE',
-    'version': '11.0.0.1.0',
+    'version': '13.0.0.1.0',
     'category': 'Tools',
     'summary': "Add standard dependecies for Argentinian localization",
     'author': "jeo Software",
@@ -60,7 +60,7 @@
     ],
     'data': [],
     'demo': [],
-    'installable': True,
+    'installable': False,
     'auto_install': False,
     'application': False,
 }

@@ -3,7 +3,7 @@
 {
     "name": "Bultos en Remitos",
     "summary": "Agrega bultos en las lineas de remito",
-    "version": "11.0.0.0.0",
+    "version": "13.0.0.0.0",
     "development_status": "Alpha",
     "category": "Inventory",
     "website": "http://jeosoft.com.ar",
