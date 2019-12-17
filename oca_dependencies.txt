@@ -1,4 +1,4 @@
-odoo-argentina https://github.com/ingadhoc/odoo-argentina.git 11.0
-argentina-reporting https://github.com/ingadhoc/argentina-reporting.git 11.0
-server-brand https://github.com/oca/server-brand.git 11.0
-product https://github.com/ingadhoc/product.git 11.0
+#odoo-argentina https://github.com/ingadhoc/odoo-argentina.git 11.0
+#argentina-reporting https://github.com/ingadhoc/argentina-reporting.git 11.0
+#server-brand https://github.com/oca/server-brand.git 11.0
+#product https://github.com/ingadhoc/product.git 11.0
