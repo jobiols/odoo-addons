@@ -38,6 +38,7 @@
         'l10n_ar_account_withholding',  # Retenciones
         'account_accountant',           # permisos para contabilidad
         'l10n_ar_aeroo_stock',   # remito argentino
+        'l10n_ar_aeroo_sale',  # presupuesto (orden de venta) argentino
 
         #'base_currency_inverse_rate',  # poner el tipo de cambio en Argentino chequear que no ponga multicurrency de prepo
 
