@@ -1,0 +1,22 @@
+<?xml version="1.0"?>
+<openerp>
+<data noupdate="1">
+
+    <record id="aeroo_sample_report_id" model="ir.actions.report">
+        <field name="name">Sample Report</field>
+        <field name="type">ir.actions.report</field>
+        <field name="model">res.partner</field>
+        <field name="report_name">sample_report</field>
+        <field name="report_type">aeroo</field>
+        <field name="in_format">oo-odt</field>
+        <field name="parser_state">default</field>
+        <field name="binding_model_id" ref="base.model_res_partner"/>
+        <field name="parser_state">loc</field>
+        <field name="parser_loc">report_aeroo_sample/report/parser.py</field>
+        <field name="report_file">report_aeroo_sample/report/template.odt</field>
+        <field name="tml_source">file</field>
+    </record>
+
+</data>
+</openerp>
+
