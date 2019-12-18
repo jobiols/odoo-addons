@@ -44,9 +44,9 @@ class DocsConfigInstaller(models.TransientModel):
             self._logo_image = b64encode(im.read())
             return self._logo_image
     
-    @api.one
-    def _get_image_fn(recs):
-        recs.config_logo = recs._get_image()
+    def _get_image_fn(self):
+        for rec in self:
+            rec.config_logo = rec._get_image()
     
     ### Fields
     enabled = fields.Boolean('Enabled', default=False)

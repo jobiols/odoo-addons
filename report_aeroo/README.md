@@ -1,5 +1,5 @@
-This is ALPHA version of Aeroo Reports for Odoo v11
---------------------------------------------------------------------------------
+This is ALPHA version of Aeroo Reports for Odoo v13
+---------------------------------------------------
 
 Enterprise grade reporting solution for Odoo
 --------------------------------------------------------------------------------

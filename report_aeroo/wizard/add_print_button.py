@@ -44,11 +44,10 @@ class aeroo_add_print_button(models.TransientModel):
         else:
             ids = irval_mod.search([('value','=',report.type+','+str(report.id))])
             if not ids:
-	            return 'add'
+                return 'add'
             else:
-	            return 'exist'
-    
-    @api.multi
+                return 'exist'
+
     def do_action(self):
         irval_mod = self.env.get('ir.values')
         this = self.browse(cr, uid, ids[0], context=context)
