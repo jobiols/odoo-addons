@@ -2,7 +2,7 @@
 
 {
     'name': 'Record and Create Modules',
-    'version': '12.0.1.0.0',
+    'version': '13.0.0.0.0',
     'category': 'Tools',
     'license': 'AGPL-3',
     'author': 'Serpent Consulting Services Pvt. Ltd.',
@@ -17,5 +17,6 @@
         'wizard/base_module_record_object_view.xml',
         'wizard/base_module_record_data_view.xml',
     ],
-    'installable': True,
+    'installable': False,
+    # Este modulo requiere migracion.
 }

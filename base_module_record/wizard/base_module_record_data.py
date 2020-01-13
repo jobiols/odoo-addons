@@ -33,7 +33,6 @@ class BaseModuleData(models.TransientModel):
         res_xml = self.env['ir.module.record'].generate_xml()
         return {'res_text': res_xml}
 
-    @api.multi
     def record_objects(self):
         data = self.read([])[0]
         check_date = data['check_date']

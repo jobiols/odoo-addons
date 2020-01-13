@@ -32,7 +32,6 @@ class BaseModuleRecord(models.TransientModel):
                                     ], string='Records only', required=True,
                                    default='created')
 
-    @api.multi
     def record_objects(self):
         data = self.read([])[0]
         check_date = data['check_date']
