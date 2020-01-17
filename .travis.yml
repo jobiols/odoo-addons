@@ -1,4 +1,4 @@
-dist: "stretch"
+dist: "trusty"
 language: python
 sudo: false
 
@@ -9,7 +9,7 @@ cache:
     - $HOME/.cache/pip
 
 python:
-  - "3.5"
+  - "3.6"
 
 git:
   depth: 1
