@@ -3,7 +3,7 @@
 # For copyright and license notices, see __openerp__.py file in module root
 # directory
 ##############################################################################
-from openerp import models, fields, api, _
+from openerp import models, fields, api
 import base64
 from datetime import datetime
 import logging
@@ -51,7 +51,6 @@ class AccountVaLedger(models.Model):
             return 'IIBB'
         else:
             return 'Desconocido'
-
 
     @api.multi
     def compute_s_perception_data(self):
