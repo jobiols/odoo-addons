@@ -18,8 +18,8 @@
 #   oe -Q [modulo-a-testear] -c [cliente] -d [cliente]_test
 #
 
-from openerp import api, models
-from openerp.tests.common import SingleTransactionCase
+from odoo import api, models
+from odoo.tests.common import SingleTransactionCase
 
 
 class AbstractSomethingTester(models.Model):
