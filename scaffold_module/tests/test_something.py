@@ -18,7 +18,7 @@
 #   oe -Q [modulo-a-testear-] -c [cliente] -d [cliente]_test
 #
 
-from openerp.tests.common import HttpCase, TransactionCase
+from odoo.tests.common import HttpCase, TransactionCase
 
 
 class SomethingCase(TransactionCase):

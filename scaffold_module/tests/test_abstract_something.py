@@ -19,8 +19,8 @@
 #
 
 
-from openerp import api, models
-from openerp.tests.common import SingleTransactionCase
+from odoo import api, models
+from odoo.tests.common import SingleTransactionCase
 
 
 class AbstractSomethingTester(models.Model):
