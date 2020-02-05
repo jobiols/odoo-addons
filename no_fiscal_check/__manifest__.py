@@ -19,5 +19,7 @@
     "data": [
         "views/account_payment_view.xml",
         "views/account_check_view.xml",
-    ]
+    ],
+    'installable': False,
+
 }

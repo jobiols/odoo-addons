@@ -20,5 +20,7 @@
     "data": [
         'report/invoice_report.xml',
         'views/stock_move_view.xml'
-    ]
+    ],
+    'installable': False,
+
 }
