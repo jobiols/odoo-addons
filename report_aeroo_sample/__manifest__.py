@@ -15,7 +15,7 @@
     "depends": ["base", "report_aeroo"],
     "category": "Generic Modules/Aeroo Reporting",
     "data": ["report/report_sample.xml"],
-    "installable": False,
+    "installable": True,
     'application': True,
     "license": "GPL-3 or any later version",
 }

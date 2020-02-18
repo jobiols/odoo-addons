@@ -22,5 +22,7 @@
     "demo": [
     ],
     "qweb": [
-    ]
+    ],
+    'installable': False,
+
 }
