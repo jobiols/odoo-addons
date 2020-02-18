@@ -25,7 +25,7 @@
              "security/ir.model.access.csv"
              ],
     "license" : "GPL-3 or any later version",
-    'installable': True,
+    'installable': False,
     'active': False,
     'application': True,
     'auto_install': False,
