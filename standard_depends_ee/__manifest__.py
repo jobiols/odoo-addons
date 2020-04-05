@@ -29,8 +29,8 @@
     'depends': [
         # para la localizacion argentina version Enterprise
         'l10n_ar',  # esto se instala solo
-        'account_payment_group',
-        'account_check',
+#        'account_payment_group',
+#        'account_check',
         #'l10n_ar_base',  # esto se instala solo
         #'l10n_ar_account',  # esto se instala solo
         #'l10n_ar_afipws_fe',  # Factura Electrónica Argentina
