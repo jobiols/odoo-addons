@@ -5,26 +5,26 @@ from openerp import models, fields, api
 
 class CursoWooCateg(models.Model):
     _name = 'curso.woo.categ'
+
     # esto hace que el name del registro sea path
     _rec_name = 'path'
     _order = 'woo_idx,slug'
 
-
     path = fields.Char(
-            compute="get_path",
-            store=True
+        compute="get_path",
+        store=True
     )
 
     nube_id = fields.Integer(
     )
 
     woo_ids = fields.Char(
-            compute="get_woo_ids"
+        compute="get_woo_ids"
     )
 
     woo_idx = fields.Integer(
-            compute="get_woo_idx",
-            store=True
+        compute="get_woo_idx",
+        store=True
     )
 
     slug = fields.Char(
@@ -34,14 +34,13 @@ class CursoWooCateg(models.Model):
     )
 
     parent = fields.Many2one(
-            'curso.woo.categ',
-            string="Parent"
+        'curso.woo.categ',
+        string="Parent"
     )
     published = fields.Boolean(
         'Publicado en tienda nube',
         help=u'Indica si se publica en tienda nube'
     )
-
 
     @api.multi
     def _path(self):

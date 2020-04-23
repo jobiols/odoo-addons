@@ -1,11 +1,7 @@
 # -*- coding: utf-8 -*-
 # Part of Odoo. See LICENSE file for full copyright and licensing details.
 
-from datetime import datetime
-
-import markdown
 from openerp import models, fields, api
-from openerp.exceptions import ValidationError
 
 
 class ProductProduct(models.Model):
@@ -22,15 +18,76 @@ class ProductProduct(models.Model):
     )
 
     published = fields.Boolean(
-        'Publicado en tienda nube',
-        help=u'Indica si se publica en tienda nube'
+        string='Publicar en tienda nube',
+        help=u'Al tildarlo se permite la publicacion en la tienda'
+    )
+    do_published = fields.Boolean(
+        string='Verificacion de publicado',
+        help='Indica si se publica realmente, y es verdadero si comple con:\n'
+             'Esta tildado para publicacion \n'
+             'Tiene una foto\n'
+             'Tiene descripcion\n'
+             'Tiene categorias nube\n'
+             'Estado es Normal',
+        compute='_compute_do_published',
+        readonly=True,
+        store=True
     )
     promotional_price = fields.Float(
         'Precio Promocional',
         digits=(16, 2),
-        help=u'Precio promocional para tienda nube, si se pone un precio aca"'
-             u'aparece como promocion, con precio publico tachado'
+        help=u'Precio promocional para tienda nube, si se pone un precio aca '
+             u'aparece como promocion, con precio publico tachado.'
     )
+    witness_quantity = fields.Float(
+        help='Cantidad de producto testigo, cuando se hace una subida a la '
+             'nube se verifica si cambio y si es asi se sube el producto.'
+    )
+    stock_match = fields.Boolean(
+        help='indica que el stock virtual y el que se chequeo la ultima vez '
+             'son iguales',
+        compute='_compute_stock_match',
+        store=True
+    )
+
+    @api.multi
+    @api.depends('witness_quantity', 'virtual_available')
+    def _compute_stock_match(self):
+        for rec in self:
+            match = rec.witness_quantity == rec.virtual_available
+            rec.stock_match = match
+
+    @api.model
+    def prepare_nube_upload(self):
+        """ Prepara el upload revisando los registros que tienen
+            witness_quantity distinto de virtual_available, si es asi los
+            igualan y le actualizan write_date a now
+        """
+        print('----------------------------------------------------')
+        product_obj = self.env['product.product']
+        to_prepare = product_obj.search([('stock_match', '=', False)],
+                                        limit=100)
+        now = fields.datetime.now().strftime('%Y-%m-%d %H:%M:%S')
+        for rec in to_prepare:
+            print(rec.default_code, rec.virtual_available)
+            rec.write({
+                'write_date': now,
+                'witness_quantity': rec.virtual_available
+            })
+        print('----------------------------------------------------')
+        return len(to_prepare)
+
+    @api.multi
+    @api.depends('published', 'image_medium', 'description', 'woo_categ_ids',
+                 'state')
+    def _compute_do_published(self):
+        for ret in self:
+            ret.do_published = \
+                ret.published and \
+                ret.image_medium and \
+                ret.description and \
+                ret.woo_categ_ids and \
+                ret.state == 'sellable'
 
     @api.multi
     def copy(self, default=None):
