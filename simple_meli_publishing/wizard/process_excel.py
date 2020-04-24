@@ -34,7 +34,7 @@ class SimpleMeliPublishing(models.TransientModel):
         default="load"
     )
     errors = fields.Html(
-        default='<h1>We found the following errors</h1>',
+        default=_('<h1>We found the following errors</h1>'),
         readonly=True
     )
 
@@ -54,10 +54,9 @@ class SimpleMeliPublishing(models.TransientModel):
 
     @api.multi
     def process_data(self, fp_name):
-        PUB_CODE_COL = 2
-        PRICE_COL = 7
-        SKU_COL = 1
-        STOCK_COL = 10
+        PUB_CODE_COL = 1
+        PRICE_COL = 13
+        STOCK_COL = 12
         FIRST_ROW = 4
 
         product_obj = self.env['product.product']
@@ -72,9 +71,6 @@ class SimpleMeliPublishing(models.TransientModel):
                 meli_code = sheet.cell(column=PUB_CODE_COL, row=row).value
                 prod = product_obj.search([('meli_code', '=', meli_code)])
                 if prod:
-                    sheet.cell(column=SKU_COL,
-                               row=row,
-                               value=prod.default_code)
                     sheet.cell(column=PRICE_COL,
                                row=row,
                                value=prod.final_price)

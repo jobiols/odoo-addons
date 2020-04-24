@@ -96,10 +96,15 @@ class InvoiceReport(models.AbstractModel):
             # obtener una lista con los medios de pago que pagaron la fac
             journal_data = self._get_journal_data(invoice)
 
+            # tener en cuenta que las facturas pueden venir en otra moneda.
+            inv_c = invoice.currency_id
+            comp_c = self.env.user.currency_id
+            total = inv_c.compute(invoice.amount_total_signed, comp_c)
+
             # aca va la factura con el primer medio de pago
             inv = {
                 'number': invoice.display_name,
-                'total': invoice.amount_total_signed,
+                'total': total,
                 'journal': journal_data[0].get('journal_name', ''),
                 'date': journal_data[0].get('date', ''),
                 'paid': journal_data[0].get('amount', 0),
@@ -159,7 +164,12 @@ class InvoiceReport(models.AbstractModel):
         res = 0
         for inv in invoices:
             if inv['journal'] == CUENTA_CORRIENTE:
-                res += inv['residual']
+                if inv['number']:
+                    # si es una factura sumo el residual pero
+                    res += inv['residual']
+                else:
+                    # si es pago parcial sumo el paid
+                    res += inv['paid']
         return res
 
     @staticmethod

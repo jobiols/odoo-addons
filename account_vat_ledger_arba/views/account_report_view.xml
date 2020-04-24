@@ -1,0 +1,59 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<openerp>
+    <data>
+        <!--  agregar una oreja RET/PERC y el boton correspondiente -->
+
+        <record id='account_vat_ledger_form' model='ir.ui.view'>
+            <field name="model">account.vat.ledger</field>
+            <field name="inherit_id"
+                   ref="l10n_ar_account_vat_ledger.account_vat_ledger_form"/>
+            <field name="name">ACCOUNT VAT LEDGER RET/PERC computar y bajar archivos
+            </field>
+            <field name='arch' type='xml'>
+                <field name="type" invisible="0"/>
+                <xpath expr="//page[@name='notes']" position="after">
+                    <page name="RET/PERC" string="RET/PERC">
+                        <button name="compute_s_withholding_data"
+                                type="object"
+                                string="Computar Retenciones Sufridas"
+                                attrs="{'invisible':[('type','!=','sale'),
+                                                     ('state','=','draft')]}"
+                        />
+                        <button name="compute_s_perception_data"
+                                type="object"
+                                string="Computar Percepciones Sufridas"
+                                attrs="{'invisible':[('type','!=','purchase'),
+                                                     ('state','=','draft')]}"
+                        />
+                        <group col="4">
+                            <field name="withholdings_s_filename" invisible="1"/>
+                            <field name="perceptions_s_filename" invisible="1"/>
+
+                            <field name="withholdings_s_file"
+                                filename="withholdings_s_filename"
+                                attrs="{'invisible':[('type','!=','sale'),
+                                                     ('state','=','draft')]}"
+                            />
+
+                            <field name="perceptions_s_file"
+                                   filename="perceptions_s_filename"
+                                   attrs="{'invisible':[('type','!=','purchase'),
+                                                     ('state','=','draft')]}"/>
+                        </group>
+                        <group col="1">
+                            <field name="REGINFO_S_WITHHOLDINGS"
+                                   attrs="{'invisible':[('type','!=','sale'),
+                                                     ('state','=','draft')]}"
+                            />
+
+                            <field name="REGINFO_S_PERCEPTIONS"
+                                   attrs="{'invisible':[('type','!=','purchase'),
+                                                     ('state','=','draft')]}"
+                            />
+                        </group>
+                    </page>
+                </xpath>
+            </field>
+        </record>
+    </data>
+</openerp>
