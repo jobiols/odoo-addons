@@ -46,7 +46,7 @@
         'disable_odoo_online',
         'res_config_settings_enterprise_remove',
         'server_mode',          # server_mode = "test" en desarrollo
-        'database_tools',
+        'auto_backup', # poner el backup en: /var/odoo/backups/
         'due_payments_argentina_fix',  # pone el nro de factura AFIP
         'account_statement_move_import',  # agrega el boton importar apuntes
 
