@@ -3,10 +3,10 @@
 
 
 def migrate(cr, version):
-    """ Forzar recalculo de la columna
+    """ Forzar recalculo de stock_match
     """
     cr.execute(
         """
-        ALTER TABLE curso_woo_categ
-          DROP COLUMN woo_idx
+        ALTER TABLE product_product
+          DROP COLUMN stock_match
         """)
