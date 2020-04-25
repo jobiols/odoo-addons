@@ -11,7 +11,8 @@
     ],
     'data': [
         'views/product_view.xml',
-        'views/woo_categ_view.xml'
+        'views/woo_categ_view.xml',
+        'security/ir.model.access.csv'
     ],
     'test': [
     ],
