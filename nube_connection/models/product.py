@@ -2,6 +2,7 @@
 # Part of Odoo. See LICENSE file for full copyright and licensing details.
 
 from openerp import models, fields, api
+from openerp.tools.float_utils import float_round
 import logging
 
 _logger = logging.getLogger(__name__)
@@ -42,44 +43,60 @@ class ProductProduct(models.Model):
         help=u'Precio promocional para tienda nube, si se pone un precio aca '
              u'aparece como promocion, con precio publico tachado.'
     )
-    witness_quantity = fields.Float(
-        help='Cantidad de producto testigo, cuando se hace una subida a la '
-             'nube se verifica si cambio y si es asi se sube el producto.'
-    )
-    stock_match = fields.Boolean(
-        help='indica que el stock virtual y el que se chequeo la ultima vez '
-             'son iguales',
-        compute='_compute_stock_match',
-        store=True
-    )
 
-    @api.multi
-    @api.depends('witness_quantity', 'virtual_available')
-    def _compute_stock_match(self):
-        for rec in self:
-            match = rec.witness_quantity == rec.virtual_available
-            rec.stock_match = match
+    #######################################################################
+    # Esto es lo que calcula el virtual available
+    #######################################################################
+    def _product_available(self, cr, uid, ids, field_names=None, arg=False, context=None):
+        context = context or {}
+        field_names = field_names or []
 
-    @api.model
-    def prepare_nube_upload(self):
-        """ Prepara el upload revisando los registros que tienen
-            witness_quantity distinto de virtual_available, si es asi los
-            igualan y le actualizan write_date a now
-        """
-        _logger.info('Prepare Nube Uplad')
+        domain_products = [('product_id', 'in', ids)]
+        domain_quant, domain_move_in, domain_move_out = [], [], []
+        domain_quant_loc, domain_move_in_loc, domain_move_out_loc = self._get_domain_locations(cr, uid, ids, context=context)
+        domain_move_in += self._get_domain_dates(cr, uid, ids, context=context) + [('state', 'not in', ('done', 'cancel', 'draft'))] + domain_products
+        domain_move_out += self._get_domain_dates(cr, uid, ids, context=context) + [('state', 'not in', ('done', 'cancel', 'draft'))] + domain_products
+        domain_quant += domain_products
 
-        product_obj = self.env['product.product']
-        to_prepare = product_obj.search([('stock_match', '=', False)],
-                                        limit=100)
-        now = fields.datetime.now().strftime('%Y-%m-%d %H:%M:%S')
-        for rec in to_prepare:
-            _logger.info('%s qty=%s' % (rec.default_code,
-                                        rec.virtual_available))
-            rec.write({
-                'write_date': now,
-                'witness_quantity': rec.virtual_available
-            })
-        return len(to_prepare)
+        if context.get('lot_id'):
+            domain_quant.append(('lot_id', '=', context['lot_id']))
+        if context.get('owner_id'):
+            domain_quant.append(('owner_id', '=', context['owner_id']))
+            owner_domain = ('restrict_partner_id', '=', context['owner_id'])
+            domain_move_in.append(owner_domain)
+            domain_move_out.append(owner_domain)
+        if context.get('package_id'):
+            domain_quant.append(('package_id', '=', context['package_id']))
+
+        domain_move_in += domain_move_in_loc
+        domain_move_out += domain_move_out_loc
+        moves_in = self.pool.get('stock.move').read_group(cr, uid, domain_move_in, ['product_id', 'product_qty'], ['product_id'], context=context)
+        moves_out = self.pool.get('stock.move').read_group(cr, uid, domain_move_out, ['product_id', 'product_qty'], ['product_id'], context=context)
+
+        domain_quant += domain_quant_loc
+        quants = self.pool.get('stock.quant').read_group(cr, uid, domain_quant, ['product_id', 'qty'], ['product_id'], context=context)
+        quants = dict(map(lambda x: (x['product_id'][0], x['qty']), quants))
+
+        moves_in = dict(map(lambda x: (x['product_id'][0], x['product_qty']), moves_in))
+        moves_out = dict(map(lambda x: (x['product_id'][0], x['product_qty']), moves_out))
+        res = {}
+        for product in self.browse(cr, uid, ids, context=context):
+            id = product.id
+            qty_available = float_round(quants.get(id, 0.0), precision_rounding=product.uom_id.rounding)
+            incoming_qty = float_round(moves_in.get(id, 0.0), precision_rounding=product.uom_id.rounding)
+            outgoing_qty = float_round(moves_out.get(id, 0.0), precision_rounding=product.uom_id.rounding)
+            virtual_available = float_round(quants.get(id, 0.0) + moves_in.get(id, 0.0) - moves_out.get(id, 0.0), precision_rounding=product.uom_id.rounding)
+            res[id] = {
+                'qty_available': qty_available,
+                'incoming_qty': incoming_qty,
+                'outgoing_qty': outgoing_qty,
+                'virtual_available': virtual_available,
+            }
+
+        replication = self.pool.get('nube.replication')
+        replication.new_record(cr, uid, ids, self._name, ids[0])
+
+        return res
 
     @api.multi
     @api.depends('published', 'image_medium', 'description', 'woo_categ_ids',
@@ -113,4 +130,13 @@ class ProductProduct(models.Model):
             for wc in prod.woo_categ_ids:
                 ret.append(wc.nube_id)
 
+        return ret
+
+    @api.multi
+    def write(self, vals):
+        """ al salvar registro en nube.replicacion que fue cambiado.
+        """
+        replication = self.env['nube.replication']
+        replication.new_record(self._name, self.id)
+        ret = super(ProductProduct, self).write(vals)
         return ret

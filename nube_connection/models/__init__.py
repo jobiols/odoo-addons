@@ -3,3 +3,4 @@
 
 from . import product
 from . import woo_categ
+from . import replication
