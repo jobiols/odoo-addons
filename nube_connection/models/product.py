@@ -2,6 +2,9 @@
 # Part of Odoo. See LICENSE file for full copyright and licensing details.
 
 from openerp import models, fields, api
+import logging
+
+_logger = logging.getLogger(__name__)
 
 
 class ProductProduct(models.Model):
@@ -63,18 +66,19 @@ class ProductProduct(models.Model):
             witness_quantity distinto de virtual_available, si es asi los
             igualan y le actualizan write_date a now
         """
-        print('----------------------------------------------------')
+        _logger.info('Prepare Nube Uplad')
+
         product_obj = self.env['product.product']
         to_prepare = product_obj.search([('stock_match', '=', False)],
                                         limit=100)
         now = fields.datetime.now().strftime('%Y-%m-%d %H:%M:%S')
         for rec in to_prepare:
-            print(rec.default_code, rec.virtual_available)
+            _logger.info('%s qty=%s' % (rec.default_code,
+                                        rec.virtual_available))
             rec.write({
                 'write_date': now,
                 'witness_quantity': rec.virtual_available
             })
-        print('----------------------------------------------------')
         return len(to_prepare)
 
     @api.multi
