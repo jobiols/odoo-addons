@@ -45,7 +45,10 @@ class ProductProduct(models.Model):
     )
 
     #######################################################################
-    # Esto es lo que calcula el virtual available
+    # Esto es lo que calcula el virtual available, se le agrega codigo para
+    # la replicacion al final
+    # No pude hacer funcionar el super, por problemas con el api viejas asi
+    # que tuve que copiar el metodo completo y agregarle el codigo al final
     #######################################################################
     def _product_available(self, cr, uid, ids, field_names=None, arg=False, context=None):
         context = context or {}
@@ -93,9 +96,13 @@ class ProductProduct(models.Model):
                 'virtual_available': virtual_available,
             }
 
-        replication = self.pool.get('nube.replication')
-        replication.new_record(cr, uid, ids, self._name, ids[0])
-
+        # la parte de arriba es copia textual del metodo original
+        # luego, si el record tiene el do_published lo registro para replicar
+        prod_obj = self.pool.get('product.product')
+        prod = prod_obj.browse(cr, uid, ids)
+        if prod.do_published:
+            replication = self.pool.get('nube.replication')
+            replication.new_record(cr, uid, ids, self._name, ids[0])
         return res
 
     @api.multi
@@ -134,9 +141,10 @@ class ProductProduct(models.Model):
 
     @api.multi
     def write(self, vals):
-        """ al salvar registro en nube.replicacion que fue cambiado.
+        """ Registrar el registro para replicar si corresponde
         """
-        replication = self.env['nube.replication']
-        replication.new_record(self._name, self.id)
+        if self.do_published:
+            replication = self.env['nube.replication']
+            replication.new_record(self._name, self.id)
         ret = super(ProductProduct, self).write(vals)
         return ret
