@@ -99,10 +99,12 @@ class ProductProduct(models.Model):
         # la parte de arriba es copia textual del metodo original
         # luego, si el record tiene el do_published lo registro para replicar
         prod_obj = self.pool.get('product.product')
-        prod = prod_obj.browse(cr, uid, ids)
-        if prod.do_published:
-            replication = self.pool.get('nube.replication')
-            replication.new_record(cr, uid, ids, self._name, ids[0])
+        replication = self.pool.get('nube.replication')
+        prods = prod_obj.browse(cr, uid, ids)
+        for prod in prods:
+            if prod.do_published:
+                replication.new_record(cr, uid, ids, self._name, prod.id)
+
         return res
 
     @api.multi
