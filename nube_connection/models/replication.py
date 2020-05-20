@@ -1,28 +1,24 @@
 # For copyright and license notices, see __manifest__.py file in module root
 
 from openerp import models, fields, api
-import logging
-
-_logger = logging.getLogger(__name__)
 
 
 class NubeReplication(models.Model):
     _name = 'nube.replication'
 
-    model = fields.Char(
-
+    product_id = fields.Many2one(
+        'product.product',
+        ondelete='cascade',
+        required=True
     )
-    id_rep = fields.Integer(
-
+    published = fields.Boolean(
+        related='product_id.do_published'
     )
 
-    @api.multi
-    def new_record(self, model, id_rep):
+    def new_record(self, id_product):
         """ Agrega un registro para replicar pero sin repetirlo
         """
-        if not self.search([('model', '=', model),
-                            ('id_rep', '=', id_rep)]):
-            self.create({
-                'model': model,
-                'id_rep': id_rep
-            })
+        replic_obj = self.env['nube.replication']
+        rec = replic_obj.search([('product_id', '=', id_product)])
+        if not rec:
+            rec.create({'product_id': id_product})
