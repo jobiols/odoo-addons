@@ -1,6 +1,6 @@
 # For copyright and license notices, see __manifest__.py file in module root
 
-from odoo import api, fields, models, tools, _
+from odoo import fields, models
 
 
 class ProductTemplate(models.Model):
@@ -29,19 +29,20 @@ class CustomerInfo(models.Model):
     name = fields.Many2one(
         'res.partner', 'Customer',
         domain=[('customer', '=', True)],
-        ondelete='cascade', required=True,
+        ondelete='cascade',
+        required=True,
         help="Customer for this product"
     )
     product_name = fields.Char(
         'Customer Product Name',
         help="This customer's product name will be used when printing a "
-             "quotation.",
+             "quotation or picking.",
         required=True
     )
     product_code = fields.Char(
         'Customer Product Code',
         help="This customer's product code will be used when printing a "
-             "quotation.",
+             "quotation or picking.",
         required=True
     )
     product_uom = fields.Many2one(
@@ -49,7 +50,7 @@ class CustomerInfo(models.Model):
         'Customer Unit of Measure',
         readonly="1",
         related='product_tmpl_id.uom_po_id',
-        help="This comes from the product form."
+        help="This UOM comes from the product form."
     )
     company_id = fields.Many2one(
         'res.company',

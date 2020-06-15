@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+<!-- Poner el nombre del producto para el cliente -->
+<record id="view_picking_form" model="ir.ui.view">
+    <field name="name">CUSTOMER PRODUCT NAMES custom product name</field>
+    <field name="model">stock.picking</field>
+    <field name="inherit_id" ref="stock.view_picking_form"/>
+    <field name="arch" type="xml">
+        <xpath expr="//tree/field[@name='name']" position="attributes">
+            <attribute name="invisible">0</attribute>
+        </xpath>
+    </field>
+</record>
+
+</odoo>

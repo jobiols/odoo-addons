@@ -20,18 +20,22 @@
 
 {
     'name': 'Customer product names',
-    'version': '11.0.0.0.0',
+    'version': '11.0.0.1.0',
     'category': 'Tools',
-    'summary': "Permite tener nombres de productos distintos por cliente",
+    'summary': "Permite tener nombres de productos distintos por cliente que "
+               "se ven en las ordenes de venta y en los remitos",
     'author': "jeo Software",
+    "development_status": "Production/Stable",
     'website': 'http://github.com/jobiols/module-repo',
     'license': 'AGPL-3',
     'depends': [
         'product',
-        'sale'
+        'sale',
+        'stock'
     ],
     'data': [
         'views/product.xml',
+        'views/stock_picking_form.xml',
         'security/ir.model.access.csv'
     ],
     'demo': [

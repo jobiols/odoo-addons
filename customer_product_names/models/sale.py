@@ -1,8 +1,8 @@
 # For copyright and license notices, see __manifest__.py file in module root
 
-from odoo.tools import DEFAULT_SERVER_DATETIME_FORMAT
 from datetime import datetime
-from odoo import api, fields, models, _
+from odoo.tools import DEFAULT_SERVER_DATETIME_FORMAT
+from odoo import api, models
 
 
 class SaleOrderLine(models.Model):
@@ -10,6 +10,11 @@ class SaleOrderLine(models.Model):
 
     @api.onchange('product_id')
     def product_id_change(self):
+        """ Cuando se selecciona un producto en la linea de factura (venta)
+            se revisa si tiene customer_ids, y si es asi se busca para el
+            cliente de esa venta cual es el nombre correcto y se lo pone en
+            el name de la linea.
+        """
         ret = super(SaleOrderLine, self).product_id_change()
 
         if self.product_id.customer_ids:
