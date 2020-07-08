@@ -64,7 +64,7 @@ class ProductProduct(models.Model):
 
     @api.multi
     @api.depends('published', 'image_medium', 'description', 'woo_categ_ids',
-                 'state')
+                 'active', 'state')
     def _compute_do_published(self):
         for ret in self:
             ret.do_published = \
@@ -72,6 +72,7 @@ class ProductProduct(models.Model):
                 ret.image_medium and \
                 ret.description and \
                 ret.woo_categ_ids and \
+                ret.active and \
                 ret.state == 'sellable'
 
     @api.multi
