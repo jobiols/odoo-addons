@@ -19,8 +19,9 @@ Recibo no Fiscal
 
 |badge1| |badge2| |badge3| 
 
-Al generar un recibo se puede seleccionar COMPROBANTE NO FISCAL y se va a
-generar un recibo con un numero de secuencia distinto.
+Al generar un recibo se puede seleccionar como talonario de recibos el que
+dice Recibo no fiscal y se va a generar un recibo con un numero de
+secuencia distinto.
 
 .. IMPORTANT::
    This is an alpha version, the data model and design can change at any time without warning.

@@ -4,6 +4,7 @@
 # maintainers tools
 # https://github.com/OCA/maintainer-tools
 #
+source /home/jobiols/.virtualenvs/oca/bin/activate
 oca-gen-addon-readme \
 	--org-name jobiols \
 	--repo-name odoo-addons \
