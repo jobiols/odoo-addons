@@ -20,7 +20,7 @@
 
 {
     'name': 'Standard Dependencies CE',
-    'version': '11.0.0.1.0',
+    'version': '11.0.0.1.1',
     'category': 'Tools',
     'summary': "Add standard dependecies for Argentinian localization",
     'author': "jeo Software",
@@ -56,8 +56,8 @@
         'account_clean_cancelled_invoice_number',  # borrar nro de factura
         'backend_theme_v11',
 
-        # fixes
-        #'invoice_lines_analysis_fix',  # corrige bug en pivot /// falla con la actualizacion
+        # corrige bug en pivot /// falla con la actualizacion
+        #'invoice_lines_analysis_fix',
     ],
     'data': [],
     'demo': [],
