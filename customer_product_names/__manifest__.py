@@ -20,7 +20,7 @@
 
 {
     'name': 'Customer product names',
-    'version': '11.0.0.1.0',
+    'version': '11.0.0.2.0',
     'category': 'Tools',
     'summary': "Permite tener nombres de productos distintos por cliente que "
                "se ven en las ordenes de venta y en los remitos",

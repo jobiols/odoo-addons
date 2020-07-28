@@ -7,9 +7,9 @@ Customer product names
    !! changes will be overwritten.                   !!
    !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 
-.. |badge1| image:: https://img.shields.io/badge/maturity-Beta-yellow.png
+.. |badge1| image:: https://img.shields.io/badge/maturity-Production%2FStable-green.png
     :target: https://odoo-community.org/page/development-status
-    :alt: Beta
+    :alt: Production/Stable
 .. |badge2| image:: https://img.shields.io/badge/licence-AGPL--3-blue.png
     :target: http://www.gnu.org/licenses/agpl-3.0-standalone.html
     :alt: License: AGPL-3
@@ -29,7 +29,9 @@ Este modulo permite tener nombres y codigos de producto distintos para cada clie
 Configuration
 =============
 
-Solo instalar el modulo
+Para que en el remito aparezca el nombre del producto definido para el cliente
+hay que modificar la linea del remito en el odt del reporte cambiando
+<line.product_id.description_picking> por <line.client_description>
 
 Usage
 =====
@@ -37,6 +39,8 @@ Usage
 ir a un formulario de producto chequear Puede ser Vendido y aparecera una lista
 donde se puede agregar el cliente y el nombre y codigo que tendra este producto
 al ser vendido a dicho cliente.
+Tambien aparecera ese nombre en el remito, aunque hay que modificar el odt.
+Ver configuracion.
 
 Bug Tracker
 ===========
