@@ -1,3 +1,6 @@
 {
-    "restructuredtext.confPath": ""
+    "restructuredtext.confPath": "",
+    "python.linting.pylintEnabled": true,
+    "python.linting.pydocstyleEnabled": false,
+    "python.linting.enabled": true
 }
