@@ -22,7 +22,7 @@
     'name': 'Standard Dependencies CE',
     'version': '13.0.0.1.0',
     'category': 'Tools',
-    'summary': "Add standard dependecies for Argentinian localization",
+    'summary': "Add standard dependecies for Argentinian localization "
                "on Community Edition",
     'author': "jeo Software",
     'website': 'http://github.com/jobiols/module-repo',
