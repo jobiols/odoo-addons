@@ -22,7 +22,7 @@
     'name': 'Standard Dependencies EE',
     'version': '13.0.0.0.0',
     'category': 'Tools',
-    'summary': "Add standard dependecies for Argentinian localization "
+    'summary': "Add standard dependecies for ADHOC Argentinian localization "
                "on Enterprise Edition",
     'author': "jeo Software",
     'website': 'http://github.com/jobiols/module-repo',
