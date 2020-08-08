@@ -106,8 +106,7 @@ class ProductProduct(models.Model):
     @api.multi
     def write(self, vals):
         ret = super(ProductProduct, self).write(vals)
-        if self.do_published:
-            self.new_replication(self.id)
+        self.new_replication(self.id)
         return ret
 
     def new_replication(self, id_product):
