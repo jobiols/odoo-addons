@@ -11,7 +11,7 @@
                ref="product.product_template_only_form_view"/>
         <field name="arch" type="xml">
             <xpath expr="//field[@name='categ_id']" position="after">
-                <field name="tag_id" widget="many2many_tags"
+                <field name="tag_ids" widget="many2many_tags"
                        options="{'color_field': 'color', 'no_create_edit': True}"
                        placeholder="Add your tag ..."/>
             </xpath>
@@ -25,8 +25,8 @@
         <field name="inherit_id" ref="product.product_template_search_view"/>
         <field name="arch" type="xml">
             <xpath expr="//field[@name='name']" position="after">
-                <field name="tag_id" string="Tag"
-                       filter_domain="[('tag_id','ilike', self)]"/>                
+                <field name="tag_ids" string="Tag"
+                       filter_domain="[('tag_ids','ilike', self)]"/>                
             </xpath>
         </field>
     </record>
@@ -40,7 +40,7 @@
             <xpath expr="//strong[hasclass('o_kanban_record_title')]"
                    position="after">
                 <span class="oe_kanban_list_many2many">
-                    <field name="tag_id" widget="many2many_tags"
+                    <field name="tag_ids" widget="many2many_tags"
                            options="{'color_field': 'color'}"/>
                 </span>
             </xpath>
@@ -52,7 +52,7 @@
         <field name="name">Product Tags</field>
         <field name="model">product.tag</field>
         <field name="arch" type="xml">
-            <form string="Contact Tag">
+            <form string="Product Tag">
                 <group col="4">
                     <field name="name"/>
                     <field name="active"/>

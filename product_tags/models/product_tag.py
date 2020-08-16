@@ -21,7 +21,7 @@ class ProductTag(models.Model):
     )
     parent_id = fields.Many2one(
         'product.tag',
-        string='Parent category',
+        string='Parent Tag',
         index=True,
         ondelete='cascade'
     )
@@ -40,7 +40,7 @@ class ProductTag(models.Model):
     )
     product_ids = fields.Many2many(
         'product.template',
-        column1='tag_id',
+        column1='tag_ids',
         column2='product_id',
         string='Products'
     )
