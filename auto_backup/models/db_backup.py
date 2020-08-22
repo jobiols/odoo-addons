@@ -57,7 +57,7 @@ class DbBackup(models.Model):
     name = fields.Char('Database', required=True, help='Database you want to schedule backups for',
                        default=_get_db_name)
     folder = fields.Char('Backup Directory', help='Absolute path for storing the backups', required='True',
-                         default='/odoo/backups')
+                         default='/var/odoo/backups/')
     backup_type = fields.Selection([('zip', 'Zip'), ('dump', 'Dump')], 'Backup Type', required=True, default='zip')
     autoremove = fields.Boolean('Auto. Remove Backups',
                                 help='If you check this option you can choose to automaticly remove the backup '
@@ -73,7 +73,7 @@ class DbBackup(models.Model):
                                      "server with SFTP.")
     sftp_path = fields.Char('Path external server',
                             help='The location to the folder where the dumps should be written to. For example '
-                                 '/odoo/backups/.\nFiles will then be written to /odoo/backups/ on your remote server.')
+                                 '/var/odoo/backups/.\nFiles will then be written to /var/odoo/backups/ on your remote server.')
     sftp_host = fields.Char('IP Address SFTP Server',
                             help='The IP address from your remote server. For example 192.168.0.1')
     sftp_port = fields.Integer('SFTP Port', help='The port on the FTP server that accepts SSH/SFTP calls.', default=22)

@@ -33,25 +33,21 @@
         'l10n_ar_bank',  # Bancos Argentinos
         'l10n_ar_afipws', # Modulo Base para los Web Services de AFIP
         'l10n_ar_afipws_fe', # Factura electronica Argentina
-        'l10n_ar_report_fe', # Reportes FE
-        'l10n_ar_account_iva_digital', # Libro de iva digital
+        'l10n_ar_reports', # Reportes FE
         'l10n_ar_ux', # Mejoras para argentina
-        'l10n_ar_report_payment_group', # Multiples medios de pago
+        'account_payment_group', # Multiples medios de pago
         'account_check', # Cartera de cheques
-        'l10n_ar_sale_additional_taxes', # Le falta dependencia account_check
-        'l10n_ar_report_payment', # Reportes en pagos
-        'l10n_ar_report_withholding', # Retenciones
+        'l10n_ar_account_withholding', # Retenciones
         # 'l10n_ar_stock', # Remito electrónico Argentino tiene una rara dependencia con l10n_ar_account
         
-        'l10n_ar_report_stock', # OJO esto instala Stock
+        #'l10n_ar_report_stock', # OJO esto instala Stock
 
         # Para mejorar la usabilidad
-        # 'base_currency_inverse_rate',  # TC en Argentino
+        'base_currency_inverse_rate',  # TC en Argentino
         # 'account_ux',  # hace pilas de cosas ver en el modulo
-        # 'base_ux',  # mejoras de base
         # 'product_ux',  # mejoras en productos
         # 'sale_ux',  # mejoras en ventas
-        # 'auto_backup',  # poner el backup en: /var/odoo/backups/
+        'auto_backup',  # poner el backup en: /var/odoo/backups/
         # 'mail_activity_board_ux',  # quitar actividades del chatter
         # 'partner_ref_unique',  # evita duplicados en referencia
         # 'partner_vat_unique',  # evita duplicados numeros de referencia
