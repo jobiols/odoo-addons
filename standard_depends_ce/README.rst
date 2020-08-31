@@ -13,7 +13,7 @@ STANDARD DEPENDS FOR CE
 =======================
 
 
-Este modulo instala las dependencias standard para localizacion argentina CTMIL
+Este modulo instala las dependencias standard para localizacion argentina ADHOC
 en version comunitaria Debe ponerse en las dependencias del modulo default de
 cada cliente.
 
@@ -22,7 +22,8 @@ Installation
 
 To install this module, you need to:
 
-#. Just intall it.
+#. Just install it.
+CAUTION: This module loads a lot of others, then the operation can end in timeout, you are warned.
 
 Configuration
 =============
@@ -35,18 +36,12 @@ Bug Tracker
 ===========
 
 Bugs are tracked on `GitHub Issues
-<https://github.com/jobiols/[reponame]/issues>`_. In case of trouble, please
+<https://github.com/jobiols/odoo-addons/issues>`_. In case of trouble, please
 check there if your issue has already been reported. If you spotted it first,
 help us smashing it by providing a detailed and welcomed feedback.
 
-Credits
-=======
-
-Contributors
-------------
-
 Maintainer
-----------
+==========
 
 |company_logo|
 

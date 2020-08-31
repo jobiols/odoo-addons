@@ -20,9 +20,9 @@
 
 {
     'name': 'Standard Dependencies CE',
-    'version': '13.0.0.1.0',
+    'version': '13.0.0.2.0',
     'category': 'Tools',
-    'summary': "Add standard dependecies for CTMIL Argentinian localization "
+    'summary': "Add standard dependecies for ADHOC "
                "on Community Edition",
     'author': "jeo Software",
     'website': 'http://github.com/jobiols/odoo-addons',
@@ -47,7 +47,8 @@
         # 'account_ux',  # hace pilas de cosas ver en el modulo
         # 'product_ux',  # mejoras en productos
         # 'sale_ux',  # mejoras en ventas
-        'auto_backup',  # poner el backup en: /var/odoo/backups/
+        'automatic_backup', # poner el backup en: /var/odoo/backups/
+        'backend_theme_v13',
         # 'mail_activity_board_ux',  # quitar actividades del chatter
         # 'partner_ref_unique',  # evita duplicados en referencia
         # 'partner_vat_unique',  # evita duplicados numeros de referencia
