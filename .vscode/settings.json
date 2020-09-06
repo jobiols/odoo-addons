@@ -1,0 +1,10 @@
+{
+    "python.linting.pylintArgs": [
+        "--load-plugins=pylint_odoo",
+        "-d all",
+        "-e odoolint",
+        "-d C8101"
+    ],
+    "python.linting.pylintEnabled": true,
+    "python.linting.enabled": true
+}
