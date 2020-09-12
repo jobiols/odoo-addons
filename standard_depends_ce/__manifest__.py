@@ -47,7 +47,7 @@
         # 'account_ux',  # hace pilas de cosas ver en el modulo
         # 'product_ux',  # mejoras en productos
         # 'sale_ux',  # mejoras en ventas
-        'automatic_backup', # poner el backup en: /var/odoo/backups/
+        # 'automatic_backup', # poner el backup en: /var/odoo/backups/
         'backend_theme_v13',
         # 'mail_activity_board_ux',  # quitar actividades del chatter
         # 'partner_ref_unique',  # evita duplicados en referencia
