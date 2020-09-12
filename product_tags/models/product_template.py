@@ -1,7 +1,7 @@
 # Copyright 2020 jeo Software
 # License AGPL-3.0 or later (https://www.gnu.org/licenses/agpl).
 
-from odoo import api, fields, models, tools, SUPERUSER_ID, _
+from odoo import fields, models
 
 
 class Product(models.Model):
@@ -12,5 +12,3 @@ class Product(models.Model):
         column1='product_id',
         column2='tag_ids',
         help='Classify or analyze your products with tags.')
-
-

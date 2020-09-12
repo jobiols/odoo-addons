@@ -1,7 +1,7 @@
 # For copyright and license notices, see __manifest__.py file in module root
 
-from odoo import api, fields, models, tools, SUPERUSER_ID, _
-from odoo.exceptions import UserError, ValidationError
+from odoo import api, fields, models, _
+from odoo.exceptions import ValidationError
 
 class ProductTag(models.Model):
     _description = 'Product Tags'
@@ -54,7 +54,7 @@ class ProductTag(models.Model):
         """ Return the categories' display name, including their direct
             parent by default.
 
-            If ``context['partner_category_display']`` is ``'short'``, 
+            If ``context['partner_category_display']`` is ``'short'``,
             the short version of the category name (without the direct parent)
             is used. The default is the long version.
         """
@@ -72,14 +72,14 @@ class ProductTag(models.Model):
         return res
 
     @api.model
-    def name_search(self, name, args=None, operator='ilike', limit=100, 
+    def name_search(self, name, args=None, operator='ilike', limit=100,
                     name_get_uid=None):
         args = args or []
         if name:
             # Be sure name_search is symetric to name_get
             name = name.split(' / ')[-1]
             args = [('name', operator, name)] + args
-        partner_category_ids = self._search(args, limit=limit, 
+        partner_category_ids = self._search(args, limit=limit,
                                             access_rights_uid=name_get_uid)
         return models.lazy_name_get(
             self.browse(partner_category_ids).with_user(name_get_uid))
