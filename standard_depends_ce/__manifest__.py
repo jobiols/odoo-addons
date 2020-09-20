@@ -36,7 +36,7 @@
         'account_debt_management',  # mejoras en administracion de deudas
         'l10n_ar_aeroo_payment_group',  # Pagos
         'l10n_ar_account_withholding',  # Retenciones
-        'account_accountant',           # permisos para contabilidad
+        'account_accountant_ce',           # permisos para contabilidad
         'l10n_ar_aeroo_stock',   # remito argentino
         'l10n_ar_aeroo_sale',  # presupuesto (orden de venta) argentino
 
