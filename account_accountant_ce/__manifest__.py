@@ -36,7 +36,7 @@
     ],
     'demo': ['data/account_accountant_demo.xml'],
     'test': [],
-    'installable': False,
+    'installable': True,
     'auto_install': False,
     'application': True,
 }
