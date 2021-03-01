@@ -20,7 +20,7 @@
 
 {
     'name': 'Standard Dependencies EE',
-    'version': '13.0.0.0.0',
+    'version': '13.0.1.0.0',
     'category': 'Tools',
     'summary': "Add standard dependecies for ADHOC Argentinian localization "
                "on Enterprise Edition",
@@ -44,6 +44,7 @@
         'product_ux',  # mejoras en productos
         'sale_ux',  # mejoras en ventas
         'auto_backup',  # poner el backup en: /var/odoo/backups/
+        'account_invoice_tax', # pone link de agregar quitar impuestos
         #'partner_ref_unique',  # evita duplicados en referencia
         #'partner_vat_unique',  # evita duplicados numeros de referencia
         #'product_unique',  # no se pueden duplicar codigos de producto
