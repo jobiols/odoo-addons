@@ -35,10 +35,10 @@ Agregar mas criterios de busqueda para los partners
     "demo_xml": [],
     'depends': [
         'l10n_ar_invoice',
+        'base'
     ],
     "data": [
         'views/partner_view.xml',
-        'base'
     ],
     'installable': True,
     'application': False,
