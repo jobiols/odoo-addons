@@ -55,6 +55,7 @@
         'mass_editing',  # permite hacer edicion masiva
         'account_clean_cancelled_invoice_number',  # borrar nro de factura
         'backend_theme_v11',
+        'l10n_ar_export_sicore',
 
         # corrige bug en pivot /// falla con la actualizacion
         #'invoice_lines_analysis_fix',
